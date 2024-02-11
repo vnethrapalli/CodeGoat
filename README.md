@@ -1,6 +1,7 @@
 # CodeGoat
 
-This is the `Segmentation Cult`'s code translation project for CS490. 
+This is the `Segmentation Cult`'s code translation project for CS490. This application will allow you to translate your code from one programming language to another programming language, utilizing GPT-3 for the translation and code checking.
+
 
 Here is what our project's file structure looks like.
 
