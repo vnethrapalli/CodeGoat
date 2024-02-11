@@ -4,7 +4,7 @@ This is the `Segmentation Cult`'s code translation project for CS490.
 
 Here is what our project's file structure looks like.
 
-├── api
+```├── api
 │   ├── db
 │   │   └── schema.prisma
 │   └── src
@@ -40,6 +40,6 @@ Here is what our project's file structure looks like.
         ├── entry.client.jsx
         ├── index.css
         ├── index.html
-        └── Routes.jsx
+        └── Routes.jsx```
 
 Redwood sets up the project with an `api` folder for the back end and the `web` folder for the front end. In the `web` folder, all the React components and their Storybook stories are stored. In the `api` folder, the Prisma schema is stored along with the stuff for authentication.
