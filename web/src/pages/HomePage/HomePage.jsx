@@ -1,48 +1,45 @@
 import { Link, routes } from '@redwoodjs/router'
 import { Metadata } from '@redwoodjs/web'
 
-import { Typography, List, ListItem, ListItemText } from '@mui/material'
+import { TextField, Typography, List, ListItem, ListItemText } from '@mui/material'
 
 const HomePage = () => {
   return (
     <>
       <Metadata title="Home" description="Home page" />
 
-      <Typography variant='h2' component='h2' align='center'>
+      <Typography variant='h2' component='h2' align='center' style={{ backgroundColor: '#2D9596', padding: '10px', marginTop: '10px', width: '50%'}}>
         Code Translator
       </Typography>
 
-      <Typography paragraph='true' align='center'>
+      <Typography paragraph='true' align='center' style={{ backgroundColor: '#2D9596', padding: '10px', marginTop: '10px', width: '50%'}}>
         This tool uses AI models to convert your code from one programming language to another. This tool provides support for a variety of languages such as:
-        <List sx={{ listStyleType: 'disc' }}>
-          <ListItem>
+        <List align='center' sx={{ listStyleType: 'disc', pl: 4 }}>
+          <ListItem sx={{ display: 'list-item' }}>
             <ListItemText>C++</ListItemText>
           </ListItem>
-          <ListItem>
+          <ListItem sx={{ display: 'list-item' }}>
             <ListItemText>C</ListItemText>
           </ListItem>
-          <ListItem>
+          <ListItem sx={{ display: 'list-item' }}>
             <ListItemText>Java</ListItemText>
           </ListItem>
-          <ListItem>
+          <ListItem sx={{ display: 'list-item' }}>
             <ListItemText>Python</ListItemText>
           </ListItem>
-          <ListItem>
+          <ListItem sx={{ display: 'list-item' }}>
             <ListItemText>JavaScript</ListItemText>
           </ListItem>
-          <ListItem>
+          <ListItem sx={{ display: 'list-item' }}>
             <ListItemText>Assembly</ListItemText>
           </ListItem>
         </List>
 
       </Typography>
 
-      <Typography variant='h4'>
-        Getting Started:
-      </Typography>
-
-      <Typography paragraph='true' align='center'>
-        <List sx={{ listStyleType: 'disc' }}>
+      <Typography paragraph='true' align='center' style={{ backgroundColor: '#2D9596', padding: '10px', marginTop: '10px', width: '50%' }}>
+        <h4>Getting Started:</h4>
+        <List sx={{ listStyleType: 'disc', pl: 4 }}>
             <ListItem>
               <ListItemText>Click on the Translate button in the NavBar above</ListItemText>
             </ListItem>
@@ -57,9 +54,6 @@ const HomePage = () => {
             </ListItem>
             <ListItem>
               <ListItemText>Make sure to give positive/negative feedback</ListItemText>
-            </ListItem>
-            <ListItem>
-              <ListItemText>Assembly</ListItemText>
             </ListItem>
           </List>
       </Typography>

@@ -1,9 +1,11 @@
 import { routes } from '@redwoodjs/router'
-import { Link } from '@mui/material';
 
+import { Link } from '@mui/material';
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
-import Button from "@mui/material/Button";
+import IconButton from '@mui/material/IconButton';
+import Brightness4Icon from '@mui/icons-material/Brightness4';
+import Brightness7Icon from '@mui/icons-material/Brightness7';
 
 const themeLight = createTheme({
   palette: {
@@ -31,7 +33,7 @@ const UserLayout = ({ children }) => {
     <>
       <ThemeProvider theme={light ? themeLight : themeDark}>
         <CssBaseline />
-        <header>
+        <header className='relative flex'>
           <h1>
             <Link href={routes.home()} underline="none">
               CodeGoat
@@ -39,7 +41,9 @@ const UserLayout = ({ children }) => {
           </h1>
 
           <nav>
-            <Button onClick={() => setLight((prev) => !prev)}>Toggle Theme</Button>
+            <IconButton sx={{ ml: 1 }} onClick={() => setLight((prev) => !prev)}>
+              {light === true ? <Brightness7Icon /> : <Brightness4Icon />}
+            </IconButton>
           </nav>
         </header>
       </ThemeProvider>
