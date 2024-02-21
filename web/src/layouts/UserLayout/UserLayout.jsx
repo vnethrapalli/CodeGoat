@@ -1,11 +1,12 @@
-import { Link, routes } from '@redwoodjs/router'
+import { routes } from '@redwoodjs/router'
+import { Link } from '@mui/material';
 
 const UserLayout = ({ children }) => {
   return (
     <>
       <header>
         <h1>
-          <Link to={routes.home()}>
+          <Link href={routes.home()} underline="none">
             CodeGoat
           </Link>
         </h1>
