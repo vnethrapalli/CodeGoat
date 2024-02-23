@@ -4,8 +4,8 @@ import { AppBar, Link } from '@mui/material';
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import IconButton from '@mui/material/IconButton';
-import Brightness4Icon from '@mui/icons-material/Brightness4';
-import Brightness7Icon from '@mui/icons-material/Brightness7';
+import LightMode from '@mui/icons-material/LightMode';
+import DarkMode from '@mui/icons-material/DarkMode';
 import { useTheme } from '@emotion/react';
 
 const themeLight = createTheme({
@@ -20,7 +20,7 @@ const themeLight = createTheme({
       default: "#F1FADA"
     },
     text: {
-      primary: "#000000"
+      primary: "#F1FADA"
     }
   }
 });
@@ -31,13 +31,13 @@ const themeDark = createTheme({
       main: "#F1FADA"
     },
     secondary: {
-      main: "#FFFFFF"
+      main: "#344955"
     },
     background: {
-      default: "#565656"
+      default: "#35374B"
     },
     text: {
-      primary: "#FFFFFF"
+      primary: "#F1FADA"
     }
   }
 });
@@ -50,15 +50,15 @@ const UserLayout = ({ children }) => {
     <>
       <ThemeProvider theme={light ? themeLight : themeDark}>
         <CssBaseline />
-        <AppBar position="static" sx={{ background: '#265073', marginBottom: '20px', height: '10%' }}>
+        <AppBar position="sticky" sx={{ background: '#265073', marginBottom: '20px', height: '10%' }}>
           <h1>
-            <Link href={routes.home()} underline="none" sx={{ marginLeft: "10px", color: "#F1FADA" }}>
+            <Link href={routes.home()} underline="none" sx={{ marginLeft: "25px", color: "#F1FADA" }}>
               CodeGoat
             </Link>
           </h1>
 
-          <IconButton sx={{ ml: 1, width: '3%' }} onClick={() => setLight((prev) => !prev)}>
-            {light === true ? <Brightness7Icon /> : <Brightness4Icon />}
+          <IconButton sx={{ ml: 1, width: '2%' }} onClick={() => setLight((prev) => !prev)}>
+            {light === true ? <LightMode /> : <DarkMode />}
           </IconButton>
         </AppBar>
 
