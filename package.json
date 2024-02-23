@@ -7,9 +7,9 @@
     ]
   },
   "devDependencies": {
-    "@redwoodjs/auth-auth0-setup": "7.0.1",
-    "@redwoodjs/core": "7.0.1",
-    "@redwoodjs/project-config": "7.0.1"
+    "@redwoodjs/auth-auth0-setup": "7.0.2",
+    "@redwoodjs/core": "7.0.2",
+    "@redwoodjs/project-config": "7.0.2"
   },
   "eslintConfig": {
     "extends": "@redwoodjs/eslint-config",
