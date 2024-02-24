@@ -11,4 +11,10 @@ describe('UserLayout', () => {
       render(<UserLayout />)
     }).not.toThrow()
   })
+
+  it('renders IconButton successfully', () => {
+    expect(() => {
+      render(<IconButton />)
+    }).not.toThrow()
+  })
 })
