@@ -12,7 +12,7 @@ const HomePage = () => {
     <>
       <Metadata title="Home" description="Home page" />
 
-      <Box display="flex" flexDirection='column' justifyContent="center" alignItems="center" minHeight="100vh">
+      <Box display="flex" flexDirection='column' justifyContent="center" alignItems="center">
         <Typography variant='h2' component='h2' align='center' style={{ backgroundColor: theme.palette.secondary.main, padding: '15px', width: '65%', borderRadius: '25px' , color: theme.palette.text.primary, fontSize: '56px', fontStyle: 'normal', fontWeight: '600'}}>
           Code Translator
         </Typography>
