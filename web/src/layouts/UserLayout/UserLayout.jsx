@@ -6,7 +6,6 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import IconButton from '@mui/material/IconButton';
 import LightMode from '@mui/icons-material/LightMode';
 import DarkMode from '@mui/icons-material/DarkMode';
-import { useTheme } from '@emotion/react';
 
 const themeLight = createTheme({
   palette: {
@@ -44,7 +43,6 @@ const themeDark = createTheme({
 
 const UserLayout = ({ children }) => {
   const [light, setLight] = React.useState(true);
-  const theme = useTheme();
 
   return (
     <>
