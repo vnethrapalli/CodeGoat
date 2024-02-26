@@ -5,7 +5,7 @@ import { Button, Box, Rating, Typography } from '@mui/material'
 import { styled } from '@mui/material/styles';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import LensIcon from '@mui/icons-material/Lens';
-import Textarea from '@mui/joy/Textarea';
+import { TextareaAutosize } from '@mui/base/TextareaAutosize';
 
 // This is for getting the correct color to display when hovered / unhovered
 const StyledRating = styled(Rating)({
@@ -183,7 +183,7 @@ const FeedbackPage = () => {
         </Box>
 
         <Typography component="legend">Additional Comments</Typography>
-        <Textarea
+        <TextareaAutosize
           name="comments"
           value={com}
           minRows={2}
@@ -193,7 +193,8 @@ const FeedbackPage = () => {
           onChange={(event) => {
             setCom(event.target.value);
           }}
-          ></Textarea>
+          ></TextareaAutosize>
+          <br></br>
         <Button type="submit" onClick={onSubmit}>Submit</Button>
       </Form>
     </>
