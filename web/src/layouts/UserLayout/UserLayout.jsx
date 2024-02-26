@@ -51,7 +51,6 @@ const UserLayout = ({ children }) => {
         <AppBar position="sticky" sx={{ background: '#265073', marginBottom: '20px', height: '10%' }}>
           <Container maxWidth="xl">
             <Toolbar disableGutters>
-              {/* <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} /> */}
               <Typography
                 variant="h6"
                 noWrap
@@ -61,6 +60,7 @@ const UserLayout = ({ children }) => {
                   display: { xs: 'none', md: 'flex' },
                   // fontFamily: 'monospace',
                   fontWeight: 700,
+                  fontSize: 40,
                   // letterSpacing: '.3rem',
                   color: "#F1FADA",
                   textDecoration: 'none',
@@ -72,27 +72,8 @@ const UserLayout = ({ children }) => {
                 </Link>
               </Typography>
 
-              {/* <Typography
-                variant="h5"
-                noWrap
-                component="a"
-                sx={{
-                  mr: 2,
-                  display: { xs: 'flex', md: 'none' },
-                  flexGrow: 1,
-                  fontFamily: 'monospace',
-                  fontWeight: 700,
-                  letterSpacing: '.3rem',
-                  color: 'inherit',
-                  textDecoration: 'none',
-                }}
-              >
-                <Link href={routes.home()} underline="none" sx={{ marginLeft: "25px", color: "#F1FADA" }}>
-                  CodeGoat
-                </Link>
-              </Typography> */}
-              <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                <Link href={routes.translate()} underline="none" sx={{ marginLeft: "25px", color: "#F1FADA", fontWeight: '300' }}>
+              <Box display="flex" sx={{ justifyContent: "center", alignItems: "center", flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+                <Link href={routes.translate()} underline="none" sx={{ color: "#F1FADA", fontWeight: '300' }}>
                   <Button
                     key="Translate"
                     variant="text"
@@ -102,7 +83,7 @@ const UserLayout = ({ children }) => {
                   </Button>
                 </Link>
 
-                <Link href={routes.status()} underline="none" sx={{ marginLeft: "5px", color: "#F1FADA", fontWeight: '300' }}>
+                <Link href={routes.status()} underline="none" sx={{ marginLeft: "10px", color: "#F1FADA", fontWeight: '300' }}>
                   <Button
                     key="Status"
                     variant="text"
@@ -112,7 +93,7 @@ const UserLayout = ({ children }) => {
                   </Button>
                 </Link>
 
-                <Link href={routes.feedback()} underline="none" sx={{ marginLeft: "5px", color: "#F1FADA", fontWeight: '300' }}>
+                <Link href={routes.feedback()} underline="none" sx={{ marginLeft: "10px", color: "#F1FADA", fontWeight: '300' }}>
                   <Button
                     key="Feedback"
                     variant="text"
@@ -125,38 +106,14 @@ const UserLayout = ({ children }) => {
               <IconButton data-testid="themeButton" sx={{ ml: 1, width: '2%' }} onClick={() => setLight((prev) => !prev)}>
                 {light === true ? <LightMode style={{fill: "#F1FADA"}} /> : <DarkMode style={{fill: "#F1FADA"}} />}
               </IconButton>
+
+              { /* Add login, logoff, and sign up buttons */ }
+
+
+
             </Toolbar>
           </Container>
         </AppBar>
-
-
-        {/* <AppBar position="sticky" sx={{ background: '#265073', marginBottom: '20px', height: '10%' }}>
-          <h1>
-            <Link href={routes.home()} underline="none" sx={{ marginLeft: "25px", color: "#F1FADA" }}>
-              CodeGoat
-            </Link>
-          </h1>
-
-          <Toolbar>
-            <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-              <Link href={routes.home()} underline="none" sx={{ marginLeft: "25px", color: "#F1FADA", fontWeight: '300' }}>
-                Translate
-              </Link>
-
-              <Link href={routes.status()} underline="none" sx={{ marginLeft: "5px", color: "#F1FADA", fontWeight: '300' }}>
-                GPT-3 Status
-              </Link>
-
-              <Link href={routes.feedback()} underline="none" sx={{ marginLeft: "5px", color: "#F1FADA", fontWeight: '300' }}>
-                Feedback
-              </Link>
-            </Box>
-          </Toolbar>
-
-          <IconButton data-testid="themeButton" sx={{ ml: 1, width: '2%' }} onClick={() => setLight((prev) => !prev)}>
-            {light === true ? <LightMode /> : <DarkMode />}
-          </IconButton>
-        </AppBar> */}
 
         <main>{children}</main>
 
