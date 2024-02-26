@@ -16,7 +16,7 @@ const StyledRating = styled(Rating)({
     color: '#2D9596',
   },
 });
-/* For when I get the input data running
+
 const CREATE_FEEDBACK = gql`
   mutation CreateFeedbackMutation($input: CreateFeedbackInput!) {
     createFeedback(input: $input) {
@@ -24,14 +24,13 @@ const CREATE_FEEDBACK = gql`
     }
   }
 `
-*/
 const FeedbackPage = () => {
-  // const [create] = useMutation(CREATE_FEEDBACK)
+  const [create] = useMutation(CREATE_FEEDBACK)
 
   const onSubmit = (data) => {
     data.preventDefault();
     console.log(sub, out, acc, gpt, exp, com)
-    // create({ variables: { input: data } })
+    create({ variables: { input: {"submissionPage":sub, "outputPage":out, "translationAccuracy":acc, "gptAvailability":gpt, "experience":exp, "comments":com} } })
   }
   // By default, hover is not on
   const [hover, setHover] = React.useState(-1);
@@ -193,7 +192,6 @@ const FeedbackPage = () => {
           variant="outlined"
           onChange={(event) => {
             setCom(event.target.value);
-            console.log(com)
           }}
           ></Textarea>
         <Button type="submit" onClick={onSubmit}>Submit</Button>
