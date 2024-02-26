@@ -2,7 +2,7 @@ import { routes } from '@redwoodjs/router'
 
 import { AppBar, Link } from '@mui/material';
 import CssBaseline from "@mui/material/CssBaseline";
-import { ThemeProvider, createTheme, experimental_extendTheme as extendTheme } from "@mui/material/styles";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
 import IconButton from '@mui/material/IconButton';
 import LightMode from '@mui/icons-material/LightMode';
 import DarkMode from '@mui/icons-material/DarkMode';
@@ -20,9 +20,8 @@ const themeLight = createTheme({
     },
     text: {
       primary: "#F1FADA"
-    },
-  },
-
+    }
+  }
 });
 
 const themeDark = createTheme({
@@ -40,8 +39,6 @@ const themeDark = createTheme({
       primary: "#F1FADA"
     }
   }
-
-
 });
 
 const UserLayout = ({ children }) => {

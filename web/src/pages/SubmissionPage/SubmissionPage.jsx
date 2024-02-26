@@ -1,7 +1,6 @@
 import { Link, routes } from '@redwoodjs/router';
 import { Metadata } from '@redwoodjs/web';
 import { Stack, Box } from '@mui/material';
-import Textarea from '@mui/joy/Textarea';
 import { TextareaAutosize } from '@mui/base/TextareaAutosize';
 import { FormControl, InputLabel, Select, MenuItem, Button } from '@material-ui/core';
 import DownloadIcon from '@mui/icons-material/Download';
