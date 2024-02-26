@@ -55,7 +55,7 @@ const UserLayout = ({ children }) => {
             </Link>
           </h1>
 
-          <IconButton sx={{ ml: 1, width: '2%' }} onClick={() => setLight((prev) => !prev)}>
+          <IconButton data-testid="themeButton" sx={{ ml: 1, width: '2%' }} onClick={() => setLight((prev) => !prev)}>
             {light === true ? <LightMode /> : <DarkMode />}
           </IconButton>
         </AppBar>

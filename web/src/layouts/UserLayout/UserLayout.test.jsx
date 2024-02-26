@@ -1,7 +1,7 @@
-import { render } from '@redwoodjs/testing/web'
+import { render, screen, fireEvent } from '@redwoodjs/testing/web'
 
 import UserLayout from './UserLayout'
-import IconButton from '@mui/material/IconButton';
+import { DarkMode } from '@mui/icons-material'
 
 //   Improve this test with help from the Redwood Testing Doc:
 //   https://redwoodjs.com/docs/testing#testing-pages-layouts
@@ -14,8 +14,21 @@ describe('UserLayout', () => {
   })
 
   it('renders IconButton successfully', () => {
+    expect(screen.getByTestId("themeButton")).toBeInTheDocument()
+  })
+
+  it('changes the theme successfully', () => {
+    const button = screen.getByTestId("themeButton");
+
+    fireEvent.click(button);
     expect(() => {
-      render(<IconButton />)
+      render(<DarkMode />)
     }).not.toThrow()
+
+    fireEvent.click(button);
+    expect(() => {
+      render(<LightMode />)
+    }).not.toThrow()
+
   })
 })
