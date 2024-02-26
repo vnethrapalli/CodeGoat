@@ -1,25 +1,38 @@
 import { render, screen, waitFor } from '@redwoodjs/testing/web'
 
 import HomePage from './HomePage'
+
+jest.mock("src/auth.js");
 import { useAuth } from 'src/auth'
 import { mocked } from "jest-mock";
+
 
   //   Improve this test with help from the Redwood Testing Doc:
 //   https://redwoodjs.com/docs/testing#testing-pages-layouts
 
 const user = {
-  email: "tma29@njit.edu",
+  email: "johndoe@me.com",
   email_verified: true,
-  sub: "google-oauth2|12345678901234"
+  sub: "google-oauth2|12345678901234",
 };
 
-jest.mock("@auth0/auth0-spa-js");
-
-const mockedUseAuth0 = mocked(useAuth, true);
-
-console.log(mockedUseAuth0.toString())
-
 describe('HomePage', () => {
+
+  beforeEach(() => {
+    const mockedUseAuth = mocked(useAuth);
+    mockedUseAuth.mockReturnValue({
+        isAuthenticated: true,
+        userMetadata: user,
+        logout: jest.fn(),
+        loginWithRedirect: jest.fn(),
+        getAccessTokenWithPopup: jest.fn(),
+        getAccessTokenSilently: jest.fn(),
+        getIdTokenClaims: jest.fn(),
+        loginWithPopup: jest.fn(),
+        isLoading: false,
+    });
+  });
+
   it('renders successfully', () => {
     expect(() => {
       render(<HomePage />)
@@ -28,6 +41,22 @@ describe('HomePage', () => {
 })
 
 describe('Login button renders', () => {
+
+  beforeEach(() => {
+    const mockedUseAuth = mocked(useAuth);
+    mockedUseAuth.mockReturnValue({
+        isAuthenticated: true,
+        userMetadata: user,
+        logout: jest.fn(),
+        loginWithRedirect: jest.fn(),
+        getAccessTokenWithPopup: jest.fn(),
+        getAccessTokenSilently: jest.fn(),
+        getIdTokenClaims: jest.fn(),
+        loginWithPopup: jest.fn(),
+        isLoading: false,
+    });
+  });
+
   it('renders successfully', () => {
     render(<HomePage />)
 
@@ -38,6 +67,23 @@ describe('Login button renders', () => {
 })
 
 describe('Logout button renders', () => {
+
+  beforeEach(() => {
+    const mockedUseAuth = mocked(useAuth);
+    mockedUseAuth.mockReturnValue({
+        isAuthenticated: true,
+        userMetadata: user,
+        logout: jest.fn(),
+        loginWithRedirect: jest.fn(),
+        getAccessTokenWithPopup: jest.fn(),
+        getAccessTokenSilently: jest.fn(),
+        getIdTokenClaims: jest.fn(),
+        loginWithPopup: jest.fn(),
+        isLoading: false,
+    });
+  });
+
+
   it('renders successfully', () => {
     render(<HomePage />)
 
@@ -48,6 +94,23 @@ describe('Logout button renders', () => {
 })
 
 describe('Sign Up button renders', () => {
+
+  beforeEach(() => {
+    const mockedUseAuth = mocked(useAuth);
+    mockedUseAuth.mockReturnValue({
+        isAuthenticated: true,
+        userMetadata: user,
+        logout: jest.fn(),
+        loginWithRedirect: jest.fn(),
+        getAccessTokenWithPopup: jest.fn(),
+        getAccessTokenSilently: jest.fn(),
+        getIdTokenClaims: jest.fn(),
+        loginWithPopup: jest.fn(),
+        isLoading: false,
+    });
+  });
+
+
   it('renders successfully', () => {
     render(<HomePage />)
 
@@ -60,29 +123,55 @@ describe('Sign Up button renders', () => {
 describe('Login works correctly', () => {
 
   beforeEach(() => {
-    mockedUseAuth0.mockReturnValue({
-      isAuthenticated: true,
-      user,
-      logout: jest.fn(),
-      loginWithRedirect: jest.fn(),
-      getAccessTokenWithPopup: jest.fn(),
-      getAccessTokenSilently: jest.fn(),
-      getIdTokenClaims: jest.fn(),
-      loginWithPopup: jest.fn(),
-      isLoading: false,
+    const mockedUseAuth = mocked(useAuth);
+    mockedUseAuth.mockReturnValue({
+        isAuthenticated: true,
+        userMetadata: user,
+        logout: jest.fn(),
+        loginWithRedirect: jest.fn(),
+        getAccessTokenWithPopup: jest.fn(),
+        getAccessTokenSilently: jest.fn(),
+        getIdTokenClaims: jest.fn(),
+        loginWithPopup: jest.fn(),
+        isLoading: false,
     });
-  })
+  });
 
   it('Login successful', async () => {
-
-    const { isAuthenticated } = mockedUseAuth0()
     render(<HomePage />)
 
-    const login = screen.getByText("Log In")
+    const email = screen.getByText("Email: ", {exact: false})
 
-    await login.click()
+    console.log(email.textContent)
 
-    expect(isAuthenticated).toBeTruthy()
+    expect(email.textContent).toEqual('Email: johndoe@me.com')
+
+  })
+})
+
+describe('Logout works correctly', () => {
+
+  beforeEach(() => {
+    const mockedUseAuth = mocked(useAuth);
+    mockedUseAuth.mockReturnValue({
+        isAuthenticated: false,
+        userMetadata: user,
+        logout: jest.fn(),
+        loginWithRedirect: jest.fn(),
+        getAccessTokenWithPopup: jest.fn(),
+        getAccessTokenSilently: jest.fn(),
+        getIdTokenClaims: jest.fn(),
+        loginWithPopup: jest.fn(),
+        isLoading: false,
+    });
+  });
+
+  it('Logout successful', async () => {
+    render(<HomePage />)
+
+    const authenticated = screen.getByText('{"isAuthenticated":', {exact: false})
+
+    expect(authenticated.textContent).toEqual('{"isAuthenticated":false}')
 
   })
 })

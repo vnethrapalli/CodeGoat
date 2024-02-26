@@ -3,8 +3,11 @@ import { Metadata } from '@redwoodjs/web'
 import { useAuth } from 'src/auth'
 
 const HomePage = () => {
-  const { isAuthenticated, signUp, logIn, logOut, userMetadata } = useAuth()
+  const { isAuthenticated, signUp, logIn, logOut, userMetadata, loading } = useAuth()
 
+  if(loading) {
+    return null
+  }
 
   return (
     <>
