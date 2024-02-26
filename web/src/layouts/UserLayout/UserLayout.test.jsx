@@ -1,7 +1,7 @@
 import { render, screen, fireEvent } from '@redwoodjs/testing/web'
 
 import UserLayout from './UserLayout'
-import { DarkMode } from '@mui/icons-material'
+import { LightMode, DarkMode } from '@mui/icons-material'
 
 //   Improve this test with help from the Redwood Testing Doc:
 //   https://redwoodjs.com/docs/testing#testing-pages-layouts
