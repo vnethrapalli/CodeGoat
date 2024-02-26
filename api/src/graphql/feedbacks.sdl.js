@@ -23,19 +23,7 @@ export const schema = gql`
     comments: String!
   }
 
-  input UpdateFeedbackInput {
-    submissionPage: Int
-    outputPage: Int
-    translationAccuracy: Int
-    gptAvailability: Int
-    experience: Int
-    comments: String
-  }
-
   type Mutation {
     createFeedback(input: CreateFeedbackInput!): Feedback! @requireAuth
-    updateFeedback(id: Int!, input: UpdateFeedbackInput!): Feedback!
-      @requireAuth
-    deleteFeedback(id: Int!): Feedback! @requireAuth
   }
 `
