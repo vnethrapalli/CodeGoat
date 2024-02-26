@@ -66,21 +66,27 @@ const CodeBox = () => {
   )
 }
 
-const TranslateBtn = () => {
-  return (
-    <>
-      <Box textAlign="center">
-        <Button
-          sx={{ width: "250px" }}
-        >
-          Translate
-        </Button>
-      </Box>
-    </>
-  )
-}
 
 const SubmissionPage = () => {
+  const [output, setOutput] = React.useState(false);
+
+  const TranslateBtn = () => {
+    return (
+      <>
+        <Box textAlign="center">
+          <Button
+            sx={{ width: "250px" }}
+            onClick={() =>
+              setOutput(() => true)
+            }
+          >
+            Translate
+          </Button>
+        </Box>
+      </>
+    )
+  }
+
   return (
     <>
       <Metadata title="Submission" description="Submission page"/>
@@ -90,10 +96,12 @@ const SubmissionPage = () => {
             <LangDropdown/>
             <CodeBox/>
           </Stack>
-          <Stack direction="column" spacing={2}>
-            <LangDropdown/>
-            <CodeBox/>
-          </Stack>
+          {output &&
+            <Stack direction="column" spacing={2}>
+              <LangDropdown/>
+              <CodeBox/>
+            </Stack>
+          }
         </Stack>
         <TranslateBtn/>
       </Stack>
