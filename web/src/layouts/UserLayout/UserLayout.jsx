@@ -101,51 +101,34 @@ const NavButtons = () => {
   )
 }
 
-const AuthButtons = () => {
-  const theme = useTheme();
-
-  return (
-    <Button></Button>
-  )
-}
-
 const Footer = () => {
   const theme = useTheme();
 
   return (
-    // <Paper component="footer" square variant="text"
-    //   sx={{ background: '#265073', marginBottom: '0px', height: '25px', width: '100%', position: 'fixed', bottom: 0 }}>
-    //   <Container maxWidth="lg">
-    //     <Box
-    //       sx={{
-    //         flexGrow: 1,
-    //         justifyContent: "center",
-    //         display: "flex",
-    //         textAlign: "center",
-    //         mb: 2,
-    //       }}
-    //     >
-    //       <Typography variant="caption" sx = {{ color: theme.palette.text.primary, fontSize: '14px', margin: 'auto auto'}}>
-    //         Copyright ©2024. Segmentation Cult
-    //       </Typography>
-    //     </Box>
-    //   </Container>
-    // </Paper>
     <Box
       sx={{
         backgroundColor: '#265073',
-        p: 6,
+        position: 'relative',
+        bottom: 0,
+        width: '100%',
+        display: 'flex',
+        alignContent: 'center',
+        alignItems: 'center',
+        height: '40px'
       }}
       component="footer"
     >
-      <Container maxWidth="sm">
-        <Typography variant="body2" color="text.secondary" align="center">
+      <Container>
+        <Typography variant="body2"
+          sx={{
+            color: theme.palette.text.primary,
+            display: 'flex',
+            justifyContent: 'center'
+          }}>
+
           {"Copyright © "}
-          <Link color="inherit" href="https://your-website.com/">
-            Your Website
-          </Link>{" "}
           {new Date().getFullYear()}
-          {"."}
+          {" Segmentation Cult."}
         </Typography>
       </Container>
     </Box>
@@ -160,63 +143,77 @@ const UserLayout = ({ children }) => {
     <>
       <ThemeProvider theme={light ? themeLight : themeDark}>
         <CssBaseline />
-        <AppBar position="sticky" sx={{ background: '#265073', marginBottom: '20px', height: '10%' }}>
-          <Grid container width="100%" spacing={2} alignItems='center' alignContent='center' justifyContent='center'>
-              {/* Title/Home Link */}
-              <Grid item alignContent='center' alignItems='stretch' xs="4">
-                <TitleLink />
-              </Grid>
+        <Box minHeight='100vh'>
+          <AppBar position="sticky" sx={{ background: '#265073', marginBottom: '20px', height: '10%' }}>
+            <Grid container width="100%" spacing={2} alignItems='center' alignContent='center' justifyContent='center'>
+                {/* Title/Home Link */}
+                <Grid item alignContent='center' alignItems='stretch' xs="4">
+                  <TitleLink />
+                </Grid>
 
-              {/* Navigation Buttons */}
-              <Grid item alignContent='center' alignItems='stretch' alignSelf='center' xs="4">
-                <NavButtons />
-              </Grid>
+                {/* Navigation Buttons */}
+                <Grid item alignContent='center' alignItems='stretch' alignSelf='center' xs="4">
+                  <NavButtons />
+                </Grid>
 
-              {/* Theme Change Button */}
-              <Grid item alignContent='center' alignItems='stretch' sx={{display: 'flex', justifyContent: 'flex-end' }} xs="4">
+                {/* Theme Change Button */}
+                <Grid item alignContent='center' alignItems='stretch' sx={{display: 'flex', justifyContent: 'flex-end' }} xs="4">
 
-                <IconButton data-testid="themeButton" sx={{ width: '4%'}} onClick={() => setLight((prev) => !prev)}>
-                  {light === true
-                    ? <LightMode style={{fill: "#F1FADA"}} />
-                    : <DarkMode style={{fill: "#F1FADA"}} />}
-                </IconButton>
+                  <IconButton data-testid="themeButton" sx={{ width: '4%'}} onClick={() => setLight((prev) => !prev)}>
+                    {light === true
+                      ? <LightMode style={{fill: "#F1FADA"}} />
+                      : <DarkMode style={{fill: "#F1FADA"}} />}
+                  </IconButton>
 
-                {!auth && <Button
-                  key="Log In"
-                  variant="text"
-                  sx={{ backgroundColor: "#F1FADA", color: "#265073", height: "30px", marginLeft: '14px', marginRight: '0px', borderRadius: '10px', alignSelf: 'center' }}
-                >
-                  Log In
-                </Button>}
+                  {!auth && <Button
+                    key="Log In"
+                    variant="text"
+                    sx={{ backgroundColor: "#F1FADA", color: "#265073", height: "30px", marginLeft: '14px', marginRight: '0px', borderRadius: '6px', alignSelf: 'center',
+                      '&:hover': {
+                        backgroundColor: '#F1FADA',
+                        color: "#265073",
+                      },
+                    }}
+                  >
+                    Log In
+                  </Button>}
 
-                {!auth && <Button
-                  key="Sign Up"
-                  variant="text"
-                  sx={{ backgroundColor: "#2D9596", color: "#F1FADA", height: "30px", marginLeft: '14px', marginRight: '0px', borderRadius: '10px', alignSelf: 'center' }}
-                >
-                  Sign Up
-                </Button>}
+                  {!auth && <Button
+                    key="Sign Up"
+                    variant="text"
+                    sx={{ backgroundColor: "#2D9596", color: "#F1FADA", height: "30px", marginLeft: '14px', marginRight: '0px', borderRadius: '6px', alignSelf: 'center',
+                      '&:hover': {
+                        backgroundColor: '#2D9596',
+                        color: "#F1FADA",
+                      },
+                    }}
+                  >
+                    Sign Up
+                  </Button>}
 
-                {auth && <Button
-                  key="Sign Out"
-                  variant="text"
-                  sx={{ backgroundColor: "#F1FADA", color: "#265073", height: "30px", marginLeft: '14px', marginRight: '0px', borderRadius: '10px', alignSelf: 'center' }}
-                >
-                  Sign Out
-                </Button>}
+                  {auth && <Button
+                    key="Sign Out"
+                    variant="text"
+                    sx={{ backgroundColor: "#F1FADA", color: "#265073", height: "30px", marginLeft: '14px', marginRight: '0px', borderRadius: '6px', alignSelf: 'center',
+                      '&:hover': {
+                        backgroundColor: '#F1FADA',
+                        color: "#265073",
+                      },
+                    }}
+                  >
+                    Sign Out
+                  </Button>}
 
-              </Grid>
+                </Grid>
+            </Grid>
+          </AppBar>
 
-              { /* Add login, logoff, and sign up buttons */ }
+          <main>{children}</main>
 
-          </Grid>
-        </AppBar>
+          {/* Static Footer */}
+          <Footer />
 
-        <main>{children}</main>
-
-        {/* Static Footer */}
-        {/* <Footer /> */}
-
+        </Box>
       </ThemeProvider>
     </>
   )
