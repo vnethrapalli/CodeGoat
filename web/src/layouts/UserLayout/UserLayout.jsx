@@ -51,7 +51,7 @@ const TitleLink = () => {
   return (
     <Grid item alignContent='center' alignItems='stretch' xs="4">
       <Tooltip title='Go Home'>
-        <Typography variant="h6" noWrap component="a"
+        <Typography data-testid="titleLink" variant="h6" noWrap component="a"
           sx={{
             mr: 2,
             display: { xs: 'none', md: 'flex' },
@@ -76,9 +76,9 @@ const NavButtons = () => {
 
   return (
     <Grid item alignContent='center' alignItems='stretch' alignSelf='center' xs="4">
-      <Box display="flex" sx={{ justifyContent: "center", alignItems: "center", flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+      <Box data-testid="navButtons" display="flex" sx={{ justifyContent: "center", alignItems: "center", flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
         <Tooltip title='Translate Code'>
-          <Link href={routes.translate()} underline="none" sx={{ color: theme.palette.text.primary, fontWeight: '300' }}>
+          <Link data-testid="translateButton" href={routes.translate()} underline="none" sx={{ color: theme.palette.text.primary, fontWeight: '300' }}>
             <Button
               key="Translate"
               variant="text"
@@ -90,7 +90,7 @@ const NavButtons = () => {
         </Tooltip>
 
         <Tooltip title='Check API Status'>
-          <Link href={routes.status()} underline="none" sx={{ color: theme.palette.text.primary, fontWeight: '300' }}>
+          <Link data-testid="statusButton" href={routes.status()} underline="none" sx={{ color: theme.palette.text.primary, fontWeight: '300' }}>
             <Button
               key="Status"
               variant="text"
@@ -102,7 +102,7 @@ const NavButtons = () => {
         </Tooltip>
 
         <Tooltip title='Give Feedback'>
-          <Link href={routes.feedback()} underline="none" sx={{ color: theme.palette.text.primary, fontWeight: '300' }}>
+          <Link data-testid="feedbackButton" href={routes.feedback()} underline="none" sx={{ color: theme.palette.text.primary, fontWeight: '300' }}>
             <Button
               key="Feedback"
               variant="text"
