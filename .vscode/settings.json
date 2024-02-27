@@ -7,5 +7,7 @@
   },
   "[prisma]": {
     "editor.formatOnSave": true
-  }
+  },
+  "jest.jestCommandLine": "node \"node_modules/jest/bin/jest.js\" \"c:/Users/rushi/Documents/Coding/Classes/CS490/CodeGoat/web/src/layouts/UserLayout/UserLayout.test.jsx\" -c \"c:/Users/rushi/Documents/Coding/Classes/CS490/CodeGoat/web/jest.config.js\"",
+  "jest.rootPath": "."
 }

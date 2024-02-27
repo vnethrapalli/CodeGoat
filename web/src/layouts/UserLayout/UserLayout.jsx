@@ -49,7 +49,7 @@ const TitleLink = () => {
   const theme = useTheme();
 
   return (
-    <Grid item alignContent='center' alignItems='stretch' xs="4">
+    <Grid item alignContent='center' alignItems='stretch' xs={4}>
       <Tooltip title='Go Home'>
         <Typography data-testid="titleLink" variant="h6" noWrap component="a"
           sx={{
@@ -75,7 +75,7 @@ const NavButtons = () => {
   const theme = useTheme();
 
   return (
-    <Grid item alignContent='center' alignItems='stretch' alignSelf='center' xs="4">
+    <Grid item alignContent='center' alignItems='stretch' alignSelf='center' xs={4}>
       <Box data-testid="navButtons" display="flex" sx={{ justifyContent: "center", alignItems: "center", flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
         <Tooltip title='Translate Code'>
           <Link data-testid="translateButton" href={routes.translate()} underline="none" sx={{ color: theme.palette.text.primary, fontWeight: '300' }}>
@@ -137,10 +137,11 @@ const ThemeAuthButtons = () => {
   const [auth, setAuth] = React.useState(false);
 
   return (
-    <Grid item alignContent='center' alignItems='stretch' sx={{display: 'flex', justifyContent: 'flex-end' }} xs="4">
+    <Grid item alignContent='center' alignItems='stretch' sx={{display: 'flex', justifyContent: 'flex-end' }} xs={4}>
       <ThemeButton />
 
       {!auth && <Button
+        data-testid="loginButton"
         key="Log In"
         variant="text"
         sx={{ backgroundColor: theme.palette.primary.main, color: "#265073", height: "30px", marginLeft: '14px', marginRight: '0px', borderRadius: '6px', alignSelf: 'center',
@@ -154,6 +155,7 @@ const ThemeAuthButtons = () => {
       </Button>}
 
       {!auth && <Button
+        data-testid="signupButton"
         key="Sign Up"
         variant="text"
         sx={{ backgroundColor: "#2D9596", color: "#F1FADA", height: "30px", marginLeft: '14px', marginRight: '0px', borderRadius: '6px', alignSelf: 'center',
@@ -167,6 +169,7 @@ const ThemeAuthButtons = () => {
       </Button>}
 
       {auth && <Button
+        data-testid="signoutButton"
         key="Sign Out"
         variant="text"
         sx={{ backgroundColor: "#F1FADA", color: "#265073", height: "30px", marginLeft: '14px', marginRight: '0px', borderRadius: '6px', alignSelf: 'center',

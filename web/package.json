@@ -16,14 +16,14 @@
     "@fontsource/roboto": "^5.0.8",
     "@mui/icons-material": "^5.15.10",
     "@mui/material": "^5.15.10",
-    "@redwoodjs/forms": "7.0.1",
-    "@redwoodjs/router": "7.0.1",
-    "@redwoodjs/web": "7.0.1",
+    "@redwoodjs/forms": "7.0.3",
+    "@redwoodjs/router": "7.0.3",
+    "@redwoodjs/web": "7.0.3",
     "react": "18.2.0",
     "react-dom": "18.2.0"
   },
   "devDependencies": {
-    "@redwoodjs/vite": "7.0.1",
+    "@redwoodjs/vite": "7.0.3",
     "@types/react": "^18.2.55",
     "@types/react-dom": "^18.2.19"
   }
