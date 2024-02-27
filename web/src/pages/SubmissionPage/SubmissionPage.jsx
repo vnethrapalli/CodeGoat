@@ -69,6 +69,7 @@ const LangDropdown = ({ text }) => {
 // }
 
 const CodeBox = () => {
+  const [codeValue, setCodeValue] = React.useState("write some code...");
   const editorRef = useRef(null);
 
   function handleEditorDidMount(editor, monaco) {
@@ -87,10 +88,11 @@ const CodeBox = () => {
         width='400px'
         m='10px'
         defaultLanguage="javascript"
-        defaultValue="// some comment"
-        value="write some code..."
+        defaultValue=""
+        value={codeValue}
         theme="vs-dark"
         onMount={handleEditorDidMount}
+        onChange={(newValue) => { setCodeValue(newValue); }}
       />
     </>
   );
@@ -116,6 +118,9 @@ const SubmissionPage = () => {
     )
   }
 
+  const codeboxInput = CodeBox();
+  const codeboxOutput = CodeBox();
+
   return (
     <>
       <Metadata title="Submission" description="Submission page"/>
@@ -133,22 +138,34 @@ const SubmissionPage = () => {
             </Stack>
 
             <Stack direction="row" spacing={1} justifyContent="flex-end" alignItems="center">
-              <Button startIcon={<ContentCopyIcon/>}/>
+              <Button
+                startIcon={<ContentCopyIcon/>}
+                onClick={() => {
+                  console.log(codeboxInput.props.children.props.value)
+                  navigator.clipboard.writeText(codeboxInput.props.children.props.value)
+                }}
+              />
               <Button startIcon={<DownloadIcon/>}/>
             </Stack>
           </Stack>
-          <CodeBox/>
+          {codeboxInput}
 
         </Stack>
         {output &&
           <Stack direction="column" spacing={1} justifyContent="center" alignItems="center" m={4}>
             <Stack direction="row" justifyContent="flex-end" alignItems="center" width='400px'>
               <Stack direction="row" spacing={1} justifyContent="flex-end" alignItems="center">
-                <Button startIcon={<ContentCopyIcon/>}/>
+                <Button
+                  startIcon={<ContentCopyIcon/>}
+                  onClick={() => {
+                    console.log(codeboxOutput.props.children.props.value)
+                    navigator.clipboard.writeText(codeboxOutput.props.children.props.value)
+                  }}
+                />
                 <Button startIcon={<DownloadIcon/>}/>
               </Stack>
             </Stack>
-            <CodeBox/>
+            {codeboxOutput}
           </Stack>
         }
       </Stack>
