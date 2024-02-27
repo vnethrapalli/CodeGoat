@@ -1,65 +1,73 @@
 import { routes } from '@redwoodjs/router'
 
-import { AppBar, Link, Toolbar, Box, Button, Container, Typography, Paper, Grid } from '@mui/material';
+import { AppBar, Link, Box, Button, Container, Tooltip, Typography, Grid } from '@mui/material';
 import CssBaseline from "@mui/material/CssBaseline";
-import { ThemeProvider, createTheme, useTheme } from "@mui/material/styles";
+import { Experimental_CssVarsProvider as CssVarsProvider, experimental_extendTheme as extendTheme, useColorScheme, useTheme } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
 import LightMode from '@mui/icons-material/LightMode';
 import DarkMode from '@mui/icons-material/DarkMode';
 
-const themeLight = createTheme({
-  palette: {
-    primary: {
-      main: "#F1FADA"
+const theme = extendTheme({
+  colorSchemes: {
+    light: {
+      palette: {
+        primary: {
+          main: "#F1FADA"
+        },
+        secondary: {
+          main: "#2D9596"
+        },
+        background: {
+          default: "#F1FADA"
+        },
+        text: {
+          primary: "#F1FADA"
+        }
+      },
     },
-    secondary: {
-      main: "#2D9596"
+    dark: {
+      palette: {
+        primary: {
+          main: "#F1FADA"
+        },
+        secondary: {
+          main: "#344955"
+        },
+        background: {
+          default: "#35374B"
+        },
+        text: {
+          primary: "#F1FADA"
+        }
+      },
     },
-    background: {
-      default: "#F1FADA"
-    },
-    text: {
-      primary: "#F1FADA"
-    }
-  }
-});
+  },
 
-const themeDark = createTheme({
-  palette: {
-    primary: {
-      main: "#F1FADA"
-    },
-    secondary: {
-      main: "#344955"
-    },
-    background: {
-      default: "#35374B"
-    },
-    text: {
-      primary: "#F1FADA"
-    }
-  }
 });
 
 const TitleLink = () => {
   const theme = useTheme();
 
   return (
-    <Typography variant="h6" noWrap component="a"
-      sx={{
-        mr: 2,
-        display: { xs: 'none', md: 'flex' },
-        fontWeight: 700,
-        fontSize: 30,
-        color: theme.palette.text.primary,
-        textDecoration: 'none',
-        marginLeft: "20px",
-      }}
-    >
-      <Link href={routes.home()} underline="none">
-        CodeGoat
-      </Link>
-    </Typography>
+    <Grid item alignContent='center' alignItems='stretch' xs="4">
+      <Tooltip title='Go Home'>
+        <Typography variant="h6" noWrap component="a"
+          sx={{
+            mr: 2,
+            display: { xs: 'none', md: 'flex' },
+            fontWeight: 700,
+            fontSize: 30,
+            color: theme.palette.text.primary,
+            textDecoration: 'none',
+            marginLeft: "20px",
+          }}
+        >
+          <Link href={routes.home()} underline="none">
+            CodeGoat
+          </Link>
+        </Typography>
+      </Tooltip>
+    </Grid>
   )
 }
 
@@ -67,37 +75,111 @@ const NavButtons = () => {
   const theme = useTheme();
 
   return (
-    <Box display="flex" sx={{ justifyContent: "center", alignItems: "center", flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-      <Link href={routes.translate()} underline="none" sx={{ color: theme.palette.text.primary, fontWeight: '300' }}>
-        <Button
-          key="Translate"
-          variant="text"
-          sx={{ my: 2, color: "#F1FADA", display: 'block', margin: 'auto auto' }}
-        >
-          Translate
-        </Button>
-      </Link>
+    <Grid item alignContent='center' alignItems='stretch' alignSelf='center' xs="4">
+      <Box display="flex" sx={{ justifyContent: "center", alignItems: "center", flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+        <Tooltip title='Translate Code'>
+          <Link href={routes.translate()} underline="none" sx={{ color: theme.palette.text.primary, fontWeight: '300' }}>
+            <Button
+              key="Translate"
+              variant="text"
+              sx={{ my: 2, color: theme.palette.text.primary, display: 'block', margin: 'auto auto' }}
+            >
+              Translate
+            </Button>
+          </Link>
+        </Tooltip>
 
-      <Link href={routes.status()} underline="none" sx={{ color: theme.palette.text.primary, fontWeight: '300' }}>
-        <Button
-          key="Status"
-          variant="text"
-          sx={{ my: 2, color: "#F1FADA", display: 'block', margin: 'auto auto' }}
-        >
-          GPT-3 Status
-        </Button>
-      </Link>
+        <Tooltip title='Check API Status'>
+          <Link href={routes.status()} underline="none" sx={{ color: theme.palette.text.primary, fontWeight: '300' }}>
+            <Button
+              key="Status"
+              variant="text"
+              sx={{ my: 2, color: theme.palette.text.primary, display: 'block', margin: 'auto auto' }}
+            >
+              GPT-3 Status
+            </Button>
+          </Link>
+        </Tooltip>
 
-      <Link href={routes.feedback()} underline="none" sx={{ color: theme.palette.text.primary, fontWeight: '300' }}>
-        <Button
-          key="Feedback"
-          variant="text"
-          sx={{ my: 2, color: "#F1FADA", display: 'block', margin: 'auto auto' }}
-        >
-          Feedback
-        </Button>
-      </Link>
-    </Box>
+        <Tooltip title='Give Feedback'>
+          <Link href={routes.feedback()} underline="none" sx={{ color: theme.palette.text.primary, fontWeight: '300' }}>
+            <Button
+              key="Feedback"
+              variant="text"
+              sx={{ my: 2, color: theme.palette.text.primary, display: 'block', margin: 'auto auto' }}
+            >
+              Feedback
+            </Button>
+          </Link>
+        </Tooltip>
+      </Box>
+    </Grid>
+  )
+}
+
+const ThemeButton = () => {
+  const theme = useTheme();
+  const { mode, setMode } = useColorScheme();
+
+  return (
+    <Tooltip title={mode === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}>
+      <IconButton data-testid="themeButton" sx={{ width: '4%'}} onClick={() => setMode(mode === 'light' ? 'dark' : 'light')}>
+        {mode === 'light'
+          ? <LightMode style={{fill: theme.palette.text.primary}} />
+          : <DarkMode style={{fill: theme.palette.text.primary}} />}
+      </IconButton>
+    </Tooltip>
+  )
+}
+
+const ThemeAuthButtons = () => {
+  const theme = useTheme();
+  const [auth, setAuth] = React.useState(false);
+
+  return (
+    <Grid item alignContent='center' alignItems='stretch' sx={{display: 'flex', justifyContent: 'flex-end' }} xs="4">
+      <ThemeButton />
+
+      {!auth && <Button
+        key="Log In"
+        variant="text"
+        sx={{ backgroundColor: theme.palette.primary.main, color: "#265073", height: "30px", marginLeft: '14px', marginRight: '0px', borderRadius: '6px', alignSelf: 'center',
+          '&:hover': {
+            backgroundColor: '#F1FADA',
+            color: "#265073",
+          },
+        }}
+      >
+        Log In
+      </Button>}
+
+      {!auth && <Button
+        key="Sign Up"
+        variant="text"
+        sx={{ backgroundColor: "#2D9596", color: "#F1FADA", height: "30px", marginLeft: '14px', marginRight: '0px', borderRadius: '6px', alignSelf: 'center',
+          '&:hover': {
+            backgroundColor: '#2D9596',
+            color: "#F1FADA",
+          },
+        }}
+      >
+        Sign Up
+      </Button>}
+
+      {auth && <Button
+        key="Sign Out"
+        variant="text"
+        sx={{ backgroundColor: "#F1FADA", color: "#265073", height: "30px", marginLeft: '14px', marginRight: '0px', borderRadius: '6px', alignSelf: 'center',
+          '&:hover': {
+            backgroundColor: '#F1FADA',
+            color: "#265073",
+          },
+        }}
+      >
+        Sign Out
+      </Button>}
+
+    </Grid>
   )
 }
 
@@ -128,7 +210,7 @@ const Footer = () => {
 
           {"Copyright © "}
           {new Date().getFullYear()}
-          {" Segmentation Cult."}
+          {" Segmentation Cult"}
         </Typography>
       </Container>
     </Box>
@@ -136,75 +218,22 @@ const Footer = () => {
 }
 
 const UserLayout = ({ children }) => {
-  const [light, setLight] = React.useState(true);
-  const [auth, setAuth] = React.useState(false);
-
   return (
     <>
-      <ThemeProvider theme={light ? themeLight : themeDark}>
+      <CssVarsProvider theme={theme}>
         <CssBaseline />
         <Box minHeight='100vh'>
           <AppBar position="sticky" sx={{ background: '#265073', marginBottom: '20px', height: '10%' }}>
             <Grid container width="100%" spacing={2} alignItems='center' alignContent='center' justifyContent='center'>
                 {/* Title/Home Link */}
-                <Grid item alignContent='center' alignItems='stretch' xs="4">
-                  <TitleLink />
-                </Grid>
+                <TitleLink />
 
                 {/* Navigation Buttons */}
-                <Grid item alignContent='center' alignItems='stretch' alignSelf='center' xs="4">
-                  <NavButtons />
-                </Grid>
+                <NavButtons />
 
-                {/* Theme Change Button */}
-                <Grid item alignContent='center' alignItems='stretch' sx={{display: 'flex', justifyContent: 'flex-end' }} xs="4">
+                {/* Theme Change and Authentication Button */}
+                <ThemeAuthButtons />
 
-                  <IconButton data-testid="themeButton" sx={{ width: '4%'}} onClick={() => setLight((prev) => !prev)}>
-                    {light === true
-                      ? <LightMode style={{fill: "#F1FADA"}} />
-                      : <DarkMode style={{fill: "#F1FADA"}} />}
-                  </IconButton>
-
-                  {!auth && <Button
-                    key="Log In"
-                    variant="text"
-                    sx={{ backgroundColor: "#F1FADA", color: "#265073", height: "30px", marginLeft: '14px', marginRight: '0px', borderRadius: '6px', alignSelf: 'center',
-                      '&:hover': {
-                        backgroundColor: '#F1FADA',
-                        color: "#265073",
-                      },
-                    }}
-                  >
-                    Log In
-                  </Button>}
-
-                  {!auth && <Button
-                    key="Sign Up"
-                    variant="text"
-                    sx={{ backgroundColor: "#2D9596", color: "#F1FADA", height: "30px", marginLeft: '14px', marginRight: '0px', borderRadius: '6px', alignSelf: 'center',
-                      '&:hover': {
-                        backgroundColor: '#2D9596',
-                        color: "#F1FADA",
-                      },
-                    }}
-                  >
-                    Sign Up
-                  </Button>}
-
-                  {auth && <Button
-                    key="Sign Out"
-                    variant="text"
-                    sx={{ backgroundColor: "#F1FADA", color: "#265073", height: "30px", marginLeft: '14px', marginRight: '0px', borderRadius: '6px', alignSelf: 'center',
-                      '&:hover': {
-                        backgroundColor: '#F1FADA',
-                        color: "#265073",
-                      },
-                    }}
-                  >
-                    Sign Out
-                  </Button>}
-
-                </Grid>
             </Grid>
           </AppBar>
 
@@ -212,9 +241,8 @@ const UserLayout = ({ children }) => {
 
           {/* Static Footer */}
           <Footer />
-
         </Box>
-      </ThemeProvider>
+      </CssVarsProvider>
     </>
   )
 }
