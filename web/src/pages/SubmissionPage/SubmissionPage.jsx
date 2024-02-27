@@ -85,7 +85,7 @@ const CodeBox = () => {
       {/* <button onClick={showValue}>Show value</button> */}
       <Editor
         height='600px'
-        width='400px'
+        width="40vw"
         m='10px'
         defaultLanguage="javascript"
         defaultValue=""
@@ -101,15 +101,20 @@ const CodeBox = () => {
 const SubmissionPage = () => {
   const [output, setOutput] = React.useState(false);
 
+  const codeboxInput = CodeBox();
+  const codeboxOutput = CodeBox();
+
   const TranslateBtn = () => {
     return (
       <>
         <Box textAlign="center">
           <Button
             sx={{ width: "250px" }}
-            onClick={() =>
-              setOutput(() => true)
-            }
+            onClick={() => {
+              setOutput(() => true);
+              codeboxInput.props.children.props.width = "48%";
+              codeboxOutput.props.children.props.width = "48%";
+            }}
           >
             Translate
           </Button>
@@ -118,13 +123,61 @@ const SubmissionPage = () => {
     )
   }
 
-  const codeboxInput = CodeBox();
-  const codeboxOutput = CodeBox();
-
   return (
     <>
       <Metadata title="Submission" description="Submission page"/>
+
       <Stack
+        direction="column"
+        spacing={2}
+        alignItems="center"
+      >
+        <Stack direction="row" spacing={4} justifyContent="space-between" alignItems="center" width={output ? '80vw' : '40vw'}>
+
+          <Stack direction="row" justifyContent="space-between" alignItems="center" width={'40vw'}>
+            <Stack direction="row" spacing={2} justifyContent="flex-start" alignItems="center">
+              <LangDropdown text="source" />
+              <LangDropdown text="target" />
+            </Stack>
+
+            <Stack direction="row" spacing={1} justifyContent="flex-end" alignItems="center">
+              <Button
+                startIcon={<ContentCopyIcon/>}
+                onClick={() => {
+                  console.log(codeboxInput.props.children.props.value)
+                  navigator.clipboard.writeText(codeboxInput.props.children.props.value)
+                }}
+              />
+              <Button startIcon={<DownloadIcon/>}/>
+            </Stack>
+          </Stack>
+
+          {output &&
+            <Stack direction="row" justifyContent="flex-end" alignItems="center" width='400px'>
+              <Stack direction="row" spacing={1} justifyContent="flex-end" alignItems="center" margin="0px">
+                <Button
+                  startIcon={<ContentCopyIcon/>}
+                  onClick={() => {
+                    console.log(codeboxOutput.props.children.props.value)
+                    navigator.clipboard.writeText(codeboxOutput.props.children.props.value)
+                  }}
+                />
+                <Button startIcon={<DownloadIcon/>}/>
+              </Stack>
+            </Stack>
+          }
+        </Stack>
+
+        <Stack direction="row" spacing={4} justifyContent="space-between" alignItems="center" width={output ? '80vw' : '40vw'}>
+          {codeboxInput}
+          {output && codeboxOutput}
+        </Stack>
+
+      </Stack>
+
+      <TranslateBtn/>
+
+      {/* <Stack
         direction="row"
         spacing={5}
         justifyContent="center"
@@ -168,8 +221,8 @@ const SubmissionPage = () => {
             {codeboxOutput}
           </Stack>
         }
-      </Stack>
-      <TranslateBtn/>
+      </Stack> */}
+      {/* <TranslateBtn/> */}
     </>
   )
 }
