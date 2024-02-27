@@ -10,12 +10,12 @@ import React, { useRef } from 'react';
 
 const languages = ["C++", "C", "Java", "Python", "JavaScript", "Assembly"];
 
-const LangDropdown = () => {
+const LangDropdown = ({ text }) => {
   return (
     <>
       <FormControl>
-        <InputLabel>Source Language</InputLabel>
-        <Select>
+        <InputLabel>{text}</InputLabel>
+        <Select style={{ width: 100, height: 30 }}>
           {languages.map((lang) => {
             return <MenuItem value={lang}>{lang}</MenuItem>
           })}
@@ -81,7 +81,7 @@ const CodeBox = () => {
 
   return (
     <>
-      <button onClick={showValue}>Show value</button>
+      {/* <button onClick={showValue}>Show value</button> */}
       <Editor
         height='600px'
         width='400px'
@@ -125,13 +125,29 @@ const SubmissionPage = () => {
         justifyContent="center"
         alignItems="center"
       >
-        <Stack direction="column" spacing={2} justifyContent="center" alignItems="center" m={2}>
-          <LangDropdown/>
+        <Stack direction="column" spacing={1} justifyContent="center" alignItems="center" m={1}>
+          <Stack direction="row" justifyContent="space-between" alignItems="center" width='400px'>
+            <Stack direction="row" spacing={2} justifyContent="flex-start" alignItems="center">
+              <LangDropdown text="source" />
+              <LangDropdown text="target" />
+            </Stack>
+
+            <Stack direction="row" spacing={1} justifyContent="flex-end" alignItems="center">
+              <Button startIcon={<ContentCopyIcon/>}/>
+              <Button startIcon={<DownloadIcon/>}/>
+            </Stack>
+          </Stack>
           <CodeBox/>
+
         </Stack>
         {output &&
-          <Stack direction="column" spacing={2} justifyContent="center" alignItems="center" m={2}>
-            <LangDropdown/>
+          <Stack direction="column" spacing={1} justifyContent="center" alignItems="center" m={4}>
+            <Stack direction="row" justifyContent="flex-end" alignItems="center" width='400px'>
+              <Stack direction="row" spacing={1} justifyContent="flex-end" alignItems="center">
+                <Button startIcon={<ContentCopyIcon/>}/>
+                <Button startIcon={<DownloadIcon/>}/>
+              </Stack>
+            </Stack>
             <CodeBox/>
           </Stack>
         }
