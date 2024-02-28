@@ -7,7 +7,7 @@ import IconButton from '@mui/material/IconButton';
 import LightMode from '@mui/icons-material/LightMode';
 import DarkMode from '@mui/icons-material/DarkMode';
 
-import { useAuth } from 'src/auth'
+import { useAuth, AuthProvider, auth0 } from 'src/auth'
 
 const theme = extendTheme({
   colorSchemes: {
@@ -136,13 +136,35 @@ const ThemeButton = () => {
 
 const ThemeAuthButtons = () => {
   const theme = useTheme();
-  const [auth, setAuth] = React.useState(false);
+  const { isAuthenticated, signUp, logOut, userMetadata } = useAuth()
+
+  const [isAuth, setIsAuth] = React.useState(isAuthenticated)
+
+  const login = async () => {
+    await auth0.loginWithPopup().then(token => {
+      setIsAuth(true)
+      auth0.getUser().then(user => console.log(user))
+      auth0.getTokenSilently().then(token => console.log(token))
+    })
+  }
+
+  const logout = async () => {
+    auth0.logout({
+      logoutParams: {
+        returnTo: 'http://localhost:8910/'
+      }
+    }).then(e => {
+      console.log('Logged out')
+      setIsAuthenticated(false)
+    })
+  }
 
   return (
     <Grid item alignContent='center' alignItems='stretch' sx={{display: 'flex', justifyContent: 'flex-end' }} xs={4}>
       <ThemeButton />
 
-      {!auth && <Button
+      {!isAuth && <Button
+        onClick={login}
         data-testid="loginButton"
         key="Log In"
         variant="text"
@@ -156,7 +178,8 @@ const ThemeAuthButtons = () => {
         Log In
       </Button>}
 
-      {!auth && <Button
+      {!isAuth && <Button
+        onClick={signUp}
         data-testid="signupButton"
         key="Sign Up"
         variant="text"
@@ -170,7 +193,8 @@ const ThemeAuthButtons = () => {
         Sign Up
       </Button>}
 
-      {auth && <Button
+      {isAuth && <Button
+        onClick={logOut}
         data-testid="signoutButton"
         key="Sign Out"
         variant="text"
