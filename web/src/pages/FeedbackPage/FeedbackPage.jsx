@@ -7,7 +7,6 @@ const FeedbackPage = () => {
       <Metadata title="Feedback" description="Feedback page" />
 
       <h1>FeedbackPage</h1>
-      <h1>{localStorage.getItem('token')}</h1>
       <p>
         Find me in <code>./web/src/pages/FeedbackPage/FeedbackPage.jsx</code>
       </p>

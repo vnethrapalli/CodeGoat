@@ -6,7 +6,7 @@ import IconButton from '@mui/material/IconButton';
 import LightMode from '@mui/icons-material/LightMode';
 import DarkMode from '@mui/icons-material/DarkMode';
 
-import { useAuth, AuthProvider, auth0 } from 'src/auth'
+import { useAuth, auth0 } from 'src/auth'
 
 const theme = extendTheme({
   colorSchemes: {
@@ -146,6 +146,8 @@ const ThemeAuthButtons = () => {
       setIsAuth(true)
       auth0.getUser().then(user => {
         delete user.sub
+        delete user.updated_at
+        delete user.email_verified
         localStorage.setItem('user', JSON.stringify(user))
       })
     })
