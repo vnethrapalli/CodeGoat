@@ -18,20 +18,24 @@ const Routes = () => {
     <Router useAuth={useAuth}>
       <PrivateSet unauthenticated="home">
         <Set wrap={UserLayout}>
+          <Route path="/translate" page={TranslatePage} name="translate" />
+          <Route path="/feedback" page={FeedbackPage} name="feedback" />
+          <Route path="/submission" page={SubmissionPage} name="submission" />
         </Set>
       </PrivateSet>
         
       <Set wrap={UserLayout}>
         <Route path="/" page={HomePage} name="home" />
-        <Route path="/submission" page={SubmissionPage} name="submission" />
-        <Route path="/feedback" page={FeedbackPage} name="feedback" />
+        <Route path="/status" page={StatusPage} name="status" />
       </Set>
 
+      // This is scaffold for test feedback inputs; I'd rather keep it in but not necessary
       <Set wrap={ScaffoldLayout} title="Feedbacks" titleTo="feedbacks" buttonLabel="New Feedback" buttonTo="newFeedback">
         <Route path="/feedbacks/new" page={FeedbackNewFeedbackPage} name="newFeedback" />
         <Route path="/feedbacks/{id:Int}/edit" page={FeedbackEditFeedbackPage} name="editFeedback" />
         <Route path="/feedbacks/{id:Int}" page={FeedbackFeedbackPage} name="feedback" />
         <Route path="/feedbacks" page={FeedbackFeedbacksPage} name="feedbacks" />
+        <Route path="/status" page={StatusPage} name="status" />
       </Set>
 
       <Route notfound page={NotFoundPage} />

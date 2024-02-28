@@ -7,9 +7,9 @@
     ]
   },
   "devDependencies": {
-    "@redwoodjs/auth-auth0-setup": "7.0.2",
-    "@redwoodjs/core": "7.0.2",
-    "@redwoodjs/project-config": "7.0.2"
+    "@redwoodjs/auth-auth0-setup": "7.0.3",
+    "@redwoodjs/core": "7.0.3",
+    "@redwoodjs/project-config": "7.0.3"
   },
   "eslintConfig": {
     "extends": "@redwoodjs/eslint-config",
@@ -23,9 +23,13 @@
   },
   "packageManager": "yarn@4.1.0",
   "dependencies": {
+<<<<<<< HEAD
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
     "@mui/joy": "^5.0.0-beta.29",
     "@mui/material": "^5.15.11"
+=======
+    "css-mediaquery": "^0.1.2"
+>>>>>>> dev
   }
 }
