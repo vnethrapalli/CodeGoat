@@ -1,7 +1,5 @@
 // import { Link, routes } from '@redwoodjs/router'
-// import { Metadata } from '@redwoodjs/web'
-
-// import { useAuth } from 'src/auth'
+import { Metadata } from '@redwoodjs/web'
 
 // const HomePage = () => {
 //   const { isAuthenticated, signUp, logIn, logOut, userMetadata, loading } = useAuth()

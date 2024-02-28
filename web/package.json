@@ -12,12 +12,12 @@
   },
   "dependencies": {
     "@auth0/auth0-spa-js": "^2",
-    "@redwoodjs/auth-auth0-web": "7.0.3",
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
     "@fontsource/roboto": "^5.0.8",
     "@mui/icons-material": "^5.15.10",
     "@mui/material": "^5.15.10",
+    "@redwoodjs/auth-auth0-web": "7.0.3",
     "@redwoodjs/forms": "7.0.3",
     "@redwoodjs/router": "7.0.3",
     "@redwoodjs/web": "7.0.3",

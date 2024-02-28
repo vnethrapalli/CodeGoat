@@ -7,6 +7,8 @@ import IconButton from '@mui/material/IconButton';
 import LightMode from '@mui/icons-material/LightMode';
 import DarkMode from '@mui/icons-material/DarkMode';
 
+import { useAuth } from 'src/auth'
+
 const theme = extendTheme({
   colorSchemes: {
     light: {
