@@ -1,5 +1,4 @@
 import { routes } from '@redwoodjs/router'
-
 import { AppBar, Link, Box, Button, Container, Tooltip, Typography, Grid } from '@mui/material';
 import CssBaseline from "@mui/material/CssBaseline";
 import { Experimental_CssVarsProvider as CssVarsProvider, experimental_extendTheme as extendTheme, useColorScheme, useTheme } from '@mui/material/styles';
@@ -46,6 +45,8 @@ const theme = extendTheme({
   },
 
 });
+
+let token = null
 
 const TitleLink = () => {
   const theme = useTheme();
@@ -136,28 +137,20 @@ const ThemeButton = () => {
 
 const ThemeAuthButtons = () => {
   const theme = useTheme();
-  const { isAuthenticated, signUp, logOut, userMetadata } = useAuth()
+  const { isAuthenticated, signUp, logOut } = useAuth()
 
   const [isAuth, setIsAuth] = React.useState(isAuthenticated)
 
   const login = async () => {
-    await auth0.loginWithPopup().then(token => {
+    await auth0.loginWithPopup().then(t => {
       setIsAuth(true)
-      auth0.getUser().then(user => console.log(user))
-      auth0.getTokenSilently().then(token => console.log(token))
+      auth0.getUser().then(user => {
+        delete user.sub
+        localStorage.setItem('user', JSON.stringify(user))
+      })
     })
   }
 
-  const logout = async () => {
-    auth0.logout({
-      logoutParams: {
-        returnTo: 'http://localhost:8910/'
-      }
-    }).then(e => {
-      console.log('Logged out')
-      setIsAuthenticated(false)
-    })
-  }
 
   return (
     <Grid item alignContent='center' alignItems='stretch' sx={{display: 'flex', justifyContent: 'flex-end' }} xs={4}>
