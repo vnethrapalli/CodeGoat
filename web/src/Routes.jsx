@@ -27,16 +27,12 @@ const Routes = () => {
       <Set wrap={UserLayout}>
         <Route path="/" page={HomePage} name="home" />
         <Route path="/status" page={StatusPage} name="status" />
+        <Route path="/feedback" page={FeedbackPage} name="feedback" />
       </Set>
 
-      // This is scaffold for test feedback inputs; I'd rather keep it in but not necessary
-      <Set wrap={ScaffoldLayout} title="Feedbacks" titleTo="feedbacks" buttonLabel="New Feedback" buttonTo="newFeedback">
-        <Route path="/feedbacks/new" page={FeedbackNewFeedbackPage} name="newFeedback" />
-        <Route path="/feedbacks/{id:Int}/edit" page={FeedbackEditFeedbackPage} name="editFeedback" />
-        <Route path="/feedbacks/{id:Int}" page={FeedbackFeedbackPage} name="feedback" />
-        <Route path="/feedbacks" page={FeedbackFeedbacksPage} name="feedbacks" />
-        <Route path="/status" page={StatusPage} name="status" />
-      </Set>
+      
+
+      
 
       <Route notfound page={NotFoundPage} />
     </Router>

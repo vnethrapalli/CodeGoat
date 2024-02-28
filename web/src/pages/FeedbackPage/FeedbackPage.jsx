@@ -6,17 +6,11 @@ import { styled } from '@mui/material/styles';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import LensIcon from '@mui/icons-material/Lens';
 import { TextareaAutosize } from '@mui/base/TextareaAutosize';
+import { useTheme } from '@mui/material/styles';
+import { alpha } from "@mui/material";
 
-// This is for getting the correct color to display when hovered / unhovered
-const StyledRating = styled(Rating)({
-  '& .MuiRating-iconFilled': {
-    color: '#9AD0C2',
-  },
-  '& .MuiRating-iconHover': {
-    color: '#2D9596',
-  },
-});
 
+// For the sql stuff
 const CREATE_FEEDBACK = gql`
   mutation CreateFeedbackMutation($input: CreateFeedbackInput!) {
     createFeedback(input: $input) {
@@ -25,16 +19,30 @@ const CREATE_FEEDBACK = gql`
   }
 `
 const FeedbackPage = () => {
+  const theme = useTheme();
+  // This is for getting the correct color to display when hovered / unhovered
+  // Alpha controls the transparency; prevents needing another color added to the UserLayout palette
+  const StyledRating = styled(Rating)({
+    '& .MuiRating-iconFilled': {
+      color: alpha(theme.palette.secondary.main == "#344955" ? "#3f6b79" : theme.palette.secondary.main, 0.6),
+    },
+    '& .MuiRating-iconHover': {
+      color: alpha(theme.palette.secondary.main, 1),
+    },
+  });
+  
   const [create] = useMutation(CREATE_FEEDBACK)
 
+  // Gets the input into the database
   const onSubmit = (data) => {
     data.preventDefault();
-    console.log(sub, out, acc, gpt, exp, com)
+    console.log(sub, com)
     create({ variables: { input: {"submissionPage":sub, "outputPage":out, "translationAccuracy":acc, "gptAvailability":gpt, "experience":exp, "comments":com} } })
   }
   // By default, hover is not on
   const [hover, setHover] = React.useState(-1);
-  // By default, the stars will be unfilled until hovered / selected
+
+  // Set the variables to 0 / empty initially
   const [sub, setSub] = React.useState(0);
   const [out, setOut] = React.useState(0);
   const [acc, setAcc] = React.useState(0);
@@ -45,158 +53,172 @@ const FeedbackPage = () => {
   return (
     <>
       <Metadata title="Feedback" description="Feedback page" />
-      <h1>Feedback</h1>
-      <Form onSubmit={onSubmit}>
-        <Typography component="legend">Submission Page</Typography>
-        <Box
-          sx={{
-            width: 200,
-            display: 'flex',
-            alignItems: 'center',
-            fontSize: "1.5rem",
-          }}
-        >
-          <StyledRating
-            name="submissionPage"
-            value={sub}
-            precision={1}
-            onChange={(event, newValue) => {
-              setSub(newValue);
-            }}
-            onChangeActive={(event, newHover) => {
-              setHover(newHover);
-            }}
+      <Box display="flex" flexDirection='column' justifyContent="center" alignItems="center">
+      <Typography variant='h2' component='h2' align='center' style={{color: (theme.palette.secondary.main == "#344955" ? theme.palette.text.primary : "#344955"), fontSize: '52px', fontStyle: 'normal', fontWeight: '600'}}>Feedback</Typography>
+        <Form onSubmit={onSubmit}>
+          <Typography variant='h5' component='h5' align='center' style={{color: (theme.palette.secondary.main == "#344955" ? theme.palette.text.primary : "#344955")}}>Submission Page</Typography>
+          <Box
             sx={{
-              fontSize: "4rem"
+              display: 'flex',
+              alignItems: 'center',
+              fontSize: "1.5rem",
+              justifyContent:"center",
             }}
-            icon={<LensIcon fontSize="inherit" />}
-            emptyIcon={<RadioButtonUncheckedIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
-          />      
-        </Box>
+          >
+            <StyledRating
+              name="submissionPage"
+              value={sub}
+              precision={1}
+              max={10}
+              onChange={(event, newValue) => {
+                setSub(newValue);
+              }}
+              onChangeActive={(event, newHover) => {
+                setHover(newHover);
+              }}
+              sx={{
+                fontSize: "5rem"
+              }}
+              icon={<LensIcon fontSize="inherit" />}
+              emptyIcon={<RadioButtonUncheckedIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
+            />      
+          </Box>
 
-        <Typography component="legend">Output Page</Typography>
-        <Box
-          sx={{
-            width: 200,
-            display: 'flex',
-            alignItems: 'center',
-            fontSize: "1.5rem",
-          }}
-        >
-          <StyledRating
-            name="outputPage"
-            value={out}
-            precision={1}
-            onChange={(event, newValue) => {
-              setOut(newValue);
-            }}
-            onChangeActive={(event, newHover) => {
-              setHover(newHover);
-            }}
+          <Typography variant='h5' component='h5' align='center' style={{color: (theme.palette.secondary.main == "#344955" ? theme.palette.text.primary : "#344955")}}>Output Page</Typography>
+          <Box
             sx={{
-              fontSize: "4rem"
+              display: 'flex',
+              alignItems: 'center',
+              fontSize: "1.5rem",
+              justifyContent:"center",
             }}
-            icon={<LensIcon fontSize="inherit" />}
-            emptyIcon={<RadioButtonUncheckedIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
-          />       
-        </Box>
+          >
+            <StyledRating
+              name="outputPage"
+              value={out}
+              precision={1}
+              max={10}
+              onChange={(event, newValue) => {
+                setOut(newValue);
+              }}
+              onChangeActive={(event, newHover) => {
+                setHover(newHover);
+              }}
+              sx={{
+                fontSize: "5rem"
+              }}
+              icon={<LensIcon fontSize="inherit" />}
+              emptyIcon={<RadioButtonUncheckedIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
+            />       
+          </Box>
 
-        <Typography component="legend">Translation Accuracy</Typography>
-        <Box
-          sx={{
-            width: 200,
-            display: 'flex',
-            alignItems: 'center',
-            fontSize: "1.5rem",
-          }}
-        >
-          <StyledRating
-            name="translationAccuracy"
-            value={acc}
-            precision={1}
-            onChange={(event, newValue) => {
-              setAcc(newValue);
-            }}
-            onChangeActive={(event, newHover) => {
-              setHover(newHover);
-            }}
+          <Typography variant='h5' component='h5' align='center' style={{color: (theme.palette.secondary.main == "#344955" ? theme.palette.text.primary : "#344955")}}>Translation Accuracy</Typography>
+          <Box
             sx={{
-              fontSize: "4rem"
+              display: 'flex',
+              alignItems: 'center',
+              fontSize: "1.5rem",
+              justifyContent:"center",
             }}
-            icon={<LensIcon fontSize="inherit" />}
-            emptyIcon={<RadioButtonUncheckedIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
-          />     
-        </Box>
+          >
+            <StyledRating
+              name="translationAccuracy"
+              value={acc}
+              precision={1}
+              max={10}
+              onChange={(event, newValue) => {
+                setAcc(newValue);
+              }}
+              onChangeActive={(event, newHover) => {
+                setHover(newHover);
+              }}
+              sx={{
+                fontSize: "5rem"
+              }}
+              icon={<LensIcon fontSize="inherit" />}
+              emptyIcon={<RadioButtonUncheckedIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
+            />     
+          </Box>
 
-        <Typography component="legend">GPT-3 Availability</Typography>
-        <Box
-          sx={{
-            width: 200,
-            display: 'flex',
-            alignItems: 'center',
-            fontSize: "1.5rem",
-          }}
-        >
-          <StyledRating
-            name="gptAvailability"
-            value={gpt}
-            precision={1}
-            onChange={(event, newValue) => {
-              setGPT(newValue);
-            }}
-            onChangeActive={(event, newHover) => {
-              setHover(newHover);
-            }}
+          <Typography variant='h5' component='h5' align='center' style={{color: (theme.palette.secondary.main == "#344955" ? theme.palette.text.primary : "#344955")}}>GPT-3 Availability</Typography>
+          <Box
             sx={{
-              fontSize: "4rem"
+              display: 'flex',
+              alignItems: 'center',
+              fontSize: "1.5rem",
+              justifyContent:"center",
             }}
-            icon={<LensIcon fontSize="inherit" />}
-            emptyIcon={<RadioButtonUncheckedIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
-          />     
-        </Box>
+          >
+            <StyledRating
+              name="gptAvailability"
+              value={gpt}
+              precision={1}
+              max={10}
+              onChange={(event, newValue) => {
+                setGPT(newValue);
+              }}
+              onChangeActive={(event, newHover) => {
+                setHover(newHover);
+              }}
+              sx={{
+                fontSize: "5rem"
+              }}
+              icon={<LensIcon fontSize="inherit" />}
+              emptyIcon={<RadioButtonUncheckedIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
+            />     
+          </Box>
 
-        <Typography component="legend">Overall Experience</Typography>
-        <Box
-          sx={{
-            width: 200,
-            display: 'flex',
-            alignItems: 'center',
-            fontSize: "1.5rem",
-          }}
-        >
-          <StyledRating
-            name="experience"
-            value={exp}
-            precision={1}
-            onChange={(event, newValue) => {
-              setExp(newValue);
-            }}
-            onChangeActive={(event, newHover) => {
-              setHover(newHover);
-            }}
+          <Typography variant='h5' component='h5' align='center' style={{color: (theme.palette.secondary.main == "#344955" ? theme.palette.text.primary : "#344955")}}>Overall Experience</Typography>
+          <Box
             sx={{
-              fontSize: "4rem"
+              display: 'flex',
+              alignItems: 'center',
+              fontSize: "1.5rem",
+              justifyContent:"center",
             }}
-            icon={<LensIcon fontSize="inherit" />}
-            emptyIcon={<RadioButtonUncheckedIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
-          />    
-        </Box>
+          >
+            <StyledRating
+              name="experience"
+              value={exp}
+              precision={1}
+              max={10}
+              onChange={(event, newValue) => {
+                setExp(newValue);
+              }}
+              onChangeActive={(event, newHover) => {
+                setHover(newHover);
+              }}
+              sx={{
+                fontSize: "5rem"
+              }}
+              icon={<LensIcon fontSize="inherit" />}
+              emptyIcon={<RadioButtonUncheckedIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
+            />    
+          </Box>
 
-        <Typography component="legend">Additional Comments</Typography>
-        <TextareaAutosize
-          name="comments"
-          value={com}
-          minRows={2}
-          placeholder="Type here."
-          size="lg"
-          variant="outlined"
-          onChange={(event) => {
-            setCom(event.target.value);
-          }}
-          ></TextareaAutosize>
-          <br></br>
-        <Button type="submit" onClick={onSubmit}>Submit</Button>
-      </Form>
+          <Typography variant='h5' component='h5' align='center' style={{color: (theme.palette.secondary.main == "#344955" ? theme.palette.text.primary : "#344955")}}>Additional Comments</Typography>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              size: "lg",
+            }}
+          >
+            <TextareaAutosize 
+              name="comments"
+              value={com}
+              minRows={5}
+              placeholder="Type here."
+              onChange={(event) => {
+                setCom(event.target.value);
+              }}
+            ></TextareaAutosize>
+          </Box>
+          
+
+          <Button type="submit" sx={{ my: 2, color: theme.palette.text.primary, display: 'block', margin: 'auto auto' }} style={{color: (theme.palette.secondary.main == "#344955" ? theme.palette.text.primary : "#344955")}} onClick={onSubmit}>Submit</Button>
+        </Form>
+      </Box>
     </>
   )
 }
