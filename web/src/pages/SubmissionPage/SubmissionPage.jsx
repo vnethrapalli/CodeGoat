@@ -25,48 +25,6 @@ const LangDropdown = ({ text }) => {
   )
 }
 
-// const CodeBox = () => {
-//   return (
-//     <Box sx = {{ padding: 0 }}>
-//       <Box
-//         sx={{
-//           outline: 1,
-//           width: "500px",
-//           height: "30px",
-//           borderTopLeftRadius: 15,
-//           borderTopRightRadius: 15,
-//           borderBottomLeftRadius: 0,
-//           borderBottomRightRadius: 0,
-//           borderBottom: 0
-//          }}
-//       >
-//         <Stack direction="row">
-//           <Box sx={{
-//             width: "500px",
-//             textAlign: "right"
-//           }}>
-//             <Button startIcon={<ContentCopyIcon/>}/>
-//             <Button startIcon={<DownloadIcon/>}/>
-//           </Box>
-//         </Stack>
-//       </Box>
-//       <TextareaAutosize
-//         placeholder="Code Area"
-//         minRows={30}
-//         maxRows={30}
-//         sx={{
-//           width: "500px",
-//           outline: 1,
-//           borderTopLeftRadius: 0,
-//           borderTopRightRadius: 0,
-//           borderBottomLeftRadius: 15,
-//           borderBottomRightRadius: 15
-//          }}
-//       >
-//       </TextareaAutosize>
-//     </Box>
-//   )
-// }
 
 const CodeBox = () => {
   const [codeValue, setCodeValue] = React.useState("write some code...");
@@ -148,7 +106,21 @@ const SubmissionPage = () => {
                   navigator.clipboard.writeText(codeboxInput.props.children.props.value)
                 }}
               />
-              <Button startIcon={<DownloadIcon/>}/>
+              <Button
+              startIcon={<DownloadIcon/>}
+              onClick={() => {
+                const element = document.createElement("a");
+                element.setAttribute("id", "download-link");
+                const file = new Blob([codeboxInput.props.children.props.value], { type: "text/plain" });
+                element.href = URL.createObjectURL(file);
+                element.download = "code_input.txt";
+
+                // simulate link click
+                document.body.appendChild(element); // Required for this to work in FireFox
+                element.click();
+                document.body.removeChild(element);
+              }}
+              />
             </Stack>
           </Stack>
 
@@ -162,7 +134,21 @@ const SubmissionPage = () => {
                     navigator.clipboard.writeText(codeboxOutput.props.children.props.value)
                   }}
                 />
-                <Button startIcon={<DownloadIcon/>}/>
+                <Button
+                  startIcon={<DownloadIcon/>}
+                  onClick={() => {
+                    const element = document.createElement("a");
+                    element.setAttribute("id", "download-link");
+                    const file = new Blob([codeboxOutput.props.children.props.value], { type: "text/plain" });
+                    element.href = URL.createObjectURL(file);
+                    element.download = "code_output.txt";
+
+                    // simulate link click
+                    document.body.appendChild(element); // Required for this to work in FireFox
+                    element.click();
+                    document.body.removeChild(element);
+                  }}
+                />
               </Stack>
             </Stack>
           }
@@ -174,55 +160,7 @@ const SubmissionPage = () => {
         </Stack>
 
       </Stack>
-
       <TranslateBtn/>
-
-      {/* <Stack
-        direction="row"
-        spacing={5}
-        justifyContent="center"
-        alignItems="center"
-      >
-        <Stack direction="column" spacing={1} justifyContent="center" alignItems="center" m={1}>
-          <Stack direction="row" justifyContent="space-between" alignItems="center" width='400px'>
-            <Stack direction="row" spacing={2} justifyContent="flex-start" alignItems="center">
-              <LangDropdown text="source" />
-              <LangDropdown text="target" />
-            </Stack>
-
-            <Stack direction="row" spacing={1} justifyContent="flex-end" alignItems="center">
-              <Button
-                startIcon={<ContentCopyIcon/>}
-                onClick={() => {
-                  console.log(codeboxInput.props.children.props.value)
-                  navigator.clipboard.writeText(codeboxInput.props.children.props.value)
-                }}
-              />
-              <Button startIcon={<DownloadIcon/>}/>
-            </Stack>
-          </Stack>
-          {codeboxInput}
-
-        </Stack>
-        {output &&
-          <Stack direction="column" spacing={1} justifyContent="center" alignItems="center" m={4}>
-            <Stack direction="row" justifyContent="flex-end" alignItems="center" width='400px'>
-              <Stack direction="row" spacing={1} justifyContent="flex-end" alignItems="center">
-                <Button
-                  startIcon={<ContentCopyIcon/>}
-                  onClick={() => {
-                    console.log(codeboxOutput.props.children.props.value)
-                    navigator.clipboard.writeText(codeboxOutput.props.children.props.value)
-                  }}
-                />
-                <Button startIcon={<DownloadIcon/>}/>
-              </Stack>
-            </Stack>
-            {codeboxOutput}
-          </Stack>
-        }
-      </Stack> */}
-      {/* <TranslateBtn/> */}
     </>
   )
 }
