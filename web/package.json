@@ -11,23 +11,21 @@
     ]
   },
   "dependencies": {
+    "@auth0/auth0-spa-js": "^2",
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
     "@fontsource/roboto": "^5.0.8",
-    "@material-ui/core": "^4.12.4",
-    "@material-ui/icons": "^4.11.3",
-    "@mui/icons-material": "^5.15.11",
-    "@mui/joy": "^5.0.0-beta.29",
-    "@mui/lab": "^5.0.0-alpha.166",
-    "@mui/material": "^5.15.11",
-    "@redwoodjs/forms": "7.0.1",
-    "@redwoodjs/router": "7.0.1",
-    "@redwoodjs/web": "7.0.1",
+    "@mui/icons-material": "^5.15.10",
+    "@mui/material": "^5.15.10",
+    "@redwoodjs/auth-auth0-web": "7.0.3",
+    "@redwoodjs/forms": "7.0.3",
+    "@redwoodjs/router": "7.0.3",
+    "@redwoodjs/web": "7.0.3",
     "react": "18.2.0",
     "react-dom": "18.2.0"
   },
   "devDependencies": {
-    "@redwoodjs/vite": "7.0.1",
+    "@redwoodjs/vite": "7.0.3",
     "@types/react": "^18.2.55",
     "@types/react-dom": "^18.2.19"
   }
