@@ -10,15 +10,13 @@ import React, { useRef } from 'react';
 const languages = ["C++", "C", "Java", "Python", "JavaScript", "Assembly"];
 
 const LangDropdown = ({ text }) => {
-  const theme = useTheme();
-
   return (
     <>
       <FormControl>
         <InputLabel>{text}</InputLabel>
         <Select style={{ width: 100, height: 30 }}>
           {languages.map((lang) => {
-            return <MenuItem sx={{ color: theme.palette.text.secondary }} value={lang}>{lang}</MenuItem>
+            return <MenuItem value={lang}>{lang}</MenuItem>
           })}
         </Select>
       </FormControl>
@@ -63,14 +61,12 @@ const SubmissionPage = () => {
   const codeboxInput = CodeBox();
   const codeboxOutput = CodeBox();
 
-  const theme = useTheme();
-
   const TranslateBtn = () => {
     return (
       <>
         <Box textAlign="center">
           <Button
-            sx={{ width: "250px", color: theme.palette.text.secondary }}
+            sx={{ width: "250px" }}
             onClick={() => {
               setOutput(() => true);
               codeboxInput.props.children.props.width = "48%";
@@ -103,14 +99,14 @@ const SubmissionPage = () => {
 
             <Stack direction="row" spacing={1} justifyContent="flex-end" alignItems="center">
               <Button
-                startIcon={<ContentCopyIcon sx={{fill: theme.palette.text.secondary}}/>}
+                startIcon={<ContentCopyIcon />}
                 onClick={() => {
                   console.log(codeboxInput.props.children.props.value)
                   navigator.clipboard.writeText(codeboxInput.props.children.props.value)
                 }}
               />
               <Button
-              startIcon={<DownloadIcon sx={{fill: theme.palette.text.secondary}}/>}
+              startIcon={<DownloadIcon />}
               onClick={() => {
                 const element = document.createElement("a");
                 element.setAttribute("id", "download-link");
@@ -131,14 +127,14 @@ const SubmissionPage = () => {
             <Stack direction="row" justifyContent="flex-end" alignItems="center" width='400px'>
               <Stack direction="row" spacing={1} justifyContent="flex-end" alignItems="center" margin="0px">
                 <Button
-                  startIcon={<ContentCopyIcon sx={{fill: theme.palette.text.secondary}}/>}
+                  startIcon={<ContentCopyIcon />}
                   onClick={() => {
                     console.log(codeboxOutput.props.children.props.value)
                     navigator.clipboard.writeText(codeboxOutput.props.children.props.value)
                   }}
                 />
                 <Button
-                  startIcon={<DownloadIcon sx={{fill: theme.palette.text.secondary}}/>}
+                  startIcon={<DownloadIcon />}
                   onClick={() => {
                     const element = document.createElement("a");
                     element.setAttribute("id", "download-link");
