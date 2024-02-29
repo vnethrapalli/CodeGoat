@@ -1,8 +1,8 @@
 import { Link, routes } from '@redwoodjs/router';
 import { Metadata } from '@redwoodjs/web';
-import { Stack, Box } from '@mui/material';
-import { TextareaAutosize } from '@mui/base/TextareaAutosize';
-import { FormControl, InputLabel, Select, MenuItem, Button } from '@material-ui/core';
+import { Stack, Box, Button } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
+import { FormControl, InputLabel, Select, MenuItem } from '@material-ui/core';
 import DownloadIcon from '@mui/icons-material/Download';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import Editor from '@monaco-editor/react';
@@ -11,13 +11,15 @@ import React, { useRef } from 'react';
 const languages = ["C++", "C", "Java", "Python", "JavaScript", "Assembly"];
 
 const LangDropdown = ({ text }) => {
+  const theme = useTheme();
+
   return (
     <>
       <FormControl>
         <InputLabel>{text}</InputLabel>
         <Select style={{ width: 100, height: 30 }}>
           {languages.map((lang) => {
-            return <MenuItem value={lang}>{lang}</MenuItem>
+            return <MenuItem sx={{ color: theme.palette.text.secondary }} value={lang}>{lang}</MenuItem>
           })}
         </Select>
       </FormControl>
@@ -62,12 +64,14 @@ const SubmissionPage = () => {
   const codeboxInput = CodeBox();
   const codeboxOutput = CodeBox();
 
+  const theme = useTheme();
+
   const TranslateBtn = () => {
     return (
       <>
         <Box textAlign="center">
           <Button
-            sx={{ width: "250px" }}
+            sx={{ width: "250px", color: theme.palette.text.secondary }}
             onClick={() => {
               setOutput(() => true);
               codeboxInput.props.children.props.width = "48%";
@@ -100,14 +104,14 @@ const SubmissionPage = () => {
 
             <Stack direction="row" spacing={1} justifyContent="flex-end" alignItems="center">
               <Button
-                startIcon={<ContentCopyIcon/>}
+                startIcon={<ContentCopyIcon sx={{fill: theme.palette.text.secondary}}/>}
                 onClick={() => {
                   console.log(codeboxInput.props.children.props.value)
                   navigator.clipboard.writeText(codeboxInput.props.children.props.value)
                 }}
               />
               <Button
-              startIcon={<DownloadIcon/>}
+              startIcon={<DownloadIcon sx={{fill: theme.palette.text.secondary}}/>}
               onClick={() => {
                 const element = document.createElement("a");
                 element.setAttribute("id", "download-link");
@@ -128,14 +132,14 @@ const SubmissionPage = () => {
             <Stack direction="row" justifyContent="flex-end" alignItems="center" width='400px'>
               <Stack direction="row" spacing={1} justifyContent="flex-end" alignItems="center" margin="0px">
                 <Button
-                  startIcon={<ContentCopyIcon/>}
+                  startIcon={<ContentCopyIcon sx={{fill: theme.palette.text.secondary}}/>}
                   onClick={() => {
                     console.log(codeboxOutput.props.children.props.value)
                     navigator.clipboard.writeText(codeboxOutput.props.children.props.value)
                   }}
                 />
                 <Button
-                  startIcon={<DownloadIcon/>}
+                  startIcon={<DownloadIcon sx={{fill: theme.palette.text.secondary}}/>}
                   onClick={() => {
                     const element = document.createElement("a");
                     element.setAttribute("id", "download-link");

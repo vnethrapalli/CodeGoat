@@ -22,7 +22,8 @@ const theme = extendTheme({
           default: "#F1FADA"
         },
         text: {
-          primary: "#F1FADA"
+          primary: "#F1FADA",
+          secondary: "#265073"
         }
       },
     },
@@ -38,7 +39,8 @@ const theme = extendTheme({
           default: "#35374B"
         },
         text: {
-          primary: "#F1FADA"
+          primary: "#F1FADA",
+          secondary: "#F1FADA"
         }
       },
     },
@@ -112,6 +114,18 @@ const NavButtons = () => {
               sx={{ my: 2, color: theme.palette.text.primary, display: 'block', margin: 'auto auto' }}
             >
               Feedback
+            </Button>
+          </Link>
+        </Tooltip>
+
+        <Tooltip title='Documentation'>
+          <Link data-testid="documentationButton" href={routes.documentation()} underline="none" sx={{ color: theme.palette.text.primary, fontWeight: '300' }}>
+            <Button
+              key="Feedback"
+              variant="text"
+              sx={{ my: 2, color: theme.palette.text.primary, display: 'block', margin: 'auto auto' }}
+            >
+              Documentation
             </Button>
           </Link>
         </Tooltip>
