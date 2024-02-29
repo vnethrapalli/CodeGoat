@@ -1,8 +1,7 @@
 import { Link, routes } from '@redwoodjs/router';
 import { Metadata } from '@redwoodjs/web';
-import { Stack, Box, Button } from '@mui/material';
+import { Stack, Box, Button, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import { FormControl, InputLabel, Select, MenuItem } from '@material-ui/core';
 import DownloadIcon from '@mui/icons-material/Download';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import Editor from '@monaco-editor/react';
