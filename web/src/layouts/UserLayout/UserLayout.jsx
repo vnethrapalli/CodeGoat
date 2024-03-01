@@ -48,8 +48,6 @@ const theme = extendTheme({
 
 });
 
-let token = null
-
 const TitleLink = () => {
   const theme = useTheme();
 
@@ -151,7 +149,11 @@ const ThemeButton = () => {
 
 const ThemeAuthButtons = () => {
   const theme = useTheme();
-  const { isAuthenticated, signUp, logOut } = useAuth()
+  const { isAuthenticated, signUp, logOut, loading } = useAuth()
+
+  if(loading) {
+    return null
+  }
 
   const [isAuth, setIsAuth] = React.useState(isAuthenticated)
 
