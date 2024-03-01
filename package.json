@@ -24,6 +24,5 @@
   "packageManager": "yarn@4.1.0",
   "dependencies": {
     "@monaco-editor/react": "^4.6.0"
-    "css-mediaquery": "^0.1.2"
   }
 }

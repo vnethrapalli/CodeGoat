@@ -9,7 +9,6 @@
 
 import { PrivateSet, Router, Route, Set } from '@redwoodjs/router'
 import UserLayout from './layouts/UserLayout/UserLayout'
-import ScaffoldLayout from 'src/layouts/ScaffoldLayout'
 
 import { useAuth } from './auth'
 
