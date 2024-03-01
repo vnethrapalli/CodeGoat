@@ -21,4 +21,6 @@ const auth0 = new Auth0Client({
   // useRefreshTokens: true,
 })
 
-export const { AuthProvider, useAuth } = createAuth(auth0)
+const { AuthProvider, useAuth } = createAuth(auth0)
+
+export {AuthProvider, useAuth, auth0}

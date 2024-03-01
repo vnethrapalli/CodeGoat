@@ -1,8 +1,7 @@
 import { Link, routes } from '@redwoodjs/router';
 import { Metadata } from '@redwoodjs/web';
-import { Stack, Box } from '@mui/material';
-import { TextareaAutosize } from '@mui/base/TextareaAutosize';
-import { FormControl, InputLabel, Select, MenuItem, Button } from '@material-ui/core';
+import { Stack, Box, Button, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import DownloadIcon from '@mui/icons-material/Download';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import Editor from '@monaco-editor/react';
@@ -100,14 +99,14 @@ const SubmissionPage = () => {
 
             <Stack direction="row" spacing={1} justifyContent="flex-end" alignItems="center">
               <Button
-                startIcon={<ContentCopyIcon/>}
+                startIcon={<ContentCopyIcon />}
                 onClick={() => {
                   console.log(codeboxInput.props.children.props.value)
                   navigator.clipboard.writeText(codeboxInput.props.children.props.value)
                 }}
               />
               <Button
-              startIcon={<DownloadIcon/>}
+              startIcon={<DownloadIcon />}
               onClick={() => {
                 const element = document.createElement("a");
                 element.setAttribute("id", "download-link");
@@ -128,14 +127,14 @@ const SubmissionPage = () => {
             <Stack direction="row" justifyContent="flex-end" alignItems="center" width='400px'>
               <Stack direction="row" spacing={1} justifyContent="flex-end" alignItems="center" margin="0px">
                 <Button
-                  startIcon={<ContentCopyIcon/>}
+                  startIcon={<ContentCopyIcon />}
                   onClick={() => {
                     console.log(codeboxOutput.props.children.props.value)
                     navigator.clipboard.writeText(codeboxOutput.props.children.props.value)
                   }}
                 />
                 <Button
-                  startIcon={<DownloadIcon/>}
+                  startIcon={<DownloadIcon />}
                   onClick={() => {
                     const element = document.createElement("a");
                     element.setAttribute("id", "download-link");
