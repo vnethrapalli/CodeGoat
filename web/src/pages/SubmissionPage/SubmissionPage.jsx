@@ -145,13 +145,13 @@ const SubmissionPage = () => {
           <InputLabel>{text}</InputLabel>
           <FormControl>
             <Select
-              style={{ width: 140, height: 30, backgroundColor: 'white' }}
+              style={{ width: 140, height: 30, backgroundColor: theme.palette.secondary.main }}
               variant="outlined"
               value={language}
               onChange={e => setLanguage(e.target.value)}
             >
               {languages.map((lang) => {
-                return <MenuItem value={lang.langCode}>{lang.dropdownItem}</MenuItem>
+                return <MenuItem sx={{backgroundColor: theme.palette.secondary.main, color: theme.palette.text.primary }} value={lang.langCode}>{lang.dropdownItem}</MenuItem>
               })}
             </Select>
           </FormControl>
@@ -205,7 +205,7 @@ const SubmissionPage = () => {
           borderBottomRightRadius: '0px'
         }}
       >
-        <ContentCopyIcon/>
+        <ContentCopyIcon sx={{ fill: theme.palette.text.primary }} />
       </Button>
     );
   }
@@ -234,13 +234,12 @@ const SubmissionPage = () => {
             }}
             onClick={readInputFile}
           >
-            <UploadFile />
+            <UploadFile sx={{ fill: theme.palette.text.primary }} />
           </Button>
         </label>
       </>
     )
   }
-
 
   const DownloadButton = () => {
     return (
@@ -267,7 +266,7 @@ const SubmissionPage = () => {
           document.body.removeChild(element);
         }}
         >
-        <DownloadIcon />
+        <DownloadIcon sx={{ fill: theme.palette.text.primary }} />
       </Button>
     )
   }
