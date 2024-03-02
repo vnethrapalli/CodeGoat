@@ -1,5 +1,5 @@
-import { render } from '@redwoodjs/testing/web'
-import { screen, configure } from '@testing-library/react'
+import { render, screen, fireEvent } from '@redwoodjs/testing/web'
+import { configure } from '@testing-library/react'
 import FeedbackPage from './FeedbackPage'
 
 //   Improve this test with help from the Redwood Testing Doc:
