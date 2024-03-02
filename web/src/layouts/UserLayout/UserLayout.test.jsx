@@ -1,13 +1,10 @@
 import { render, screen, fireEvent } from '@redwoodjs/testing/web'
 import mediaQuery from "css-mediaquery";
 
-<<<<<<< HEAD
-=======
 jest.mock("src/auth.js");
 import { useAuth } from 'src/auth'
 import { mocked } from "jest-mock";
 
->>>>>>> 0d31ac4e8a62b6c313079e14a7bd86b084649286
 const createMatchMedia = (width) => (query) => ({
   matches: mediaQuery.match(query, { width }),
   addListener: () => {},
@@ -159,23 +156,6 @@ describe('UserLayout', () => {
     }).not.toThrow()
   })
 
-<<<<<<< HEAD
-  test('renders Login Button successfully', () => {
-    render(<UserLayout />)
-
-    expect(screen.getByTestId("loginButton")).toBeInTheDocument()
-  })
-
-  test('renders Sign Up successfully', () => {
-    render(<UserLayout />)
-
-    expect(screen.getByTestId("signupButton")).toBeInTheDocument()
-  })
-
-});
-
-describe("Media Test", () => {
-=======
 
 
 });
@@ -196,7 +176,6 @@ describe("Media Test - Logged Out", () => {
         isLoading: false,
     });
   });
->>>>>>> 0d31ac4e8a62b6c313079e14a7bd86b084649286
   test("Desktop Test", async () => {
     window.matchMedia = createMatchMedia(1500);
 
@@ -238,9 +217,6 @@ describe("Media Test - Logged Out", () => {
     expect(screen.getByTestId("loginButton")).toBeInTheDocument()
     expect(screen.getByTestId("signupButton")).toBeInTheDocument()
   });
-<<<<<<< HEAD
-});
-=======
 });
 
 describe("Media Test - Logged In", () => {
@@ -351,4 +327,3 @@ describe('Navbar Auth - Logged Out', () => {
     expect(screen.getByTestId("signupButton")).toBeInTheDocument()
   })
 })
->>>>>>> 0d31ac4e8a62b6c313079e14a7bd86b084649286
