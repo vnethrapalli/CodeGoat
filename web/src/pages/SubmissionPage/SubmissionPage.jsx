@@ -26,7 +26,7 @@ const SubmissionPage = () => {
   const [output, setOutput] = React.useState(false);
   const theme = useTheme();
 
-  const CodeBox = ({ codeValue, updateCodeValue, defaultLanguage, language, defaultValue }) => {
+  const CodeBox = ({ codeValue, updateCodeValue, defaultLanguage, language, defaultValue, isInput }) => {
     const editorRef = useRef(null);
 
     function handleEditorDidMount(editor, monaco) {
@@ -38,7 +38,7 @@ const SubmissionPage = () => {
     // }
 
     return (
-      <>
+      <div data-testid={isInput ? "inputEditor" : "outputEditor"}>
         <Editor
           height='600px'
           width="40vw"
@@ -50,8 +50,9 @@ const SubmissionPage = () => {
           theme="vs-dark"
           onMount={handleEditorDidMount}
           onChange={updateCodeValue}
+          title={isInput ? "inputEditor" : "outputEditor"}
         />
-      </>
+      </div>
     );
   }
 
@@ -60,14 +61,16 @@ const SubmissionPage = () => {
     updateCodeValue: (newCodeVal) => setInputCodeValue(newCodeVal),
     defaultLanguage: inputLanguage,
     language: inputLanguage,
-    defaultValue: inputCodeValue
+    defaultValue: inputCodeValue,
+    isInput: true
   });
   const codeboxOutput = CodeBox({
     codeValue: outputCodeValue,
     updateCodeValue: (newCodeVal) => setOutputCodeValue(newCodeVal),
     defaultLanguage: outputLanguage,
     language: outputLanguage,
-    defaultValue: outputCodeValue
+    defaultValue: outputCodeValue,
+    isInput: false
   });
 
   const readInputFile = (event) => {
@@ -109,6 +112,7 @@ const SubmissionPage = () => {
         <Box textAlign="center" pt={2}>
           <Button
             variant="contained"
+            data-testid="translateButton"
             style={{
               backgroundColor: theme.palette.secondary.main,
               color: 'white',
@@ -121,8 +125,8 @@ const SubmissionPage = () => {
             }}
             onClick={() => {
               setOutput(() => true);
-              codeboxInput.props.children.props.width = "48%";
-              codeboxOutput.props.children.props.width = "48%";
+              // codeboxInput.props.children.props.width = "48%";
+              // codeboxOutput.props.children.props.width = "48%";
             }}
           >
             Translate
@@ -132,7 +136,7 @@ const SubmissionPage = () => {
     );
   }
 
-  const CopyButton = ({ editor }) => {
+  const CopyButton = ({ editor, isInput }) => {
     return (
       <Button
         onClick={() => {
@@ -147,6 +151,7 @@ const SubmissionPage = () => {
           borderTopRightRadius: '0px',
           borderBottomRightRadius: '0px'
         }}
+        data-testid={isInput ? "inputCopy" : "outputCopy"}
       >
         <ContentCopyIcon sx={{ fill: theme.palette.text.primary }} />
       </Button>
@@ -176,6 +181,7 @@ const SubmissionPage = () => {
               borderBottomRightRadius: '10px'
             }}
             onClick={readInputFile}
+            data-testid="uploadButton"
           >
             <UploadFile sx={{ fill: theme.palette.text.primary }} />
           </Button>
@@ -208,6 +214,7 @@ const SubmissionPage = () => {
           element.click();
           document.body.removeChild(element);
         }}
+        data-testid="downloadButton"
         >
         <DownloadIcon sx={{ fill: theme.palette.text.primary }} />
       </Button>
@@ -215,7 +222,6 @@ const SubmissionPage = () => {
   }
 
   const DropdownAndButtons = ({ input }) => {
-    // console.log(input);
     return (
       <Stack direction="row" justifyContent="space-between" alignItems="center" width={'40vw'}>
         <Stack direction="row" spacing={2} justifyContent="flex-start" alignItems="center">
@@ -223,7 +229,7 @@ const SubmissionPage = () => {
           <LangDropdown text="Target Language" language={outputLanguage} setLanguage={(newLang) => setOutputLanguage(newLang)} />
         </Stack>
         <Stack direction="row" spacing={0} justifyContent="flex-end" alignItems="center">
-          <CopyButton editor={codeboxInput}/>
+          <CopyButton editor={codeboxInput} isInput={input}/>
           <Divider orientation="vertical" flexItem style={{ backgroundColor: darken(theme.palette.secondary.main, 0.5), width: '1%' }}/>
           {input ? <UploadButtonInput/> : <DownloadButton/>}
         </Stack>
@@ -232,7 +238,6 @@ const SubmissionPage = () => {
   }
 
   const NoDropdownAndButtons = ({ input }) => {
-    // console.log(input);
     return (
       <Stack direction="row" spacing={0} justifyContent="flex-end" alignItems="center">
         <CopyButton editor={input ? codeboxInput : codeboxOutput}/>
@@ -255,15 +260,11 @@ const SubmissionPage = () => {
           {output && <NoDropdownAndButtons input={false} />}
         </Stack>
         <Stack direction="row" spacing={4} justifyContent="space-between" alignItems="center" width={output ? '80vw' : '40vw'}>
-          {/* <CodeBox codeValue={inputCodeValue} setCodeValue={newCodeVal => setInputCodeValue(newCodeVal)} defaultLanguage={inputLanguage} language={inputLanguage} /> */}
           {codeboxInput}
-          {output &&
-          // <CodeBox codeValue={outputCodeValue} setCodeValue={newCodeVal => setOutputCodeValue(newCodeVal)} defaultLanguage={outputLanguage} language={outputLanguage} />}
-          codeboxOutput}
+          {output && codeboxOutput}
         </Stack>
       </Stack>
       <TranslateBtn/>
-      {/* <TranslateBtn/> */}
     </>
   );
 }
