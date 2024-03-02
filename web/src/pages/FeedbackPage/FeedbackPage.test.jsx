@@ -13,7 +13,7 @@ describe('FeedbackPage', () => {
     }).not.toThrow()
   })
 
-  if('renders text successfully', () => {
+  it('renders text successfully', () => {
     expect(() => {
       render(<FeedbackPage />)
       screen.getByRole('heading', {
