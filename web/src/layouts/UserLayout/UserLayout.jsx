@@ -1,9 +1,5 @@
 import { routes } from '@redwoodjs/router'
-<<<<<<< HEAD
-
-=======
 import { Toaster, toast } from '@redwoodjs/web/toast'
->>>>>>> 0d31ac4e8a62b6c313079e14a7bd86b084649286
 import { AppBar, Link, Box, Button, Container, Tooltip, Typography, Grid } from '@mui/material';
 import CssBaseline from "@mui/material/CssBaseline";
 import { Experimental_CssVarsProvider as CssVarsProvider, experimental_extendTheme as extendTheme, useColorScheme, useTheme } from '@mui/material/styles';
@@ -11,11 +7,7 @@ import IconButton from '@mui/material/IconButton';
 import LightMode from '@mui/icons-material/LightMode';
 import DarkMode from '@mui/icons-material/DarkMode';
 
-<<<<<<< HEAD
-import { useAuth } from 'src/auth'
-=======
-import { useAuth, auth0 } from 'src/auth'
->>>>>>> 0d31ac4e8a62b6c313079e14a7bd86b084649286
+import { useAuth, auth0 } from 'src/auth';
 
 const theme = extendTheme({
   colorSchemes: {
@@ -31,12 +23,8 @@ const theme = extendTheme({
           default: "#F1FADA"
         },
         text: {
-<<<<<<< HEAD
-          primary: "#F1FADA"
-=======
           primary: "#F1FADA",
           secondary: "#265073"
->>>>>>> 0d31ac4e8a62b6c313079e14a7bd86b084649286
         }
       },
     },
@@ -52,12 +40,8 @@ const theme = extendTheme({
           default: "#35374B"
         },
         text: {
-<<<<<<< HEAD
-          primary: "#F1FADA"
-=======
           primary: "#F1FADA",
           secondary: "#F1FADA"
->>>>>>> 0d31ac4e8a62b6c313079e14a7bd86b084649286
         }
       },
     },
@@ -132,8 +116,6 @@ const NavButtons = () => {
             </Button>
           </Link>
         </Tooltip>
-<<<<<<< HEAD
-=======
 
         <Tooltip title='Documentation'>
           <Link data-testid="documentationButton" href={routes.documentation()} underline="none" sx={{ color: theme.palette.text.primary, fontWeight: '300' }}>
@@ -146,7 +128,6 @@ const NavButtons = () => {
             </Button>
           </Link>
         </Tooltip>
->>>>>>> 0d31ac4e8a62b6c313079e14a7bd86b084649286
       </Box>
     </Grid>
   )
@@ -169,9 +150,6 @@ const ThemeButton = () => {
 
 const ThemeAuthButtons = () => {
   const theme = useTheme();
-<<<<<<< HEAD
-  const [auth, setAuth] = React.useState(false);
-=======
   const { isAuthenticated, signUp, logOut, loading } = useAuth()
 
   if(loading) {
@@ -192,18 +170,13 @@ const ThemeAuthButtons = () => {
     })
   }
 
->>>>>>> 0d31ac4e8a62b6c313079e14a7bd86b084649286
 
   return (
     <Grid item alignContent='center' alignItems='stretch' sx={{display: 'flex', justifyContent: 'flex-end' }} xs={4}>
       <ThemeButton />
 
-<<<<<<< HEAD
-      {!auth && <Button
-=======
       {!isAuth && <Button
         onClick={login}
->>>>>>> 0d31ac4e8a62b6c313079e14a7bd86b084649286
         data-testid="loginButton"
         key="Log In"
         variant="text"
@@ -217,12 +190,8 @@ const ThemeAuthButtons = () => {
         Log In
       </Button>}
 
-<<<<<<< HEAD
-      {!auth && <Button
-=======
       {!isAuth && <Button
         onClick={signUp}
->>>>>>> 0d31ac4e8a62b6c313079e14a7bd86b084649286
         data-testid="signupButton"
         key="Sign Up"
         variant="text"
@@ -236,12 +205,8 @@ const ThemeAuthButtons = () => {
         Sign Up
       </Button>}
 
-<<<<<<< HEAD
-      {auth && <Button
-=======
       {isAuth && <Button
         onClick={logOut}
->>>>>>> 0d31ac4e8a62b6c313079e14a7bd86b084649286
         data-testid="signoutButton"
         key="Sign Out"
         variant="text"
@@ -298,10 +263,7 @@ const UserLayout = ({ children }) => {
     <>
       <CssVarsProvider theme={theme}>
         <CssBaseline />
-<<<<<<< HEAD
-=======
         <Toaster />
->>>>>>> 0d31ac4e8a62b6c313079e14a7bd86b084649286
         <Box minHeight='100vh'>
           <AppBar position="sticky" sx={{ background: '#265073', marginBottom: '20px', height: '10%' }}>
             <Grid container width="100%" spacing={2} alignItems='center' alignContent='center' justifyContent='center'>

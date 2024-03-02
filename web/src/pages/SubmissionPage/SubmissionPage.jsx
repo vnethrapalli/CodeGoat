@@ -1,86 +1,108 @@
 import { Link, routes } from '@redwoodjs/router';
 import { Metadata } from '@redwoodjs/web';
-<<<<<<< HEAD
-import { Stack, Box, Divider } from '@mui/material';
-import { FormControl, InputLabel, Select, MenuItem, Button } from '@material-ui/core';
-import UploadIcon from '@mui/icons-material/Upload';
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import Editor from '@monaco-editor/react';
-import React, { useRef, useState } from 'react';
+import { Stack, Box, Button, FormControl, InputLabel, Select, MenuItem, Divider } from '@mui/material';
 import { useTheme, darken } from '@mui/material/styles';
-
-const languages = [
-    {dropdownItem: "C++", langCode: "cpp"},
-    {dropdownItem: "C#", langCode: "csharp"},
-    {dropdownItem: "Java", langCode: "java"},
-    {dropdownItem: "JavaScript", langCode: "javascript"},
-    {dropdownItem: "Python", langCode: "python"},
-    {dropdownItem: "TypeScript", langCode: "typescript"},
-];
-=======
-import { Stack, Box, Button, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
 import DownloadIcon from '@mui/icons-material/Download';
+import UploadFile from '@mui/icons-material/UploadFile';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import Editor from '@monaco-editor/react';
 import React, { useRef } from 'react';
 
-const languages = ["C++", "C", "Java", "Python", "JavaScript", "Assembly"];
+const languages = [
+  {dropdownItem: "C++", langCode: "cpp"},
+  {dropdownItem: "C#", langCode: "csharp"},
+  {dropdownItem: "Java", langCode: "java"},
+  {dropdownItem: "JavaScript", langCode: "javascript"},
+  {dropdownItem: "Python", langCode: "python"},
+  {dropdownItem: "TypeScript", langCode: "typescript"},
+];
 
-const LangDropdown = ({ text }) => {
-  return (
-    <>
-      <FormControl>
-        <InputLabel>{text}</InputLabel>
-        <Select style={{ width: 100, height: 30 }}>
-          {languages.map((lang) => {
-            return <MenuItem value={lang}>{lang}</MenuItem>
-          })}
-        </Select>
-      </FormControl>
-    </>
-  )
-}
+// const LangDropdown = ({ text }) => {
+//   return (
+//     <>
+//       <FormControl>
+//         <InputLabel>{text}</InputLabel>
+//         <Select style={{ width: 100, height: 30 }}>
+//           {languages.map((lang) => {
+//             return <MenuItem value={lang}>{lang}</MenuItem>
+//           })}
+//         </Select>
+//       </FormControl>
+//     </>
+//   )
+// }
 
 
-const CodeBox = () => {
-  const [codeValue, setCodeValue] = React.useState("write some code...");
-  const editorRef = useRef(null);
+// const CodeBox = () => {
+//   const [codeValue, setCodeValue] = React.useState("write some code...");
+//   const editorRef = useRef(null);
 
-  function handleEditorDidMount(editor, monaco) {
-    editorRef.current = editor;
-  }
+//   function handleEditorDidMount(editor, monaco) {
+//     editorRef.current = editor;
+//   }
 
-  function showValue() {
-    alert(editorRef.current.getValue());
-  }
+//   function showValue() {
+//     alert(editorRef.current.getValue());
+//   }
 
-  return (
-    <>
-      {/* <button onClick={showValue}>Show value</button> */}
-      <Editor
-        height='600px'
-        width="40vw"
-        m='10px'
-        defaultLanguage="javascript"
-        defaultValue=""
-        value={codeValue}
-        theme="vs-dark"
-        onMount={handleEditorDidMount}
-        onChange={(newValue) => { setCodeValue(newValue); }}
-      />
-    </>
-  );
-}
->>>>>>> 0d31ac4e8a62b6c313079e14a7bd86b084649286
+//   return (
+//     <>
+//       {/* <button onClick={showValue}>Show value</button> */}
+//       <Editor
+//         height='600px'
+//         width="40vw"
+//         m='10px'
+//         defaultLanguage="javascript"
+//         defaultValue=""
+//         value={codeValue}
+//         theme="vs-dark"
+//         onMount={handleEditorDidMount}
+//         onChange={(newValue) => { setCodeValue(newValue); }}
+//       />
+//     </>
+//   );
+// }
 
 const SubmissionPage = () => {
-  const [inputCodeValue, setInputCodeValue] = useState("// write some code...");
-  const [outputCodeValue, setOutputCodeValue] = useState("# write some code...");
-  const [inputLanguage, setInputLanguage] = useState("javascript");
-  const [outputLanguage, setOutputLanguage] = useState("python");
+  const [inputCodeValue, setInputCodeValue] = React.useState("// write some code...");
+  const [outputCodeValue, setOutputCodeValue] = React.useState("# write some code...");
+  const [inputLanguage, setInputLanguage] = React.useState("javascript");
+  const [outputLanguage, setOutputLanguage] = React.useState("python");
   const [output, setOutput] = React.useState(false);
   const theme = useTheme();
+
+  const CodeBox = ({ codeValue, setCodeValue, defaultLanguage, language, defaultValue }) => {
+    const editorRef = useRef(null);
+
+    function handleEditorDidMount(editor, monaco) {
+      editorRef.current = editor;
+    }
+
+    // function showValue() {
+    //   alert(editorRef.current.getValue());
+    // }
+
+    return (
+      <>
+        {/* <button onClick={showValue}>Show value</button> */}
+        <Editor
+          height='600px'
+          width="40vw"
+          m='10px'
+          defaultLanguage={defaultLanguage}
+          language={language}
+          defaultValue={defaultValue}
+          value={codeValue}
+          theme="vs-dark"
+          onMount={handleEditorDidMount}
+          onChange={setCodeValue}
+        />
+      </>
+    );
+  }
+
+  const codeboxInput = CodeBox(inputCodeValue, (newCodeVal) => setInputCodeValue(newCodeVal), inputLanguage, inputLanguage, inputCodeValue);
+  const codeboxOutput = CodeBox(outputCodeValue, (newCodeVal) => setOutputCodeValue(newCodeVal), outputLanguage, outputLanguage, outputCodeValue);
 
   const readInputFile = (event) => {
     const file = event.target.files[0];
@@ -126,15 +148,11 @@ const SubmissionPage = () => {
     )
   }
 
-  const codeboxInput = CodeBox();
-  const codeboxOutput = CodeBox();
-
   const TranslateBtn = () => {
     return (
       <>
         <Box textAlign="center" pt={2}>
           <Button
-<<<<<<< HEAD
             variant="contained"
             style={{
               backgroundColor: theme.palette.secondary.main,
@@ -143,11 +161,9 @@ const SubmissionPage = () => {
             }}
             sx={{
               width: "250px",
-              borderRadius: "40px"
+              borderRadius: "40px",
+              marginBottom: "25px",
             }}
-=======
-            sx={{ width: "250px" }}
->>>>>>> 0d31ac4e8a62b6c313079e14a7bd86b084649286
             onClick={() => {
               setOutput(() => true);
               codeboxInput.props.children.props.width = "48%";
@@ -197,7 +213,8 @@ const SubmissionPage = () => {
           <Button
             component="span"
             style={{
-              backgroundColor: theme.palette.secondary.main, color: darken(theme.palette.secondary.main, 0.5),
+              backgroundColor: theme.palette.secondary.main,
+              color: darken(theme.palette.secondary.main, 0.5),
               textTransform: 'none',
               borderTopLeftRadius: '0px',
               borderBottomLeftRadius: '0px',
@@ -205,242 +222,124 @@ const SubmissionPage = () => {
               borderBottomRightRadius: '10px'
             }}
           >
-            <UploadIcon/>
+            <UploadFile />
           </Button>
         </label>
       </>
     )
   }
 
-  const UploadButtonOutput = () => {
+  // const UploadButtonOutput = () => {
+  //   return (
+  //     <>
+  //       <input
+  //         type="file"
+  //         accept="*"
+  //         style={{ display: 'none' }}
+  //         id="upload-button-output"
+  //         onChange={readOutputFile}
+  //       />
+  //       <label htmlFor="upload-button-output">
+  //         <Button
+  //           component="span"
+  //           style={{
+  //             backgroundColor: theme.palette.secondary.main, color: darken(theme.palette.secondary.main, 0.5),
+  //             textTransform: 'none',
+  //             borderTopLeftRadius: '0px',
+  //             borderBottomLeftRadius: '0px',
+  //             borderTopRightRadius: '10px',
+  //             borderBottomRightRadius: '10px'
+  //           }}
+  //         >
+  //           <UploadIcon/>
+  //         </Button>
+  //       </label>
+  //     </>
+  //   )
+  // }
+
+  const DownloadButton = () => {
     return (
-      <>
-        <input
-          type="file"
-          accept="*"
-          style={{ display: 'none' }}
-          id="upload-button-output"
-          onChange={readOutputFile}
-        />
-        <label htmlFor="upload-button-output">
-          <Button
-            component="span"
-            style={{
-              backgroundColor: theme.palette.secondary.main, color: darken(theme.palette.secondary.main, 0.5),
-              textTransform: 'none',
-              borderTopLeftRadius: '0px',
-              borderBottomLeftRadius: '0px',
-              borderTopRightRadius: '10px',
-              borderBottomRightRadius: '10px'
-            }}
-          >
-            <UploadIcon/>
-          </Button>
-        </label>
-      </>
+      <Button
+        style={{
+          backgroundColor: theme.palette.secondary.main,
+          color: darken(theme.palette.secondary.main, 0.5),
+          textTransform: 'none',
+          borderTopLeftRadius: '10px',
+          borderBottomLeftRadius: '10px',
+          borderTopRightRadius: '0px',
+          borderBottomRightRadius: '0px'
+        }}
+        onClick={() => {
+          const element = document.createElement("a");
+          element.setAttribute("id", "download-link");
+          const file = new Blob([codeboxInput.props.children.props.value], { type: "text/plain" });
+          element.href = URL.createObjectURL(file);
+          element.download = "code_output.txt";
+
+          // simulate link click
+          document.body.appendChild(element); // Required for this to work in FireFox
+          element.click();
+          document.body.removeChild(element);
+        }}
+        >
+        <DownloadIcon />
+      </Button>
     )
   }
 
   const DropdownAndButtons = ({ input }) => {
-    console.log(input);
+    // console.log(input);
     return (
       <Stack direction="row" justifyContent="space-between" alignItems="center" width={'40vw'}>
         <Stack direction="row" spacing={2} justifyContent="flex-start" alignItems="center">
-          <LangDropdown text="Source Language" language={inputLanguage} setLanguage={newLang => setInputLanguage(newLang)} />
-          <LangDropdown text="Target Language" language={outputLanguage} setLanguage={newLang => setOutputLanguage(newLang)} />
+          <LangDropdown text="Source Language" language={inputLanguage} setLanguage={(newLang) => setInputLanguage(newLang)} />
+          <LangDropdown text="Target Language" language={outputLanguage} setLanguage={(newLang) => setOutputLanguage(newLang)} />
         </Stack>
         <Stack direction="row" spacing={0} justifyContent="flex-end" alignItems="center">
           <CopyButton/>
           <Divider orientation="vertical" flexItem style={{ backgroundColor: darken(theme.palette.secondary.main, 0.5), width: '1%' }}/>
-          {input ? <UploadButtonInput/> : <UploadButtonOutput/>}
+          {input ? <UploadButtonInput/> : <DownloadButton/>}
         </Stack>
       </Stack>
     );
   }
 
   const NoDropdownAndButtons = ({ input }) => {
-    console.log(input);
+    // console.log(input);
     return (
       <Stack direction="row" spacing={0} justifyContent="flex-end" alignItems="center">
         <CopyButton/>
         <Divider orientation="vertical" flexItem style={{ backgroundColor: darken(theme.palette.secondary.main, 0.5), width: '1%' }}/>
-        {input ? <UploadButtonInput/> : <UploadButtonOutput/>}
+        {input ? <UploadButtonInput/> : <DownloadButton/>}
       </Stack>
-    );
-  }
-
-  const CodeBox = ({ codeValue, setCodeValue, defaultLanguage, language }) => {
-    const editorRef = useRef(null);
-
-    function handleEditorDidMount(editor, monaco) {
-      editorRef.current = editor;
-    }
-
-    // function showValue() {
-    //   alert(editorRef.current.getValue());
-    // }
-
-    return (
-      <>
-        {/* <button onClick={showValue}>Show value</button> */}
-        <Editor
-          height='600px'
-          width="40vw"
-          m='10px'
-          defaultLanguage={defaultLanguage}
-          language={language}
-          value={codeValue}
-          theme="vs-dark"
-          onMount={handleEditorDidMount}
-          onChange={setCodeValue}
-        />
-      </>
     );
   }
 
   return (
     <>
       <Metadata title="Submission" description="Submission page"/>
-<<<<<<< HEAD
-=======
-
->>>>>>> 0d31ac4e8a62b6c313079e14a7bd86b084649286
       <Stack
         direction="column"
         spacing={2}
         alignItems="center"
       >
         <Stack direction="row" spacing={4} justifyContent="space-between" alignItems="center" width={output ? '80vw' : '40vw'}>
-<<<<<<< HEAD
           <DropdownAndButtons input={true} />
           {output && <NoDropdownAndButtons input={false} />}
         </Stack>
         <Stack direction="row" spacing={4} justifyContent="space-between" alignItems="center" width={output ? '80vw' : '40vw'}>
-          <CodeBox codeValue={inputCodeValue} setCodeValue={newCodeVal => setInputCodeValue(newCodeVal)} defaultLanguage={inputLanguage} language={inputLanguage} />
-          {output &&
-          <CodeBox codeValue={outputCodeValue} setCodeValue={newCodeVal => setOutputCodeValue(newCodeVal)} defaultLanguage={outputLanguage} language={outputLanguage} />}
-        </Stack>
-      </Stack>
-      <TranslateBtn/>
-      <TranslateBtn/>
-=======
-
-          <Stack direction="row" justifyContent="space-between" alignItems="center" width={'40vw'}>
-            <Stack direction="row" spacing={2} justifyContent="flex-start" alignItems="center">
-              <LangDropdown text="source" />
-              <LangDropdown text="target" />
-            </Stack>
-
-            <Stack direction="row" spacing={1} justifyContent="flex-end" alignItems="center">
-              <Button
-                startIcon={<ContentCopyIcon />}
-                onClick={() => {
-                  console.log(codeboxInput.props.children.props.value)
-                  navigator.clipboard.writeText(codeboxInput.props.children.props.value)
-                }}
-              />
-              <Button
-              startIcon={<DownloadIcon />}
-              onClick={() => {
-                const element = document.createElement("a");
-                element.setAttribute("id", "download-link");
-                const file = new Blob([codeboxInput.props.children.props.value], { type: "text/plain" });
-                element.href = URL.createObjectURL(file);
-                element.download = "code_input.txt";
-
-                // simulate link click
-                document.body.appendChild(element); // Required for this to work in FireFox
-                element.click();
-                document.body.removeChild(element);
-              }}
-              />
-            </Stack>
-          </Stack>
-
-          {output &&
-            <Stack direction="row" justifyContent="flex-end" alignItems="center" width='400px'>
-              <Stack direction="row" spacing={1} justifyContent="flex-end" alignItems="center" margin="0px">
-                <Button
-                  startIcon={<ContentCopyIcon />}
-                  onClick={() => {
-                    console.log(codeboxOutput.props.children.props.value)
-                    navigator.clipboard.writeText(codeboxOutput.props.children.props.value)
-                  }}
-                />
-                <Button
-                  startIcon={<DownloadIcon />}
-                  onClick={() => {
-                    const element = document.createElement("a");
-                    element.setAttribute("id", "download-link");
-                    const file = new Blob([codeboxOutput.props.children.props.value], { type: "text/plain" });
-                    element.href = URL.createObjectURL(file);
-                    element.download = "code_output.txt";
-
-                    // simulate link click
-                    document.body.appendChild(element); // Required for this to work in FireFox
-                    element.click();
-                    document.body.removeChild(element);
-                  }}
-                />
-              </Stack>
-            </Stack>
-          }
-        </Stack>
-
-        <Stack direction="row" spacing={4} justifyContent="space-between" alignItems="center" width={output ? '80vw' : '40vw'}>
+          {/* <CodeBox codeValue={inputCodeValue} setCodeValue={newCodeVal => setInputCodeValue(newCodeVal)} defaultLanguage={inputLanguage} language={inputLanguage} /> */}
           {codeboxInput}
-          {output && codeboxOutput}
+          {output &&
+          // <CodeBox codeValue={outputCodeValue} setCodeValue={newCodeVal => setOutputCodeValue(newCodeVal)} defaultLanguage={outputLanguage} language={outputLanguage} />}
+          codeboxOutput}
         </Stack>
-
       </Stack>
       <TranslateBtn/>
->>>>>>> 0d31ac4e8a62b6c313079e14a7bd86b084649286
+      {/* <TranslateBtn/> */}
     </>
   );
-
-// const CodeBox = () => {
-//   return (
-//     <Box sx = {{ padding: 0 }}>
-//       <Box
-//         sx={{
-//           outline: 1,
-//           width: "500px",
-//           height: "30px",
-//           borderTopLeftRadius: 15,
-//           borderTopRightRadius: 15,
-//           borderBottomLeftRadius: 0,
-//           borderBottomRightRadius: 0,
-//           borderBottom: 0
-//          }}
-//       >
-//         <Stack direction="row">
-//           <Box sx={{
-//             width: "500px",
-//             textAlign: "right"
-//           }}>
-//             <Button startIcon={<ContentCopyIcon/>}/>
-//             <Button startIcon={<UploadIcon/>}/>
-//           </Box>
-//         </Stack>
-//       </Box>
-//       <TextareaAutosize
-//         placeholder="Code Area"
-//         minRows={30}
-//         maxRows={30}
-//         sx={{
-//           width: "500px",
-//           outline: 1,
-//           borderTopLeftRadius: 0,
-//           borderTopRightRadius: 0,
-//           borderBottomLeftRadius: 15,
-//           borderBottomRightRadius: 15
-//          }}
-//       >
-//       </TextareaAutosize>
-//     </Box>
-//   )
-// }
-
 }
 
 export default SubmissionPage;

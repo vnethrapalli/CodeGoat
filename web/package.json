@@ -11,40 +11,16 @@
     ]
   },
   "dependencies": {
-<<<<<<< HEAD
-    "@auth0/auth0-spa-js": "^2",
-    "@emotion/react": "^11.11.3",
-    "@emotion/styled": "^11.11.0",
-    "@fontsource/roboto": "^5.0.8",
-<<<<<<< HEAD
-    "@material-ui/core": "^4.12.4",
-    "@material-ui/icons": "^4.11.3",
-    "@monaco-editor/react": "^4.6.0",
-    "@mui/icons-material": "^5.15.11",
-    "@mui/joy": "^5.0.0-beta.29",
-    "@mui/lab": "^5.0.0-alpha.166",
-    "@mui/material": "^5.15.11",
-    "@redwoodjs/auth-auth0-web": "7.0.2",
-    "@redwoodjs/forms": "7.0.2",
-    "@redwoodjs/router": "7.0.2",
-    "@redwoodjs/web": "7.0.2",
-=======
-=======
     "@auth0/auth0-spa-js": "^2.1.2",
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
     "@fontsource/roboto": "^5.0.8",
->>>>>>> 0d31ac4e8a62b6c313079e14a7bd86b084649286
     "@mui/icons-material": "^5.15.10",
     "@mui/material": "^5.15.10",
     "@redwoodjs/auth-auth0-web": "7.0.3",
     "@redwoodjs/forms": "7.0.3",
     "@redwoodjs/router": "7.0.3",
     "@redwoodjs/web": "7.0.3",
-<<<<<<< HEAD
->>>>>>> 0d9ce1c8d4970dc7cf731935c40d7b73c00026ec
-=======
->>>>>>> 0d31ac4e8a62b6c313079e14a7bd86b084649286
     "react": "18.2.0",
     "react-dom": "18.2.0"
   },

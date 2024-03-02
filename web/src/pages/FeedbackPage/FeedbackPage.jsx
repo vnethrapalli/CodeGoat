@@ -1,21 +1,4 @@
 import { Link, routes } from '@redwoodjs/router'
-<<<<<<< HEAD
-import { Metadata } from '@redwoodjs/web'
-
-const FeedbackPage = () => {
-  return (
-    <>
-      <Metadata title="Feedback" description="Feedback page" />
-
-      <h1>FeedbackPage</h1>
-      <p>
-        Find me in <code>./web/src/pages/FeedbackPage/FeedbackPage.jsx</code>
-      </p>
-      <p>
-        My default route is named <code>feedback</code>, link to me with `
-        <Link to={routes.feedback()}>Feedback</Link>`
-      </p>
-=======
 import { Metadata, useMutation } from '@redwoodjs/web'
 import { Form, Submit, TextField, TextAreaField } from '@redwoodjs/forms'
 import { Toaster, toast } from '@redwoodjs/web/toast'
@@ -239,7 +222,6 @@ const FeedbackPage = () => {
           <Button type="submit" sx={{ my: 2, color: theme.palette.text.primary, display: 'block', margin: 'auto auto' }} style={{color: (theme.palette.secondary.main == "#344955" ? theme.palette.text.primary : "#344955")}} onClick={onSubmit}>Submit</Button>
         </Form>
       </Box>
->>>>>>> 0d31ac4e8a62b6c313079e14a7bd86b084649286
     </>
   )
 }
