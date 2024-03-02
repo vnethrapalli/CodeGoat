@@ -17,51 +17,6 @@ const languages = [
   {dropdownItem: "TypeScript", langCode: "typescript"},
 ];
 
-// const LangDropdown = ({ text }) => {
-//   return (
-//     <>
-//       <FormControl>
-//         <InputLabel>{text}</InputLabel>
-//         <Select style={{ width: 100, height: 30 }}>
-//           {languages.map((lang) => {
-//             return <MenuItem value={lang}>{lang}</MenuItem>
-//           })}
-//         </Select>
-//       </FormControl>
-//     </>
-//   )
-// }
-
-
-// const CodeBox = () => {
-//   const [codeValue, setCodeValue] = React.useState("write some code...");
-//   const editorRef = useRef(null);
-
-//   function handleEditorDidMount(editor, monaco) {
-//     editorRef.current = editor;
-//   }
-
-//   function showValue() {
-//     alert(editorRef.current.getValue());
-//   }
-
-//   return (
-//     <>
-//       {/* <button onClick={showValue}>Show value</button> */}
-//       <Editor
-//         height='600px'
-//         width="40vw"
-//         m='10px'
-//         defaultLanguage="javascript"
-//         defaultValue=""
-//         value={codeValue}
-//         theme="vs-dark"
-//         onMount={handleEditorDidMount}
-//         onChange={(newValue) => { setCodeValue(newValue); }}
-//       />
-//     </>
-//   );
-// }
 
 const SubmissionPage = () => {
   const [inputCodeValue, setInputCodeValue] = React.useState("// write some code...");
@@ -84,7 +39,6 @@ const SubmissionPage = () => {
 
     return (
       <>
-        {/* <button onClick={showValue}>Show value</button> */}
         <Editor
           height='600px'
           width="40vw"
@@ -124,17 +78,6 @@ const SubmissionPage = () => {
     reader.onload = function(e) {
       const fileContents = e.target.result;
       setInputCodeValue(fileContents);
-    }
-  }
-
-  const readOutputFile = (event) => {
-    const file = event.target.files[0];
-    const reader = new FileReader();
-    reader.readAsText(file);
-
-    reader.onload = function(e) {
-      const fileContents = e.target.result;
-      setOutputCodeValue(fileContents);
     }
   }
 
@@ -256,7 +199,7 @@ const SubmissionPage = () => {
         onClick={() => {
           const element = document.createElement("a");
           element.setAttribute("id", "download-link");
-          const file = new Blob([codeboxInput.props.children.props.value], { type: "text/plain" });
+          const file = new Blob([codeboxOutput.props.children.props.value], { type: "text/plain" });
           element.href = URL.createObjectURL(file);
           element.download = "code_output.txt";
 
