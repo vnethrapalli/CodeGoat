@@ -253,6 +253,7 @@ const SubmissionPage = () => {
         </Stack>
       </Stack>
       <TranslateBtn/>
+      <TranslateBtn/>
     </>
   );
 
