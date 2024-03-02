@@ -1,6 +1,7 @@
 import { Link, routes } from '@redwoodjs/router'
 import { Metadata, useMutation } from '@redwoodjs/web'
 import { Form, Submit, TextField, TextAreaField } from '@redwoodjs/forms'
+import { Toaster, toast } from '@redwoodjs/web/toast'
 import { Button, Box, Rating, Typography } from '@mui/material'
 import { styled } from '@mui/material/styles';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
@@ -30,7 +31,7 @@ const FeedbackPage = () => {
       color: alpha(theme.palette.secondary.main, 1),
     },
   });
-  
+
   const [create] = useMutation(CREATE_FEEDBACK)
 
   // Gets the input into the database
@@ -38,6 +39,7 @@ const FeedbackPage = () => {
     data.preventDefault();
     console.log(sub, com)
     create({ variables: { input: {"submissionPage":sub, "outputPage":out, "translationAccuracy":acc, "gptAvailability":gpt, "experience":exp, "comments":com} } })
+    toast.success('Submitted!', { duration: 2500})
   }
   // By default, hover is not on
   const [hover, setHover] = React.useState(-1);
@@ -82,7 +84,7 @@ const FeedbackPage = () => {
               }}
               icon={<LensIcon fontSize="inherit" />}
               emptyIcon={<RadioButtonUncheckedIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
-            />      
+            />
           </Box>
 
           <Typography variant='h5' component='h5' align='center' style={{color: (theme.palette.secondary.main == "#344955" ? theme.palette.text.primary : "#344955")}}>Output Page</Typography>
@@ -110,7 +112,7 @@ const FeedbackPage = () => {
               }}
               icon={<LensIcon fontSize="inherit" />}
               emptyIcon={<RadioButtonUncheckedIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
-            />       
+            />
           </Box>
 
           <Typography variant='h5' component='h5' align='center' style={{color: (theme.palette.secondary.main == "#344955" ? theme.palette.text.primary : "#344955")}}>Translation Accuracy</Typography>
@@ -138,7 +140,7 @@ const FeedbackPage = () => {
               }}
               icon={<LensIcon fontSize="inherit" />}
               emptyIcon={<RadioButtonUncheckedIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
-            />     
+            />
           </Box>
 
           <Typography variant='h5' component='h5' align='center' style={{color: (theme.palette.secondary.main == "#344955" ? theme.palette.text.primary : "#344955")}}>GPT-3 Availability</Typography>
@@ -166,7 +168,7 @@ const FeedbackPage = () => {
               }}
               icon={<LensIcon fontSize="inherit" />}
               emptyIcon={<RadioButtonUncheckedIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
-            />     
+            />
           </Box>
 
           <Typography variant='h5' component='h5' align='center' style={{color: (theme.palette.secondary.main == "#344955" ? theme.palette.text.primary : "#344955")}}>Overall Experience</Typography>
@@ -194,7 +196,7 @@ const FeedbackPage = () => {
               }}
               icon={<LensIcon fontSize="inherit" />}
               emptyIcon={<RadioButtonUncheckedIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
-            />    
+            />
           </Box>
 
           <Typography variant='h5' component='h5' align='center' style={{color: (theme.palette.secondary.main == "#344955" ? theme.palette.text.primary : "#344955")}}>Additional Comments</Typography>
@@ -205,7 +207,7 @@ const FeedbackPage = () => {
               size: "lg",
             }}
           >
-            <TextareaAutosize 
+            <TextareaAutosize
               name="comments"
               value={com}
               minRows={5}
@@ -215,7 +217,7 @@ const FeedbackPage = () => {
               }}
             ></TextareaAutosize>
           </Box>
-          
+
 
           <Button type="submit" sx={{ my: 2, color: theme.palette.text.primary, display: 'block', margin: 'auto auto' }} style={{color: (theme.palette.secondary.main == "#344955" ? theme.palette.text.primary : "#344955")}} onClick={onSubmit}>Submit</Button>
         </Form>
