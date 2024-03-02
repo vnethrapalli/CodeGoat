@@ -71,7 +71,7 @@ const SubmissionPage = () => {
   const [output, setOutput] = React.useState(false);
   const theme = useTheme();
 
-  const CodeBox = ({ codeValue, setCodeValue, defaultLanguage, language, defaultValue }) => {
+  const CodeBox = ({ codeValue, updateCodeValue, defaultLanguage, language, defaultValue }) => {
     const editorRef = useRef(null);
 
     function handleEditorDidMount(editor, monaco) {
@@ -95,14 +95,26 @@ const SubmissionPage = () => {
           value={codeValue}
           theme="vs-dark"
           onMount={handleEditorDidMount}
-          onChange={setCodeValue}
+          onChange={updateCodeValue}
         />
       </>
     );
   }
 
-  const codeboxInput = CodeBox(inputCodeValue, (newCodeVal) => setInputCodeValue(newCodeVal), inputLanguage, inputLanguage, inputCodeValue);
-  const codeboxOutput = CodeBox(outputCodeValue, (newCodeVal) => setOutputCodeValue(newCodeVal), outputLanguage, outputLanguage, outputCodeValue);
+  const codeboxInput = CodeBox({
+    codeValue: inputCodeValue,
+    updateCodeValue: (newCodeVal) => setInputCodeValue(newCodeVal),
+    defaultLanguage: inputLanguage,
+    language: inputLanguage,
+    defaultValue: inputCodeValue
+  });
+  const codeboxOutput = CodeBox({
+    codeValue: outputCodeValue,
+    updateCodeValue: (newCodeVal) => setOutputCodeValue(newCodeVal),
+    defaultLanguage: outputLanguage,
+    language: outputLanguage,
+    defaultValue: outputCodeValue
+  });
 
   const readInputFile = (event) => {
     const file = event.target.files[0];
@@ -177,12 +189,11 @@ const SubmissionPage = () => {
     );
   }
 
-  const CopyButton = () => {
+  const CopyButton = ({ editor }) => {
     return (
       <Button
         onClick={() => {
-          console.log(codeboxOutput.props.children.props.value)
-          navigator.clipboard.writeText(codeboxOutput.props.children.props.value)
+          navigator.clipboard.writeText(editor.props.children.props.value)
         }}
         style={{
           backgroundColor: theme.palette.secondary.main,
@@ -221,6 +232,7 @@ const SubmissionPage = () => {
               borderTopRightRadius: '10px',
               borderBottomRightRadius: '10px'
             }}
+            onClick={readInputFile}
           >
             <UploadFile />
           </Button>
@@ -229,34 +241,6 @@ const SubmissionPage = () => {
     )
   }
 
-  // const UploadButtonOutput = () => {
-  //   return (
-  //     <>
-  //       <input
-  //         type="file"
-  //         accept="*"
-  //         style={{ display: 'none' }}
-  //         id="upload-button-output"
-  //         onChange={readOutputFile}
-  //       />
-  //       <label htmlFor="upload-button-output">
-  //         <Button
-  //           component="span"
-  //           style={{
-  //             backgroundColor: theme.palette.secondary.main, color: darken(theme.palette.secondary.main, 0.5),
-  //             textTransform: 'none',
-  //             borderTopLeftRadius: '0px',
-  //             borderBottomLeftRadius: '0px',
-  //             borderTopRightRadius: '10px',
-  //             borderBottomRightRadius: '10px'
-  //           }}
-  //         >
-  //           <UploadIcon/>
-  //         </Button>
-  //       </label>
-  //     </>
-  //   )
-  // }
 
   const DownloadButton = () => {
     return (
@@ -265,10 +249,10 @@ const SubmissionPage = () => {
           backgroundColor: theme.palette.secondary.main,
           color: darken(theme.palette.secondary.main, 0.5),
           textTransform: 'none',
-          borderTopLeftRadius: '10px',
-          borderBottomLeftRadius: '10px',
-          borderTopRightRadius: '0px',
-          borderBottomRightRadius: '0px'
+          borderTopLeftRadius: '0px',
+          borderBottomLeftRadius: '0px',
+          borderTopRightRadius: '10px',
+          borderBottomRightRadius: '10px'
         }}
         onClick={() => {
           const element = document.createElement("a");
@@ -297,7 +281,7 @@ const SubmissionPage = () => {
           <LangDropdown text="Target Language" language={outputLanguage} setLanguage={(newLang) => setOutputLanguage(newLang)} />
         </Stack>
         <Stack direction="row" spacing={0} justifyContent="flex-end" alignItems="center">
-          <CopyButton/>
+          <CopyButton editor={codeboxInput}/>
           <Divider orientation="vertical" flexItem style={{ backgroundColor: darken(theme.palette.secondary.main, 0.5), width: '1%' }}/>
           {input ? <UploadButtonInput/> : <DownloadButton/>}
         </Stack>
@@ -309,7 +293,7 @@ const SubmissionPage = () => {
     // console.log(input);
     return (
       <Stack direction="row" spacing={0} justifyContent="flex-end" alignItems="center">
-        <CopyButton/>
+        <CopyButton editor={input ? codeboxInput : codeboxOutput}/>
         <Divider orientation="vertical" flexItem style={{ backgroundColor: darken(theme.palette.secondary.main, 0.5), width: '1%' }}/>
         {input ? <UploadButtonInput/> : <DownloadButton/>}
       </Stack>
