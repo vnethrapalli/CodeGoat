@@ -66,6 +66,7 @@ const FeedbackPage = () => {
             }}
           >
             <StyledRating
+              label = "submissionPage"
               name="submissionPage"
               value={sub}
               precision={1}

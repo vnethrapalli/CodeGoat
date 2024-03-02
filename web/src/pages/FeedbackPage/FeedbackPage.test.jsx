@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@redwoodjs/testing/web'
+import { render, screen, fireEvent, container } from '@redwoodjs/testing/web'
 import { configure } from '@testing-library/react'
 import FeedbackPage from './FeedbackPage'
 
@@ -56,9 +56,16 @@ describe('FeedbackPage', () => {
     }).not.toThrow()
   })
 
+  it ('renders rating circles successfully', () => {
+    expect(() => {
+      render(<FeedbackPage />)
+
+      screen.getAllByRole('radio')
+    }).not.toThrow()
+  })
   // not sure if this actually tests correctly
   // it('submits data correctly', async () => {
-  //   mockGraphQLQuery('Feedback', () => {
+  //   mockGraphQLQuery('createFeedback', () => {
   //     return {
   //       feedback: {
   //         id: 90000,
