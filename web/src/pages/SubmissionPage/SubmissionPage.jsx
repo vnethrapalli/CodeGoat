@@ -1,5 +1,6 @@
 import { Link, routes } from '@redwoodjs/router';
 import { Metadata } from '@redwoodjs/web';
+<<<<<<< HEAD
 import { Stack, Box, Divider } from '@mui/material';
 import { FormControl, InputLabel, Select, MenuItem, Button } from '@material-ui/core';
 import UploadIcon from '@mui/icons-material/Upload';
@@ -16,6 +17,62 @@ const languages = [
     {dropdownItem: "Python", langCode: "python"},
     {dropdownItem: "TypeScript", langCode: "typescript"},
 ];
+=======
+import { Stack, Box, Button, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
+import DownloadIcon from '@mui/icons-material/Download';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import Editor from '@monaco-editor/react';
+import React, { useRef } from 'react';
+
+const languages = ["C++", "C", "Java", "Python", "JavaScript", "Assembly"];
+
+const LangDropdown = ({ text }) => {
+  return (
+    <>
+      <FormControl>
+        <InputLabel>{text}</InputLabel>
+        <Select style={{ width: 100, height: 30 }}>
+          {languages.map((lang) => {
+            return <MenuItem value={lang}>{lang}</MenuItem>
+          })}
+        </Select>
+      </FormControl>
+    </>
+  )
+}
+
+
+const CodeBox = () => {
+  const [codeValue, setCodeValue] = React.useState("write some code...");
+  const editorRef = useRef(null);
+
+  function handleEditorDidMount(editor, monaco) {
+    editorRef.current = editor;
+  }
+
+  function showValue() {
+    alert(editorRef.current.getValue());
+  }
+
+  return (
+    <>
+      {/* <button onClick={showValue}>Show value</button> */}
+      <Editor
+        height='600px'
+        width="40vw"
+        m='10px'
+        defaultLanguage="javascript"
+        defaultValue=""
+        value={codeValue}
+        theme="vs-dark"
+        onMount={handleEditorDidMount}
+        onChange={(newValue) => { setCodeValue(newValue); }}
+      />
+    </>
+  );
+}
+>>>>>>> 0d31ac4e8a62b6c313079e14a7bd86b084649286
 
 const SubmissionPage = () => {
   const [inputCodeValue, setInputCodeValue] = useState("// write some code...");
@@ -69,11 +126,15 @@ const SubmissionPage = () => {
     )
   }
 
+  const codeboxInput = CodeBox();
+  const codeboxOutput = CodeBox();
+
   const TranslateBtn = () => {
     return (
       <>
         <Box textAlign="center" pt={2}>
           <Button
+<<<<<<< HEAD
             variant="contained"
             style={{
               backgroundColor: theme.palette.secondary.main,
@@ -84,6 +145,9 @@ const SubmissionPage = () => {
               width: "250px",
               borderRadius: "40px"
             }}
+=======
+            sx={{ width: "250px" }}
+>>>>>>> 0d31ac4e8a62b6c313079e14a7bd86b084649286
             onClick={() => {
               setOutput(() => true);
               codeboxInput.props.children.props.width = "48%";
@@ -237,12 +301,17 @@ const SubmissionPage = () => {
   return (
     <>
       <Metadata title="Submission" description="Submission page"/>
+<<<<<<< HEAD
+=======
+
+>>>>>>> 0d31ac4e8a62b6c313079e14a7bd86b084649286
       <Stack
         direction="column"
         spacing={2}
         alignItems="center"
       >
         <Stack direction="row" spacing={4} justifyContent="space-between" alignItems="center" width={output ? '80vw' : '40vw'}>
+<<<<<<< HEAD
           <DropdownAndButtons input={true} />
           {output && <NoDropdownAndButtons input={false} />}
         </Stack>
@@ -254,6 +323,78 @@ const SubmissionPage = () => {
       </Stack>
       <TranslateBtn/>
       <TranslateBtn/>
+=======
+
+          <Stack direction="row" justifyContent="space-between" alignItems="center" width={'40vw'}>
+            <Stack direction="row" spacing={2} justifyContent="flex-start" alignItems="center">
+              <LangDropdown text="source" />
+              <LangDropdown text="target" />
+            </Stack>
+
+            <Stack direction="row" spacing={1} justifyContent="flex-end" alignItems="center">
+              <Button
+                startIcon={<ContentCopyIcon />}
+                onClick={() => {
+                  console.log(codeboxInput.props.children.props.value)
+                  navigator.clipboard.writeText(codeboxInput.props.children.props.value)
+                }}
+              />
+              <Button
+              startIcon={<DownloadIcon />}
+              onClick={() => {
+                const element = document.createElement("a");
+                element.setAttribute("id", "download-link");
+                const file = new Blob([codeboxInput.props.children.props.value], { type: "text/plain" });
+                element.href = URL.createObjectURL(file);
+                element.download = "code_input.txt";
+
+                // simulate link click
+                document.body.appendChild(element); // Required for this to work in FireFox
+                element.click();
+                document.body.removeChild(element);
+              }}
+              />
+            </Stack>
+          </Stack>
+
+          {output &&
+            <Stack direction="row" justifyContent="flex-end" alignItems="center" width='400px'>
+              <Stack direction="row" spacing={1} justifyContent="flex-end" alignItems="center" margin="0px">
+                <Button
+                  startIcon={<ContentCopyIcon />}
+                  onClick={() => {
+                    console.log(codeboxOutput.props.children.props.value)
+                    navigator.clipboard.writeText(codeboxOutput.props.children.props.value)
+                  }}
+                />
+                <Button
+                  startIcon={<DownloadIcon />}
+                  onClick={() => {
+                    const element = document.createElement("a");
+                    element.setAttribute("id", "download-link");
+                    const file = new Blob([codeboxOutput.props.children.props.value], { type: "text/plain" });
+                    element.href = URL.createObjectURL(file);
+                    element.download = "code_output.txt";
+
+                    // simulate link click
+                    document.body.appendChild(element); // Required for this to work in FireFox
+                    element.click();
+                    document.body.removeChild(element);
+                  }}
+                />
+              </Stack>
+            </Stack>
+          }
+        </Stack>
+
+        <Stack direction="row" spacing={4} justifyContent="space-between" alignItems="center" width={output ? '80vw' : '40vw'}>
+          {codeboxInput}
+          {output && codeboxOutput}
+        </Stack>
+
+      </Stack>
+      <TranslateBtn/>
+>>>>>>> 0d31ac4e8a62b6c313079e14a7bd86b084649286
     </>
   );
 

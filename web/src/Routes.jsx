@@ -17,16 +17,29 @@ const Routes = () => {
     <Router useAuth={useAuth}>
       <PrivateSet unauthenticated="home">
         <Set wrap={UserLayout}>
+<<<<<<< HEAD
           <Route path="/translate" page={TranslatePage} name="translate" />
           <Route path="/feedback" page={FeedbackPage} name="feedback" />
           <Route path="/submission" page={SubmissionPage} name="submission" />
+=======
+          <Route path="/translate" page={SubmissionPage} name="translate" />
+          <Route path="/feedback" page={FeedbackPage} name="feedback" />
+>>>>>>> 0d31ac4e8a62b6c313079e14a7bd86b084649286
         </Set>
       </PrivateSet>
-        
+
       <Set wrap={UserLayout}>
         <Route path="/" page={HomePage} name="home" />
         <Route path="/status" page={StatusPage} name="status" />
+<<<<<<< HEAD
+=======
+        <Route path="/documentation" page={DocumentationPage} name="documentation" />
+>>>>>>> 0d31ac4e8a62b6c313079e14a7bd86b084649286
       </Set>
+
+      
+
+      
 
       <Route notfound page={NotFoundPage} />
     </Router>

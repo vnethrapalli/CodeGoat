@@ -1,6 +1,13 @@
 import { render, screen, fireEvent } from '@redwoodjs/testing/web'
 import mediaQuery from "css-mediaquery";
 
+<<<<<<< HEAD
+=======
+jest.mock("src/auth.js");
+import { useAuth } from 'src/auth'
+import { mocked } from "jest-mock";
+
+>>>>>>> 0d31ac4e8a62b6c313079e14a7bd86b084649286
 const createMatchMedia = (width) => (query) => ({
   matches: mediaQuery.match(query, { width }),
   addListener: () => {},
@@ -30,6 +37,27 @@ import { LightMode, DarkMode } from '@mui/icons-material'
 
 //   Improve this test with help from the Redwood Testing Doc:
 //   https://redwoodjs.com/docs/testing#testing-pages-layouts
+
+const user = {
+  email: "johndoe@me.com",
+  email_verified: true,
+  sub: "google-oauth2|12345678901234",
+};
+
+beforeEach(() => {
+  const mockedUseAuth = mocked(useAuth);
+  mockedUseAuth.mockReturnValue({
+      isAuthenticated: true,
+      userMetadata: user,
+      logout: jest.fn(),
+      loginWithRedirect: jest.fn(),
+      getAccessTokenWithPopup: jest.fn(),
+      getAccessTokenSilently: jest.fn(),
+      getIdTokenClaims: jest.fn(),
+      loginWithPopup: jest.fn(),
+      isLoading: false,
+  });
+});
 
 describe('UserLayout', () => {
   test('renders successfully', () => {
@@ -131,6 +159,7 @@ describe('UserLayout', () => {
     }).not.toThrow()
   })
 
+<<<<<<< HEAD
   test('renders Login Button successfully', () => {
     render(<UserLayout />)
 
@@ -146,6 +175,28 @@ describe('UserLayout', () => {
 });
 
 describe("Media Test", () => {
+=======
+
+
+});
+
+describe("Media Test - Logged Out", () => {
+
+  beforeEach(() => {
+    const mockedUseAuth = mocked(useAuth);
+    mockedUseAuth.mockReturnValue({
+        isAuthenticated: false,
+        userMetadata: user,
+        logout: jest.fn(),
+        loginWithRedirect: jest.fn(),
+        getAccessTokenWithPopup: jest.fn(),
+        getAccessTokenSilently: jest.fn(),
+        getIdTokenClaims: jest.fn(),
+        loginWithPopup: jest.fn(),
+        isLoading: false,
+    });
+  });
+>>>>>>> 0d31ac4e8a62b6c313079e14a7bd86b084649286
   test("Desktop Test", async () => {
     window.matchMedia = createMatchMedia(1500);
 
@@ -187,4 +238,117 @@ describe("Media Test", () => {
     expect(screen.getByTestId("loginButton")).toBeInTheDocument()
     expect(screen.getByTestId("signupButton")).toBeInTheDocument()
   });
+<<<<<<< HEAD
 });
+=======
+});
+
+describe("Media Test - Logged In", () => {
+
+  beforeEach(() => {
+    const mockedUseAuth = mocked(useAuth);
+    mockedUseAuth.mockReturnValue({
+        isAuthenticated: true,
+        userMetadata: user,
+        logout: jest.fn(),
+        loginWithRedirect: jest.fn(),
+        getAccessTokenWithPopup: jest.fn(),
+        getAccessTokenSilently: jest.fn(),
+        getIdTokenClaims: jest.fn(),
+        loginWithPopup: jest.fn(),
+        isLoading: false,
+    });
+  });
+  test("Desktop Test", async () => {
+    window.matchMedia = createMatchMedia(1500);
+
+    render(<UserLayout />);
+
+    expect(screen.getByTestId("themeButton")).toBeInTheDocument()
+    expect(screen.getByTestId("titleLink")).toBeInTheDocument()
+    expect(screen.getByTestId("translateButton")).toBeInTheDocument()
+    expect(screen.getByTestId("statusButton")).toBeInTheDocument()
+    expect(screen.getByTestId("feedbackButton")).toBeInTheDocument()
+    expect(screen.getByTestId("signoutButton")).toBeInTheDocument()
+  });
+
+  test("Laptop Test", async () => {
+    window.matchMedia = createMatchMedia(750);
+
+    render(<UserLayout />);
+
+    expect(screen.getByTestId("themeButton")).toBeInTheDocument()
+    expect(screen.getByTestId("titleLink")).toBeInTheDocument()
+    expect(screen.getByTestId("translateButton")).toBeInTheDocument()
+    expect(screen.getByTestId("statusButton")).toBeInTheDocument()
+    expect(screen.getByTestId("feedbackButton")).toBeInTheDocument()
+    expect(screen.getByTestId("signoutButton")).toBeInTheDocument()
+
+  });
+
+  test("Mobile Test", async () => {
+    window.matchMedia = createMatchMedia(200);
+
+    render(<UserLayout />);
+
+    expect(screen.getByTestId("themeButton")).toBeInTheDocument()
+    expect(screen.getByTestId("titleLink")).toBeInTheDocument()
+    expect(screen.getByTestId("translateButton")).toBeInTheDocument()
+    expect(screen.getByTestId("statusButton")).toBeInTheDocument()
+    expect(screen.getByTestId("feedbackButton")).toBeInTheDocument()
+    expect(screen.getByTestId("signoutButton")).toBeInTheDocument()
+  });
+});
+
+describe('Navbar Auth - Logged In', () => {
+
+  beforeEach(() => {
+    const mockedUseAuth = mocked(useAuth);
+    mockedUseAuth.mockReturnValue({
+        isAuthenticated: true,
+        userMetadata: user,
+        logout: jest.fn(),
+        loginWithRedirect: jest.fn(),
+        getAccessTokenWithPopup: jest.fn(),
+        getAccessTokenSilently: jest.fn(),
+        getIdTokenClaims: jest.fn(),
+        loginWithPopup: jest.fn(),
+        isLoading: false,
+    });
+  });
+
+  it('Logout Button show when signed out', () => {
+    render(<UserLayout />)
+
+    expect(screen.getByTestId('signoutButton')).toBeVisible()
+  })
+})
+
+describe('Navbar Auth - Logged Out', () => {
+  beforeEach(() => {
+    const mockedUseAuth = mocked(useAuth);
+    mockedUseAuth.mockReturnValue({
+        isAuthenticated: false,
+        userMetadata: user,
+        logout: jest.fn(),
+        loginWithRedirect: jest.fn(),
+        getAccessTokenWithPopup: jest.fn(),
+        getAccessTokenSilently: jest.fn(),
+        getIdTokenClaims: jest.fn(),
+        loginWithPopup: jest.fn(),
+        isLoading: false,
+    });
+  });
+  test('renders Login Button successfully', () => {
+    render(<UserLayout />)
+
+    expect(screen.getByTestId("loginButton")).toBeInTheDocument()
+  })
+
+  test('renders Sign Up successfully', () => {
+    render(<UserLayout />)
+
+    expect(screen.getByTestId("signupButton")).toBeInTheDocument()
+  })
+})
+>>>>>>> 0d31ac4e8a62b6c313079e14a7bd86b084649286
