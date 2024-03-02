@@ -1,4 +1,5 @@
 import { routes } from '@redwoodjs/router'
+import { Toaster, toast } from '@redwoodjs/web/toast'
 import { AppBar, Link, Box, Button, Container, Tooltip, Typography, Grid } from '@mui/material';
 import CssBaseline from "@mui/material/CssBaseline";
 import { Experimental_CssVarsProvider as CssVarsProvider, experimental_extendTheme as extendTheme, useColorScheme, useTheme } from '@mui/material/styles';
@@ -262,6 +263,7 @@ const UserLayout = ({ children }) => {
     <>
       <CssVarsProvider theme={theme}>
         <CssBaseline />
+        <Toaster />
         <Box minHeight='100vh'>
           <AppBar position="sticky" sx={{ background: '#265073', marginBottom: '20px', height: '10%' }}>
             <Grid container width="100%" spacing={2} alignItems='center' alignContent='center' justifyContent='center'>
