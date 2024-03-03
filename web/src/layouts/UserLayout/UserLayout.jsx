@@ -54,23 +54,23 @@ const TitleLink = () => {
 
   return (
     <Grid item alignContent='center' alignItems='stretch' xs={4}>
-      <Tooltip title='Go Home'>
-        <Typography data-testid="titleLink" variant="h6" noWrap component="a"
-          sx={{
-            mr: 2,
-            display: { xs: 'none', md: 'flex' },
-            fontWeight: 700,
-            fontSize: 30,
-            color: theme.palette.text.primary,
-            textDecoration: 'none',
-            marginLeft: "20px",
-          }}
-        >
+      <Typography data-testid="titleLink" variant="h6" noWrap component="span"
+        sx={{
+          mr: 2,
+          display: { xs: 'none', md: 'flex' },
+          fontWeight: 700,
+          fontSize: 30,
+          color: theme.palette.text.primary,
+          textDecoration: 'none',
+          marginLeft: "20px",
+        }}
+      >
+        <Tooltip title='Go Home'>
           <Link href={routes.home()} underline="none">
             CodeGoat
           </Link>
-        </Typography>
-      </Tooltip>
+        </Tooltip>
+      </Typography>
     </Grid>
   )
 }
@@ -242,7 +242,7 @@ const Footer = () => {
       component="footer"
     >
       <Container>
-        <Typography variant="body2"
+        <Typography component='span' variant="body2"
           sx={{
             color: theme.palette.text.primary,
             display: 'flex',

@@ -122,6 +122,7 @@ const SubmissionPage = () => {
                      color: theme.palette.text.secondary,
                   }}
                   value={lang.langCode}
+                  key={lang.langCode}
                 >
                     {lang.dropdownItem}
                 </MenuItem>
