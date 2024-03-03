@@ -1,7 +1,6 @@
-import { Link, routes } from '@redwoodjs/router';
 import { Metadata } from '@redwoodjs/web';
 import { Stack, Box, Button, FormControl, InputLabel, Select, MenuItem, Divider } from '@mui/material';
-import { useTheme, darken } from '@mui/material/styles';
+import { useTheme } from '@mui/material/styles';
 import DownloadIcon from '@mui/icons-material/Download';
 import UploadFile from '@mui/icons-material/UploadFile';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
@@ -122,7 +121,6 @@ const SubmissionPage = () => {
                      color: theme.palette.text.secondary,
                   }}
                   value={lang.langCode}
-                  key={lang.langCode}
                 >
                     {lang.dropdownItem}
                 </MenuItem>
@@ -143,7 +141,7 @@ const SubmissionPage = () => {
             data-testid="translateButton"
             style={{
               backgroundColor: theme.palette.secondary.main,
-              color: 'white',
+              color: theme.palette.text.primary,
               textTransform: 'none'
             }}
             sx={{
@@ -170,7 +168,6 @@ const SubmissionPage = () => {
         }}
         style={{
           backgroundColor: theme.palette.secondary.main,
-          color: darken(theme.palette.secondary.main, 0.5),
           textTransform: 'none',
           borderTopLeftRadius: '10px',
           borderBottomLeftRadius: '10px',
@@ -199,7 +196,6 @@ const SubmissionPage = () => {
             component="span"
             style={{
               backgroundColor: theme.palette.secondary.main,
-              color: darken(theme.palette.secondary.main, 0.5),
               textTransform: 'none',
               borderTopLeftRadius: '0px',
               borderBottomLeftRadius: '0px',
@@ -221,7 +217,6 @@ const SubmissionPage = () => {
       <Button
         style={{
           backgroundColor: theme.palette.secondary.main,
-          color: darken(theme.palette.secondary.main, 0.5),
           textTransform: 'none',
           borderTopLeftRadius: '0px',
           borderBottomLeftRadius: '0px',
@@ -248,7 +243,7 @@ const SubmissionPage = () => {
         </Stack>
         <Stack direction="row" spacing={0} justifyContent="flex-end" alignItems="center">
           <CopyButton editor={codeboxInput} isInput={input}/>
-          <Divider orientation="vertical" flexItem style={{ backgroundColor: darken(theme.palette.secondary.main, 0.5), width: '1%' }}/>
+          <Divider orientation="vertical" flexItem style={{ backgroundColor: theme.palette.text.primary, width: '1%' }}/>
           {input ? <UploadButtonInput/> : <DownloadButton/>}
         </Stack>
       </Stack>
@@ -259,7 +254,7 @@ const SubmissionPage = () => {
     return (
       <Stack direction="row" spacing={0} justifyContent="flex-end" alignItems="center">
         <CopyButton editor={input ? codeboxInput : codeboxOutput}/>
-        <Divider orientation="vertical" flexItem style={{ backgroundColor: darken(theme.palette.secondary.main, 0.5), width: '1%' }}/>
+        <Divider orientation="vertical" flexItem style={{ backgroundColor: theme.palette.text.primary, width: '1%' }}/>
         {input ? <UploadButtonInput/> : <DownloadButton/>}
       </Stack>
     );
