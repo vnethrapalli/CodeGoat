@@ -108,9 +108,29 @@ const SubmissionPage = () => {
               variant="outlined"
               value={language}
               onChange={e => setLanguage(e.target.value)}
+              MenuProps={{
+                sx: {
+                  "&& .Mui-selected": {
+                    backgroundColor: darken(theme.palette.secondary.main, 0.2)
+                  }
+                }
+              }}
             >
               {languages.map((lang) => {
-                return <MenuItem sx={{backgroundColor: theme.palette.secondary.main, color: theme.palette.text.primary }} value={lang.langCode}>{lang.dropdownItem}</MenuItem>
+                return (
+                  <MenuItem
+                    sx={{
+                      backgroundColor: theme.palette.secondary.main,
+                      color: theme.palette.text.secondary,
+                      "&:hover": {
+                        bgcolor: darken(theme.palette.secondary.main, 0.1),
+                      },
+                    }}
+                    value={lang.langCode}
+                  >
+                      {lang.dropdownItem}
+                  </MenuItem>
+                )
               })}
             </Select>
           </FormControl>
