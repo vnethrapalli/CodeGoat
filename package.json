@@ -23,7 +23,6 @@
   },
   "packageManager": "yarn@4.1.0",
   "dependencies": {
-    "@material-ui/core": "^4.12.4",
     "@monaco-editor/react": "^4.6.0",
     "css-mediaquery": "^0.1.2"
   }
