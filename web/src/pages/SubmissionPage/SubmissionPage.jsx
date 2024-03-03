@@ -7,7 +7,7 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import Editor from '@monaco-editor/react';
 import React, { useRef } from 'react';
 
-const languages = [
+export const languages = [
   {dropdownItem: "C++", langCode: "cpp"},
   {dropdownItem: "C#", langCode: "csharp"},
   {dropdownItem: "Java", langCode: "java"},
