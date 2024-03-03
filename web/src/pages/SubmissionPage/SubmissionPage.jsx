@@ -16,7 +16,14 @@ const languages = [
   {dropdownItem: "Python", langCode: "python"},
   {dropdownItem: "TypeScript", langCode: "typescript"},
 ];
-
+const extensions = {
+  "cpp": ".cpp",
+  "csharp": ".cs",
+  "java": ".java",
+  "javascript": ".js",
+  "python": ".py",
+  "typescript": ".ts"
+};
 
 const SubmissionPage = () => {
   const [inputCodeValue, setInputCodeValue] = React.useState("// write some code...");
@@ -221,7 +228,8 @@ const SubmissionPage = () => {
           borderBottomRightRadius: '10px'
         }}
         onClick={() => {
-          downloadTextAsFile(codeboxOutput.props.children.props.value, 'code_output.txt');
+          console.log(outputLanguage);
+          downloadTextAsFile(codeboxOutput.props.children.props.value, 'code_output' + extensions[outputLanguage]);
         }}
         data-testid="downloadButton"
         >
