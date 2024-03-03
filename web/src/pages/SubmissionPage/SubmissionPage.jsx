@@ -20,7 +20,7 @@ const languages = [
 
 const SubmissionPage = () => {
   const [inputCodeValue, setInputCodeValue] = React.useState("// write some code...");
-  const [outputCodeValue, setOutputCodeValue] = React.useState("# write some code...");
+  const [outputCodeValue, setOutputCodeValue] = React.useState("# your new code will be here...");
   const [inputLanguage, setInputLanguage] = React.useState("javascript");
   const [outputLanguage, setOutputLanguage] = React.useState("python");
   const [output, setOutput] = React.useState(false);
@@ -84,6 +84,19 @@ const SubmissionPage = () => {
     }
   }
 
+  const downloadTextAsFile = (text, fname) => {
+    const element = document.createElement("a");
+    element.setAttribute("id", "download-link");
+    const file = new Blob([text], { type: "text/plain" });
+    element.href = URL.createObjectURL(file);
+    element.download = fname;
+
+    // simulate link click
+    document.body.appendChild(element); // Required for this to work in FireFox
+    element.click();
+    document.body.removeChild(element);
+  }
+
   const LangDropdown = ({ text, language, setLanguage }) => {
     return (
       <>
@@ -125,8 +138,6 @@ const SubmissionPage = () => {
             }}
             onClick={() => {
               setOutput(() => true);
-              // codeboxInput.props.children.props.width = "48%";
-              // codeboxOutput.props.children.props.width = "48%";
             }}
           >
             Translate
@@ -203,16 +214,7 @@ const SubmissionPage = () => {
           borderBottomRightRadius: '10px'
         }}
         onClick={() => {
-          const element = document.createElement("a");
-          element.setAttribute("id", "download-link");
-          const file = new Blob([codeboxOutput.props.children.props.value], { type: "text/plain" });
-          element.href = URL.createObjectURL(file);
-          element.download = "code_output.txt";
-
-          // simulate link click
-          document.body.appendChild(element); // Required for this to work in FireFox
-          element.click();
-          document.body.removeChild(element);
+          downloadTextAsFile(codeboxOutput.props.children.props.value, 'code_output.txt');
         }}
         data-testid="downloadButton"
         >
