@@ -24,7 +24,7 @@ const extensions = {
   "typescript": ".ts"
 };
 
-const SubmissionPage = () => {
+const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => {
   const [inputCodeValue, setInputCodeValue] = React.useState("// write some code...");
   const [outputCodeValue, setOutputCodeValue] = React.useState("# your new code will be here...");
   const [inputLanguage, setInputLanguage] = React.useState("javascript");
@@ -38,10 +38,6 @@ const SubmissionPage = () => {
     function handleEditorDidMount(editor, monaco) {
       editorRef.current = editor;
     }
-
-    // function showValue() {
-    //   alert(editorRef.current.getValue());
-    // }
 
     return (
       <div data-testid={isInput ? "inputEditor" : "outputEditor"}>
@@ -79,7 +75,7 @@ const SubmissionPage = () => {
     isInput: false
   });
 
-  const readInputFile = (event) => {
+  const readInputFile = defaultReadInputFile || ((event) => {
     const file = event.target.files[0];
     const reader = new FileReader();
     reader.readAsText(file);
@@ -88,9 +84,9 @@ const SubmissionPage = () => {
       const fileContents = e.target.result;
       setInputCodeValue(fileContents);
     }
-  }
+  });
 
-  const downloadTextAsFile = (text, fname) => {
+  const downloadTextAsFile = defaultDownloadTextAsFile || ((text, fname) => {
     const element = document.createElement("a");
     element.setAttribute("id", "download-link");
     const file = new Blob([text], { type: "text/plain" });
@@ -101,7 +97,7 @@ const SubmissionPage = () => {
     document.body.appendChild(element); // Required for this to work in FireFox
     element.click();
     document.body.removeChild(element);
-  }
+  });
 
   const LangDropdown = ({ text, language, setLanguage }) => {
     return (
@@ -224,7 +220,7 @@ const SubmissionPage = () => {
           borderBottomRightRadius: '10px'
         }}
         onClick={() => {
-          console.log(outputLanguage);
+          // console.log(outputLanguage);
           downloadTextAsFile(codeboxOutput.props.children.props.value, 'code_output' + extensions[outputLanguage]);
         }}
         data-testid="downloadButton"
