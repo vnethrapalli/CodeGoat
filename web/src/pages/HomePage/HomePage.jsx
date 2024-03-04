@@ -1,11 +1,11 @@
 // import { Link, routes } from '@redwoodjs/router'
-import { Metadata } from '@redwoodjs/web'
+import { Metadata } from '@redwoodjs/web';
 
 
-import { Box, Typography, List, ListItem } from '@mui/material'
+import { Box, Typography, List, ListItem } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
+import { languages } from '../SubmissionPage/SubmissionPage.jsx';
 
-const languages = ['C++', 'C', 'Java', 'Python', 'Javascript', 'Assembly']
 const instructions = ['Click on the Translate button in the NavBar above',
                       'Select the language of the source code and the language of the translated code using the two dropdowns',
                       'Paste source code in the text editor',
@@ -29,8 +29,8 @@ const HomePage = () => {
 
           <List dense disablePadding sx={{ listStyleType: 'disc', pl: 4, marginTop: '5px', marginBottom: '0px'}}>
             {languages.map((language) => (
-              <ListItem dense key={language} disablePadding sx={{ display: 'list-item' }}>
-                {language}
+              <ListItem dense key={language.dropdownItem} disablePadding sx={{ display: 'list-item' }}>
+                {language.dropdownItem}
               </ListItem>
             ))}
           </List>
