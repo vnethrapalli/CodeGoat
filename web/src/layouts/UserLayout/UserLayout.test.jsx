@@ -156,8 +156,6 @@ describe('UserLayout', () => {
     }).not.toThrow()
   })
 
-
-
 });
 
 describe("Media Test - Logged Out", () => {

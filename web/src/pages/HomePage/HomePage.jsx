@@ -20,11 +20,11 @@ const HomePage = () => {
       <Metadata title="Home" description="Home page" />
 
       <Box display="flex" flexDirection='column' justifyContent="center" alignItems="center">
-        <Typography variant='h2' component='span' align='center' style={{ backgroundColor: theme.palette.secondary.main, padding: '15px', width: '65%', borderRadius: '20px' , color: theme.palette.text.primary, fontSize: '52px', fontStyle: 'normal', fontWeight: '600'}}>
+        <Typography data-testid='title' variant='h2' component='span' align='center' style={{ backgroundColor: theme.palette.secondary.main, padding: '15px', width: '65%', borderRadius: '20px' , color: theme.palette.text.primary, fontSize: '52px', fontStyle: 'normal', fontWeight: '600'}}>
           Code Translator
         </Typography>
 
-        <Typography component='span' style={{ backgroundColor: theme.palette.secondary.main, padding: '25px', marginTop: '20px', marginBottom: '0px', width: '65%', borderRadius: '20px', color: theme.palette.text.primary, fontSize: '24px', fontStyle: 'normal', fontWeight: '300'}}>
+        <Typography data-testid='description' component='span' style={{ backgroundColor: theme.palette.secondary.main, padding: '25px', marginTop: '20px', marginBottom: '0px', width: '65%', borderRadius: '20px', color: theme.palette.text.primary, fontSize: '24px', fontStyle: 'normal', fontWeight: '300'}}>
           This tool uses an AI model to convert your code from one programming language to another. We provide support for a variety of languages such as:
 
           <List dense disablePadding sx={{ listStyleType: 'disc', pl: 4, marginTop: '5px', marginBottom: '0px'}}>
@@ -36,7 +36,7 @@ const HomePage = () => {
           </List>
         </Typography>
 
-        <Typography component='span' style={{ backgroundColor: theme.palette.secondary.main, padding: '25px', marginTop: '20px', marginBottom: '20px', width: '65%', borderRadius: '20px', color: theme.palette.text.primary, fontSize: '24px', fontStyle: 'normal', fontWeight: '300'}}>
+        <Typography data-testid='tutorial' component='span' style={{ backgroundColor: theme.palette.secondary.main, padding: '25px', marginTop: '20px', marginBottom: '20px', width: '65%', borderRadius: '20px', color: theme.palette.text.primary, fontSize: '24px', fontStyle: 'normal', fontWeight: '300'}}>
           <Typography variant='h4' component='span' style={{ backgroundColor: theme.palette.secondary.main, padding: '0px', margin: '0px', color: theme.palette.text.primary, fontSize: '32px', fontStyle: 'normal', fontWeight: '550'}}>
             Getting Started
           </Typography>

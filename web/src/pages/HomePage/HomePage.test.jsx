@@ -1,185 +1,83 @@
-// import { render, screen, waitFor } from '@redwoodjs/testing/web'
-
-// import HomePage from './HomePage'
-
-// jest.mock("src/auth.js");
-// import { useAuth } from 'src/auth'
-// import { mocked } from "jest-mock";
-
-
-//   //   Improve this test with help from the Redwood Testing Doc:
-// //   https://redwoodjs.com/docs/testing#testing-pages-layouts
-
-// const user = {
-//   email: "johndoe@me.com",
-//   email_verified: true,
-//   sub: "google-oauth2|12345678901234",
-// };
-
-// describe('HomePage', () => {
-
-//   beforeEach(() => {
-//     const mockedUseAuth = mocked(useAuth);
-//     mockedUseAuth.mockReturnValue({
-//         isAuthenticated: true,
-//         userMetadata: user,
-//         logout: jest.fn(),
-//         loginWithRedirect: jest.fn(),
-//         getAccessTokenWithPopup: jest.fn(),
-//         getAccessTokenSilently: jest.fn(),
-//         getIdTokenClaims: jest.fn(),
-//         loginWithPopup: jest.fn(),
-//         isLoading: false,
-//     });
-//   });
-
-import { render } from '@redwoodjs/testing/web'
-
+import { render, screen } from '@redwoodjs/testing/web'
+import mediaQuery from "css-mediaquery";
 import HomePage from './HomePage'
 
-//   Improve this test with help from the Redwood Testing Doc:
-//   https://redwoodjs.com/docs/testing#testing-pages-layouts
+const createMatchMedia = (width) => (query) => ({
+  matches: mediaQuery.match(query, { width }),
+  addListener: () => {},
+  removeListener: () => {}
+});
+
+Object.defineProperty(window, 'matchMedia', {
+  writable: true,
+  value: jest.fn().mockImplementation(query => ({
+    matches: false,
+    media: query,
+    onchange: null,
+    addListener: jest.fn(), // deprecated
+    removeListener: jest.fn(), // deprecated
+    addEventListener: jest.fn(),
+    removeEventListener: jest.fn(),
+    dispatchEvent: jest.fn(),
+  })),
+});
 
 describe('HomePage', () => {
-  it('renders successfully', () => {
+  it('renders HomePage successfully', () => {
     expect(() => {
       render(<HomePage />)
     }).not.toThrow()
   })
+
+  it('renders Title successfully', () => {
+    render(<HomePage />)
+
+    expect(screen.getByTestId("title")).toBeInTheDocument()
+  })
+
+  it('renders Description successfully', () => {
+    render(<HomePage />)
+
+    expect(screen.getByTestId("description")).toBeInTheDocument()
+  })
+
+  it('renders Tutorial successfully', () => {
+    render(<HomePage />)
+
+    expect(screen.getByTestId("tutorial")).toBeInTheDocument()
+  })
+
 })
 
-// describe('Login button renders', () => {
+describe("Media Test", () => {
 
-//   beforeEach(() => {
-//     const mockedUseAuth = mocked(useAuth);
-//     mockedUseAuth.mockReturnValue({
-//         isAuthenticated: true,
-//         userMetadata: user,
-//         logout: jest.fn(),
-//         loginWithRedirect: jest.fn(),
-//         getAccessTokenWithPopup: jest.fn(),
-//         getAccessTokenSilently: jest.fn(),
-//         getIdTokenClaims: jest.fn(),
-//         loginWithPopup: jest.fn(),
-//         isLoading: false,
-//     });
-//   });
+  test("Desktop Test", async () => {
+    window.matchMedia = createMatchMedia(1500);
 
-//   it('renders successfully', () => {
-//     render(<HomePage />)
+    render(<HomePage />);
 
-//     const login = screen.getByText("Log In")
+    expect(screen.getByTestId("title")).toBeInTheDocument()
+    expect(screen.getByTestId("description")).toBeInTheDocument()
+    expect(screen.getByTestId("tutorial")).toBeInTheDocument()
+  });
 
-//     expect(login).toBeVisible()
-//   })
-// })
+  test("Laptop Test", async () => {
+    window.matchMedia = createMatchMedia(750);
 
-// describe('Logout button renders', () => {
+    render(<HomePage />);
 
-//   beforeEach(() => {
-//     const mockedUseAuth = mocked(useAuth);
-//     mockedUseAuth.mockReturnValue({
-//         isAuthenticated: true,
-//         userMetadata: user,
-//         logout: jest.fn(),
-//         loginWithRedirect: jest.fn(),
-//         getAccessTokenWithPopup: jest.fn(),
-//         getAccessTokenSilently: jest.fn(),
-//         getIdTokenClaims: jest.fn(),
-//         loginWithPopup: jest.fn(),
-//         isLoading: false,
-//     });
-//   });
+    expect(screen.getByTestId("title")).toBeInTheDocument()
+    expect(screen.getByTestId("description")).toBeInTheDocument()
+    expect(screen.getByTestId("tutorial")).toBeInTheDocument()
+  });
 
+  test("Mobile Test", async () => {
+    window.matchMedia = createMatchMedia(200);
 
-//   it('renders successfully', () => {
-//     render(<HomePage />)
+    render(<HomePage />);
 
-//     const logout = screen.getByText("Log Out")
-
-//     expect(logout).toBeVisible()
-//   })
-// })
-
-// describe('Sign Up button renders', () => {
-
-//   beforeEach(() => {
-//     const mockedUseAuth = mocked(useAuth);
-//     mockedUseAuth.mockReturnValue({
-//         isAuthenticated: true,
-//         userMetadata: user,
-//         logout: jest.fn(),
-//         loginWithRedirect: jest.fn(),
-//         getAccessTokenWithPopup: jest.fn(),
-//         getAccessTokenSilently: jest.fn(),
-//         getIdTokenClaims: jest.fn(),
-//         loginWithPopup: jest.fn(),
-//         isLoading: false,
-//     });
-//   });
-
-
-//   it('renders successfully', () => {
-//     render(<HomePage />)
-
-//     const signup = screen.getByText("sign up")
-
-//     expect(signup).toBeVisible()
-//   })
-// })
-
-// describe('Login works correctly', () => {
-
-//   beforeEach(() => {
-//     const mockedUseAuth = mocked(useAuth);
-//     mockedUseAuth.mockReturnValue({
-//         isAuthenticated: true,
-//         userMetadata: user,
-//         logout: jest.fn(),
-//         loginWithRedirect: jest.fn(),
-//         getAccessTokenWithPopup: jest.fn(),
-//         getAccessTokenSilently: jest.fn(),
-//         getIdTokenClaims: jest.fn(),
-//         loginWithPopup: jest.fn(),
-//         isLoading: false,
-//     });
-//   });
-
-//   it('Login successful', async () => {
-//     render(<HomePage />)
-
-//     const email = screen.getByText("Email: ", {exact: false})
-
-//     console.log(email.textContent)
-
-//     expect(email.textContent).toEqual('Email: johndoe@me.com')
-
-//   })
-// })
-
-// describe('Logout works correctly', () => {
-
-//   beforeEach(() => {
-//     const mockedUseAuth = mocked(useAuth);
-//     mockedUseAuth.mockReturnValue({
-//         isAuthenticated: false,
-//         userMetadata: user,
-//         logout: jest.fn(),
-//         loginWithRedirect: jest.fn(),
-//         getAccessTokenWithPopup: jest.fn(),
-//         getAccessTokenSilently: jest.fn(),
-//         getIdTokenClaims: jest.fn(),
-//         loginWithPopup: jest.fn(),
-//         isLoading: false,
-//     });
-//   });
-
-//   it('Logout successful', async () => {
-//     render(<HomePage />)
-
-//     const authenticated = screen.getByText('{"isAuthenticated":', {exact: false})
-
-//     expect(authenticated.textContent).toEqual('{"isAuthenticated":false}')
-
-//   })
-// })
+    expect(screen.getByTestId("title")).toBeInTheDocument()
+    expect(screen.getByTestId("description")).toBeInTheDocument()
+    expect(screen.getByTestId("tutorial")).toBeInTheDocument()
+  });
+});
