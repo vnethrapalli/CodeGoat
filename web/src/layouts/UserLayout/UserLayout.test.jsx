@@ -27,7 +27,7 @@ Object.defineProperty(window, 'matchMedia', {
 
 import UserLayout from './UserLayout'
 import HomePage from 'src/pages/HomePage/HomePage';
-import TranslatePage from 'src/pages/TranslatePage/TranslatePage';
+import SubmissionPage from 'src/pages/SubmissionPage/SubmissionPage';
 import StatusPage from 'src/pages/StatusPage/StatusPage';
 import FeedbackPage from 'src/pages/FeedbackPage/FeedbackPage';
 import { LightMode, DarkMode } from '@mui/icons-material'
@@ -115,10 +115,10 @@ describe('UserLayout', () => {
     render(<UserLayout />)
 
     const button = screen.getByTestId("translateButton");
-
     fireEvent.click(button);
+
     expect(() => {
-      render(<TranslatePage />)
+      render(<SubmissionPage />)
     }).not.toThrow()
   })
 
