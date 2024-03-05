@@ -64,13 +64,28 @@ describe('FeedbackPage', () => {
     }).not.toThrow()
   })
   
-  it('sends a completion message upon submission', async() => {
+  it('sends a completion message upon successful submission', async() => {
     render(<FeedbackPage />)
-    
+
     const subButton = screen.getByRole('button')
     fireEvent.click(subButton)
     setTimeout(() => {
       expect(screen.findByText('Submitted!')).toBeInTheDocument()
+    }, 5000);
+  })
+
+  it('sends an error message upon bad submission', async() => {
+    const error = {
+      request: {
+        variables: {submissionPage: "error"}
+      }
+    };
+    render(<FeedbackPage data={[error]}/>)
+    
+    const subButton = screen.getByRole('button')
+    fireEvent.click(subButton)
+    setTimeout(() => {
+      expect(screen.findByText('An error occurred.')).toBeInTheDocument()
     }, 5000);
   })
 

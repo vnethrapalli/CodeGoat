@@ -32,13 +32,19 @@ const FeedbackPage = () => {
     },
   });
 
-  const [create] = useMutation(CREATE_FEEDBACK)
+  const [create] = useMutation(CREATE_FEEDBACK, {
+    onCompleted: () => {
+      toast.success("Submitted!", {duration: 2500})
+    },
+    onError: () => {
+      toast.error("An error occurred.", {duration: 2500})
+    },
+  })
 
   // Gets the input into the database
   const onSubmit = (data) => {
     data.preventDefault();
     create({ variables: { input: {"submissionPage":sub, "outputPage":out, "translationAccuracy":acc, "gptAvailability":gpt, "experience":exp, "comments":com} } })
-    toast.success('Submitted!', { duration: 2500})
   }
   // By default, hover is not on
   const [hover, setHover] = React.useState(-1);
