@@ -1,4 +1,4 @@
-import { routes } from '@redwoodjs/router'
+import { navigate, routes } from '@redwoodjs/router'
 import { Toaster, toast } from '@redwoodjs/web/toast'
 import { AppBar, Link, Box, Button, Container, Tooltip, Typography, Grid } from '@mui/material';
 import CssBaseline from "@mui/material/CssBaseline";
@@ -54,23 +54,23 @@ const TitleLink = () => {
 
   return (
     <Grid item alignContent='center' alignItems='stretch' xs={4}>
-      <Tooltip title='Go Home'>
-        <Typography data-testid="titleLink" variant="h6" noWrap component="a"
-          sx={{
-            mr: 2,
-            display: { xs: 'none', md: 'flex' },
-            fontWeight: 700,
-            fontSize: 30,
-            color: theme.palette.text.primary,
-            textDecoration: 'none',
-            marginLeft: "20px",
-          }}
-        >
+      <Typography data-testid="titleLink" variant="h6" noWrap component="span"
+        sx={{
+          mr: 2,
+          display: { xs: 'none', md: 'flex' },
+          fontWeight: 700,
+          fontSize: 30,
+          color: theme.palette.text.primary,
+          textDecoration: 'none',
+          marginLeft: "20px",
+        }}
+      >
+        <Tooltip title='Go Home'>
           <Link href={routes.home()} underline="none">
             CodeGoat
           </Link>
-        </Typography>
-      </Tooltip>
+        </Tooltip>
+      </Typography>
     </Grid>
   )
 }
@@ -82,51 +82,51 @@ const NavButtons = () => {
     <Grid item alignContent='center' alignItems='stretch' alignSelf='center' xs={4}>
       <Box data-testid="navButtons" display="flex" sx={{ justifyContent: "center", alignItems: "center", flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
         <Tooltip title='Translate Code'>
-          <Link data-testid="translateButton" href={routes.translate()} underline="none" sx={{ color: theme.palette.text.primary, fontWeight: '300' }}>
-            <Button
-              key="Translate"
-              variant="text"
-              sx={{ my: 2, color: theme.palette.text.primary, display: 'block', margin: 'auto auto' }}
-            >
-              Translate
-            </Button>
-          </Link>
+          <Button
+            key="Translate"
+            variant="text"
+            data-testid="translateButton"
+            href={routes.translate()}
+            sx={{ my: 2, color: theme.palette.text.primary, display: 'block', margin: 'auto auto' }}
+          >
+            Translate
+          </Button>
         </Tooltip>
 
         <Tooltip title='Check API Status'>
-          <Link data-testid="statusButton" href={routes.status()} underline="none" sx={{ color: theme.palette.text.primary, fontWeight: '300' }}>
-            <Button
-              key="Status"
-              variant="text"
-              sx={{ my: 2, color: theme.palette.text.primary, display: 'block', margin: 'auto auto' }}
-            >
-              GPT-3 Status
-            </Button>
-          </Link>
+          <Button
+            key="Status"
+            variant="text"
+            data-testid="statusButton"
+            onClick={() => (navigate(routes.status()))}
+            sx={{ my: 2, color: theme.palette.text.primary, display: 'block', margin: 'auto auto' }}
+          >
+            GPT-3 Status
+          </Button>
         </Tooltip>
 
         <Tooltip title='Give Feedback'>
-          <Link data-testid="feedbackButton" href={routes.feedback()} underline="none" sx={{ color: theme.palette.text.primary, fontWeight: '300' }}>
-            <Button
-              key="Feedback"
-              variant="text"
-              sx={{ my: 2, color: theme.palette.text.primary, display: 'block', margin: 'auto auto' }}
-            >
-              Feedback
-            </Button>
-          </Link>
+          <Button
+            key="Feedback"
+            variant="text"
+            data-testid="feedbackButton"
+            href={routes.feedback()}
+            sx={{ my: 2, color: theme.palette.text.primary, display: 'block', margin: 'auto auto' }}
+          >
+            Feedback
+          </Button>
         </Tooltip>
 
         <Tooltip title='Documentation'>
-          <Link data-testid="documentationButton" href={routes.documentation()} underline="none" sx={{ color: theme.palette.text.primary, fontWeight: '300' }}>
-            <Button
-              key="Feedback"
-              variant="text"
-              sx={{ my: 2, color: theme.palette.text.primary, display: 'block', margin: 'auto auto' }}
-            >
-              Documentation
-            </Button>
-          </Link>
+          <Button
+            key="Feedback"
+            variant="text"
+            data-testid="documentationButton"
+            onClick={() => (navigate(routes.documentation()))}
+            sx={{ my: 2, color: theme.palette.text.primary, display: 'block', margin: 'auto auto' }}
+          >
+            Documentation
+          </Button>
         </Tooltip>
       </Box>
     </Grid>
@@ -242,7 +242,7 @@ const Footer = () => {
       component="footer"
     >
       <Container>
-        <Typography variant="body2"
+        <Typography component='span' variant="body2"
           sx={{
             color: theme.palette.text.primary,
             display: 'flex',

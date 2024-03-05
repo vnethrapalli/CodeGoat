@@ -1,14 +1,13 @@
-import { Link, routes } from '@redwoodjs/router';
 import { Metadata } from '@redwoodjs/web';
 import { Stack, Box, Button, FormControl, InputLabel, Select, MenuItem, Divider } from '@mui/material';
-import { useTheme, darken } from '@mui/material/styles';
+import { useTheme } from '@mui/material/styles';
 import DownloadIcon from '@mui/icons-material/Download';
 import UploadFile from '@mui/icons-material/UploadFile';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import Editor from '@monaco-editor/react';
 import React, { useRef } from 'react';
 
-const languages = [
+export const languages = [
   {dropdownItem: "C++", langCode: "cpp"},
   {dropdownItem: "C#", langCode: "csharp"},
   {dropdownItem: "Java", langCode: "java"},
@@ -25,7 +24,7 @@ const extensions = {
   "typescript": ".ts"
 };
 
-const SubmissionPage = () => {
+const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => {
   const [inputCodeValue, setInputCodeValue] = React.useState("// write some code...");
   const [outputCodeValue, setOutputCodeValue] = React.useState("# your new code will be here...");
   const [inputLanguage, setInputLanguage] = React.useState("javascript");
@@ -39,10 +38,6 @@ const SubmissionPage = () => {
     function handleEditorDidMount(editor, monaco) {
       editorRef.current = editor;
     }
-
-    // function showValue() {
-    //   alert(editorRef.current.getValue());
-    // }
 
     return (
       <div data-testid={isInput ? "inputEditor" : "outputEditor"}>
@@ -80,7 +75,7 @@ const SubmissionPage = () => {
     isInput: false
   });
 
-  const readInputFile = (event) => {
+  const readInputFile = defaultReadInputFile || ((event) => {
     const file = event.target.files[0];
     const reader = new FileReader();
     reader.readAsText(file);
@@ -89,9 +84,9 @@ const SubmissionPage = () => {
       const fileContents = e.target.result;
       setInputCodeValue(fileContents);
     }
-  }
+  });
 
-  const downloadTextAsFile = (text, fname) => {
+  const downloadTextAsFile = defaultDownloadTextAsFile || ((text, fname) => {
     const element = document.createElement("a");
     element.setAttribute("id", "download-link");
     const file = new Blob([text], { type: "text/plain" });
@@ -102,7 +97,7 @@ const SubmissionPage = () => {
     document.body.appendChild(element); // Required for this to work in FireFox
     element.click();
     document.body.removeChild(element);
-  }
+  });
 
   const LangDropdown = ({ text, language, setLanguage }) => {
     return (
@@ -142,7 +137,7 @@ const SubmissionPage = () => {
             data-testid="translateButton"
             style={{
               backgroundColor: theme.palette.secondary.main,
-              color: 'white',
+              color: theme.palette.text.primary,
               textTransform: 'none'
             }}
             sx={{
@@ -169,7 +164,6 @@ const SubmissionPage = () => {
         }}
         style={{
           backgroundColor: theme.palette.secondary.main,
-          color: darken(theme.palette.secondary.main, 0.5),
           textTransform: 'none',
           borderTopLeftRadius: '10px',
           borderBottomLeftRadius: '10px',
@@ -198,7 +192,6 @@ const SubmissionPage = () => {
             component="span"
             style={{
               backgroundColor: theme.palette.secondary.main,
-              color: darken(theme.palette.secondary.main, 0.5),
               textTransform: 'none',
               borderTopLeftRadius: '0px',
               borderBottomLeftRadius: '0px',
@@ -220,7 +213,6 @@ const SubmissionPage = () => {
       <Button
         style={{
           backgroundColor: theme.palette.secondary.main,
-          color: darken(theme.palette.secondary.main, 0.5),
           textTransform: 'none',
           borderTopLeftRadius: '0px',
           borderBottomLeftRadius: '0px',
@@ -228,7 +220,7 @@ const SubmissionPage = () => {
           borderBottomRightRadius: '10px'
         }}
         onClick={() => {
-          console.log(outputLanguage);
+          // console.log(outputLanguage);
           downloadTextAsFile(codeboxOutput.props.children.props.value, 'code_output' + extensions[outputLanguage]);
         }}
         data-testid="downloadButton"
@@ -247,7 +239,7 @@ const SubmissionPage = () => {
         </Stack>
         <Stack direction="row" spacing={0} justifyContent="flex-end" alignItems="center">
           <CopyButton editor={codeboxInput} isInput={input}/>
-          <Divider orientation="vertical" flexItem style={{ backgroundColor: darken(theme.palette.secondary.main, 0.5), width: '1%' }}/>
+          <Divider orientation="vertical" flexItem style={{ backgroundColor: theme.palette.text.primary, width: '1%' }}/>
           {input ? <UploadButtonInput/> : <DownloadButton/>}
         </Stack>
       </Stack>
@@ -258,7 +250,7 @@ const SubmissionPage = () => {
     return (
       <Stack direction="row" spacing={0} justifyContent="flex-end" alignItems="center">
         <CopyButton editor={input ? codeboxInput : codeboxOutput}/>
-        <Divider orientation="vertical" flexItem style={{ backgroundColor: darken(theme.palette.secondary.main, 0.5), width: '1%' }}/>
+        <Divider orientation="vertical" flexItem style={{ backgroundColor: theme.palette.text.primary, width: '1%' }}/>
         {input ? <UploadButtonInput/> : <DownloadButton/>}
       </Stack>
     );
