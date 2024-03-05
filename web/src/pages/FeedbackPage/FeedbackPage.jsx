@@ -37,7 +37,6 @@ const FeedbackPage = () => {
   // Gets the input into the database
   const onSubmit = (data) => {
     data.preventDefault();
-    console.log(sub, com)
     create({ variables: { input: {"submissionPage":sub, "outputPage":out, "translationAccuracy":acc, "gptAvailability":gpt, "experience":exp, "comments":com} } })
     toast.success('Submitted!', { duration: 2500})
   }

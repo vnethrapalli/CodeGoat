@@ -63,20 +63,15 @@ describe('FeedbackPage', () => {
       screen.getAllByRole('radio')
     }).not.toThrow()
   })
-  // not sure if this actually tests correctly
-  // it('submits data correctly', async () => {
-  //   mockGraphQLQuery('createFeedback', () => {
-  //     return {
-  //       feedback: {
-  //         id: 90000,
-  //         submissionPage: 20,
-  //         outputPage: 32,
-  //         translationAccuracy: 1,
-  //         gptAvailability: 23,
-  //         experience: 2,
-  //         comments: 'spaghetti',
-  //       }
-  //     }
-  //   })
-  // })
+  
+  it('sends a completion message upon submission', async() => {
+    render(<FeedbackPage />)
+    
+    const subButton = screen.getByRole('button')
+    fireEvent.click(subButton)
+    setTimeout(() => {
+      expect(screen.findByText('Submitted!')).toBeInTheDocument()
+    }, 5000);
+  })
+
 })
