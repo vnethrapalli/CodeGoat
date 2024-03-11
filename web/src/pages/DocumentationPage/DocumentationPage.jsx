@@ -11,15 +11,10 @@ const DocumentationPage = () => {
     <>
       <Metadata title="Documentation" description="Documentation page" />
 
-      <Typography component='h2' sx={{ color: theme.palette.text.secondary }}>DocumentationPage</Typography>
-      {/* <p>
-        Find me in{' '}
-        <code>./web/src/pages/DocumentationPage/DocumentationPage.jsx</code>
-      </p>
-      <p>
-        My default route is named <code>documentation</code>, link to me with `
-        <Link to={routes.documentation()}>Documentation</Link>`
-      </p> */}
+      <Typography variant='h2' component='h2' align='center' style={{color: theme.palette.text.secondary, fontSize: '52px', fontStyle: 'normal', fontWeight: '600'}}>Documentation</Typography>
+      {
+        <p>Documentation Page!!!</p>
+      }
     </>
   )
 }

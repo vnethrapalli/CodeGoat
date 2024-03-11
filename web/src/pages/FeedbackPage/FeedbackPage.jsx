@@ -61,9 +61,9 @@ const FeedbackPage = () => {
     <>
       <Metadata title="Feedback" description="Feedback page" />
       <Box display="flex" flexDirection='column' justifyContent="center" alignItems="center">
-      <Typography variant='h2' component='h2' align='center' style={{color: (theme.palette.secondary.main == "#344955" ? theme.palette.text.primary : "#344955"), fontSize: '52px', fontStyle: 'normal', fontWeight: '600'}}>Feedback</Typography>
+      <Typography variant='h2' component='h2' align='center' style={{color: theme.palette.text.secondary, fontSize: '52px', fontStyle: 'normal', fontWeight: '600'}}>Feedback</Typography>
         <Form onSubmit={onSubmit}>
-          <Typography variant='h5' component='h5' align='center' style={{color: (theme.palette.secondary.main == "#344955" ? theme.palette.text.primary : "#344955")}}>Submission Page</Typography>
+          <Typography variant='h5' component='h5' align='center' style={{color: theme.palette.text.secondary}}>Submission Page</Typography>
           <Box
             sx={{
               display: 'flex',
@@ -92,7 +92,7 @@ const FeedbackPage = () => {
             />
           </Box>
 
-          <Typography variant='h5' component='h5' align='center' style={{color: (theme.palette.secondary.main == "#344955" ? theme.palette.text.primary : "#344955")}}>Output Page</Typography>
+          <Typography variant='h5' component='h5' align='center' style={{color: theme.palette.text.secondary}}>Output Page</Typography>
           <Box
             sx={{
               display: 'flex',
@@ -120,7 +120,7 @@ const FeedbackPage = () => {
             />
           </Box>
 
-          <Typography variant='h5' component='h5' align='center' style={{color: (theme.palette.secondary.main == "#344955" ? theme.palette.text.primary : "#344955")}}>Translation Accuracy</Typography>
+          <Typography variant='h5' component='h5' align='center' style={{color: theme.palette.text.secondary}}>Translation Accuracy</Typography>
           <Box
             sx={{
               display: 'flex',
@@ -148,7 +148,7 @@ const FeedbackPage = () => {
             />
           </Box>
 
-          <Typography variant='h5' component='h5' align='center' style={{color: (theme.palette.secondary.main == "#344955" ? theme.palette.text.primary : "#344955")}}>GPT-3 Availability</Typography>
+          <Typography variant='h5' component='h5' align='center' style={{color: theme.palette.text.secondary}}>GPT-3 Availability</Typography>
           <Box
             sx={{
               display: 'flex',
@@ -176,7 +176,7 @@ const FeedbackPage = () => {
             />
           </Box>
 
-          <Typography variant='h5' component='h5' align='center' style={{color: (theme.palette.secondary.main == "#344955" ? theme.palette.text.primary : "#344955")}}>Overall Experience</Typography>
+          <Typography variant='h5' component='h5' align='center' style={{color: theme.palette.text.secondary}}>Overall Experience</Typography>
           <Box
             sx={{
               display: 'flex',
@@ -204,7 +204,7 @@ const FeedbackPage = () => {
             />
           </Box>
 
-          <Typography variant='h5' component='h5' align='center' style={{color: (theme.palette.secondary.main == "#344955" ? theme.palette.text.primary : "#344955")}}>Additional Comments</Typography>
+          <Typography variant='h5' component='h5' align='center' style={{color: theme.palette.text.secondary}}>Additional Comments</Typography>
           <Box
             sx={{
               display: "flex",
@@ -224,7 +224,7 @@ const FeedbackPage = () => {
           </Box>
 
 
-          <Button type="submit" sx={{ my: 2, color: theme.palette.text.primary, display: 'block', margin: 'auto auto' }} style={{color: (theme.palette.secondary.main == "#344955" ? theme.palette.text.primary : "#344955")}} onClick={onSubmit}>Submit</Button>
+          <Button type="submit" sx={{ my: 2, color: theme.palette.text.primary, display: 'block', margin: 'auto auto' }} style={{color: theme.palette.text.secondary}} onClick={onSubmit}>Submit</Button>
         </Form>
       </Box>
     </>
