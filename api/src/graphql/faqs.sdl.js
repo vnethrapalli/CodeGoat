@@ -6,8 +6,8 @@ export const schema = gql`
   }
 
   type Query {
-    faqs: [Faq!]! @requireAuth
-    faq(id: Int!): Faq @requireAuth
+    faqs: [Faq!]! @skipAuth
+    faq(id: Int!): Faq @skipAuth
   }
 
   input CreateFaqInput {
@@ -21,7 +21,7 @@ export const schema = gql`
   }
 
   type Mutation {
-    createFaq(input: CreateFaqInput!): Faq! @requireAuth
+    createFaq(input: CreateFaqInput!): Faq! @skipAuth
     updateFaq(id: Int!, input: UpdateFaqInput!): Faq! @requireAuth
     deleteFaq(id: Int!): Faq! @requireAuth
   }

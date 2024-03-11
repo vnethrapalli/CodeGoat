@@ -18,6 +18,8 @@ import { TextareaAutosize, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { createTheme } from '@mui/material/styles'
 
+import QuestionsCell from 'src/components/QuestionsCell' 
+
 // puts data to standard lowercase and compares to data passed
 const filterData = (query, data) => {
   if (!query) {
@@ -58,7 +60,8 @@ const DocumentationPage = () => {
           flexDirection: "column",
           padding: 20
         }}
-      >
+      > 
+        <QuestionsCell />
         <Form>
           <TextField
             sx={{ input: { color: theme.palette.text.secondary }, '&:active fieldset': {borderColor: theme.palette.text.secondary} }}
