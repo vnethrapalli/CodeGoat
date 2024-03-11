@@ -13,7 +13,7 @@ const DocumentationPage = () => {
 
       <Typography variant='h2' component='h2' align='center' style={{color: theme.palette.text.secondary, fontSize: '52px', fontStyle: 'normal', fontWeight: '600'}}>Documentation</Typography>
       {
-        <p>Documentation Page!!!</p>
+        <p>Documentation Page!</p>
       }
     </>
   )
