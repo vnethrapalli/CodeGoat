@@ -36,14 +36,14 @@ export const Success = ({ questions }) => {
     <>
       {questions.map((question) => (
         <question key={question.id}>
-          <Accordion style={{color: theme.palette.text.secondary}} expanded={expanded === 'panel'+question.id} onChange={handleChange('panel'+question.id)}>
-            <AccordionSummary sx={{backgroundColor: theme.palette.primary}}aria-controls="panel1d-content" id="panel1d-header">
+          <Accordion sx={{bgcolor: theme.palette.secondary.main}} expanded={expanded === 'panel'+question.id} onChange={handleChange('panel'+question.id)}>
+            <AccordionSummary sx={{bgcolor: theme.palette.primary}} aria-controls="panel1d-content" id="panel1d-header">
               <Typography>{question.question}</Typography>
             </AccordionSummary>
-            <AccordionDetails>
+            <AccordionDetails sx={{bgcolor: theme.palette.primary}}>
               <Typography>{question.answer}</Typography>
             </AccordionDetails>
-          </Accordion>
+          </Accordion> 
         </question>
       ))}
     </>
