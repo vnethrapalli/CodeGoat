@@ -25,9 +25,19 @@ export const Failure = ({ error }) => (
   <div style={{ color: 'red' }}>Error: {error?.message}</div>
 )
 
-export const Success = ({ questions }) => {
+// puts data to standard lowercase and compares to data passed
+const filterData = (query, data) => {
+  if (!query) {
+    return data;
+  } else {
+    return data.filter((d) => d.toString().toLowerCase().includes(query));
+  }
+};
+
+export const Success = ({ questions, searchQuery }) => {
   const theme = useTheme()
   const [expanded, setExpanded] = React.useState('panel1');
+  //const dataFiltered = filterData(searchQuery, questions);
 
   const handleChange = (panel) => (event, newExpanded) => {
     setExpanded(newExpanded ? panel : false);
@@ -36,6 +46,7 @@ export const Success = ({ questions }) => {
     <>
       {questions.map((question) => (
         <question key={question.id}>
+          {(question.question.toLowerCase().includes(searchQuery) || question.answer.toLowerCase().includes(searchQuery))&&
           <Accordion sx={{bgcolor: theme.palette.secondary.main}} expanded={expanded === 'panel'+question.id} onChange={handleChange('panel'+question.id)}>
             <AccordionSummary sx={{bgcolor: theme.palette.primary}} aria-controls="panel1d-content" id="panel1d-header">
               <Typography>{question.question}</Typography>
@@ -44,6 +55,7 @@ export const Success = ({ questions }) => {
               <Typography>{question.answer}</Typography>
             </AccordionDetails>
           </Accordion> 
+          }
         </question>
       ))}
     </>
