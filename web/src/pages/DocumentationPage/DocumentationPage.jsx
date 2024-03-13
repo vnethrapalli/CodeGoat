@@ -1,7 +1,6 @@
 import { Link, routes } from '@redwoodjs/router'
 import { Metadata, useMutation } from '@redwoodjs/web'
 import { Form, Submit, TextAreaField } from '@redwoodjs/forms'
-
 // Accordion is for the FAQ section displays
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
@@ -14,7 +13,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import TextField from "@mui/material/TextField";
 
 import { useTheme } from '@mui/material/styles'
-import { TextareaAutosize, Typography } from '@mui/material';
+import { TextareaAutosize, Box, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { createTheme } from '@mui/material/styles'
 
@@ -51,6 +50,15 @@ const DocumentationPage = () => {
           padding: 20
         }}
       > 
+      <Typography variant='h1' component='h1' align='center' style={{color: theme.palette.text.secondary, fontSize: '42px', fontStyle: 'normal', fontWeight: '600'}}>FAQ</Typography>
+      <br></br>
+        <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              size: "lg",
+            }}
+          >
         <Form>
           <TextField
             sx={{ input: { color: theme.palette.text.secondary }, '&:active fieldset': {borderColor: theme.palette.text.secondary} }}
@@ -68,6 +76,8 @@ const DocumentationPage = () => {
             <SearchIcon style={{ fill: theme.palette.text.secondary, size:"xl" }} />
           </IconButton>
         </Form>
+        </Box>
+        <br></br>
         <QuestionsCell searchQuery={searchQuery}/>
       </div>
       }

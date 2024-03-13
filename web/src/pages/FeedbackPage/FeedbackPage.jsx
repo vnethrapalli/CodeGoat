@@ -222,8 +222,6 @@ const FeedbackPage = () => {
               }}
             ></TextareaAutosize>
           </Box>
-
-
           <Button type="submit" sx={{ my: 2, color: theme.palette.text.primary, display: 'block', margin: 'auto auto' }} style={{color: theme.palette.text.secondary}} onClick={onSubmit}>Submit</Button>
         </Form>
       </Box>

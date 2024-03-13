@@ -7,6 +7,9 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles'
 
+// This is for the regex highlighting stuff
+import _ from "lodash";
+
 export const QUERY = gql`
   query QuestionsQuery {
     questions: faqs {
@@ -25,20 +28,24 @@ export const Failure = ({ error }) => (
   <div style={{ color: 'red' }}>Error: {error?.message}</div>
 )
 
-// puts data to standard lowercase and compares to data passed
-const filterData = (query, data) => {
-  if (!query) {
-    return data;
-  } else {
-    return data.filter((d) => d.toString().toLowerCase().includes(query));
-  }
-};
-
 export const Success = ({ questions, searchQuery }) => {
   const theme = useTheme()
+  
   const [expanded, setExpanded] = React.useState('panel1');
-  //const dataFiltered = filterData(searchQuery, questions);
-
+  const Highlighted = ({text = '', highlight = ''}) => {
+    if (!highlight.trim()) {
+      return <span>{text}</span>
+    }
+    const regex = new RegExp(`(${highlight})`, 'gi')
+    const parts = text.split(regex)
+    return (
+      <span>
+         {parts.filter(part => part).map((part, i) => (
+             regex.test(part) ? <mark key={i}>{part}</mark> : <span key={i}>{part}</span>
+         ))}
+     </span>
+    )
+  }
   const handleChange = (panel) => (event, newExpanded) => {
     setExpanded(newExpanded ? panel : false);
   };
@@ -49,10 +56,10 @@ export const Success = ({ questions, searchQuery }) => {
           {(question.question.toLowerCase().includes(searchQuery) || question.answer.toLowerCase().includes(searchQuery))&&
           <Accordion sx={{bgcolor: theme.palette.secondary.main}} expanded={expanded === 'panel'+question.id} onChange={handleChange('panel'+question.id)}>
             <AccordionSummary sx={{bgcolor: theme.palette.primary}} aria-controls="panel1d-content" id="panel1d-header">
-              <Typography>{question.question}</Typography>
+              <Highlighted text={question.question} highlight={searchQuery} />
             </AccordionSummary>
             <AccordionDetails sx={{bgcolor: theme.palette.primary}}>
-              <Typography>{question.answer}</Typography>
+              <Highlighted text={question.answer} highlight={searchQuery} />
             </AccordionDetails>
           </Accordion> 
           }
