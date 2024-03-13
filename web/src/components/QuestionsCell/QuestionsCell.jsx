@@ -28,6 +28,10 @@ export const Failure = ({ error }) => (
   <div style={{ color: 'red' }}>Error: {error?.message}</div>
 )
 
+function escapeRegex(string) {
+  return string.replace(/[/\-\\^$*+?.()|[\]{}]/g, '\\$&');
+}
+
 export const Success = ({ questions, searchQuery }) => {
   const theme = useTheme()
   
@@ -36,7 +40,7 @@ export const Success = ({ questions, searchQuery }) => {
     if (!highlight.trim()) {
       return <span>{text}</span>
     }
-    const regex = new RegExp(`(${highlight})`, 'gi')
+    const regex = new RegExp(`(${escapeRegex(highlight)})`, 'gi')
     const parts = text.split(regex)
     return (
       <span>
