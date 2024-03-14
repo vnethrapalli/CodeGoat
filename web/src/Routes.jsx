@@ -17,6 +17,7 @@ const Routes = () => {
     <Router useAuth={useAuth}>
       <PrivateSet unauthenticated="home">
         <Set wrap={UserLayout}>
+          <Route path="/user-account" page={UserAccountPage} name="userAccount" />
           <Route path="/translate" page={SubmissionPage} name="translate" />
           <Route path="/feedback" page={FeedbackPage} name="feedback" />
         </Set>
@@ -27,7 +28,7 @@ const Routes = () => {
         <Route path="/status" page={StatusPage} name="status" />
         <Route path="/documentation" page={DocumentationPage} name="documentation" />
       </Set>
-      
+
       <Route notfound page={NotFoundPage} />
     </Router>
   )
