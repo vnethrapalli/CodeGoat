@@ -18,7 +18,7 @@ const UserAccountPage = () => {
 
   let email = userMetadata.email
 
-  const inputStyle = {style:{color: "#344955", fontSize: '18px', fontStyle: 'normal', fontWeight: '600', margin: '1%'}}
+  const inputStyle = {style:{color: theme.palette.text.secondary, fontSize: '18px', fontStyle: 'normal', fontWeight: '600', margin: '1%'}}
 
   const handleUsernameChange = (e) => {
     let value = e.target.value
@@ -42,7 +42,7 @@ const UserAccountPage = () => {
 
   return (
     <>
-      <Typography variant='h2' component='h2' align='left' style={{color: "#344955", fontSize: '36px', fontStyle: 'normal', fontWeight: '600', margin: '1%'}}>Account</Typography>
+      <Typography variant='h2' component='h2' align='left' style={{color:theme.palette.text.secondary, fontSize: '36px', fontStyle: 'normal', fontWeight: '600', margin: '1%'}}>Account</Typography>
 
       <Box
         component="form"

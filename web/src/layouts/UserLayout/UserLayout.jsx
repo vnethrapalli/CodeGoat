@@ -6,6 +6,7 @@ import { Experimental_CssVarsProvider as CssVarsProvider, experimental_extendThe
 import IconButton from '@mui/material/IconButton';
 import LightMode from '@mui/icons-material/LightMode';
 import DarkMode from '@mui/icons-material/DarkMode';
+import AccountBoxIcon from '@mui/icons-material/AccountBox';
 
 import { useAuth, auth0 } from 'src/auth'
 
@@ -150,7 +151,7 @@ const ThemeButton = () => {
 
 const ThemeAuthButtons = () => {
   const theme = useTheme();
-  const { isAuthenticated, signUp, logOut, loading } = useAuth()
+  const { isAuthenticated, signUp, logOut, loading, userMetadata } = useAuth()
 
   if(loading) {
     return null
@@ -219,6 +220,12 @@ const ThemeAuthButtons = () => {
       >
         Sign Out
       </Button>}
+
+      {isAuth && <Tooltip title='Account Management'>
+        <IconButton data-testid="accountButton" sx={{ width: '10%'}} href={routes.userAccount()}>
+          <AccountBoxIcon style={{fill: theme.palette.text.primary}} sx={{fontSize: 35}} />
+        </IconButton>
+      </Tooltip>}
 
     </Grid>
   )
