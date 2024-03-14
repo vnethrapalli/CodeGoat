@@ -1,4 +1,4 @@
-import { Metadata } from '@redwoodjs/web';
+import { Metadata, useQuery } from '@redwoodjs/web';
 import { Stack, Box, Button, FormControl, InputLabel, Select, MenuItem, Divider } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import DownloadIcon from '@mui/icons-material/Download';
@@ -6,6 +6,8 @@ import UploadFile from '@mui/icons-material/UploadFile';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import Editor from '@monaco-editor/react';
 import React, { useRef } from 'react';
+import CodeOutputCell from 'src/components/CodeOutputCell'
+
 
 export const languages = [
   {dropdownItem: "C++", langCode: "cpp"},
@@ -23,6 +25,7 @@ const extensions = {
   "python": ".py",
   "typescript": ".ts"
 };
+
 
 const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => {
   const [inputCodeValue, setInputCodeValue] = React.useState("// write some code...");
@@ -53,6 +56,7 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
           onMount={handleEditorDidMount}
           onChange={updateCodeValue}
           title={isInput ? "inputEditor" : "outputEditor"}
+          options={{domReadOnly: output, readOnly: output}}
         />
       </div>
     );
@@ -270,7 +274,7 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
         </Stack>
         <Stack direction="row" spacing={4} justifyContent="space-between" alignItems="center" width={output ? '80vw' : '40vw'}>
           {codeboxInput}
-          {output && codeboxOutput}
+          {output && <CodeOutputCell code={inputCodeValue} inLang={inputLanguage} outLang={outputLanguage} />}
         </Stack>
       </Stack>
       <TranslateBtn/>
