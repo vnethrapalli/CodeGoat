@@ -8,8 +8,8 @@ import { useEffect, useState } from 'react'
 import TranslationsCell from 'src/components/TranslationsCell'
 
 const HistoryPage = () => {
-  const [userId, setUserId] = React.useState()
   const theme = useTheme();
+  const [userId, setUserId] = React.useState()
   const regex = /.+\|(.*)/;
 
   useEffect(()=>{

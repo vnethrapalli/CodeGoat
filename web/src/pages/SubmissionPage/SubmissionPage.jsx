@@ -1,11 +1,25 @@
-import { Metadata } from '@redwoodjs/web';
+import { Metadata, useMutation} from '@redwoodjs/web';
 import { Stack, Box, Button, FormControl, InputLabel, Select, MenuItem, Divider } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import DownloadIcon from '@mui/icons-material/Download';
 import UploadFile from '@mui/icons-material/UploadFile';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import Editor from '@monaco-editor/react';
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
+import { auth0 } from 'src/auth'
+
+const CREATE_TRANSLATION = gql`
+  mutation CreateTranslationMutation($input: CreateTranslationInput!) {
+    createTranslation(input: $input) {
+      uid
+      inputLanguage
+      outputLanguage
+      inputCode
+      outputCode
+      rating
+    }
+  }
+`
 
 export const languages = [
   {dropdownItem: "C++", langCode: "cpp"},
@@ -15,6 +29,7 @@ export const languages = [
   {dropdownItem: "Python", langCode: "python"},
   {dropdownItem: "TypeScript", langCode: "typescript"},
 ];
+
 const extensions = {
   "cpp": ".cpp",
   "csharp": ".cs",
@@ -30,7 +45,15 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
   const [inputLanguage, setInputLanguage] = React.useState("javascript");
   const [outputLanguage, setOutputLanguage] = React.useState("python");
   const [output, setOutput] = React.useState(false);
+  const [userId, setUserId] = React.useState()
+  const regex = /.+\|(.*)/;
   const theme = useTheme();
+
+  useEffect(()=>{
+    auth0.getUser().then(user => {
+      setUserId(user.sub.match(regex)[1]);
+    })
+  },[])
 
   const CodeBox = ({ codeValue, updateCodeValue, defaultLanguage, language, defaultValue, isInput }) => {
     const editorRef = useRef(null);
@@ -66,6 +89,7 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
     defaultValue: inputCodeValue,
     isInput: true
   });
+  
   const codeboxOutput = CodeBox({
     codeValue: outputCodeValue,
     updateCodeValue: (newCodeVal) => setOutputCodeValue(newCodeVal),
@@ -117,6 +141,7 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
                      color: theme.palette.text.secondary,
                   }}
                   value={lang.langCode}
+                  key={lang.langCode}
                 >
                     {lang.dropdownItem}
                 </MenuItem>
@@ -129,6 +154,26 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
   }
 
   const TranslateBtn = () => {
+    const [createTranslation] = useMutation(CREATE_TRANSLATION, {
+      onCompleted: () => {},
+      onError: (err) => {},
+    })
+
+    const translate = () => {
+      createTranslation({ variables: { input: { "uid": userId, "inputLanguage": inputCodeValue, "outputLanguage": outputCodeValue, "inputCode": inputLanguage, "outputCode": outputLanguage, "rating": 5 }}});
+    }
+
+    const clicked = () => {
+      setOutput(true);
+    };
+
+    useEffect(()=>{
+      if(output){
+        translate()
+      }
+    },[output])
+
+
     return (
       <>
         <Box textAlign="center" pt={2}>
@@ -145,9 +190,7 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
               borderRadius: "40px",
               marginBottom: "25px",
             }}
-            onClick={() => {
-              setOutput(() => true);
-            }}
+            onClick={clicked}
           >
             Translate
           </Button>

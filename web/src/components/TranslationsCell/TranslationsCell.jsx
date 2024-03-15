@@ -43,10 +43,6 @@ export const Success = ({ translations }) => {
     )
   };
 
-  var result = Object.keys(translations).map((key) => [key, translations[key]]);
-
-  console.log(result);
-
   return (
     <>
       {translations.map((translation) => {
