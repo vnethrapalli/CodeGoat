@@ -241,7 +241,7 @@ const UserButtons = () => {
       })
     })
     let currUser = JSON.parse(localStorage.getItem('user'));
-    toast.success("Welcome " + currUser.nickname + "!")
+    toast.success("Welcome " + currUser.nickname + "!", {position: "bottom-right"})
   }
 
   return (

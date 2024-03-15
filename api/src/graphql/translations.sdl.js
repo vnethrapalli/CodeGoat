@@ -11,7 +11,7 @@ export const schema = gql`
   }
 
   type Query {
-    translations: [Translation!]! @requireAuth
+    translations(uid: String!): [Translation!]! @requireAuth
     translation(id: Int!): Translation @requireAuth
   }
 
@@ -39,4 +39,13 @@ export const schema = gql`
       @requireAuth
     deleteTranslation(id: Int!): Translation! @requireAuth
   }
+
+  # input TranslationOrderByInput {
+  #   createdAt: Sort
+  # }
+
+  # enum Sort {
+  #   asc
+  #   desc
+  # }
 `

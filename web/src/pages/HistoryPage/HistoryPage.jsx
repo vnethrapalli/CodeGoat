@@ -2,11 +2,25 @@ import { Link, routes } from '@redwoodjs/router'
 import { Metadata } from '@redwoodjs/web'
 import { useTheme } from '@mui/material/styles'
 import { Box, Typography } from '@mui/material'
+import { auth0 } from 'src/auth'
+import { useEffect, useState } from 'react'
 
 import TranslationsCell from 'src/components/TranslationsCell'
 
 const HistoryPage = () => {
+  const [userId, setUserId] = React.useState()
   const theme = useTheme();
+  const regex = /.+\|(.*)/;
+
+  useEffect(()=>{
+    auth0.getUser().then(user => {
+      setUserId(user.sub.match(regex)[1]);
+    })
+  },[])
+
+  // useEffect(()=>{
+  //   console.log('USERID changed');
+  // },[userId])
 
   return (
     <>
@@ -18,8 +32,7 @@ const HistoryPage = () => {
           Translation History
         </Typography>
 
-        <TranslationsCell />
-
+        <TranslationsCell uid={userId} />
       </Box>
     </>
   )
