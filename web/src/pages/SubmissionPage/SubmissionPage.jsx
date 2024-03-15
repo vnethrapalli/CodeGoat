@@ -56,7 +56,6 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
           onMount={handleEditorDidMount}
           onChange={updateCodeValue}
           title={isInput ? "inputEditor" : "outputEditor"}
-          options={{domReadOnly: output, readOnly: output}}
         />
       </div>
     );
@@ -149,8 +148,14 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
               borderRadius: "40px",
               marginBottom: "25px",
             }}
-            onClick={() => {
+            onClick={async () => {
               setOutput(() => true);
+              const reqUrl = `http://localhost:8910/.redwood/functions/translate?code=${inputCodeValue}&inputLanguage=${inputLanguage}&outputLanguage=${outputLanguage}`;
+              const translation = await fetch(reqUrl);
+
+              // const reader = translation.body.getReader();
+              let body = await translation.json();
+              setOutputCodeValue(body.data);
             }}
           >
             Translate
@@ -274,7 +279,7 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
         </Stack>
         <Stack direction="row" spacing={4} justifyContent="space-between" alignItems="center" width={output ? '80vw' : '40vw'}>
           {codeboxInput}
-          {output && <CodeOutputCell code={inputCodeValue} inLang={inputLanguage} outLang={outputLanguage} />}
+          {output && codeboxOutput}
         </Stack>
       </Stack>
       <TranslateBtn/>
@@ -282,4 +287,5 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
   );
 }
 
+// {output && <CodeOutputCell code={inputCodeValue} inLang={inputLanguage} outLang={outputLanguage} />}
 export default SubmissionPage;
