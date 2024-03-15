@@ -79,14 +79,14 @@ const NavButtons = () => {
 
   return (
     <Grid item alignContent='center' alignItems='center' alignSelf='center' xs={6}>
-      <Box data-testid="navButtons" display="flex" sx={{ justifyContent: "center", alignItems: "center", display: { xs: 'none', md: 'flex' } }}>
+      <Box data-testid="navButtons" display="flex" sx={{ justifyContent: "center", alignItems: "center" }}>
         <Tooltip title='Translate Code'>
           <Button
             key="Translate"
             variant="text"
             data-testid="translateButton"
             href={routes.translate()}
-            sx={{ my: 2, color: theme.palette.text.primary, display: 'block', margin: 'auto auto' }}
+            sx={{ marginTop: '2px', marginBottom: '2px', marginRight: '5px', marginLeft: '0px', color: theme.palette.text.primary, display: 'block' }}
           >
             Translate
           </Button>
@@ -98,7 +98,7 @@ const NavButtons = () => {
             variant="text"
             data-testid="statusButton"
             onClick={() => (navigate(routes.status()))}
-            sx={{ my: 2, color: theme.palette.text.primary, display: 'block', margin: 'auto auto' }}
+            sx={{ marginTop: '2px', marginBottom: '2px', marginRight: '5px', marginLeft: '0px', color: theme.palette.text.primary, display: 'block' }}
           >
             GPT-3 Status
           </Button>
@@ -110,7 +110,7 @@ const NavButtons = () => {
             variant="text"
             data-testid="feedbackButton"
             href={routes.feedback()}
-            sx={{ my: 2, color: theme.palette.text.primary, display: 'block', margin: 'auto auto' }}
+            sx={{ marginTop: '2px', marginBottom: '2px', marginRight: '5px', marginLeft: '0px', color: theme.palette.text.primary, display: 'block' }}
           >
             Feedback
           </Button>
@@ -122,7 +122,7 @@ const NavButtons = () => {
             variant="text"
             data-testid="documentationButton"
             onClick={() => (navigate(routes.documentation()))}
-            sx={{ my: 2, color: theme.palette.text.primary, display: 'block', margin: 'auto auto' }}
+            sx={{ marginTop: '2px', marginBottom: '2px', marginRight: '0px', marginLeft: '0px', color: theme.palette.text.primary, display: 'block' }}
           >
             Documentation
           </Button>
@@ -171,7 +171,7 @@ const UserMenu = () => {
   return (
     <Box sx={{ display: 'flex', alignContent: 'center', paddingLeft: '10px', flexGrow: 0 }}>
       <Tooltip title="Open Settings">
-        <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+        <IconButton onClick={handleOpenUserMenu} sx={{ marginLeft: '5px', p: 0 }}>
           <Person sx={{ fill: theme.palette.text.primary }} />
         </IconButton>
       </Tooltip>

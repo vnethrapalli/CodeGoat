@@ -1,3 +1,5 @@
+import Translation from 'src/components/Translation'
+
 export const QUERY = gql`
   query FindTranslationQuery($id: Int!) {
     translation: translation(id: $id) {
@@ -22,7 +24,5 @@ export const Failure = ({ error }) => (
 )
 
 export const Success = ({ translation }) => {
-  return (
-    <h1>Hi</h1>
-  )
+  return (<Translation translation={translation} />)
 }
