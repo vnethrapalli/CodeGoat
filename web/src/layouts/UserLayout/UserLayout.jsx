@@ -52,7 +52,7 @@ const TitleLink = () => {
   const theme = useTheme();
 
   return (
-    <Grid item alignContent='center' alignItems='stretch' xs={4}>
+    <Grid item alignContent='center' alignItems='stretch' xs={3}>
       <Typography data-testid="titleLink" variant="h6" noWrap component="span"
         sx={{
           mr: 2,
@@ -78,8 +78,8 @@ const NavButtons = () => {
   const theme = useTheme();
 
   return (
-    <Grid item alignContent='center' alignItems='stretch' alignSelf='center' xs={4}>
-      <Box data-testid="navButtons" display="flex" sx={{ justifyContent: "center", alignItems: "center", flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+    <Grid item alignContent='center' alignItems='center' alignSelf='center' xs={6}>
+      <Box data-testid="navButtons" display="flex" sx={{ justifyContent: "center", alignItems: "center", display: { xs: 'none', md: 'flex' } }}>
         <Tooltip title='Translate Code'>
           <Button
             key="Translate"
@@ -245,7 +245,7 @@ const UserButtons = () => {
   }
 
   return (
-    <Grid item alignContent='center' alignItems='stretch' sx={{display: 'flex', justifyContent: 'flex-end' }} xs={4}>
+    <Grid item alignContent='center' alignItems='stretch' sx={{display: 'flex', justifyContent: 'flex-end' }} xs={3}>
       <ThemeButton />
 
       {!isAuth && <Button
