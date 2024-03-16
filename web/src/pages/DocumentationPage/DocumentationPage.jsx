@@ -36,13 +36,13 @@ const DocumentationPage = () => {
         }}
       > 
       <Box display="flex" flexDirection='column' justifyContent="center" alignItems="center">
-        <Typography variant='h1' component='span' style={{color: theme.palette.text.secondary, fontSize: '42px', fontStyle: 'normal', fontWeight: '600'}}>Technologies</Typography>
+      <Typography variant='h1' component='h1' align='center' style={{color: theme.palette.text.secondary, fontSize: '42px', fontStyle: 'normal', fontWeight: '600'}}>Technologies</Typography>
         <Typography data-testid='description' component='span' style={{ backgroundColor: theme.palette.secondary.main, padding: '25px', marginTop: '20px', marginBottom: '0px', width: '85%', borderRadius: '20px', color: theme.palette.text.primary, fontSize: '24px', fontStyle: 'normal', fontWeight: '300'}}>
           This tool was created using <Link href="https://redwoodjs.com/docs/introduction">Redwood</Link>, a full-stack web framework. As such, most of the technologies we employ are provided and are 
           seamlessly integrated into our workflow and development of our tool.
         </Typography>
 
-        <Typography data-testid='gpt' component='span' style={{ backgroundColor: theme.palette.secondary.main, padding: '25px', marginTop: '20px', marginBottom: '20px', width: '85%', borderRadius: '20px', color: theme.palette.text.primary, fontSize: '24px', fontStyle: 'normal', fontWeight: '300'}}>
+        <Typography data-testid='whatgpt' component='span' style={{ backgroundColor: theme.palette.secondary.main, padding: '25px', marginTop: '20px', marginBottom: '20px', width: '85%', borderRadius: '20px', color: theme.palette.text.primary, fontSize: '24px', fontStyle: 'normal', fontWeight: '300'}}>
           <Typography variant='h4' component='span' style={{ backgroundColor: theme.palette.secondary.main, padding: '0px', margin: '0px', color: theme.palette.text.primary, fontSize: '32px', fontStyle: 'normal', fontWeight: '550'}}>
             What is GPT-3?
           </Typography>
@@ -52,7 +52,7 @@ const DocumentationPage = () => {
           </Typography>
         </Typography>
 
-        <Typography data-testid='gpt' component='span' style={{ backgroundColor: theme.palette.secondary.main, padding: '25px', marginTop: '20px', marginBottom: '20px', width: '85%', borderRadius: '20px', color: theme.palette.text.primary, fontSize: '24px', fontStyle: 'normal', fontWeight: '300'}}>
+        <Typography data-testid='howgpt' component='span' style={{ backgroundColor: theme.palette.secondary.main, padding: '25px', marginTop: '20px', marginBottom: '20px', width: '85%', borderRadius: '20px', color: theme.palette.text.primary, fontSize: '24px', fontStyle: 'normal', fontWeight: '300'}}>
           <Typography variant='h4' component='span' style={{ backgroundColor: theme.palette.secondary.main, padding: '0px', margin: '0px', color: theme.palette.text.primary, fontSize: '32px', fontStyle: 'normal', fontWeight: '550'}}>
             How do we use GPT-3?
           </Typography>
@@ -65,7 +65,7 @@ const DocumentationPage = () => {
           
         <Typography variant='h1' component='h1' align='center' style={{color: theme.palette.text.secondary, fontSize: '42px', fontStyle: 'normal', fontWeight: '600'}}>Downloadable Guides</Typography>
         
-        <Box display="flex" flexDirection="row" justifyContent="center" alignItems="center">
+        <Box data-testid='translate guide' display="flex" flexDirection="row" justifyContent="center" alignItems="center">
           <Typography variant='h1' component='h1' align='center' style={{color: theme.palette.text.secondary, fontSize: '24px', fontStyle: 'normal', fontWeight: '300'}}>CodeGoat Walkthrough</Typography>
           <a href="Guides/CodeGoat.pdf" download="TranslateGuide" target='_blank'>
             <IconButton color="primary" aria-label="download translate guide">
@@ -73,7 +73,7 @@ const DocumentationPage = () => {
             </IconButton>
           </a>
         </Box>
-        <Box display="flex" flexDirection="row" justifyContent="center" alignItems="center">
+        <Box data-testid='gpt guide' display="flex" flexDirection="row" justifyContent="center" alignItems="center">
           <Typography variant='h1' component='h1' align='center' style={{color: theme.palette.text.secondary, fontSize: '24px', fontStyle: 'normal', fontWeight: '300'}}>Trackier's Guide to GPT</Typography>
           <a href="Guides/ChatGPT.pdf" download="GPTGuide" target='_blank'>
             <IconButton color="primary" aria-label="download gpt guide">
@@ -81,7 +81,7 @@ const DocumentationPage = () => {
             </IconButton>
           </a>
         </Box>
-        <Box display="flex" flexDirection="row" justifyContent="center" alignItems="center">
+        <Box data-testid='about us' display="flex" flexDirection="row" justifyContent="center" alignItems="center">
           <Typography variant='h1' component='h1' align='center' style={{color: theme.palette.text.secondary, fontSize: '24px', fontStyle: 'normal', fontWeight: '300'}}>About Us</Typography>
           <a href="Guides/AboutUs.pdf" download="About Us" target='_blank'>
             <IconButton color="primary" aria-label="download about us">
@@ -101,7 +101,7 @@ const DocumentationPage = () => {
               size: "lg",
             }}
           >
-        <Form>
+        <Form data-testid='search'>
           <TextField
             sx={{ input: { color: theme.palette.text.secondary }, '&:active fieldset': {borderColor: theme.palette.text.secondary} }}
             id="search-bar"
@@ -115,7 +115,7 @@ const DocumentationPage = () => {
             placeholder="Search..."
             size="small"
           />
-          <IconButton type="submit" aria-label="search">
+          <IconButton data-testid='search icon' type="submit" aria-label="search">
             <SearchIcon style={{ fill: theme.palette.text.secondary, size:"xl" }} />
           </IconButton>
         </Form>
