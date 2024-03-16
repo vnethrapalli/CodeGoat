@@ -16,10 +16,6 @@ import { createTheme } from '@mui/material/styles'
 import QuestionsCell from 'src/components/QuestionsCell' 
 import DownloadIcon from '@mui/icons-material/Download';
 
-import GPTGuide from 'src/Guides/ChatGPT.pdf'
-import TranslateGuide from 'src/Guides/CodeGoat.pdf'
-import AboutGuide from 'src/Guides/AboutUs.pdf'
-
 
 const DocumentationPage = () => {
   const theme = useTheme()
@@ -71,7 +67,7 @@ const DocumentationPage = () => {
         
         <Box display="flex" flexDirection="row" justifyContent="center" alignItems="center">
           <Typography variant='h1' component='h1' align='center' style={{color: theme.palette.text.secondary, fontSize: '24px', fontStyle: 'normal', fontWeight: '300'}}>CodeGoat Walkthrough</Typography>
-          <a href={TranslateGuide} download="TranslateGuide" target='_blank'>
+          <a href="Guides/CodeGoat.pdf" download="TranslateGuide" target='_blank'>
             <IconButton color="primary" aria-label="download translate guide">
               <DownloadIcon />
             </IconButton>
@@ -79,7 +75,7 @@ const DocumentationPage = () => {
         </Box>
         <Box display="flex" flexDirection="row" justifyContent="center" alignItems="center">
           <Typography variant='h1' component='h1' align='center' style={{color: theme.palette.text.secondary, fontSize: '24px', fontStyle: 'normal', fontWeight: '300'}}>Trackier's Guide to GPT</Typography>
-          <a href={GPTGuide} download="GPTGuide" target='_blank'>
+          <a href="Guides/ChatGPT.pdf" download="GPTGuide" target='_blank'>
             <IconButton color="primary" aria-label="download gpt guide">
               <DownloadIcon />
             </IconButton>
@@ -87,7 +83,7 @@ const DocumentationPage = () => {
         </Box>
         <Box display="flex" flexDirection="row" justifyContent="center" alignItems="center">
           <Typography variant='h1' component='h1' align='center' style={{color: theme.palette.text.secondary, fontSize: '24px', fontStyle: 'normal', fontWeight: '300'}}>About Us</Typography>
-          <a href={AboutGuide} download="About Us" target='_blank'>
+          <a href="Guides/AboutUs.pdf" download="About Us" target='_blank'>
             <IconButton color="primary" aria-label="download about us">
               <DownloadIcon />
             </IconButton>

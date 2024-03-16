@@ -7,9 +7,12 @@
     ]
   },
   "devDependencies": {
+    "@babel/cli": "^7.23.9",
+    "@babel/core": "^7.24.0",
     "@redwoodjs/auth-auth0-setup": "7.0.3",
     "@redwoodjs/core": "7.0.3",
-    "@redwoodjs/project-config": "7.0.3"
+    "@redwoodjs/project-config": "7.0.3",
+    "identity-obj-proxy": "^3.0.0"
   },
   "eslintConfig": {
     "extends": "@redwoodjs/eslint-config",
