@@ -1,6 +1,10 @@
 import { logger } from 'src/lib/logger'
-
 import { getTranslation } from 'src/services/translation'
+
+import { useRequireAuth } from '@redwoodjs/graphql-server'
+import { authDecoder } from '@redwoodjs/auth-auth0-api'
+import { getCurrentUser, isAuthenticated } from 'src/lib/auth'
+
 
 /**
  * The handler function is your code that processes http request events.
@@ -18,26 +22,65 @@ import { getTranslation } from 'src/services/translation'
  * @param { Context } context - contains information about the invocation,
  * function, and execution environment.
  */
-export const handler = async (event, _context) => {
+const myHandler = async (event, _context) => {
   logger.info(`${event.httpMethod} ${event.path}: translate function`)
+  // if (isAuthenticated()) {
+  let statusCode = 200;
 
-  console.log(event);
+  try {
+    const { code, inputLanguage, outputLanguage } = event.queryStringParameters;
+    if (code === undefined || inputLanguage === undefined || outputLanguage === undefined) {
+      statusCode = 400;
+      throw Error("please provide all three of code, input language, and output language");
+    }
 
-  // get the two numbers to divide from the event query string
-  const { code, inputLanguage, outputLanguage } = event.queryStringParameters;
-  console.log(code);
-  console.log(inputLanguage);
-  console.log(outputLanguage);
-  // get results from api call
-  const response = await getTranslation({ code, inLang: inputLanguage, outLang: outputLanguage });
+    // get results from api call
+    const response = await getTranslation({ code, inLang: inputLanguage, outLang: outputLanguage });
 
-  return {
-    statusCode: 200,
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      data: response.translation,
-    }),
+    if (response.statusCode == 200) {
+      return {
+        statusCode: 200,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          data: response.translation,
+        }),
+      }
+    }
+    else {
+      return {
+        statusCode: 200,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          data: "error",
+        }),
+      }
+    }
   }
+  catch (err) {
+    return {
+      statusCode,
+      body: {
+        message: err.message,
+      },
+    }
+  }
+
+  //}
+  // else {
+  //   console.log("unathenaticated access denied");
+
+  //   return {
+  //     statusCode: 401,
+  //   }
+  // }
 }
+
+export const handler = useRequireAuth({
+  handlerFn: myHandler,
+  getCurrentUser,
+  authDecoder,
+})

@@ -6,7 +6,6 @@ import UploadFile from '@mui/icons-material/UploadFile';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import Editor from '@monaco-editor/react';
 import React, { useRef } from 'react';
-import CodeOutputCell from 'src/components/CodeOutputCell'
 
 
 export const languages = [
