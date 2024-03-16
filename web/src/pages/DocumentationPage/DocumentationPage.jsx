@@ -52,7 +52,7 @@ const DocumentationPage = () => {
           </Typography>
           <Typography style={{ backgroundColor: theme.palette.secondary.main, padding: '5px', marginTop: '20px', marginBottom: '0px', borderRadius: '20px', color: theme.palette.text.primary, fontSize: '24px', fontStyle: 'normal', fontWeight: '300'}}>
             <Link href="https://platform.openai.com/docs/introduction">GPT</Link> is a natural language processing model developed by OpenAI, which uses a deep learning
-            architecture that has seen massive use in recent years. In our tool, we use GPT-3, since GPT-4 costs an additional price.
+            architecture that has seen massive use in recent years. In our tool, we use GPT-3, since GPT-4 costs more overall.
           </Typography>
         </Typography>
 
@@ -61,7 +61,9 @@ const DocumentationPage = () => {
             How do we use GPT-3?
           </Typography>
           <Typography style={{ backgroundColor: theme.palette.secondary.main, padding: '5px', marginTop: '20px', marginBottom: '0px', borderRadius: '20px', color: theme.palette.text.primary, fontSize: '24px', fontStyle: 'normal', fontWeight: '300'}}>
-            Anog
+            On our end, we sanitize and quickly error check input from you, the user, on the frontend. That is, anything that you type in the initial code box is pre-processed 
+            before we create an API call. Once the API call is made, given that there are no errors or connection issues, your request for translation will be queued. Once the information is 
+            sent and translated, a new code box will return with the translation provided by GPT-3. 
           </Typography>
         </Typography>
           
