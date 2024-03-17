@@ -3,15 +3,6 @@ import { Box, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles';
 import { useRef } from 'react';
 
-export const languages = {
-  "C++": "cpp",
-  "C#": "csharp",
-  "Java": "java",
-  "JavaScript": "javascript",
-  "Python": "python",
-  "TypeScript": "typescript",
-}
-
 const Translation = ({ translation }) => {
   const theme = useTheme();
   const editorRef = useRef(null);
@@ -32,7 +23,7 @@ const Translation = ({ translation }) => {
           height='400px'
           width="45%"
           m='10px'
-          language={languages[translation.inputLanguage]}
+          language={translation.inputLanguage}
           defaultValue="# input code"
           value={translation.inputCode}
           theme="vs-dark"
@@ -43,7 +34,7 @@ const Translation = ({ translation }) => {
         <Editor
           height='400px'
           width="45%"
-          language={languages[translation.outputLanguage]}
+          language={translation.outputLanguage}
           defaultValue="# input code"
           value={translation.outputCode}
           theme="vs-dark"

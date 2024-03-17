@@ -89,7 +89,7 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
     defaultValue: inputCodeValue,
     isInput: true
   });
-  
+
   const codeboxOutput = CodeBox({
     codeValue: outputCodeValue,
     updateCodeValue: (newCodeVal) => setOutputCodeValue(newCodeVal),
@@ -160,7 +160,7 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
     })
 
     const translate = () => {
-      createTranslation({ variables: { input: { "uid": userId, "inputLanguage": inputCodeValue, "outputLanguage": outputCodeValue, "inputCode": inputLanguage, "outputCode": outputLanguage, "rating": 5 }}});
+      createTranslation({ variables: { input: { "uid": userId, "inputLanguage": inputLanguage, "outputLanguage": outputLanguage, "inputCode": inputCodeValue, "outputCode": outputCodeValue, "rating": 5 }}});
     }
 
     const clicked = () => {

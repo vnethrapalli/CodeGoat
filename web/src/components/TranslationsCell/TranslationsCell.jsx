@@ -5,6 +5,15 @@ import { useTheme } from '@mui/material/styles'
 
 const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 
+const languages = {
+  "cpp": "C++",
+  "csharp": "C#",
+  "java": "Java",
+  "javascript": "JavaScript",
+  "python": "Python",
+  "typescript": "TypeScript",
+}
+
 export const QUERY = gql`
   query TranslationsQuery($uid: String!) {
     translations(uid: $uid) {
@@ -37,8 +46,8 @@ export const Success = ({ translations }) => {
     }
 
     return (
-      <Typography sx={{marginLeft: 'auto', marginRight: '0', opacity: '0.75'}}>
-        {monthNames[translationDate.getMonth()]} {translationDate.getDate()}, {translationDate.getFullYear()}, {translationDate.getHours()%12}:{translationDate.getMinutes()} {ampm}
+      <Typography sx={{marginLeft: 'auto', marginRight: '10px', opacity: '0.75'}}>
+        {monthNames[translationDate.getMonth()]} {translationDate.getDate()}, {translationDate.getFullYear()}, {translationDate.getHours()%12}:{String(translationDate.getMinutes()).padStart(2, '0')} {ampm}
       </Typography>
     )
   };
@@ -62,7 +71,7 @@ export const Success = ({ translations }) => {
                 }
               }}
             >
-              <Typography>{translation.inputLanguage} &#8594; {translation.outputLanguage}</Typography>
+              <Typography>{languages[translation.inputLanguage]} &#8594; {languages[translation.outputLanguage]}</Typography>
               {prettyDate(translation.createdAt)}
             </AccordionSummary>
 

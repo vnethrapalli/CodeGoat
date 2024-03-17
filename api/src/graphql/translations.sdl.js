@@ -8,6 +8,7 @@ export const schema = gql`
     outputCode: String!
     createdAt: DateTime!
     rating: Int!
+    status: String!
   }
 
   type Query {
@@ -22,6 +23,7 @@ export const schema = gql`
     inputCode: String!
     outputCode: String!
     rating: Int!
+    status: String!
   }
 
   input UpdateTranslationInput {
@@ -31,21 +33,12 @@ export const schema = gql`
     inputCode: String
     outputCode: String
     rating: Int
+    status: String
   }
 
   type Mutation {
     createTranslation(input: CreateTranslationInput!): Translation! @requireAuth
-    updateTranslation(id: Int!, input: UpdateTranslationInput!): Translation!
-      @requireAuth
+    updateTranslation(id: Int!, input: UpdateTranslationInput!): Translation! @requireAuth
     deleteTranslation(id: Int!): Translation! @requireAuth
   }
-
-  # input TranslationOrderByInput {
-  #   createdAt: Sort
-  # }
-
-  # enum Sort {
-  #   asc
-  #   desc
-  # }
 `

@@ -297,7 +297,9 @@ const Footer = () => {
         display: 'flex',
         alignContent: 'center',
         alignItems: 'center',
-        height: '40px'
+        height: '40px',
+        marginTop: '10px',
+        marginBottom: '0px'
       }}
       component="footer"
     >

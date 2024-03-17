@@ -33,4 +33,5 @@ model Translation {
   outputCode     String
   createdAt      DateTime @default(now())
   rating         Int
+  status         String   @default("200 OK")
 }
