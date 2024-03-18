@@ -51,7 +51,7 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }, pro
   const regex = /.+\|(.*)/;
   const theme = useTheme();
 
-  const { code, inLang, outLang} = useParams();
+  const { code, inLang, outLang } = useParams();
 
   useEffect(()=>{
     auth0.getUser().then(user => {

@@ -17,12 +17,14 @@ const languages = {
 export const QUERY = gql`
   query TranslationsQuery($uid: String!) {
     translations(uid: $uid) {
-      id
-      uid
-      inputLanguage
-      outputLanguage
-      createdAt
-      status
+      translations {
+        id
+        uid
+        inputLanguage
+        outputLanguage
+        createdAt
+        status
+      }
     }
   }
 `
@@ -55,7 +57,7 @@ export const Success = ({ translations }) => {
 
   return (
     <>
-      {translations.map((translation) => {
+      {translations.translations.map((translation) => {
         return (
           <Accordion key={translation.id} sx={{ backgroundColor: theme.palette.secondary.main, width: '70%', marginBottom: '5px', marginTop: '5px' }}>
             <AccordionSummary

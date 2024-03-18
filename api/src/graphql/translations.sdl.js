@@ -1,3 +1,5 @@
+
+
 export const schema = gql`
   type Translation {
     id: Int!
@@ -12,7 +14,8 @@ export const schema = gql`
   }
 
   type Query {
-    translations(uid: String!): [Translation!]! @requireAuth
+    translateHistoryPage(page: Int): TranslationHistoryPage @requireAuth
+    translations(uid: String!): TranslationsList @requireAuth
     translation(id: Int!): Translation @requireAuth
   }
 
@@ -40,5 +43,14 @@ export const schema = gql`
     createTranslation(input: CreateTranslationInput!): Translation! @requireAuth
     updateTranslation(id: Int!, input: UpdateTranslationInput!): Translation! @requireAuth
     deleteTranslation(id: Int!): Translation! @requireAuth
+  }
+
+  type TranslationHistoryPage {
+    translations: [Translation!]!
+    count: Int!
+  }
+
+  type TranslationsList {
+    translations: [Translation!]!
   }
 `

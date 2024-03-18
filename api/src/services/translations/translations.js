@@ -1,7 +1,12 @@
 import { db } from 'src/lib/db'
 
 export const translations = ({ uid }) => {
-  return db.translation.findMany({where: { uid } })
+  return {
+    translations: db.translation.findMany({
+      where: { uid },
+      orderBy: { createdAt: 'desc' },
+    })
+  }
 }
 
 export const translation = ({ id }) => {
@@ -27,4 +32,19 @@ export const deleteTranslation = ({ id }) => {
   return db.translation.delete({
     where: { id },
   })
+}
+
+const POSTS_PER_PAGE = 10
+
+export const translationHistoryPage = ({ page = 1 }) => {
+  const offset = (page - 1) * POSTS_PER_PAGE
+
+  return {
+    translations: db.translation.findMany({
+      take: POSTS_PER_PAGE,
+      skip: offset,
+      orderBy: { createdAt: 'desc' },
+    }),
+    count: db.translation.count(),
+  }
 }
