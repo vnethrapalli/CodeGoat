@@ -11,6 +11,7 @@ export const QUERY = gql`
       outputCode
       createdAt
       rating
+      status
     }
   }
 `

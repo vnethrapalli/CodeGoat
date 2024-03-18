@@ -1,4 +1,3 @@
-import { Link, routes } from '@redwoodjs/router'
 import { Metadata } from '@redwoodjs/web'
 import { useTheme } from '@mui/material/styles'
 import { Box, Typography } from '@mui/material'
@@ -9,7 +8,7 @@ import TranslationsCell from 'src/components/TranslationsCell'
 
 const HistoryPage = () => {
   const theme = useTheme();
-  const [userId, setUserId] = React.useState()
+  const [userId, setUserId] = useState()
   const regex = /.+\|(.*)/;
 
   useEffect(()=>{

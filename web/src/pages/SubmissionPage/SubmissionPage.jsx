@@ -7,6 +7,7 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import Editor from '@monaco-editor/react';
 import React, { useEffect, useRef } from 'react';
 import { auth0 } from 'src/auth'
+import { useParams } from '@redwoodjs/router'
 
 const CREATE_TRANSLATION = gql`
   mutation CreateTranslationMutation($input: CreateTranslationInput!) {
@@ -17,6 +18,7 @@ const CREATE_TRANSLATION = gql`
       inputCode
       outputCode
       rating
+      status
     }
   }
 `
@@ -39,7 +41,7 @@ const extensions = {
   "typescript": ".ts"
 };
 
-const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => {
+const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }, props) => {
   const [inputCodeValue, setInputCodeValue] = React.useState("// write some code...");
   const [outputCodeValue, setOutputCodeValue] = React.useState("# your new code will be here...");
   const [inputLanguage, setInputLanguage] = React.useState("javascript");
@@ -49,10 +51,24 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
   const regex = /.+\|(.*)/;
   const theme = useTheme();
 
+  const { code, inLang, outLang} = useParams();
+
   useEffect(()=>{
     auth0.getUser().then(user => {
       setUserId(user.sub.match(regex)[1]);
     })
+
+    if(code){
+      setInputCodeValue(code);
+    }
+
+    if(inLang){
+      setInputLanguage(inLang);
+    }
+
+    if(outLang){
+      setOutputLanguage(outLang);
+    }
   },[])
 
   const CodeBox = ({ codeValue, updateCodeValue, defaultLanguage, language, defaultValue, isInput }) => {
@@ -160,7 +176,7 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
     })
 
     const translate = () => {
-      createTranslation({ variables: { input: { "uid": userId, "inputLanguage": inputLanguage, "outputLanguage": outputLanguage, "inputCode": inputCodeValue, "outputCode": outputCodeValue, "rating": 5 }}});
+      createTranslation({ variables: { input: { "uid": userId, "inputLanguage": inputLanguage, "outputLanguage": outputLanguage, "inputCode": inputCodeValue, "outputCode": outputCodeValue, "rating": 5, status: "200 OK" }}});
     }
 
     const clicked = () => {
