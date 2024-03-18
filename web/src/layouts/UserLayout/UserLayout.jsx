@@ -224,11 +224,12 @@ const UserMenu = () => {
 const UserButtons = () => {
   const theme = useTheme();
   const { isAuthenticated, signUp, logOut, loading } = useAuth()
-  const [isAuth, setIsAuth] = React.useState(isAuthenticated)
 
   if(loading) {
     return null
   }
+
+  const [isAuth, setIsAuth] = React.useState(isAuthenticated)
 
   const login = async () => {
     await auth0.loginWithPopup().then(t => {

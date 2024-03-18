@@ -114,3 +114,9 @@ const Translation = ({ translation }) => {
 }
 
 export default Translation
+
+
+//TODO
+//Pagination
+//Move Delete and Translate Again into a separate cell
+//Reverse order of translation history
