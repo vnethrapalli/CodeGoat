@@ -1,14 +1,22 @@
 import { Link, routes } from '@redwoodjs/router'
-import { Metadata } from '@redwoodjs/web'
+import { Metadata, useMutation } from '@redwoodjs/web'
 
 import { Button, TextField, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 import { Box } from '@mui/system'
 import { useAuth, auth0 } from 'src/auth'
-import { set } from '@redwoodjs/forms'
-
 
 const UserAccountPage = () => {
+
+  const UPDATE_USER_MUTATION = gql`
+    mutation UpdateUser($user_id: String!, $nickname: String!, $token: String!) {
+      updateUser(user_id: $user_id, nickname: $nickname, token: $token)
+    }
+  `
+
+  const [updateUser] = useMutation(UPDATE_USER_MUTATION);
+
+
   const theme = useTheme()
   const [deleteAccount, setDeleteAccount] = React.useState(false)
   const { userMetadata } = useAuth()
@@ -36,8 +44,18 @@ const UserAccountPage = () => {
     }
     setUsername(value)
     setUsernameError({error: false, helperText: ''})
+  }
 
-    console.log(usernameError)
+  const updateData = async () => {
+    const token = await auth0.getTokenSilently()
+    try {
+      const { data } = await updateUser({
+        variables: { user_id: userMetadata.sub, nickname: username, token: token }
+      })
+      console.log('User updated:', data.updateUser)
+    } catch (error) {
+      console.error('Failed to update user:', error)
+    }
   }
 
   return (
@@ -56,7 +74,7 @@ const UserAccountPage = () => {
           <TextField id="outlined-basic" label="Email" variant="outlined" inputProps={{...inputStyle, readOnly: true}} value={email} style={{margin: '1%', display: 'block'}}/>
           <TextField id="outlined-basic" label="Name" variant="outlined" inputProps={{...inputStyle}} defaultValue={username} style={{margin: '1%', display: 'block'}} onChange={handleUsernameChange} error={usernameError.error} helperText={usernameError.helperText}/>
 
-          <Button variant="contained" style={{backgroundColor: theme.palette.secondary.main, color: theme.palette.primary.main, margin: '1%', display: 'block'}} onClick={() => alert(username)}>Save</Button>
+          <Button variant="contained" style={{backgroundColor: theme.palette.secondary.main, color: theme.palette.primary.main, margin: '1%', display: 'block'}} onClick={updateData} disabled={usernameError.error}>Save</Button>
 
           <Button variant="contained" style={{backgroundColor: 'red', color: theme.palette.primary.main, margin: '1%', display: 'block'}} onClick={() => {
             setDeleteAccount(!deleteAccount)
