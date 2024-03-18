@@ -52,6 +52,7 @@ test('renders output Download Button when Translate Button clicked successfully'
 // BUTTON TESTS
 
 // some variables
+const originalClipboard = { ...global.navigator.clipboard };
 beforeEach(() => {
   const mockClipboard = {
     writeText: jest.fn(),
@@ -64,21 +65,6 @@ afterEach(() => {
   global.navigator.clipboard = originalClipboard;
 });
 
-// copy tests variables
-const originalClipboard = { ...global.navigator.clipboard };
-
-// const fileContent = "function hello()\n{\tprint(\"Hello World!\");\n}\n\nhello();";
-
-// const readInputFile = jest.fn(() => {
-//   const blob = new Blob([fileContent], { type: 'text/javascript' });
-//   const file = new File([blob], "testInput.js", { type: 'text/javascript' });
-//   const reader = new FileReader();
-//   reader.readAsText(file);
-
-//   reader.onload = function(e) {
-//     return e.target.result;
-//   };
-// });
 
 // upload test variables
 const readInputFile = jest.fn();
@@ -117,19 +103,3 @@ test('output Download Button functions correctly', () => {
   fireEvent.click(outputCopyBtn);
   expect(downloadTextAsFile).toHaveBeenCalled();
 });
-
-// test('input copy Button functions correctly', () => {
-//   render(<SubmissionPage />)
-//   const button = screen.getByTestId("inputCopy");
-//   fireEvent.click(button);
-//   expect(navigator.clipboard.read()).toEqual("// write some code...");
-// })
-
-// test('output copy Button functions correctly', () => {
-//   render(<SubmissionPage />)
-//   const translateBtn = screen.getByTestId("translateButton");
-//   fireEvent.click(translateBtn);
-//   const outputCopyBtn = screen.getByTestId('outputCopy');
-//   fireEvent.click(outputCopyBtn);
-//   expect(navigator.clipboard.read()).toEqual("# your new code will be here...");
-// })
