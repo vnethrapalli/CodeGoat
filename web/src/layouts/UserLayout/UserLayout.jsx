@@ -163,9 +163,9 @@ const ThemeAuthButtons = () => {
         localStorage.setItem('user', JSON.stringify(user))
       })
     }
-  }, [])
+  }, [loading])
 
-  if(loading) {
+  if (loading) {
     return null
   }
 

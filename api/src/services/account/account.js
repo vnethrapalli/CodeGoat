@@ -85,31 +85,34 @@ export const deleteAccount = async ({ user_id, token }) => {
 
   if (fetchError) {
     console.error('Failed to fetch access token:', fetchError)
-    return JSON.stringify({ statusCode: 500, message: "Failed to update username" })
+    return JSON.stringify({ statusCode: 500, message: "Failed to delete account" })
   }
+
+  // if(access_token) {
+  //   return JSON.stringify({ statusCode: 200, message: "Token retrieved successfully" })
+  // }
 
   const userDeleteOptions = {
     method: 'DELETE',
     url: process.env.AUTH0_AUDIENCE + 'users/' + user_id,
-    headers: {'content-type': 'application/json', 'accept': 'application/json','authorization': 'Bearer ' + access_token}
+    headers: {'Authorization': 'Bearer ' + access_token}
   };
 
   let userDeleteError = null
   let userDeleteResponse = null
 
-  await axios.request(userDeleteOptions).then((response) => {
-    userDeleteResponse = response.data
+  await axios.request(userDeleteOptions).then((response) => {    userDeleteResponse = response.status
   }).catch(function (error) {
     userDeleteError = error
   });
 
   if (userDeleteError) {
-    console.error('Failed to update user:', userDeleteError)
-    return JSON.stringify({ statusCode: 500, message: "Failed to update username" })
+    console.error('Failed to delete user:', userDeleteError)
+    return JSON.stringify({ statusCode: 500, message: "Failed to delete account" })
   }
 
   if (userDeleteResponse) {
-    console.log('User updated:', userDeleteResponse)
+    console.log('User deleted:', userDeleteResponse)
     return JSON.stringify({ statusCode: 204, message: "User successfully deleted" })
   }
 

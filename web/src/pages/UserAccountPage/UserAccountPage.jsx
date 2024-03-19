@@ -1,4 +1,4 @@
-import { Link, routes } from '@redwoodjs/router'
+import { Link, navigate, routes } from '@redwoodjs/router'
 import { Metadata, useMutation } from '@redwoodjs/web'
 
 import { Button, TextField, Typography } from '@mui/material'
@@ -17,12 +17,20 @@ const UserAccountPage = () => {
       updateUsername(user_id: $user_id, nickname: $nickname, token: $token)
     }
   `
+  const DELETE_ACCOUNT_MUTATION = gql`
+  mutation DeleteAccount($user_id: String!, $token: String!) {
+    deleteAccount(user_id: $user_id, token: $token)
+  }
+`
 
   const [updateUsername] = useMutation(UPDATE_USERNAME_MUTATION);
+  const [deleteAccount] = useMutation(DELETE_ACCOUNT_MUTATION);
+
+  const { logOut } = useAuth()
 
 
   const theme = useTheme()
-  const [deleteAccount, setDeleteAccount] = React.useState(false)
+  const [isDeleteAccount, setIsDeleteAccount] = React.useState(false)
 
   const [username, setUsername] = React.useState(localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')).nickname : '')
   const [usernameError, setUsernameError] = React.useState({error: false, helperText: ''})
@@ -92,13 +100,40 @@ const UserAccountPage = () => {
   }
 
   const onDeleteAccount = async () => {
-    alert('Account deleted')
+
+
+    let token = await auth0.getTokenSilently()
+    try {
+      const {data} = await deleteAccount({
+        variables: { user_id: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')).sub : '', token: token }
+      })
+
+      const response = JSON.parse(data.deleteAccount)
+
+      console.log(response)
+
+      if (response.statusCode === 500) {
+        throw new Error('Failed to delete account')
+      }
+
+      toast.success(response.message, {duration: 1500})
+      setTimeout(() => {
+        logOut().then(() => {
+          localStorage.removeItem('user')
+        })
+        navigate(routes.home())
+      }, 1500)
+
+    } catch (error) {
+      console.log(error)
+      toast.error(error.message, {duration: 2500})
+    }
   }
 
   return (
     <>
       <Toaster />
-      <Typography variant='h2' component='h2' align='left' style={{color:theme.palette.text.secondary, fontSize: '36px', fontStyle: 'normal', fontWeight: '600', margin: '1%'}}>Account</Typography>
+      <Typography variant='h2' component='h2' align='left' style={{color:theme.palette.text.secondary, fontSize: '36px', fontStyle: 'normal', fontWeight: '600', margin: '1%', marginBottom: '2%'}}>Account</Typography>
 
       <Box
         component="form"
@@ -114,10 +149,10 @@ const UserAccountPage = () => {
 
           <Button variant="contained" style={{backgroundColor: theme.palette.secondary.main, color: theme.palette.primary.main, margin: '1%', display: 'block'}} onClick={updateData} disabled={usernameError.error}>Save</Button>
 
-          <Button variant="contained" style={{backgroundColor: 'red', color: theme.palette.primary.main, margin: '1%', display: 'block'}} onClick={()=> {setDeleteAccount(!deleteAccount)}}>Delete Account</Button>
+          <Button variant="contained" style={{backgroundColor: 'red', color: theme.palette.primary.main, margin: '1%', display: 'block'}} onClick={()=> {setIsDeleteAccount(!isDeleteAccount)}}>Delete Account</Button>
           <Modal
-            open={deleteAccount}
-            onClose={() => setDeleteAccount(false)}
+            open={isDeleteAccount}
+            onClose={() => setIsDeleteAccount(false)}
             aria-labelledby="modal-modal-title"
             aria-describedby="modal-modal-description"
           >
@@ -125,8 +160,8 @@ const UserAccountPage = () => {
               <Typography id="modal-modal-title" variant="h6" component="h2" style={{color:theme.palette.primary.main, fontSize: '30px', fontStyle: 'normal', fontWeight: '600', margin: '1%', display: 'block'}}>
                 Do you want to permanently delete your account?
               </Typography>
-              <Button variant="contained" style={{backgroundColor: 'red', color: theme.palette.primary.main, margin: '', display: 'inline-block'}} onClick={onDeleteAccount}>Yes</Button>
-              <IconButton onClick={() => setDeleteAccount(false)} style={{position: 'absolute', top: '10px', right: '10px'}}>
+              <Button variant="contained" style={{backgroundColor: 'red', color: theme.palette.primary.main, margin: '', display: 'inline-block'}} onClick={onDeleteAccount}>Yes, Delete Account</Button>
+              <IconButton onClick={() => setIsDeleteAccount(false)} style={{position: 'absolute', top: '10px', right: '10px'}}>
                   <CloseIcon />
               </IconButton>
             </Box>
