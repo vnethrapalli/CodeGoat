@@ -122,8 +122,3 @@ const Translation = ({ translation }) => {
 }
 
 export default Translation
-
-
-//TODO
-//refetch when deleting (passing state variable down from main parent)
-//Move Delete and Translate Again into a separate cell
