@@ -162,11 +162,6 @@ const ThemeAuthButtons = () => {
   const login = async () => {
     await auth0.loginWithPopup().then(t => {
       setIsAuth(true)
-      auth0.getUser().then(user => {
-        delete user.updated_at
-        delete user.email_verified
-        localStorage.setItem('user', JSON.stringify(user))
-      })
     })
   }
 

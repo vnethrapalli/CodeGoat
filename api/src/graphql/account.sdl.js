@@ -6,6 +6,6 @@ export const schema = gql`
   }
 
   type Mutation {
-    updateUser(user_id: String!, nickname: String!, token: String!): String! @requireAuth
+    updateUsername(user_id: String!, nickname: String!, token: String!): String! @requireAuth
   }
 `

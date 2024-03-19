@@ -8,13 +8,13 @@ import { useAuth, auth0 } from 'src/auth'
 
 const UserAccountPage = () => {
 
-  const UPDATE_USER_MUTATION = gql`
-    mutation UpdateUser($user_id: String!, $nickname: String!, $token: String!) {
-      updateUser(user_id: $user_id, nickname: $nickname, token: $token)
+  const UPDATE_USERNAME_MUTATION = gql`
+    mutation UpdateUsername($user_id: String!, $nickname: String!, $token: String!) {
+      updateUsername(user_id: $user_id, nickname: $nickname, token: $token)
     }
   `
 
-  const [updateUser] = useMutation(UPDATE_USER_MUTATION);
+  const [updateUsername] = useMutation(UPDATE_USERNAME_MUTATION);
 
 
   const theme = useTheme()
@@ -23,6 +23,7 @@ const UserAccountPage = () => {
 
   const [username, setUsername] = React.useState(userMetadata.nickname)
   const [usernameError, setUsernameError] = React.useState({error: false, helperText: ''})
+  const [usernameUpdated, setUsernameUpdated] = React.useState(false)
 
   let email = userMetadata.email
 
@@ -47,15 +48,20 @@ const UserAccountPage = () => {
   }
 
   const updateData = async () => {
-    const token = await auth0.getTokenSilently()
+    let token = await auth0.getTokenSilently()
     try {
-      const { data } = await updateUser({
+      const {data} = await updateUsername({
         variables: { user_id: userMetadata.sub, nickname: username, token: token }
       })
-      console.log('User updated:', data.updateUser)
+
+      const response = JSON.parse(data.updateUsername)
+      console.log('User updated:', response)
+      token = await auth0.getTokenSilently()
+      auth0.getUser().then(user => {})
     } catch (error) {
       console.error('Failed to update user:', error)
     }
+
   }
 
   return (
