@@ -1,4 +1,3 @@
-import { UsersManager } from 'auth0'
 import axios from 'axios'
 
 export const updateUsername = async ({ user_id, nickname, token }) => {
@@ -87,10 +86,6 @@ export const deleteAccount = async ({ user_id, token }) => {
     console.error('Failed to fetch access token:', fetchError)
     return JSON.stringify({ statusCode: 500, message: "Failed to delete account" })
   }
-
-  // if(access_token) {
-  //   return JSON.stringify({ statusCode: 200, message: "Token retrieved successfully" })
-  // }
 
   const userDeleteOptions = {
     method: 'DELETE',
