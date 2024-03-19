@@ -19,13 +19,12 @@ const UserAccountPage = () => {
 
   const theme = useTheme()
   const [deleteAccount, setDeleteAccount] = React.useState(false)
-  const { userMetadata } = useAuth()
 
-  const [username, setUsername] = React.useState(userMetadata.nickname)
+  const [username, setUsername] = React.useState(localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')).nickname : '')
   const [usernameError, setUsernameError] = React.useState({error: false, helperText: ''})
   const [usernameUpdated, setUsernameUpdated] = React.useState(false)
 
-  let email = userMetadata.email
+  let email = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')).email : ''
 
   const inputStyle = {style:{color: theme.palette.text.secondary, fontSize: '18px', fontStyle: 'normal', fontWeight: '600', margin: '1%'}}
 
@@ -51,15 +50,25 @@ const UserAccountPage = () => {
     let token = await auth0.getTokenSilently()
     try {
       const {data} = await updateUsername({
-        variables: { user_id: userMetadata.sub, nickname: username, token: token }
+        variables: { user_id: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')).sub : '', nickname: username, token: token }
       })
 
       const response = JSON.parse(data.updateUsername)
-      console.log('User updated:', response)
+
+      if (response.statusCode === 500) {
+        throw new Error('Failed to update user')
+      }
+
       token = await auth0.getTokenSilently()
-      auth0.getUser().then(user => {})
+      auth0.getUser().then(user => {
+        delete user.updated_at
+        delete user.email_verified
+        user.nickname = username
+        localStorage.setItem('user', JSON.stringify(user))
+      })
+
     } catch (error) {
-      console.error('Failed to update user:', error)
+      console.error(error)
     }
 
   }
