@@ -180,6 +180,12 @@ const ThemeAuthButtons = () => {
     })
   }
 
+  const logout = async () => {
+    await logOut().then(() => {
+      localStorage.removeItem('user')
+    })
+  }
+
 
   return (
     <Grid item alignContent='center' alignItems='stretch' sx={{display: 'flex', justifyContent: 'flex-end' }} xs={4}>
@@ -216,7 +222,7 @@ const ThemeAuthButtons = () => {
       </Button>}
 
       {isAuth && <Button
-        onClick={logOut}
+        onClick={logout}
         data-testid="signoutButton"
         key="Sign Out"
         variant="text"
