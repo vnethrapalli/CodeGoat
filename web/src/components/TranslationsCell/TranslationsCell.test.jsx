@@ -35,7 +35,7 @@ describe('TranslationsCell', () => {
 
   it('renders Success successfully', async () => {
     expect(() => {
-      render(<Success translations={standard().translations} />)
+      render(<Success translationHistoryPage={standard()} />)
     }).not.toThrow()
   })
 })

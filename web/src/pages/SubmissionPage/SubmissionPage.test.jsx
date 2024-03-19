@@ -10,43 +10,43 @@ describe('SubmissionPage', () => {
       render(<SubmissionPage />)
     }).not.toThrow()
   })
-})
 
-test('renders Translate Button successfully', () => {
-  render(<SubmissionPage />)
-  expect(screen.getByTestId("translateButton")).toBeInTheDocument()
-})
+  test('renders Translate Button successfully', () => {
+    render(<SubmissionPage />)
+    expect(screen.getByTestId("translateButton")).toBeInTheDocument()
+  })
 
-test('renders input copy Button successfully', () => {
-  render(<SubmissionPage />)
-  expect(screen.getByTestId("inputCopy")).toBeInTheDocument()
-})
+  test('renders input copy Button successfully', () => {
+    render(<SubmissionPage />)
+    expect(screen.getByTestId("inputCopy")).toBeInTheDocument()
+  })
 
-test('renders input Editor successfully', () => {
-  render(<SubmissionPage />)
-  expect(screen.getByTestId("inputEditor")).toBeInTheDocument()
-})
+  test('renders input Editor successfully', () => {
+    render(<SubmissionPage />)
+    expect(screen.getByTestId("inputEditor")).toBeInTheDocument()
+  })
 
-// RENDER TESTS AFTER CLICKING THE TRANSLATE BUTTON
-test('renders output Editor when Translate Button clicked successfully', () => {
-  render(<SubmissionPage />)
-  const button = screen.getByTestId("translateButton");
-  fireEvent.click(button);
-  expect(screen.getByTestId("outputEditor")).toBeInTheDocument()
-})
+  // RENDER TESTS AFTER CLICKING THE TRANSLATE BUTTON
+  test('renders output Editor when Translate Button clicked successfully', () => {
+    render(<SubmissionPage />)
+    const button = screen.getByTestId("translateButton");
+    fireEvent.click(button);
+    expect(screen.getByTestId("outputEditor")).toBeInTheDocument()
+  })
 
-test('renders output Copy Button when Translate Button clicked successfully', () => {
-  render(<SubmissionPage />)
-  const button = screen.getByTestId("translateButton");
-  fireEvent.click(button);
-  expect(screen.getByTestId("outputCopy")).toBeInTheDocument()
-})
+  test('renders output Copy Button when Translate Button clicked successfully', () => {
+    render(<SubmissionPage />)
+    const button = screen.getByTestId("translateButton");
+    fireEvent.click(button);
+    expect(screen.getByTestId("outputCopy")).toBeInTheDocument()
+  })
 
-test('renders output Download Button when Translate Button clicked successfully', () => {
-  render(<SubmissionPage />)
-  const button = screen.getByTestId("translateButton");
-  fireEvent.click(button);
-  expect(screen.getByTestId("downloadButton")).toBeInTheDocument()
+  test('renders output Download Button when Translate Button clicked successfully', () => {
+    render(<SubmissionPage />)
+    const button = screen.getByTestId("translateButton");
+    fireEvent.click(button);
+    expect(screen.getByTestId("downloadButton")).toBeInTheDocument()
+  })
 })
 
 // BUTTON TESTS

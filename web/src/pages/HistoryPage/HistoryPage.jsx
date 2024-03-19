@@ -12,7 +12,9 @@ const HistoryPage = ({ page = 1 }) => {
 
   useEffect(()=>{
     auth0.getUser().then(user => {
-      setUserId(user.sub);
+      if(user){
+        setUserId(user.sub);
+      }
     })
   },[])
 

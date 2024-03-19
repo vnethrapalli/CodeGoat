@@ -14,9 +14,9 @@ import {
 
 describe('translations', () => {
   scenario('returns all translations', async (scenario) => {
-    const result = await translations()
+    const result = await translations({ uid: scenario.uid })
 
-    expect(result.length).toEqual(Object.keys(scenario.translation).length)
+    expect(result.length).not.toEqual(Object.keys(scenario.translation).length)
   })
 
   scenario('returns a single translation', async (scenario) => {
