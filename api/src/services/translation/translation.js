@@ -1,4 +1,26 @@
 import OpenAI from "openai";
+import hljs from 'highlight.js';
+
+export const getLanguage = (code) => {
+    const languages = [
+      {dropdownItem: "C++", langCode: "cpp"},
+      {dropdownItem: "C#", langCode: "csharp"},
+      {dropdownItem: "Java", langCode: "java"},
+      {dropdownItem: "JavaScript", langCode: "javascript"},
+      {dropdownItem: "Python", langCode: "python"},
+      {dropdownItem: "TypeScript", langCode: "typescript"},
+    ];
+
+    let langCodes = [];
+
+    for (let i = 0; i < languages.length; i++)
+    {
+        langCodes.push(languages[i].langCode);
+    }
+
+    const { language } = hljs.highlightAuto(code, langCodes);
+    return language;
+}
 
 export const getTranslation = async ({ code, inLang, outLang }) => {
   const useDummyResponse = 1;
@@ -16,6 +38,8 @@ export const getTranslation = async ({ code, inLang, outLang }) => {
     // }
 
     // console.log('hellooooo')
+
+    // character limit because auto detection is screwy with small code snippets
 
     if (useDummyResponse) {
       return {
