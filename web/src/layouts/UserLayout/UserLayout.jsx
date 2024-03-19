@@ -152,12 +152,22 @@ const ThemeButton = () => {
 const ThemeAuthButtons = () => {
   const theme = useTheme();
   const { isAuthenticated, signUp, logOut, loading, userMetadata } = useAuth()
+  const [isAuth, setIsAuth] = React.useState(isAuthenticated)
+
+  React.useEffect(() => {
+    if(isAuthenticated) {
+      setIsAuth(true)
+      auth0.getUser().then(user => {
+        delete user.updated_at
+        delete user.email_verified
+        localStorage.setItem('user', JSON.stringify(user))
+      })
+    }
+  }, [])
 
   if(loading) {
     return null
   }
-
-  const [isAuth, setIsAuth] = React.useState(isAuthenticated)
 
   const login = async () => {
     await auth0.loginWithPopup().then(t => {
