@@ -57,7 +57,7 @@ export const Success = ({ questions, searchQuery }) => {
     <>
       {questions.map((question) => (
         <question key={question.id}>
-          {((question.question && question.question.toLowerCase().includes(searchQuery.toLowerCase())) || (question.answer && question.answer.toLowerCase().includes(searchQuery)))&&
+          {((searchQuery && question.question && question.question.toLowerCase().includes(searchQuery.toLowerCase())) || (question.answer && question.answer.toLowerCase().includes(searchQuery)))&&
           <Accordion sx={{bgcolor: theme.palette.secondary.main}} expanded={expanded === 'panel'+question.id} onChange={handleChange('panel'+question.id)}>
             <AccordionSummary sx={{bgcolor: theme.palette.primary, fontSize: '24px'}} aria-controls="panel1d-content" id="panel1d-header">
               <Highlighted text={question.question} highlight={searchQuery} />

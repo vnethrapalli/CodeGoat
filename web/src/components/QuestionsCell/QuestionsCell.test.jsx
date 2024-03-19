@@ -1,4 +1,4 @@
-import { render } from '@redwoodjs/testing/web'
+import { render, screen } from '@redwoodjs/testing/web'
 import { Loading, Empty, Failure, Success } from './QuestionsCell'
 import { standard } from './QuestionsCell.mock'
 
@@ -37,5 +37,29 @@ describe('QuestionsCell', () => {
     expect(() => {
       render(<Success questions={standard().questions} />)
     }).not.toThrow()
+  })
+})
+
+describe('Search Tests', () => {
+  it('displays the data with no search input', () => {
+    render(<Success questions={standard().questions} searchQuery={''}/>)
+
+    const accords = screen.getAllByRole("button")
+    expect(accords).toHaveLength(3)
+  })
+
+  it('displays the data with a search input', () => {
+    render(<Success questions={standard().questions} searchQuery={'annoying'}/>)
+    
+    const accords = screen.getAllByRole("button")
+    expect(accords).toHaveLength(1)
+  })
+
+  it('displays the data with no search results', () => {
+    render(<Success questions={standard().questions} searchQuery={'i dont wwnamn code!!!'}/>)
+    
+    expect(() => {
+      const accords = screen.getAllByRole("button")
+    }).toThrow()
   })
 })

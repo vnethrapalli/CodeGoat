@@ -114,22 +114,3 @@ describe('Link and Download Tests', () => {
     expect(glink).toHaveAttribute('download', 'About Us');
   })
 })
-
-// Test the walkthrough download
-
-// Test the GPT download
-
-// Test the about us download
-
-describe('Search Tests', () => {
-  it('Works', () => {
-    expect(() => {
-      render(<DocumentationPage />)
-    }).not.toThrow()
-  })
-})
-// Test searching with no input
-
-// Test searching capability
-
-// Test searching with no results
