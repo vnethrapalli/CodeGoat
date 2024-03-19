@@ -5,6 +5,10 @@ import { Button, TextField, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 import { Box } from '@mui/system'
 import { useAuth, auth0 } from 'src/auth'
+import { Toaster, toast } from '@redwoodjs/web/toast'
+import {Modal} from '@mui/material'
+import {IconButton} from '@mui/material'
+import CloseIcon from '@mui/icons-material/Close'
 
 const UserAccountPage = () => {
 
@@ -22,12 +26,24 @@ const UserAccountPage = () => {
 
   const [username, setUsername] = React.useState(localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')).nickname : '')
   const [usernameError, setUsernameError] = React.useState({error: false, helperText: ''})
-  const [usernameUpdated, setUsernameUpdated] = React.useState(false)
 
   let email = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')).email : ''
 
   const inputStyle = {style:{color: theme.palette.text.secondary, fontSize: '18px', fontStyle: 'normal', fontWeight: '600', margin: '1%'}}
-
+  const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: '40%',
+    bgcolor: theme.palette.secondary.main,
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+    borderRadius: '10px',
+    height:"30%",
+    textAlign: 'center'
+  };
   const handleUsernameChange = (e) => {
     let value = e.target.value
     if (value.length < 5) {
@@ -56,7 +72,7 @@ const UserAccountPage = () => {
       const response = JSON.parse(data.updateUsername)
 
       if (response.statusCode === 500) {
-        throw new Error('Failed to update user')
+        throw new Error('Failed to update username')
       }
 
       token = await auth0.getTokenSilently()
@@ -67,14 +83,21 @@ const UserAccountPage = () => {
         localStorage.setItem('user', JSON.stringify(user))
       })
 
+      toast.success(response.message, {duration: 2500})
+
     } catch (error) {
-      console.error(error)
+      toast.error(error.message, {duration: 2500})
     }
 
   }
 
+  const onDeleteAccount = async () => {
+    alert('Account deleted')
+  }
+
   return (
     <>
+      <Toaster />
       <Typography variant='h2' component='h2' align='left' style={{color:theme.palette.text.secondary, fontSize: '36px', fontStyle: 'normal', fontWeight: '600', margin: '1%'}}>Account</Typography>
 
       <Box
@@ -91,11 +114,23 @@ const UserAccountPage = () => {
 
           <Button variant="contained" style={{backgroundColor: theme.palette.secondary.main, color: theme.palette.primary.main, margin: '1%', display: 'block'}} onClick={updateData} disabled={usernameError.error}>Save</Button>
 
-          <Button variant="contained" style={{backgroundColor: 'red', color: theme.palette.primary.main, margin: '1%', display: 'block'}} onClick={() => {
-            setDeleteAccount(!deleteAccount)
-            alert('Delete Account')
-            }}>Delete Account</Button>
-          <TextField id="outlined-basic" label="Delete Account" variant="outlined" inputProps={{...inputStyle}} helperText='Type your email to delete account' style={{margin: '1%', display: deleteAccount ? 'block' : 'none', width: '50%'}}/>
+          <Button variant="contained" style={{backgroundColor: 'red', color: theme.palette.primary.main, margin: '1%', display: 'block'}} onClick={()=> {setDeleteAccount(!deleteAccount)}}>Delete Account</Button>
+          <Modal
+            open={deleteAccount}
+            onClose={() => setDeleteAccount(false)}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box sx={style}>
+              <Typography id="modal-modal-title" variant="h6" component="h2" style={{color:theme.palette.primary.main, fontSize: '30px', fontStyle: 'normal', fontWeight: '600', margin: '1%', display: 'block'}}>
+                Do you want to permanently delete your account?
+              </Typography>
+              <Button variant="contained" style={{backgroundColor: 'red', color: theme.palette.primary.main, margin: '', display: 'inline-block'}} onClick={onDeleteAccount}>Yes</Button>
+              <IconButton onClick={() => setDeleteAccount(false)} style={{position: 'absolute', top: '10px', right: '10px'}}>
+                  <CloseIcon />
+              </IconButton>
+            </Box>
+          </Modal>
 
         </div>
       </Box>

@@ -1,6 +1,5 @@
 import { UsersManager } from 'auth0'
 import axios from 'axios'
-import request from 'request'
 
 export const updateUsername = async ({ user_id, nickname, token }) => {
 
@@ -55,7 +54,7 @@ export const updateUsername = async ({ user_id, nickname, token }) => {
 
   if (userUpdateResponse) {
     console.log('User updated:', userUpdateResponse)
-    return JSON.stringify({ statusCode: 200, message: "Username updated" })
+    return JSON.stringify({ statusCode: 200, message: "Username updated successfully" })
   }
 
 }
