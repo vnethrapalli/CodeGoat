@@ -38,7 +38,7 @@ const DocumentationPage = () => {
       <Box display="flex" flexDirection='column' justifyContent="center" alignItems="center">
       <Typography variant='h1' component='h1' align='center' style={{color: theme.palette.text.secondary, fontSize: '42px', fontStyle: 'normal', fontWeight: '600'}}>Technologies</Typography>
         <Typography data-testid='description' component='span' style={{ backgroundColor: theme.palette.secondary.main, padding: '25px', marginTop: '20px', marginBottom: '0px', width: '85%', borderRadius: '20px', color: theme.palette.text.primary, fontSize: '24px', fontStyle: 'normal', fontWeight: '300'}}>
-          This tool was created using <Link href="https://redwoodjs.com/docs/introduction">Redwood</Link>, a full-stack web framework. As such, most of the technologies we employ are provided and are 
+          This tool was created using <Link data-testid='redwood link' href="https://redwoodjs.com/docs/introduction">Redwood</Link>, a full-stack web framework. As such, most of the technologies we employ are provided and are 
           seamlessly integrated into our workflow and development of our tool.
         </Typography>
 
@@ -47,7 +47,7 @@ const DocumentationPage = () => {
             What is GPT-3?
           </Typography>
           <Typography style={{ backgroundColor: theme.palette.secondary.main, padding: '5px', marginTop: '20px', marginBottom: '0px', borderRadius: '20px', color: theme.palette.text.primary, fontSize: '24px', fontStyle: 'normal', fontWeight: '300'}}>
-            <Link href="https://platform.openai.com/docs/introduction">GPT</Link> is a natural language processing model developed by OpenAI, which uses a deep learning
+            <Link data-testid='gpt link' href="https://platform.openai.com/docs/introduction">GPT</Link> is a natural language processing model developed by OpenAI, which uses a deep learning
             architecture that has seen massive use in recent years. In our tool, we use GPT-3, since GPT-4 costs more overall.
           </Typography>
         </Typography>
@@ -65,29 +65,29 @@ const DocumentationPage = () => {
           
         <Typography variant='h1' component='h1' align='center' style={{color: theme.palette.text.secondary, fontSize: '42px', fontStyle: 'normal', fontWeight: '600'}}>Downloadable Guides</Typography>
         
-        <Box data-testid='translate guide' display="flex" flexDirection="row" justifyContent="center" alignItems="center">
+        <Box display="flex" flexDirection="row" justifyContent="center" alignItems="center">
           <Typography variant='h1' component='h1' align='center' style={{color: theme.palette.text.secondary, fontSize: '24px', fontStyle: 'normal', fontWeight: '300'}}>CodeGoat Walkthrough</Typography>
-          <a href="Guides/CodeGoat.pdf" download="TranslateGuide" target='_blank'>
+          <Link data-testid='translate guide' href="Guides/CodeGoat.pdf" download="TranslateGuide" target='_blank'>
             <IconButton color="primary" aria-label="download translate guide">
               <DownloadIcon />
             </IconButton>
-          </a>
+          </Link>
         </Box>
-        <Box data-testid='gpt guide' display="flex" flexDirection="row" justifyContent="center" alignItems="center">
+        <Box display="flex" flexDirection="row" justifyContent="center" alignItems="center">
           <Typography variant='h1' component='h1' align='center' style={{color: theme.palette.text.secondary, fontSize: '24px', fontStyle: 'normal', fontWeight: '300'}}>Trackier's Guide to GPT</Typography>
-          <a href="Guides/ChatGPT.pdf" download="GPTGuide" target='_blank'>
+          <Link data-testid='gpt guide' href="Guides/ChatGPT.pdf" download="GPTGuide" target='_blank'>
             <IconButton color="primary" aria-label="download gpt guide">
               <DownloadIcon />
             </IconButton>
-          </a>
+          </Link>
         </Box>
-        <Box data-testid='about us' display="flex" flexDirection="row" justifyContent="center" alignItems="center">
+        <Box display="flex" flexDirection="row" justifyContent="center" alignItems="center">
           <Typography variant='h1' component='h1' align='center' style={{color: theme.palette.text.secondary, fontSize: '24px', fontStyle: 'normal', fontWeight: '300'}}>About Us</Typography>
-          <a href="Guides/AboutUs.pdf" download="About Us" target='_blank'>
+          <Link data-testid='about us' href="Guides/AboutUs.pdf" download="About Us" target='_blank'>
             <IconButton color="primary" aria-label="download about us">
               <DownloadIcon />
             </IconButton>
-          </a>
+          </Link>
         </Box>
         
         <br></br>

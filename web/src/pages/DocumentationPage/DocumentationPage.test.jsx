@@ -70,18 +70,50 @@ describe('Rendering Tests', () => {
   })
 })
 
-// Render the search bar and icon
+describe('Link and Download Tests', () => {
+  it('redirects to Redwood docs', () => {
+    render(<DocumentationPage />)
 
-describe('Links and Download Tests', () => {
-  it('Works', () => {
-    expect(() => {
-      render(<DocumentationPage />)
-    }).not.toThrow()
+    const rwlink = screen.getByTestId('redwood link');
+    expect(rwlink).toBeInTheDocument()
+    expect(rwlink).toHaveAttribute('href', 'https://redwoodjs.com/docs/introduction');
+  })
+
+  it('redirects to GPT docs', () => {
+    render(<DocumentationPage />)
+
+    const glink = screen.getByTestId('gpt link');
+    expect(glink).toBeInTheDocument()
+    expect(glink).toHaveAttribute('href', 'https://platform.openai.com/docs/introduction');
+  })
+
+  it('downloads the translate guide', () => {
+    render(<DocumentationPage />)
+
+    const glink = screen.getByTestId('translate guide');
+    expect(glink).toBeInTheDocument()
+    expect(glink).toHaveAttribute('href', 'Guides/CodeGoat.pdf');
+    expect(glink).toHaveAttribute('download', 'TranslateGuide');
+  })
+
+  it('downloads the gpt guide', () => {
+    render(<DocumentationPage />)
+
+    const glink = screen.getByTestId('gpt guide');
+    expect(glink).toBeInTheDocument()
+    expect(glink).toHaveAttribute('href', 'Guides/ChatGPT.pdf');
+    expect(glink).toHaveAttribute('download', 'GPTGuide');
+  })
+
+  it('downloads the about us', () => {
+    render(<DocumentationPage />)
+
+    const glink = screen.getByTestId('about us');
+    expect(glink).toBeInTheDocument()
+    expect(glink).toHaveAttribute('href', 'Guides/AboutUs.pdf');
+    expect(glink).toHaveAttribute('download', 'About Us');
   })
 })
-// Test the Redwood link redirect
-
-// Test the GPT link redirect
 
 // Test the walkthrough download
 
