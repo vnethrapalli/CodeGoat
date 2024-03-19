@@ -12,7 +12,7 @@ export const schema = gql`
   }
 
   type Query {
-    translationHistoryPage(page: Int): TranslationHistoryPage @requireAuth
+    translationHistoryPage(page: Int, uid: String!): TranslationHistoryPage @requireAuth
     translations(uid: String!): TranslationsList @requireAuth
     translation(id: Int!): Translation @requireAuth
   }

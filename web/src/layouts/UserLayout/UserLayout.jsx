@@ -45,8 +45,8 @@ const theme = extendTheme({
       },
     },
   },
-
 });
+
 
 const TitleLink = () => {
   const theme = useTheme();
@@ -192,26 +192,32 @@ const UserMenu = () => {
         open={Boolean(anchorElUser)}
         onClose={handleCloseUserMenu}
       >
-        <Typography sx={{ textAlign: 'center', fontSize: '20px', fontWeight: '500', color: theme.palette.text.secondary}}>
+        <Typography sx={{ textAlign: 'center', fontSize: '20px', fontWeight: '500', color: theme.palette.text.secondary, p: '5px' }}>
           {currUser.nickname}
         </Typography>
-        <Typography sx={{ textAlign: 'center', fontSize: '16px', fontWeight: '400', color: theme.palette.text.secondary}}>
+
+        <Typography sx={{ textAlign: 'center', fontSize: '16px', fontWeight: '400', color: theme.palette.text.secondary, p: '0px 10px' }}>
           {currUser.email}
         </Typography>
+
         <Divider  sx={{ paddingTop: '8px' }}/>
+
         <MenuItem sx={{ alignSelf: 'center', color: theme.palette.text.secondary }} key="Settings" onClick={handleCloseUserMenu}>
           <Link href={routes.account()} underline='none' sx={{ color: theme.palette.text.secondary, width: '100%', display: 'flex', alignItems: 'center' }}>
             <Settings sx={{ fill: theme.palette.text.secondary, paddingRight: '8px' }} />
             Settings
           </Link>
         </MenuItem>
+
         <MenuItem sx={{ alignSelf: 'center', color: theme.palette.text.secondary }} key="Translation History" onClick={handleCloseUserMenu}>
           <Link href={routes.history()} underline='none' sx={{ color: theme.palette.text.secondary, width: '100%', display: 'flex', alignItems: 'center' }}>
             <AccessTime sx={{ fill: theme.palette.text.secondary, paddingRight: '8px' }} />
             Translation History
           </Link>
         </MenuItem>
+
         <Divider sx={{ marginTop: '0px' }} />
+
         <MenuItem sx={{ alignSelf: 'center', color: theme.palette.text.secondary, width: '100%' }} key="Sign Out" onClick={handleCloseUserMenuSignOut}>
           <Logout sx={{ fill: theme.palette.text.secondary, paddingRight: '8px' }}/>
           Sign Out
@@ -235,7 +241,6 @@ const UserButtons = () => {
     await auth0.loginWithPopup().then(t => {
       setIsAuth(true)
       auth0.getUser().then(user => {
-        delete user.sub
         delete user.updated_at
         delete user.email_verified
         localStorage.setItem('user', JSON.stringify(user))

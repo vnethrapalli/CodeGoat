@@ -1,5 +1,5 @@
 import TranslationCell from 'src/components/TranslationCell'
-import { Accordion, AccordionActions, AccordionSummary, AccordionDetails, Typography } from '@mui/material'
+import { Accordion, AccordionActions, AccordionSummary, AccordionDetails, Tooltip, Typography } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useTheme } from '@mui/material/styles'
 
@@ -16,30 +16,15 @@ const languages = {
   "typescript": "TypeScript",
 }
 
-export const beforeQuery = ({ page }) => {
+export const beforeQuery = ({ page, uid }) => {
   page = page ? parseInt(page, 10) : 1
 
-  return { variables: { page } }
+  return { variables: { page, uid } }
 }
 
-// export const QUERY = gql`
-//   query TranslationsQuery($uid: String!) {
-//     translations(uid: $uid) {
-//       translations {
-//         id
-//         uid
-//         inputLanguage
-//         outputLanguage
-//         createdAt
-//         status
-//       }
-//     }
-//   }
-// `
-
 export const QUERY = gql`
-  query TranslationHistoryQuery($page: Int) {
-    translationHistoryPage(page: $page) {
+  query TranslationHistoryQuery($page: Int, $uid: String!) {
+    translationHistoryPage(page: $page, uid: $uid) {
       translations {
         id
         uid
@@ -65,16 +50,12 @@ export const Success = ({ translationHistoryPage }) => {
   const theme = useTheme();
 
   const prettyDate = (translation) => {
-    let ampm = "am";
     const translationDate = new Date(translation.createdAt);
-
-    if(translationDate.getHours() >= 12){
-      ampm = "pm";
-    }
+    let ampm = translationDate.getHours() >= 12 ? "PM" : "AM";
 
     return (
       <Typography sx={{marginLeft: 'auto', marginRight: '10px', opacity: '0.75'}}>
-        {monthNames[translationDate.getMonth()]} {translationDate.getDate()}, {translationDate.getFullYear()}, {translationDate.getHours()%12}:{String(translationDate.getMinutes()).padStart(2, '0')} {ampm}
+        {monthNames[translationDate.getMonth()]} {translationDate.getDate()}, {translationDate.getFullYear()}, {String(translationDate.getHours()%12).padStart(2, '0')}:{String(translationDate.getMinutes()).padStart(2, '0')} {ampm}
       </Typography>
     )
   };

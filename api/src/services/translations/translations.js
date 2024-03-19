@@ -36,15 +36,18 @@ export const deleteTranslation = ({ id }) => {
 
 const POSTS_PER_PAGE = 10
 
-export const translationHistoryPage = ({ page = 1 }) => {
+export const translationHistoryPage = ({ page = 1, uid }) => {
   const offset = (page - 1) * POSTS_PER_PAGE
 
   return {
     translations: db.translation.findMany({
+      where: { uid },
       take: POSTS_PER_PAGE,
       skip: offset,
       orderBy: { createdAt: 'desc' },
     }),
-    count: db.translation.count(),
+    count: db.translation.count({
+      where: { uid },
+    }),
   }
 }
