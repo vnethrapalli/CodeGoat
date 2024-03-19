@@ -3,6 +3,8 @@ import { Accordion, AccordionActions, AccordionSummary, AccordionDetails, Typogr
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useTheme } from '@mui/material/styles'
 
+import Pagination from 'src/components/Pagination'
+
 const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 
 const languages = {
@@ -14,9 +16,30 @@ const languages = {
   "typescript": "TypeScript",
 }
 
+export const beforeQuery = ({ page }) => {
+  page = page ? parseInt(page, 10) : 1
+
+  return { variables: { page } }
+}
+
+// export const QUERY = gql`
+//   query TranslationsQuery($uid: String!) {
+//     translations(uid: $uid) {
+//       translations {
+//         id
+//         uid
+//         inputLanguage
+//         outputLanguage
+//         createdAt
+//         status
+//       }
+//     }
+//   }
+// `
+
 export const QUERY = gql`
-  query TranslationsQuery($uid: String!) {
-    translations(uid: $uid) {
+  query TranslationHistoryQuery($page: Int) {
+    translationHistoryPage(page: $page) {
       translations {
         id
         uid
@@ -25,6 +48,7 @@ export const QUERY = gql`
         createdAt
         status
       }
+      count
     }
   }
 `
@@ -37,7 +61,7 @@ export const Failure = ({ error }) => (
   <div style={{ color: 'red' }}>Error: {error?.message}</div>
 )
 
-export const Success = ({ translations }) => {
+export const Success = ({ translationHistoryPage }) => {
   const theme = useTheme();
 
   const prettyDate = (translation) => {
@@ -57,7 +81,7 @@ export const Success = ({ translations }) => {
 
   return (
     <>
-      {translations.translations.map((translation) => {
+      {translationHistoryPage.translations.map((translation) => {
         return (
           <Accordion key={translation.id} sx={{ backgroundColor: theme.palette.secondary.main, width: '70%', marginBottom: '5px', marginTop: '5px' }}>
             <AccordionSummary
@@ -84,6 +108,8 @@ export const Success = ({ translations }) => {
           </Accordion>
         )
       })}
+
+      <Pagination count={translationHistoryPage.count} />
     </>
   )
 }

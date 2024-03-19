@@ -1,5 +1,3 @@
-
-
 export const schema = gql`
   type Translation {
     id: Int!
@@ -14,7 +12,7 @@ export const schema = gql`
   }
 
   type Query {
-    translateHistoryPage(page: Int): TranslationHistoryPage @requireAuth
+    translationHistoryPage(page: Int): TranslationHistoryPage @requireAuth
     translations(uid: String!): TranslationsList @requireAuth
     translation(id: Int!): Translation @requireAuth
   }

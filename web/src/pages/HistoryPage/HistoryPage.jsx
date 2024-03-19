@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react'
 
 import TranslationsCell from 'src/components/TranslationsCell'
 
-const HistoryPage = () => {
+const HistoryPage = ({ page = 1 }) => {
   const theme = useTheme();
   const [userId, setUserId] = useState()
   const regex = /.+\|(.*)/;
@@ -25,13 +25,13 @@ const HistoryPage = () => {
     <>
       <Metadata title="History" description="History page" />
 
-      <Box minHeight='100vh' width='100%' display="flex" flexDirection='column' alignItems="center">
+      <Box minHeight='90vh' width='100%' display="flex" flexDirection='column' alignItems="center">
 
         <Typography data-testid='title' variant='h2' component='span' align='center' style={{ padding: '15px', width: '65%', borderRadius: '20px' , color: theme.palette.text.secondary, fontSize: '52px', fontStyle: 'normal', fontWeight: '600'}}>
           Translation History
         </Typography>
 
-        <TranslationsCell uid={userId} />
+        <TranslationsCell page={page} uid={userId} />
       </Box>
     </>
   )

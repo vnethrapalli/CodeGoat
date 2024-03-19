@@ -6,6 +6,8 @@ import { useTheme } from '@mui/material/styles';
 import { Repeat, Delete } from '@mui/icons-material';
 import { useRef } from 'react';
 
+import { QUERY as TranslationQuery } from 'src/components/TranslationsCell'
+
 const DELETE_TRANSLATION = gql`
   mutation DeleteTranslationMutation($id: Int!) {
     deleteTranslation(id: $id) {
@@ -25,6 +27,7 @@ const Translation = ({ translation }) => {
   const [deleteTranslation] = useMutation(DELETE_TRANSLATION, {
     onCompleted: () => {},
     onError: (err) => {},
+    refetchQueries: [{ query: TranslationQuery }],
   })
 
   const del = () => {
@@ -117,5 +120,5 @@ export default Translation
 
 
 //TODO
-//Pagination
+//refetch when deleting
 //Move Delete and Translate Again into a separate cell
