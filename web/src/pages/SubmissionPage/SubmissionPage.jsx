@@ -48,14 +48,13 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }, pro
   const [outputLanguage, setOutputLanguage] = React.useState("python");
   const [output, setOutput] = React.useState(false);
   const [userId, setUserId] = React.useState()
-  const regex = /.+\|(.*)/;
   const theme = useTheme();
 
   const { code, inLang, outLang } = useParams();
 
   useEffect(()=>{
     auth0.getUser().then(user => {
-      setUserId(user.sub.match(regex)[1]);
+      setUserId(user.sub);
     })
 
     if(code){

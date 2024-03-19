@@ -1,6 +1,6 @@
 import Editor from '@monaco-editor/react';
 import { useMutation} from '@redwoodjs/web';
-import { Link, routes } from '@redwoodjs/router';
+import { Link, routes, useParams } from '@redwoodjs/router';
 import { Box, Button, IconButton, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles';
 import { Repeat, Delete } from '@mui/icons-material';
@@ -19,6 +19,12 @@ const DELETE_TRANSLATION = gql`
 const Translation = ({ translation }) => {
   const theme = useTheme();
   const editorRef = useRef(null);
+  let { page } = useParams();
+  let userId = translation.uid;
+
+  if(!page){
+    page = 1;
+  }
 
   function handleEditorDidMount(editor, monaco) {
     editorRef.current = editor;
@@ -26,8 +32,7 @@ const Translation = ({ translation }) => {
 
   const [deleteTranslation] = useMutation(DELETE_TRANSLATION, {
     onCompleted: () => {},
-    onError: (err) => {},
-    refetchQueries: [{ query: TranslationQuery }],
+    refetchQueries: [{ query: TranslationQuery, variables: { page: Number(page), uid: userId } }],
   })
 
   const del = () => {

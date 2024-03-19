@@ -9,11 +9,10 @@ import TranslationsCell from 'src/components/TranslationsCell'
 const HistoryPage = ({ page = 1 }) => {
   const theme = useTheme();
   const [userId, setUserId] = useState()
-  const regex = /.+\|(.*)/;
 
   useEffect(()=>{
     auth0.getUser().then(user => {
-      setUserId(user.sub.match(regex)[1]);
+      setUserId(user.sub);
     })
   },[])
 
