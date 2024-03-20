@@ -1,5 +1,5 @@
-import { Link, navigate, routes } from '@redwoodjs/router'
-import { Metadata, useMutation } from '@redwoodjs/web'
+import { navigate, routes } from '@redwoodjs/router'
+import { useMutation } from '@redwoodjs/web'
 
 import { Button, TextField, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
@@ -10,6 +10,7 @@ import {Modal} from '@mui/material'
 import {IconButton} from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 
+
 const UserAccountPage = () => {
 
   const UPDATE_USERNAME_MUTATION = gql`
@@ -18,10 +19,10 @@ const UserAccountPage = () => {
     }
   `
   const DELETE_ACCOUNT_MUTATION = gql`
-  mutation DeleteAccount($user_id: String!, $token: String!) {
-    deleteAccount(user_id: $user_id, token: $token)
-  }
-`
+    mutation DeleteAccount($user_id: String!, $token: String!) {
+      deleteAccount(user_id: $user_id, token: $token)
+    }
+  `
 
   const [updateUsername] = useMutation(UPDATE_USERNAME_MUTATION);
   const [deleteAccount] = useMutation(DELETE_ACCOUNT_MUTATION);
@@ -76,7 +77,6 @@ const UserAccountPage = () => {
       const {data} = await updateUsername({
         variables: { user_id: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')).sub : '', nickname: username, token: token }
       })
-
       const response = JSON.parse(data.updateUsername)
 
       if (response.statusCode === 500) {
@@ -110,8 +110,6 @@ const UserAccountPage = () => {
 
       const response = JSON.parse(data.deleteAccount)
 
-      console.log(response)
-
       if (response.statusCode === 500) {
         throw new Error('Failed to delete account')
       }
@@ -125,7 +123,6 @@ const UserAccountPage = () => {
       }, 1500)
 
     } catch (error) {
-      console.log(error)
       toast.error(error.message, {duration: 2500})
     }
   }
@@ -144,8 +141,8 @@ const UserAccountPage = () => {
         autoComplete="off"
       >
         <div>
-          <TextField id="outlined-basic" label="Email" variant="outlined" inputProps={{...inputStyle, readOnly: true}} value={email} style={{margin: '1%', display: 'block'}}/>
-          <TextField id="outlined-basic" label="Name" variant="outlined" inputProps={{...inputStyle}} defaultValue={username} style={{margin: '1%', display: 'block'}} onChange={handleUsernameChange} error={usernameError.error} helperText={usernameError.helperText}/>
+          <TextField id="outlined-basic" data-testid="email" label="Email" variant="outlined" inputProps={{...inputStyle, readOnly: true}} value={email} style={{margin: '1%', display: 'block'}}/>
+          <TextField id="outlined-basic" data-testid="username" label="Name" variant="outlined" inputProps={{...inputStyle}} defaultValue={username} style={{margin: '1%', display: 'block'}} onChange={handleUsernameChange} error={usernameError.error} helperText={usernameError.helperText}/>
 
           <Button variant="contained" style={{backgroundColor: theme.palette.secondary.main, color: theme.palette.primary.main, margin: '1%', display: 'block'}} onClick={updateData} disabled={usernameError.error}>Save</Button>
 
