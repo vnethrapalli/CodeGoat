@@ -12,11 +12,8 @@ export const getLanguage = (code) => {
     ];
 
     let langCodes = [];
-
     for (let i = 0; i < languages.length; i++)
-    {
         langCodes.push(languages[i].langCode);
-    }
 
     const { language } = hljs.highlightAuto(code, langCodes);
     return language;

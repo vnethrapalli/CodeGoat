@@ -7,10 +7,11 @@ import { handler } from './translate'
 describe('code, input, and output is required',  () => {
   it('requires code', async () => {
     const httpEvent = mockHttpEvent({
-      queryStringParameters: {
-        inputLanguage: 'python',
-        outputLanguage: 'javascript',
-      },
+      method: "POST",
+      body: JSON.stringify({
+        inputLanguage: "python",
+        outputLanguage: "javascript"
+      })
     })
 
     const result = await handler(httpEvent);
@@ -22,10 +23,11 @@ describe('code, input, and output is required',  () => {
 
   it('requires input language', async () => {
     const httpEvent = mockHttpEvent({
-      queryStringParameters: {
+      method: "POST",
+      body: JSON.stringify({
         code: "print('hello world!')",
-        outputLanguage: 'javascript',
-      },
+        outputLanguage: "javascript"
+      })
     })
 
     const result = await handler(httpEvent);
@@ -37,10 +39,11 @@ describe('code, input, and output is required',  () => {
 
   it('requires output language', async () => {
     const httpEvent = mockHttpEvent({
-      queryStringParameters: {
+      method: "POST",
+      body: JSON.stringify({
         code: "print('hello world!')",
         inputLanguage: 'python',
-      },
+      })
     })
 
     const result = await handler(httpEvent);
@@ -54,7 +57,8 @@ describe('code, input, and output is required',  () => {
 describe('language detection errors',  () => {
   it('>=500 chars and selected language and detected language are different', async () => {
     const httpEvent = mockHttpEvent({
-      queryStringParameters: {
+      method: "POST",
+      body: JSON.stringify({
         inputLanguage: 'python',
         outputLanguage: 'javascript',
         code: `
@@ -97,8 +101,8 @@ describe('language detection errors',  () => {
             }
           }
         `
-      },
-    })
+      }),
+    });
 
     const result = await handler(httpEvent);
     const body = result.body;
@@ -109,7 +113,8 @@ describe('language detection errors',  () => {
 
   it('>=500 chars and selected language and detected language are the same', async () => {
     const httpEvent = mockHttpEvent({
-      queryStringParameters: {
+      method: "POST",
+      body: JSON.stringify({
         inputLanguage: 'java',
         outputLanguage: 'javascript',
         code: `
@@ -152,8 +157,8 @@ describe('language detection errors',  () => {
             }
           }
         `
-      },
-    })
+      }),
+    });
 
     const result = await handler(httpEvent);
     const body = result.body;
@@ -163,7 +168,8 @@ describe('language detection errors',  () => {
 
   it('<500 chars, language discrepancy should be ignored', async () => {
     const httpEvent = mockHttpEvent({
-      queryStringParameters: {
+      method: "POST",
+      body: JSON.stringify({
         inputLanguage: 'javascript',
         outputLanguage: 'python',
         code: `
@@ -171,7 +177,7 @@ describe('language detection errors',  () => {
           return a + b
         print(add(1, 2))
         `
-      },
+      }),
     })
 
     const result = await handler(httpEvent);

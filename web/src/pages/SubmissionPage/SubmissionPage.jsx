@@ -149,12 +149,19 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
             }}
             onClick={async () => {
               setOutput(() => true);
-              const reqUrl = `http://localhost:8910/.redwood/functions/translate?code=${inputCodeValue}&inputLanguage=${inputLanguage}&outputLanguage=${outputLanguage}`;
-              const translation = await fetch(reqUrl);
+              const reqUrl = `http://localhost:8910/.redwood/functions/translate`;
+              const translation = await fetch(reqUrl, {
+                method: "POST",
+                body: JSON.stringify({
+                  code: inputCodeValue,
+                  inputLanguage: inputLanguage,
+                  outputLanguage: outputLanguage
+                })
+              });
 
               // const reader = translation.body.getReader();
               let body = await translation.json();
-              setOutputCodeValue(body.data);
+              setOutputCodeValue(body.data ? body.data : body.message);
             }}
           >
             Translate
