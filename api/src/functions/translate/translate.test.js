@@ -51,7 +51,7 @@ describe('code, input, and output is required',  () => {
   });
 });
 
-describe('language detection and code cleanup',  () => {
+describe('language detection errors',  () => {
   it('>=500 chars and selected language and detected language are different', async () => {
     const httpEvent = mockHttpEvent({
       queryStringParameters: {
@@ -156,6 +156,8 @@ describe('language detection and code cleanup',  () => {
     })
 
     const result = await handler(httpEvent);
+    const body = result.body;
+
     expect(result.statusCode).toBe(200);
   });
 
@@ -173,28 +175,8 @@ describe('language detection and code cleanup',  () => {
     })
 
     const result = await handler(httpEvent);
+    const body = result.body;
+
     expect(result.statusCode).toBe(200);
   });
-
-  // it('make sure that whitespace is properly trimmed', async () => {
-  //   const httpEvent = mockHttpEvent({
-  //     queryStringParameters: {
-  //       inputLanguage: 'python',
-  //       outputLanguage: 'java',
-  //       code: `
-  //                 def add(a, b):
-  //         return a + b
-  //       print(add(1, 2))
-
-
-
-  //       `
-  //     },
-  //   })
-
-  //   const result = await handler(httpEvent);
-  //   expect(result.statusCode).toBe(200);
-  //   const outputCode = result.body;
-  //   expect(outputCode).toBe("");
-  // });
 });

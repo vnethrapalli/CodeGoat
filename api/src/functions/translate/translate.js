@@ -35,8 +35,6 @@ const myHandler = async (event, _context) => {
       throw Error("please provide all three of code, input language, and output language");
     }
 
-    code = code.trim();
-
     // only for code snippets with 500 chars or greater because auto detection is screwy for small code snippets
     if (getLanguage(code) !== inputLanguage && code.length >= 500)
     {
