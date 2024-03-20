@@ -42,6 +42,8 @@ const myHandler = async (event, _context) => {
       throw Error("Please select the right language for your code.");
     }
 
+    code = code.trim();
+
     // get results from api call
     const response = await getTranslation({ code, inLang: inputLanguage, outLang: outputLanguage });
 
