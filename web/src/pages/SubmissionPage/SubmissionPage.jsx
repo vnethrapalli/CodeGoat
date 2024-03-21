@@ -1,4 +1,4 @@
-import { Metadata } from '@redwoodjs/web';
+import { Metadata, useQuery } from '@redwoodjs/web';
 import { Stack, Box, Button, FormControl, InputLabel, Select, MenuItem, Divider } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import DownloadIcon from '@mui/icons-material/Download';
@@ -6,6 +6,7 @@ import UploadFile from '@mui/icons-material/UploadFile';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import Editor from '@monaco-editor/react';
 import React, { useRef } from 'react';
+
 
 export const languages = [
   {dropdownItem: "C++", langCode: "cpp"},
@@ -23,6 +24,7 @@ const extensions = {
   "python": ".py",
   "typescript": ".ts"
 };
+
 
 const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => {
   const [inputCodeValue, setInputCodeValue] = React.useState("// write some code...");
@@ -145,8 +147,21 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
               borderRadius: "40px",
               marginBottom: "25px",
             }}
-            onClick={() => {
+            onClick={async () => {
               setOutput(() => true);
+              const reqUrl = `http://localhost:8910/.redwood/functions/translate`;
+              const translation = await fetch(reqUrl, {
+                method: "POST",
+                body: JSON.stringify({
+                  code: inputCodeValue,
+                  inputLanguage: inputLanguage,
+                  outputLanguage: outputLanguage
+                })
+              });
+
+              // const reader = translation.body.getReader();
+              let body = await translation.json();
+              setOutputCodeValue(body.data ? body.data : body.message);
             }}
           >
             Translate
@@ -278,4 +293,5 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
   );
 }
 
+// {output && <CodeOutputCell code={inputCodeValue} inLang={inputLanguage} outLang={outputLanguage} />}
 export default SubmissionPage;
