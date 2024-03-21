@@ -34,7 +34,7 @@ function escapeRegex(string) {
 
 export const Success = ({ questions, searchQuery }) => {
   const theme = useTheme()
-  
+
   const [expanded, setExpanded] = React.useState('panel1');
   const Highlighted = ({text = '', highlight = ''}) => {
     if (!highlight.trim()) {
@@ -56,18 +56,18 @@ export const Success = ({ questions, searchQuery }) => {
   return (
     <>
       {questions.map((question) => (
-        <question key={question.id}>
+        <p style={{margin: 3}} key={question.id}>
           {((searchQuery && question.question && question.question.toLowerCase().includes(searchQuery.toLowerCase())) || (question.answer && question.answer.toLowerCase().includes(searchQuery)))&&
-          <Accordion sx={{bgcolor: theme.palette.secondary.main}} expanded={expanded === 'panel'+question.id} onChange={handleChange('panel'+question.id)}>
-            <AccordionSummary sx={{bgcolor: theme.palette.primary, fontSize: '24px'}} aria-controls="panel1d-content" id="panel1d-header">
+          <Accordion sx={{bgcolor: theme.palette.primary.main}} expanded={expanded === 'panel'+question.id} onChange={handleChange('panel'+question.id)}>
+            <AccordionSummary sx={{bgcolor: theme.palette.secondary.main, fontSize: '24px'}} aria-controls="panel1d-content" id="panel1d-header">
               <Highlighted text={question.question} highlight={searchQuery} />
             </AccordionSummary>
-            <AccordionDetails sx={{bgcolor: theme.palette.primary, fontSize: '18px'}}>
+            <AccordionDetails sx={{bgcolor: theme.palette.secondary.main, fontSize: '18px'}}>
               <Highlighted text={question.answer} highlight={searchQuery} />
             </AccordionDetails>
-          </Accordion> 
+          </Accordion>
           }
-        </question>
+        </p>
       ))}
     </>
   )
