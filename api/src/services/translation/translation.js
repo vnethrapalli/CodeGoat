@@ -2,19 +2,7 @@ import OpenAI from "openai";
 import hljs from 'highlight.js';
 
 export const getLanguage = (code) => {
-    const languages = [
-      {dropdownItem: "C++", langCode: "cpp"},
-      {dropdownItem: "C#", langCode: "csharp"},
-      {dropdownItem: "Java", langCode: "java"},
-      {dropdownItem: "JavaScript", langCode: "javascript"},
-      {dropdownItem: "Python", langCode: "python"},
-      {dropdownItem: "TypeScript", langCode: "typescript"},
-    ];
-
-    let langCodes = [];
-    for (let i = 0; i < languages.length; i++)
-        langCodes.push(languages[i].langCode);
-
+    let langCodes = ["cpp", "csharp", "java", "javascript", "python", "typescript"];
     const { language } = hljs.highlightAuto(code, langCodes);
     return language;
 }
