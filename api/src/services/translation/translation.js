@@ -1,4 +1,11 @@
 import OpenAI from "openai";
+import hljs from 'highlight.js';
+
+export const getLanguage = (code) => {
+    let langCodes = ["cpp", "csharp", "java", "javascript", "python", "typescript"];
+    const { language } = hljs.highlightAuto(code, langCodes);
+    return language;
+}
 
 export const getTranslation = async ({ code, inLang, outLang }) => {
   const useDummyResponse = 1;
@@ -16,6 +23,8 @@ export const getTranslation = async ({ code, inLang, outLang }) => {
     // }
 
     // console.log('hellooooo')
+
+    // character limit because auto detection is screwy with small code snippets
 
     if (useDummyResponse) {
       return {
