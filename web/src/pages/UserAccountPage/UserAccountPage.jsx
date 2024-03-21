@@ -55,8 +55,8 @@ const UserAccountPage = () => {
   };
   const handleUsernameChange = (e) => {
     let value = e.target.value
-    if (value.length < 5) {
-      setUsernameError({error: true, helperText: 'Username must be at least 5 characters'})
+    if (value.length < 2) {
+      setUsernameError({error: true, helperText: 'Username must be at least 2 characters'})
       return
     }
     if (value.length > 12) {

@@ -114,11 +114,11 @@ describe('User Account Management', () => {
     expect(username.value).toBe(user.nickname)
 
     fireEvent.change(username, { target: { value: '' } })
-    expect(await screen.findByText('Username must be at least 5 characters')).toBeInTheDocument()
+    expect(await screen.findByText('Username must be at least 2 characters')).toBeInTheDocument()
     expect(save).toBeDisabled()
 
-    fireEvent.change(username, { target: { value: '1234' } })
-    expect(await screen.findByText('Username must be at least 5 characters')).toBeInTheDocument()
+    fireEvent.change(username, { target: { value: '1' } })
+    expect(await screen.findByText('Username must be at least 2 characters')).toBeInTheDocument()
     expect(save).toBeDisabled()
 
     fireEvent.change(username, { target: { value: '123456789012345' } })
