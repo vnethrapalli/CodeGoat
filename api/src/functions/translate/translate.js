@@ -1,5 +1,5 @@
 import { logger } from 'src/lib/logger'
-import { getTranslation } from 'src/services/translation'
+import { getTranslation, getLanguage } from 'src/services/translation'
 
 import { useRequireAuth } from '@redwoodjs/graphql-server'
 import { authDecoder } from '@redwoodjs/auth-auth0-api'
@@ -28,14 +28,22 @@ const myHandler = async (event, _context) => {
   let statusCode = 200;
 
   try {
-    const { code, inputLanguage, outputLanguage } = event.queryStringParameters;
+    const { code, inputLanguage, outputLanguage } = JSON.parse(event.body);
+
     if (code === undefined || inputLanguage === undefined || outputLanguage === undefined) {
       statusCode = 400;
       throw Error("please provide all three of code, input language, and output language");
     }
 
+    // only for code snippets with 500 chars or greater because auto detection is screwy for small code snippets
+    if (getLanguage(code) !== inputLanguage && code.length >= 500) {
+      statusCode = 400;
+      throw Error("Please select the right language for your code.");
+    }
+    let codeForTranslation = code.trim();
+
     // get results from api call
-    const response = await getTranslation({ code, inLang: inputLanguage, outLang: outputLanguage });
+    const response = await getTranslation({ code: codeForTranslation, inLang: inputLanguage, outLang: outputLanguage });
 
     if (response.statusCode == 200) {
       return {
