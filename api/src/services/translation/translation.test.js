@@ -16,6 +16,30 @@ const mockCreate = jest.fn().mockImplementationOnce(async () => {
 .mockImplementationOnce(async () => {
   const err = { type: 'authentication_error' }
   throw err;
+})
+.mockImplementationOnce(async () => {
+  const err = { type: 'invalid_request_error' }
+  throw err;
+})
+.mockImplementationOnce(async () => {
+  const err = { type: 'rate_limit_error' }
+  throw err;
+})
+.mockImplementationOnce(async () => {
+  const err = { type: 'tokens_exceeded_error' }
+  throw err;
+})
+.mockImplementationOnce(async () => {
+  const err = { type: 'not_found_error' }
+  throw err;
+})
+.mockImplementationOnce(async () => {
+  const err = { type: 'server_error' }
+  throw err;
+})
+.mockImplementationOnce(async () => {
+  const err = { type: 'permission_error' }
+  throw err;
 });
 
 jest.mock('openai', () => {
@@ -61,4 +85,37 @@ describe("testing invalid openai api key", () => {
     const response = await getTranslation({ code: "test", inLang: "python", outLang: "java" });
     expect(response.statusCode).toEqual(401);
   });
+})
+
+describe('testing error openai api error responses', () => {
+  test('testing handling for a bad request', async () => {
+    const response = await getTranslation({ code: "test", inLang: "python", outLang: "java" });
+    expect(response.statusCode).toEqual(400);
+  });
+
+  test('testing handling for a rate limiting error', async () => {
+    const response = await getTranslation({ code: "test", inLang: "python", outLang: "java" });
+    expect(response.statusCode).toEqual(429);
+  });
+
+  test('testing handling for tokens exceeded error', async () => {
+    const response = await getTranslation({ code: "test", inLang: "python", outLang: "java" });
+    expect(response.statusCode).toEqual(403);
+  });
+
+  test('testing handling for resource not found error', async () => {
+    const response = await getTranslation({ code: "test", inLang: "python", outLang: "java" });
+    expect(response.statusCode).toEqual(404);
+  });
+
+  test('testing handling for server error', async () => {
+    const response = await getTranslation({ code: "test", inLang: "python", outLang: "java" });
+    expect(response.statusCode).toEqual(500);
+  });
+
+  test('testing handling for permission error', async () => {
+    const response = await getTranslation({ code: "test", inLang: "python", outLang: "java" });
+    expect(response.statusCode).toEqual(403);
+  });
+
 })

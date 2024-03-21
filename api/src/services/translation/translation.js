@@ -101,7 +101,7 @@ export const getTranslation = async ({ code, inLang, outLang }) => {
       const completion = await openai.chat.completions.create({
         messages: messages,
         model: "gpt-3.5-turbo",
-        max_tokens: 4,
+        max_tokens: 128,
       });
 
       // for testing, if bad response throw exception so it is caught
