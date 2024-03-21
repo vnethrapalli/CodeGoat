@@ -23,10 +23,7 @@ import { getCurrentUser, isAuthenticated } from 'src/lib/auth'
  * function, and execution environment.
  */
 const myHandler = async (event, _context) => {
-  logger.info(`${event.httpMethod} ${event.path}: translate function`)
-  // if (isAuthenticated()) {
   let statusCode = 200;
-
   try {
     const { code, inputLanguage, outputLanguage } = JSON.parse(event.body);
 
@@ -45,6 +42,7 @@ const myHandler = async (event, _context) => {
     // get results from api call
     const response = await getTranslation({ code: codeForTranslation, inLang: inputLanguage, outLang: outputLanguage });
 
+    // successful response!
     if (response.statusCode == 200) {
       return {
         statusCode: 200,
@@ -52,39 +50,31 @@ const myHandler = async (event, _context) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          data: response.translation,
+          data: response.body.translation,
         }),
       }
     }
     else {
       return {
-        statusCode: 200,
+        statusCode: response.statusCode,
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          data: "error",
+          data: response.body.error,
         }),
       }
     }
   }
   catch (err) {
+    console.log(err);
     return {
       statusCode,
       body: {
-        message: err.message,
+        data: err.message,
       },
     }
   }
-
-  //}
-  // else {
-  //   console.log("unathenaticated access denied");
-
-  //   return {
-  //     statusCode: 401,
-  //   }
-  // }
 }
 
 export const handler = useRequireAuth({

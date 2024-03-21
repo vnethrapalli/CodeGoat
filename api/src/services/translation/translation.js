@@ -8,52 +8,122 @@ export const getLanguage = (code) => {
 }
 
 export const getTranslation = async ({ code, inLang, outLang }) => {
-  const useDummyResponse = 1;
-  try {
-    // const key = process.env.OPENAI_API_KEY;
-    // make sure type string
-    // if (typeof key !== 'string') {
-    //   throw TypeError("key is of invalid type");
-    // }
-    // else {
-    //   // simple regex check to block some strings
-    //   let pattern = /^sk-[0-9a-zA-Z]*$/;
-    //   if (!(pattern.test(key)))
-    //     throw Error("invalid key");
-    // }
+  errorInfo = {
+    'invalid_request_error' : {
+        'code' : 400,
+        'description' : 'Your request was malformed or missing some required parameters.',
+    },
+    'rate_limit_error' : {
+        'code' : 429,
+        'description' : 'You have hit your assigned rate limit.',
+    },
+    'tokens_exceeded_error' : {
+        'code' : '403',
+        'description' : 'You have exceeded the allowed number of tokens in your request.',
+    },
+    'authentication_error' : {
+        'code' : 401,
+        'description' : 'Your API key or token was invalid, expired, or revoked.',
+    },
+    'not_found_error' : {
+        'code' : 404,
+        'description' : 'The requested resource was not found.',
+    },
+    'server_error' : {
+        'code' : 500,
+        'description' : 'An issue occurred on the OpenAI server side.',
+    },
+    'permission_error' : {
+        'code' : 403,
+        'description' : 'Your API key or token lacks the required permissions for the requested action.',
+    },
+  };
 
-    // console.log('hellooooo')
+  let langcodeToLang = {
+    "cpp" : "C++",
+    "csharp" : "C#",
+    "java" : "Java",
+    "javascript" : "Javascript",
+    "python" : "Python",
+    "typescript" : "Typescript",
+  };
 
-    // character limit because auto detection is screwy with small code snippets
-
-    if (useDummyResponse) {
-      return {
-        statusCode: 200,
+  const useDummyResponse = 0;
+  // character limit because auto detection is screwy with small code snippets
+  if (useDummyResponse) {
+    return {
+      statusCode: 200,
+      body: {
         translation: `// converting '${code}' from ${inLang} to ${outLang}`,
         inputLang: `${inLang}`,
         outputLang: `${outLang}`,
-      };
-    }
-    else {
+      },
+    };
+  }
+  else {
+    try {
+      /* toggle for using an example prompt for chatgpt */
+      let useExample = 0;
+
+      let messages = [];
+      if (useExample) {
+        messages.push({
+          role: "user",
+          content: `
+          Please convert following Python code to the C programming language:\n\n
+          print('hello')
+          `.trim()
+        });
+
+        messages.push({
+          role: "assistant",
+          content: `
+          #include <stdio.h>\n
+
+          int main() {
+            printf("hello\n");
+            return 0;
+          }
+          `.trim()
+        });
+      }
+
+      /* construct main message request */
+      let msg = `
+      Please convert the following ${langcodeToLang[inLang]} code into the ${langcodeToLang[outLang]} programming language\n\n
+      ${code}
+      `.trim();
+      messages.push({ role : "user", content: msg });
+      console.log(messages);
+
       const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
       const completion = await openai.chat.completions.create({
-        messages: [{ role: "system", content: "You are a helpful assistant." }],
+        messages: messages,
         model: "gpt-3.5-turbo",
-        max_tokens: 8
+        max_tokens: 64,
       });
+
+      console.log("gpt response!");
+      console.log(completion);
+      console.log(completion.choices[0]);
 
       return {
         statusCode: 200,
-        translation: JSON.stringify(completion.choices[0]),
-        inputLang: `${inLang}`,
-        outputLang: `${outLang}`,
+        body: {
+          translation: completion.choices[0].message["content"],
+          inputLang: `${inLang}`,
+          outputLang: `${outLang}`,
+        },
       }
     }
+    catch (err) {
+      // console.log(err);
+      return {
+        statusCode: errorInfo[err.type]['code'],
+        body: {
+          error: errorInfo[err.type]['description'],
+        }
+      };
+    }
   }
-  catch(err) {
-    return {
-      statusCode: 401,
-    };
-  }
-
 }
