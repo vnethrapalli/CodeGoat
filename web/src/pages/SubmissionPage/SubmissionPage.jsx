@@ -161,9 +161,6 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
 
               // const reader = translation.body.getReader();
               let response = await translation.json();
-              console.log('the response in question....');
-              console.log(response);
-              console.log(response.data);
               setOutputCodeValue(response.data);
             }}
           >

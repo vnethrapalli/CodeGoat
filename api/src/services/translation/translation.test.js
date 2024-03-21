@@ -1,5 +1,54 @@
 import { getTranslation } from './translation'
 
+// const mockCreate = jest.fn().mockResolvedValue({
+//   choices: [{ message: { "content" : "This is a sample response!" } }]
+// });
+
+const mockCreate = jest.fn().mockImplementationOnce(async () => {
+  return {
+    choices: [{ message: { "content" : "This is a sample response!" } }]
+  }
+})
+.mockImplementationOnce(async () => {
+  const err = { type: 'authentication_error' }
+  throw err;
+})
+.mockImplementationOnce(async () => {
+  const err = { type: 'authentication_error' }
+  throw err;
+});
+
+// const mockCreate = jest.fn().mockReturnValueOnce({
+//   choices: [{ message: { "content" : "This is a sample response!" } }]
+// })
+// .mockReturnValueOnce({
+//   type: 'authentication_error'
+// })
+// .mockReturnValueOnce({
+//   type: 'authentication_error'
+// });
+
+jest.mock('openai', () => {
+  return jest.fn().mockImplementation(() => {
+    return {
+      chat: {
+        completions: {
+          create: mockCreate
+        }
+      }
+    };
+  });
+});
+
+
+describe("testing valid openai api key", () => {
+  test("valid openai api key response", async () => {
+    const response = await getTranslation({ code: "test", inLang: "python", outLang: "java" });
+    expect(response.statusCode).toBe(200);
+    expect(response.body.translation).toEqual("This is a sample response!");
+  });
+});
+
 describe("testing invalid openai api key", () => {
   const OLD_ENV = process.env;
   beforeEach(() => {
@@ -23,31 +72,3 @@ describe("testing invalid openai api key", () => {
     expect(response.statusCode).toEqual(401);
   });
 })
-
-describe("testing valid openai api key", () => {
-  // const originalCreate = { ...global.openai.chat.completions };
-  beforeEach(() => {
-    const mockAPIRequest = {
-      chat: {
-        completions: {
-          create: jest.fn().mockImplementation(() => {
-            return {
-              statusCode: 200,
-            };
-          }),
-        },
-      }
-    };
-    global.openai = mockAPIRequest;
-  });
-
-  // afterEach(() => {
-  //   jest.resetAllMocks();
-  //   global.openai.chat.completions = originalCreate;
-  // });
-
-  test("valid openai api key response", async () => {
-    const response = await getTranslation({ code: "test", inLang: "python", outLang: "java" });
-    expect(response.statusCode).toBe(200);
-  });
-});

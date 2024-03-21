@@ -1,5 +1,6 @@
 import OpenAI from "openai";
 import hljs from 'highlight.js';
+import { json } from "stream/consumers";
 
 export const getLanguage = (code) => {
     let langCodes = ["cpp", "csharp", "java", "javascript", "python", "typescript"];
@@ -8,7 +9,7 @@ export const getLanguage = (code) => {
 }
 
 export const getTranslation = async ({ code, inLang, outLang }) => {
-  errorInfo = {
+  let errorInfo = {
     'invalid_request_error' : {
         'code' : 400,
         'description' : 'Your request was malformed or missing some required parameters.',
@@ -18,7 +19,7 @@ export const getTranslation = async ({ code, inLang, outLang }) => {
         'description' : 'You have hit your assigned rate limit.',
     },
     'tokens_exceeded_error' : {
-        'code' : '403',
+        'code' : 403,
         'description' : 'You have exceeded the allowed number of tokens in your request.',
     },
     'authentication_error' : {
@@ -94,18 +95,23 @@ export const getTranslation = async ({ code, inLang, outLang }) => {
       ${code}
       `.trim();
       messages.push({ role : "user", content: msg });
-      console.log(messages);
+      // console.log(messages);
 
       const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
       const completion = await openai.chat.completions.create({
         messages: messages,
         model: "gpt-3.5-turbo",
-        max_tokens: 64,
+        max_tokens: 4,
       });
 
-      console.log("gpt response!");
+      // for testing, if bad response throw exception so it is caught
+      if (!completion.choices) {
+        throw Error(JSON.stringify(completion));
+      }
+
+      // console.log("gpt response!");
       console.log(completion);
-      console.log(completion.choices[0]);
+      // console.log(completion.choices[0]);
 
       return {
         statusCode: 200,
@@ -117,7 +123,10 @@ export const getTranslation = async ({ code, inLang, outLang }) => {
       }
     }
     catch (err) {
-      // console.log(err);
+      console.log(err)
+      if (!err.type) {
+        err = JSON.parse(err);
+      }
       return {
         statusCode: errorInfo[err.type]['code'],
         body: {
