@@ -18,16 +18,6 @@ const mockCreate = jest.fn().mockImplementationOnce(async () => {
   throw err;
 });
 
-// const mockCreate = jest.fn().mockReturnValueOnce({
-//   choices: [{ message: { "content" : "This is a sample response!" } }]
-// })
-// .mockReturnValueOnce({
-//   type: 'authentication_error'
-// })
-// .mockReturnValueOnce({
-//   type: 'authentication_error'
-// });
-
 jest.mock('openai', () => {
   return jest.fn().mockImplementation(() => {
     return {
