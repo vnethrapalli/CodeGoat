@@ -157,11 +157,13 @@ const ThemeAuthButtons = () => {
   React.useEffect(() => {
     if(isAuthenticated) {
       setIsAuth(true)
-      auth0.getUser().then(user => {
-        delete user.updated_at
-        delete user.email_verified
-        localStorage.setItem('user', JSON.stringify(user))
-      })
+      if (localStorage.getItem('user') === null) {
+        auth0.getUser().then(user => {
+          delete user.updated_at
+          delete user.email_verified
+          localStorage.setItem('user', JSON.stringify(user))
+        })
+      }
     }
   }, [loading])
 
