@@ -50,7 +50,7 @@ const UserAccountPage = () => {
     boxShadow: 24,
     p: 4,
     borderRadius: '10px',
-    height:"30%",
+    height:"230px",
     textAlign: 'center'
   };
   const handleUsernameChange = (e) => {
