@@ -2,7 +2,7 @@ import { render, screen, fireEvent } from '@redwoodjs/testing/web'
 import mediaQuery from "css-mediaquery";
 
 jest.mock("src/auth.js");
-import { useAuth } from 'src/auth'
+import { useAuth, auth0 } from 'src/auth'
 import { mocked } from "jest-mock";
 
 const createMatchMedia = (width) => (query) => ({
@@ -54,6 +54,9 @@ beforeEach(() => {
       loginWithPopup: jest.fn(),
       isLoading: false,
   });
+
+  const mockedAuth0 = mocked(auth0);
+  mockedAuth0.getUser = jest.fn().mockResolvedValue(user);
 });
 
 describe('UserLayout', () => {

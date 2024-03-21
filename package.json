@@ -26,7 +26,10 @@
   },
   "packageManager": "yarn@4.1.0",
   "dependencies": {
+    "@apollo/react-hooks": "^4.0.0",
     "@monaco-editor/react": "^4.6.0",
+    "auth0": "^4.3.1",
+    "axios": "^1.6.8",
     "css-mediaquery": "^0.1.2",
     "openai": "^4.29.0"
   }

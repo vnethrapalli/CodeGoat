@@ -6,6 +6,7 @@ import { Experimental_CssVarsProvider as CssVarsProvider, experimental_extendThe
 import IconButton from '@mui/material/IconButton';
 import LightMode from '@mui/icons-material/LightMode';
 import DarkMode from '@mui/icons-material/DarkMode';
+import AccountBoxIcon from '@mui/icons-material/AccountBox';
 
 import { useAuth, auth0 } from 'src/auth'
 
@@ -150,23 +151,40 @@ const ThemeButton = () => {
 
 const ThemeAuthButtons = () => {
   const theme = useTheme();
-  const { isAuthenticated, signUp, logOut, loading } = useAuth()
+  const { isAuthenticated, signUp, logOut, loading, userMetadata } = useAuth()
+  const [isAuth, setIsAuth] = React.useState(isAuthenticated)
 
-  if(loading) {
+  React.useEffect(() => {
+    if(isAuthenticated) {
+      setIsAuth(true)
+      if (localStorage.getItem('user') === null) {
+        auth0.getUser().then(user => {
+          delete user.updated_at
+          delete user.email_verified
+          localStorage.setItem('user', JSON.stringify(user))
+        })
+      }
+    }
+  }, [loading])
+
+  if (loading) {
     return null
   }
-
-  const [isAuth, setIsAuth] = React.useState(isAuthenticated)
 
   const login = async () => {
     await auth0.loginWithPopup().then(t => {
       setIsAuth(true)
       auth0.getUser().then(user => {
-        delete user.sub
         delete user.updated_at
         delete user.email_verified
         localStorage.setItem('user', JSON.stringify(user))
       })
+    })
+  }
+
+  const logout = async () => {
+    await logOut().then(() => {
+      localStorage.removeItem('user')
     })
   }
 
@@ -206,7 +224,7 @@ const ThemeAuthButtons = () => {
       </Button>}
 
       {isAuth && <Button
-        onClick={logOut}
+        onClick={logout}
         data-testid="signoutButton"
         key="Sign Out"
         variant="text"
@@ -219,6 +237,12 @@ const ThemeAuthButtons = () => {
       >
         Sign Out
       </Button>}
+
+      {isAuth && <Tooltip title='Account Management'>
+        <IconButton data-testid="accountButton" sx={{ width: '10%'}} href={routes.userAccount()}>
+          <AccountBoxIcon style={{fill: theme.palette.text.primary}} sx={{fontSize: 35}} />
+        </IconButton>
+      </Tooltip>}
 
     </Grid>
   )

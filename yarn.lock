@@ -64,6 +64,52 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@apollo/client@npm:latest":
+  version: 3.9.8
+  resolution: "@apollo/client@npm:3.9.8"
+  dependencies:
+    "@graphql-typed-document-node/core": "npm:^3.1.1"
+    "@wry/caches": "npm:^1.0.0"
+    "@wry/equality": "npm:^0.5.6"
+    "@wry/trie": "npm:^0.5.0"
+    graphql-tag: "npm:^2.12.6"
+    hoist-non-react-statics: "npm:^3.3.2"
+    optimism: "npm:^0.18.0"
+    prop-types: "npm:^15.7.2"
+    rehackt: "npm:0.0.6"
+    response-iterator: "npm:^0.2.6"
+    symbol-observable: "npm:^4.0.0"
+    ts-invariant: "npm:^0.10.3"
+    tslib: "npm:^2.3.0"
+    zen-observable-ts: "npm:^1.2.5"
+  peerDependencies:
+    graphql: ^15.0.0 || ^16.0.0
+    graphql-ws: ^5.5.5
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0
+    react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
+    subscriptions-transport-ws: ^0.9.0 || ^0.11.0
+  peerDependenciesMeta:
+    graphql-ws:
+      optional: true
+    react:
+      optional: true
+    react-dom:
+      optional: true
+    subscriptions-transport-ws:
+      optional: true
+  checksum: 10c0/d346ed98eb89455a98c237a7162cadccac99f8642eed3a261dc8b3cf4e873fc5dbf909ebd8ae30429fe272f84f6de540d71f20b50cf981e3d0b3dba05fc2d197
+  languageName: node
+  linkType: hard
+
+"@apollo/react-hooks@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "@apollo/react-hooks@npm:4.0.0"
+  dependencies:
+    "@apollo/client": "npm:latest"
+  checksum: 10c0/fde1cdaf83751cc93bb2d76bc1cdfc6ae39018c0d674511d4fa84cd725a7f91d0e19b7df86ad39846b0104f580777abb90e9c4a6e259ba5dadfed6809b869116
+  languageName: node
+  linkType: hard
+
 "@ardatan/relay-compiler@npm:12.0.0":
   version: 12.0.0
   resolution: "@ardatan/relay-compiler@npm:12.0.0"
@@ -6149,15 +6195,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^18.11.18":
-  version: 18.19.26
-  resolution: "@types/node@npm:18.19.26"
-  dependencies:
-    undici-types: "npm:~5.26.4"
-  checksum: 10c0/34b9ceb3366fc616f35a3f3a1467478182cc265ff142c02000503161a679d3036d8bbc410d343ae4012a868e879941d64d656bd509674b055c8735aba24d98e2
-  languageName: node
-  linkType: hard
-
 "@types/parse-json@npm:^4.0.0":
   version: 4.0.2
   resolution: "@types/parse-json@npm:4.0.2"
@@ -7745,6 +7782,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"auth0@npm:^4.3.1":
+  version: 4.3.1
+  resolution: "auth0@npm:4.3.1"
+  dependencies:
+    jose: "npm:^4.13.2"
+    uuid: "npm:^9.0.0"
+  checksum: 10c0/7ccda5dd239a1106e46945ed07886e5ea520bd81fc7f595e45dd6e15a4aee54407df3c38dc2d4bdad1232d2860cdf720a0a5777362bd0a0b6f621a6c7e846769
+  languageName: node
+  linkType: hard
+
 "auto-bind@npm:~4.0.0":
   version: 4.0.0
   resolution: "auto-bind@npm:4.0.0"
@@ -7777,6 +7824,17 @@ __metadata:
   version: 4.7.0
   resolution: "axe-core@npm:4.7.0"
   checksum: 10c0/89ac5712b5932ac7d23398b4cb5ba081c394a086e343acc68ba49c83472706e18e0799804e8388c779dcdacc465377deb29f2714241d3fbb389cf3a6b275c9ba
+  languageName: node
+  linkType: hard
+
+"axios@npm:^1.6.8":
+  version: 1.6.8
+  resolution: "axios@npm:1.6.8"
+  dependencies:
+    follow-redirects: "npm:^1.15.6"
+    form-data: "npm:^4.0.0"
+    proxy-from-env: "npm:^1.1.0"
+  checksum: 10c0/0f22da6f490335479a89878bc7d5a1419484fbb437b564a80c34888fc36759ae4f56ea28d55a191695e5ed327f0bad56e7ff60fb6770c14d1be6501505d47ab9
   languageName: node
   linkType: hard
 
@@ -8118,13 +8176,6 @@ __metadata:
   version: 2.2.1
   resolution: "bare-events@npm:2.2.1"
   checksum: 10c0/b28cbebe810ecd234b6df89b717fea593c19dad22159662df6a725e43369f74c5c178b1cb19b8ebb0a3e8a0e5a297083234c8183ae784f7dacc1ae17cacc08ed
-  languageName: node
-  linkType: hard
-
-"base-64@npm:^0.1.0":
-  version: 0.1.0
-  resolution: "base-64@npm:0.1.0"
-  checksum: 10c0/fe0dcf076e823f04db7ee9b02495be08a91c445fbc6db03cb9913be9680e2fcc0af8b74459041fe08ad16800b1f65a549501d8f08696a8a6d32880789b7de69d
   languageName: node
   linkType: hard
 
@@ -16724,7 +16775,7 @@ __metadata:
     openai: bin/cli
   checksum: 10c0/4bf00d9a6ee5cde24bb473d548670e8951058122b14e2cbd72199e47178b4e3b1e0350a51fdae871b6f5dec5b569ff7f6af5fc91a77d6c26b5e7437e8f62ec6a
   languageName: node
-  linkType: hard
+  linkType: har
 
 "opener@npm:^1.5.2":
   version: 1.5.2
@@ -17899,6 +17950,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"proxy-from-env@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "proxy-from-env@npm:1.1.0"
+  checksum: 10c0/fe7dd8b1bdbbbea18d1459107729c3e4a2243ca870d26d34c2c1bcd3e4425b7bcc5112362df2d93cc7fb9746f6142b5e272fd1cc5c86ddf8580175186f6ad42b
+  languageName: node
+  linkType: hard
+
 "proxyquire@npm:2.1.3":
   version: 2.1.3
   resolution: "proxyquire@npm:2.1.3"
@@ -18473,6 +18531,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"rehackt@npm:0.0.6":
+  version: 0.0.6
+  resolution: "rehackt@npm:0.0.6"
+  peerDependencies:
+    "@types/react": "*"
+    react: "*"
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+    react:
+      optional: true
+  checksum: 10c0/814c9b80b2680dc0572639ecad1ed1961b23b606e53a00976ee4c4876f6ed736ea702381235ac40ed2a5c826fb55641b46ae23343e4ddd6378ced1da3d51ada7
+  languageName: node
+  linkType: hard
+
 "relateurl@npm:^0.2.7":
   version: 0.2.7
   resolution: "relateurl@npm:0.2.7"
@@ -18833,10 +18906,13 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
+    "@apollo/react-hooks": "npm:^4.0.0"
     "@monaco-editor/react": "npm:^4.6.0"
     "@redwoodjs/auth-auth0-setup": "npm:7.0.3"
     "@redwoodjs/core": "npm:7.0.3"
     "@redwoodjs/project-config": "npm:7.0.3"
+    auth0: "npm:^4.3.1"
+    axios: "npm:^1.6.8"
     css-mediaquery: "npm:^0.1.2"
     openai: "npm:^4.29.0"
   languageName: unknown
@@ -21104,7 +21180,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"uuid@npm:9.0.1":
+"uuid@npm:9.0.1, uuid@npm:^9.0.0":
   version: 9.0.1
   resolution: "uuid@npm:9.0.1"
   bin:
@@ -21364,8 +21440,8 @@ __metadata:
     "@redwoodjs/router": "npm:7.0.3"
     "@redwoodjs/vite": "npm:7.0.3"
     "@redwoodjs/web": "npm:7.0.3"
-    "@types/react": "npm:^18.2.55"
-    "@types/react-dom": "npm:^18.2.19"
+    "@types/react": "npm:^18.2.37"
+    "@types/react-dom": "npm:^18.2.15"
     react: "npm:18.2.0"
     react-dom: "npm:18.2.0"
   languageName: unknown
