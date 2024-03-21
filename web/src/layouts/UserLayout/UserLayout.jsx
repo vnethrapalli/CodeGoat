@@ -14,7 +14,7 @@ const theme = extendTheme({
     light: {
       palette: {
         primary: {
-          main: "#F1FADA"
+          main: "#265073"
         },
         secondary: {
           main: "#2D9596"
@@ -66,7 +66,7 @@ const TitleLink = () => {
         }}
       >
         <Tooltip title='Go Home'>
-          <Link href={routes.home()} underline="none">
+          <Link href={routes.home()} underline="none" sx={{ color: theme.palette.text.primary }}>
             CodeGoat
           </Link>
         </Tooltip>
@@ -180,7 +180,7 @@ const ThemeAuthButtons = () => {
         data-testid="loginButton"
         key="Log In"
         variant="text"
-        sx={{ backgroundColor: theme.palette.primary.main, color: "#265073", height: "30px", marginLeft: '14px', marginRight: '0px', borderRadius: '6px', alignSelf: 'center',
+        sx={{ backgroundColor: theme.palette.text.primary, color: "#265073", height: "30px", marginLeft: '14px', marginRight: '0px', borderRadius: '6px', alignSelf: 'center',
           '&:hover': {
             backgroundColor: '#F1FADA',
             color: "#265073",

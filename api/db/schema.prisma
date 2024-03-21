@@ -23,3 +23,9 @@ model Feedback {
   experience          Int
   comments            String
 }
+
+model Faq {
+  id                  Int     @id @default(autoincrement())
+  question            String
+  answer              String
+}
