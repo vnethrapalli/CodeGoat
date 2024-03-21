@@ -85,7 +85,8 @@ const NavButtons = () => {
             key="Translate"
             variant="text"
             data-testid="translateButton"
-            href={routes.translate()}
+            onClick={() => (navigate(routes.translate()))}
+            // href={routes.translate()}
             sx={{ marginTop: '2px', marginBottom: '2px', marginRight: '5px', marginLeft: '0px', color: theme.palette.text.primary, display: 'block' }}
           >
             Translate
@@ -109,7 +110,8 @@ const NavButtons = () => {
             key="Feedback"
             variant="text"
             data-testid="feedbackButton"
-            href={routes.feedback()}
+            onClick={() => (navigate(routes.feedback()))}
+            // href={routes.feedback()}
             sx={{ marginTop: '2px', marginBottom: '2px', marginRight: '5px', marginLeft: '0px', color: theme.palette.text.primary, display: 'block' }}
           >
             Feedback
@@ -218,7 +220,7 @@ const UserMenu = () => {
 
         <Divider sx={{ marginTop: '0px' }} />
 
-        <MenuItem sx={{ alignSelf: 'center', color: theme.palette.text.secondary, width: '100%' }} key="Sign Out" onClick={handleCloseUserMenuSignOut}>
+        <MenuItem data-testid="signoutButton" sx={{ alignSelf: 'center', color: theme.palette.text.secondary, width: '100%' }} key="Sign Out" onClick={handleCloseUserMenuSignOut}>
           <Logout sx={{ fill: theme.palette.text.secondary, paddingRight: '8px' }}/>
           Sign Out
         </MenuItem>
@@ -241,6 +243,7 @@ const UserButtons = () => {
     await auth0.loginWithPopup().then(t => {
       setIsAuth(true)
       auth0.getUser().then(user => {
+        console.log(user);
         delete user.updated_at
         delete user.email_verified
         localStorage.setItem('user', JSON.stringify(user))

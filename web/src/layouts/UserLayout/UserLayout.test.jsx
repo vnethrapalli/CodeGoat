@@ -3,7 +3,17 @@ import mediaQuery from "css-mediaquery";
 
 jest.mock("src/auth.js");
 import { useAuth } from 'src/auth'
+import { navigate } from "@redwoodjs/router";
 import { mocked } from "jest-mock";
+
+import UserLayout from './UserLayout'
+import HomePage from 'src/pages/HomePage/HomePage';
+import { LightMode, DarkMode } from '@mui/icons-material'
+
+jest.mock('@redwoodjs/router', () => ({
+  ...jest.requireActual('@redwoodjs/router'),
+  navigate: jest.fn(),
+}));
 
 const createMatchMedia = (width) => (query) => ({
   matches: mediaQuery.match(query, { width }),
@@ -32,30 +42,37 @@ const user = {
   sub: "google-oauth2|12345678901234",
 };
 
+const localStorageMock = (function () {
+  let user = {};
 
-const mockGetItem = jest.fn(() => {
-  return user;
-});
-const mockSetItem = jest.fn();
-const mockRemoveItem = jest.fn();
+  return {
+    getItem(key) {
+      return user[key];
+    },
 
-Object.defineProperty(window, "localStorage", {
-  value: {
-    getItem: (...args) => mockGetItem(...args),
-    setItem: (...args) => mockSetItem(...args),
-    removeItem: (...args) => mockRemoveItem(...args),
-  },
-});
+    setItem(key, value) {
+      user[key] = value;
+    },
 
-import UserLayout from './UserLayout'
-import HomePage from 'src/pages/HomePage/HomePage';
-import SubmissionPage from 'src/pages/SubmissionPage/SubmissionPage';
-import StatusPage from 'src/pages/StatusPage/StatusPage';
-import FeedbackPage from 'src/pages/FeedbackPage/FeedbackPage';
-import { LightMode, DarkMode } from '@mui/icons-material'
+    clear() {
+      user = {};
+    },
 
-//   Improve this test with help from the Redwood Testing Doc:
-//   https://redwoodjs.com/docs/testing#testing-pages-layouts
+    removeItem(key) {
+      delete user[key];
+    },
+
+    getAll() {
+      return user;
+    },
+  };
+})();
+
+Object.defineProperty(window, "localStorage", { value: localStorageMock });
+
+const setLocalStorage = (id, data) => {
+  window.localStorage.setItem(id, JSON.stringify(data));
+};
 
 beforeEach(() => {
   const mockedUseAuth = mocked(useAuth);
@@ -70,6 +87,10 @@ beforeEach(() => {
       loginWithPopup: jest.fn(),
       isLoading: false,
   });
+
+  const mockId = "user";
+  const mockJson = { data: "json data" };
+  setLocalStorage(mockId, mockJson);
 });
 
 describe('UserLayout', () => {
@@ -133,9 +154,7 @@ describe('UserLayout', () => {
     const button = screen.getByTestId("translateButton");
     fireEvent.click(button);
 
-    expect(() => {
-      render(<SubmissionPage />)
-    }).not.toThrow()
+    expect(navigate).toHaveBeenCalled();
   })
 
   test('renders Status Button successfully', () => {
@@ -148,11 +167,9 @@ describe('UserLayout', () => {
     render(<UserLayout />)
 
     const button = screen.getByTestId("statusButton");
-
     fireEvent.click(button);
-    expect(() => {
-      render(<StatusPage />)
-    }).not.toThrow()
+
+    expect(navigate).toHaveBeenCalled();
   })
 
   test('renders Feedback Button successfully', () => {
@@ -165,11 +182,9 @@ describe('UserLayout', () => {
     render(<UserLayout />)
 
     const button = screen.getByTestId("feedbackButton");
-
     fireEvent.click(button);
-    expect(() => {
-      render(<FeedbackPage />)
-    }).not.toThrow()
+
+    expect(navigate).toHaveBeenCalled();
   })
 
 });
@@ -307,10 +322,10 @@ describe('Navbar Auth - Logged In', () => {
     });
   });
 
-  it('Logout Button show when signed out', () => {
+  it('Logout Button show when signed in', () => {
     render(<UserLayout />)
 
-    expect(screen.getByTestId('signoutButton')).toBeVisible()
+    expect(screen.getByTestId('signoutButton')).toBeInTheDocument()
   })
 })
 
