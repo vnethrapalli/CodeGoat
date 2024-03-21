@@ -25,6 +25,28 @@ Object.defineProperty(window, 'matchMedia', {
   })),
 });
 
+const user = {
+  nickname: "johndoe",
+  email: "johndoe@me.com",
+  email_verified: true,
+  sub: "google-oauth2|12345678901234",
+};
+
+
+const mockGetItem = jest.fn(() => {
+  return user;
+});
+const mockSetItem = jest.fn();
+const mockRemoveItem = jest.fn();
+
+Object.defineProperty(window, "localStorage", {
+  value: {
+    getItem: (...args) => mockGetItem(...args),
+    setItem: (...args) => mockSetItem(...args),
+    removeItem: (...args) => mockRemoveItem(...args),
+  },
+});
+
 import UserLayout from './UserLayout'
 import HomePage from 'src/pages/HomePage/HomePage';
 import SubmissionPage from 'src/pages/SubmissionPage/SubmissionPage';
@@ -34,12 +56,6 @@ import { LightMode, DarkMode } from '@mui/icons-material'
 
 //   Improve this test with help from the Redwood Testing Doc:
 //   https://redwoodjs.com/docs/testing#testing-pages-layouts
-
-const user = {
-  email: "johndoe@me.com",
-  email_verified: true,
-  sub: "google-oauth2|12345678901234",
-};
 
 beforeEach(() => {
   const mockedUseAuth = mocked(useAuth);
