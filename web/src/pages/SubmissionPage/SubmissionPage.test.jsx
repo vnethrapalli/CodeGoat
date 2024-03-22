@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@redwoodjs/testing/web';
+import { render, screen, fireEvent, waitFor } from '@redwoodjs/testing/web';
 import SubmissionPage from './SubmissionPage';
 
 // https://redwoodjs.com/docs/testing#testing-pages-layouts
@@ -28,25 +28,25 @@ test('renders input Editor successfully', () => {
 })
 
 // RENDER TESTS AFTER CLICKING THE TRANSLATE BUTTON
-test('renders output Editor when Translate Button clicked successfully', () => {
+test('renders output Editor when Translate Button clicked successfully', async() => {
   render(<SubmissionPage />)
   const button = screen.getByTestId("translateButton");
   fireEvent.click(button);
-  expect(screen.getByTestId("outputEditor")).toBeInTheDocument()
+  await waitFor(() => expect(screen.getByTestId("outputEditor")).toBeInTheDocument())
 })
 
-test('renders output Copy Button when Translate Button clicked successfully', () => {
+test('renders output Copy Button when Translate Button clicked successfully', async() => {
   render(<SubmissionPage />)
   const button = screen.getByTestId("translateButton");
   fireEvent.click(button);
-  expect(screen.getByTestId("outputCopy")).toBeInTheDocument()
+  await waitFor(() => expect(screen.getByTestId("outputCopy")).toBeInTheDocument())
 })
 
-test('renders output Download Button when Translate Button clicked successfully', () => {
+test('renders output Download Button when Translate Button clicked successfully', async () => {
   render(<SubmissionPage />)
   const button = screen.getByTestId("translateButton");
   fireEvent.click(button);
-  expect(screen.getByTestId("downloadButton")).toBeInTheDocument()
+  await waitFor(() => expect(screen.getByTestId("downloadButton")).toBeInTheDocument())
 })
 
 // BUTTON TESTS
@@ -79,27 +79,29 @@ test('input copy Button functions correctly', () => {
   expect(navigator.clipboard.writeText).toHaveBeenCalledWith("// write some code...");
 });
 
-test('output copy Button functions correctly', () => {
+test('output copy Button functions correctly', async() => {
   render(<SubmissionPage />)
   const translateBtn = screen.getByTestId("translateButton");
-  fireEvent.click(translateBtn);
+  await waitFor(() => fireEvent.click(translateBtn));
+  await waitFor(() => expect(screen.getByTestId("outputCopy")).toBeInTheDocument());
   const outputCopyBtn = screen.getByTestId('outputCopy');
   fireEvent.click(outputCopyBtn);
-  expect(navigator.clipboard.writeText).toHaveBeenCalledWith("# your new code will be here...");
+  await waitFor(() => expect(navigator.clipboard.writeText).toHaveBeenCalledWith("# your new code will be here..."));
 });
 
-test('input Upload Button functions correctly', () => {
+test('input Upload Button functions correctly', async() => {
   render(<SubmissionPage defaultReadInputFile={readInputFile}/>);
   const button = screen.getByTestId("uploadButton");
   fireEvent.click(button);
-  expect(readInputFile).toHaveBeenCalled();
+  await waitFor(() => expect(readInputFile).toHaveBeenCalled());
 });
 
-test('output Download Button functions correctly', () => {
+test('output Download Button functions correctly', async() => {
   render(<SubmissionPage defaultDownloadTextAsFile={downloadTextAsFile}/>)
   const translateBtn = screen.getByTestId("translateButton");
-  fireEvent.click(translateBtn);
+  await waitFor(() => fireEvent.click(translateBtn));
+  await waitFor(() => expect(screen.getByTestId("downloadButton")).toBeInTheDocument());
   const outputCopyBtn = screen.getByTestId('downloadButton');
   fireEvent.click(outputCopyBtn);
-  expect(downloadTextAsFile).toHaveBeenCalled();
+  await waitFor(() => expect(downloadTextAsFile).toHaveBeenCalled());
 });

@@ -163,9 +163,9 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
               let response = await translation;
               let status = response.status;
               response = await response.json();
+              setOutput(() => true);
               if(status === 200) {
                 toast.success("Code translated successfully", { duration: 1500 });
-                setOutput(() => true);
                 setOutputCodeValue(response.data);
               } else {
                 switch(status) {
