@@ -35,7 +35,7 @@ export const getTranslation = async ({ code, inLang, outLang }) => {
         'description' : 'An issue occurred on the OpenAI server side.',
     },
     'permission_error' : {
-        'code' : 403,
+        'code' : 405,
         'description' : 'Your API key or token lacks the required permissions for the requested action.',
     },
   };
@@ -49,7 +49,7 @@ export const getTranslation = async ({ code, inLang, outLang }) => {
     "typescript" : "Typescript",
   };
 
-  const useDummyResponse = 0;
+  const useDummyResponse = 1;
   // character limit because auto detection is screwy with small code snippets
   if (useDummyResponse) {
     return {
