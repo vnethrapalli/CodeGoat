@@ -4,6 +4,29 @@ import { handler } from './translate'
 //   Improve this test with help from the Redwood Testing Doc:
 //    https://redwoodjs.com/docs/testing#testing-functions
 
+const mockCreate = jest.fn().mockImplementationOnce(async () => {
+  return {
+    choices: [{ message: { "content" : "This is a sample response!" } }]
+  }
+})
+.mockImplementationOnce(async () => {
+  return {
+    choices: [{ message: { "content" : "This is a sample response!" } }]
+  }
+});
+
+jest.mock('openai', () => {
+  return jest.fn().mockImplementation(() => {
+    return {
+      chat: {
+        completions: {
+          create: mockCreate
+        }
+      }
+    };
+  });
+});
+
 describe('code, input, and output is required',  () => {
   it('requires code', async () => {
     const httpEvent = mockHttpEvent({
@@ -18,7 +41,7 @@ describe('code, input, and output is required',  () => {
     const body = result.body;
 
     expect(result.statusCode).toBe(400);
-    expect(body.message).toEqual('please provide all three of code, input language, and output language')
+    expect(body.data).toEqual('please provide all three of code, input language, and output language')
   });
 
   it('requires input language', async () => {
@@ -34,7 +57,7 @@ describe('code, input, and output is required',  () => {
     const body = result.body;
 
     expect(result.statusCode).toBe(400);
-    expect(body.message).toEqual('please provide all three of code, input language, and output language')
+    expect(body.data).toEqual('please provide all three of code, input language, and output language')
   });
 
   it('requires output language', async () => {
@@ -50,7 +73,7 @@ describe('code, input, and output is required',  () => {
     const body = result.body;
 
     expect(result.statusCode).toBe(400);
-    expect(body.message).toEqual('please provide all three of code, input language, and output language')
+    expect(body.data).toEqual('please provide all three of code, input language, and output language')
   });
 });
 
@@ -108,7 +131,7 @@ describe('language detection errors',  () => {
     const body = result.body;
 
     expect(result.statusCode).toBe(400);
-    expect(body.message).toEqual("Please select the right language for your code.");
+    expect(body.data).toEqual("Please select the right language for your code.");
   });
 
   it('>=500 chars and selected language and detected language are the same', async () => {

@@ -160,8 +160,8 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
               });
 
               // const reader = translation.body.getReader();
-              let body = await translation.json();
-              setOutputCodeValue(body.data ? body.data : body.message);
+              let response = await translation.json();
+              setOutputCodeValue(response.data);
             }}
           >
             Translate
