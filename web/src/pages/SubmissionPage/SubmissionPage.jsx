@@ -7,6 +7,12 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import Editor from '@monaco-editor/react';
 import React, { useRef } from 'react';
 
+// These things  are potentially for the async queuing if I can make it work lmao
+import { Toaster, toast } from '@redwoodjs/web/toast'
+import axios from 'axios';
+import { TaskQueue } from 'cwait';
+import { ConcurrencyManager } from 'axios-concurrency';
+
 
 export const languages = [
   {dropdownItem: "C++", langCode: "cpp"},
@@ -148,7 +154,8 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
               marginBottom: "25px",
             }}
             onClick={async () => {
-              setOutput(() => true);
+              // created temporary submission message after translate clicked, might want to change this later
+              toast.success("Your request has been received!", {duration: 2500})
               const reqUrl = `http://localhost:8910/.redwood/functions/translate`;
               const translation = await fetch(reqUrl, {
                 method: "POST",
@@ -162,6 +169,9 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
               // const reader = translation.body.getReader();
               let response = await translation.json();
               setOutputCodeValue(response.data);
+              // created temporary completion message and setoutput = true after the translation is completed
+              toast.success("Translation completed!", {duration: 2500});
+              setOutput(() => true);
             }}
           >
             Translate
