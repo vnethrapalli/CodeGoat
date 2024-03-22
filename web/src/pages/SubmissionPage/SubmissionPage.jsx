@@ -176,10 +176,16 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
             onClick={() => {
               setQueue(queue
                 .then(() => {
-                  queueCount++;
-                  toast.dismiss();
-                  toast.success("Your request has been sent! \nQueued Requests: " + queueCount.toString(), {duration: 1200});
-                  translateRequest();
+                  if (queueCount < 5) {
+                    queueCount++;
+                    toast.dismiss();
+                    toast.success("Your request has been sent! \nQueued Requests: " + queueCount.toString(), {duration: 1200});
+                    translateRequest();
+                  } else {
+                    toast.dismiss();
+                    toast.error("Slow down there! I can't afford all those API calls lmao", {duration: 2500});
+                  }
+
                 })
                 .catch((err) => {console.error(err)})
                 )
