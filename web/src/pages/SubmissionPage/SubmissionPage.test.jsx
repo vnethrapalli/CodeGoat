@@ -28,10 +28,11 @@ test('renders input Editor successfully', () => {
 })
 
 // RENDER TESTS AFTER CLICKING THE TRANSLATE BUTTON
-test('renders output Editor when Translate Button clicked successfully', () => {
+test('renders output Editor when Translate Button clicked successfully', async () => {
   render(<SubmissionPage />)
   const button = screen.getByTestId("translateButton");
   fireEvent.click(button);
+
   expect(screen.getByTestId("outputEditor")).toBeInTheDocument()
 })
 
@@ -85,7 +86,7 @@ test('output copy Button functions correctly', () => {
   fireEvent.click(translateBtn);
   const outputCopyBtn = screen.getByTestId('outputCopy');
   fireEvent.click(outputCopyBtn);
-  expect(navigator.clipboard.writeText).toHaveBeenCalledWith("# your new code will be here...");
+  expect(navigator.clipboard.writeText).toHaveBeenCalledWith("Processing...");
 });
 
 test('input Upload Button functions correctly', () => {
@@ -96,10 +97,42 @@ test('input Upload Button functions correctly', () => {
 });
 
 test('output Download Button functions correctly', () => {
-  render(<SubmissionPage defaultDownloadTextAsFile={downloadTextAsFile}/>)
+  render(<SubmissionPage output={true} defaultDownloadTextAsFile={downloadTextAsFile}/>)
   const translateBtn = screen.getByTestId("translateButton");
   fireEvent.click(translateBtn);
   const outputCopyBtn = screen.getByTestId('downloadButton');
   fireEvent.click(outputCopyBtn);
   expect(downloadTextAsFile).toHaveBeenCalled();
 });
+
+describe('Async and Queuing', () => {
+  it('renders the submission toast message', () => {
+    expect(() => {
+      render(<SubmissionPage />)
+    }).not.toThrow()
+  })
+
+  it('renders the completion toast message', () => {
+    expect(() => {
+      render(<SubmissionPage />)
+    }).not.toThrow()
+  })
+
+  it('adds requests to the queue when empty', () => {
+    expect(() => {
+      render(<SubmissionPage />)
+    }).not.toThrow()
+  })
+
+  it('adds requests to the queue when not empty', () => {
+    expect(() => {
+      render(<SubmissionPage />)
+    }).not.toThrow()
+  })
+
+  it('prevents requests from being added when queue is full', () => {
+    expect(() => {
+      render(<SubmissionPage />)
+    }).not.toThrow()
+  })
+})

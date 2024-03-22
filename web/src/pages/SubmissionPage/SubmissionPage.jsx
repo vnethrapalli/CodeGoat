@@ -6,12 +6,7 @@ import UploadFile from '@mui/icons-material/UploadFile';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import Editor from '@monaco-editor/react';
 import React, { useRef, useState } from 'react';
-
-// These things  are potentially for the async queuing if I can make it work lmao
 import { Toaster, toast } from '@redwoodjs/web/toast'
-import axios from 'axios';
-import { TaskQueue } from 'cwait';
-import { ConcurrencyManager } from 'axios-concurrency';
 
 
 export const languages = [
@@ -35,7 +30,7 @@ let queueCount = 0;
 
 const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => {
   const [inputCodeValue, setInputCodeValue] = React.useState("// write some code...");
-  const [outputCodeValue, setOutputCodeValue] = React.useState("# your new code will be here...");
+  const [outputCodeValue, setOutputCodeValue] = React.useState("Processing...");
   const [inputLanguage, setInputLanguage] = React.useState("javascript");
   const [outputLanguage, setOutputLanguage] = React.useState("python");
   const [output, setOutput] = React.useState(false);
@@ -152,7 +147,6 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
       });
       let response = await translation.json();
       setOutputCodeValue(response.data);
-      setOutput(() => true);
       queueCount--;
       toast.success("Translation completed! \nQueued Requests: " + queueCount.toString(), {duration: 1200});
     }
@@ -174,6 +168,7 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
               marginBottom: "25px",
             }}
             onClick={() => {
+              setOutput(() => true);
               setQueue(queue
                 .then(() => {
                   if (queueCount < 5) {
