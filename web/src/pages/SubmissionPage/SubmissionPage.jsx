@@ -5,7 +5,7 @@ import DownloadIcon from '@mui/icons-material/Download';
 import UploadFile from '@mui/icons-material/UploadFile';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import Editor from '@monaco-editor/react';
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 
 // These things  are potentially for the async queuing if I can make it work lmao
 import { Toaster, toast } from '@redwoodjs/web/toast'
@@ -31,6 +31,7 @@ const extensions = {
   "typescript": ".ts"
 };
 
+let queueCount = 0;
 
 const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => {
   const [inputCodeValue, setInputCodeValue] = React.useState("// write some code...");
@@ -137,6 +138,25 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
   }
 
   const TranslateBtn = () => {
+    const [queue, setQueue] = React.useState(Promise.resolve())
+
+    async function translateRequest() {
+      const reqUrl = `http://localhost:8910/.redwood/functions/translate`;
+      const translation = await fetch(reqUrl, {
+        method: "POST",
+        body: JSON.stringify({
+          code: inputCodeValue,
+          inputLanguage: inputLanguage,
+          outputLanguage: outputLanguage
+        })
+      });
+      let response = await translation.json();
+      setOutputCodeValue(response.data);
+      setOutput(() => true);
+      queueCount--;
+      toast.success("Translation completed! \nQueued Requests: " + queueCount.toString(), {duration: 1200});
+    }
+
     return (
       <>
         <Box textAlign="center" pt={2}>
@@ -153,25 +173,16 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
               borderRadius: "40px",
               marginBottom: "25px",
             }}
-            onClick={async () => {
-              // created temporary submission message after translate clicked, might want to change this later
-              toast.success("Your request has been received!", {duration: 2500})
-              const reqUrl = `http://localhost:8910/.redwood/functions/translate`;
-              const translation = await fetch(reqUrl, {
-                method: "POST",
-                body: JSON.stringify({
-                  code: inputCodeValue,
-                  inputLanguage: inputLanguage,
-                  outputLanguage: outputLanguage
+            onClick={() => {
+              setQueue(queue
+                .then(() => {
+                  queueCount++;
+                  toast.dismiss();
+                  toast.success("Your request has been sent! \nQueued Requests: " + queueCount.toString(), {duration: 1200});
+                  translateRequest();
                 })
-              });
-
-              // const reader = translation.body.getReader();
-              let response = await translation.json();
-              setOutputCodeValue(response.data);
-              // created temporary completion message and setoutput = true after the translation is completed
-              toast.success("Translation completed!", {duration: 2500});
-              setOutput(() => true);
+                .catch((err) => {console.error(err)})
+                )
             }}
           >
             Translate
