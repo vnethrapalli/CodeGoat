@@ -3,6 +3,44 @@ import SubmissionPage from './SubmissionPage';
 
 // https://redwoodjs.com/docs/testing#testing-pages-layouts
 
+const assetsFetchMock = async (url) => {
+  return {
+    status: 200,
+    json: () => Promise.resolve({
+      data: "translated code"
+    })
+  }
+}
+
+beforeEach(() => {
+  fetchMock = jest.spyOn(global, "fetch")
+  .mockImplementation(assetsFetchMock);
+});
+
+afterEach(() => {
+  jest.restoreAllMocks();
+})
+
+const createMatchMedia = (width) => (query) => ({
+  matches: mediaQuery.match(query, { width }),
+  addListener: () => {},
+  removeListener: () => {}
+});
+
+Object.defineProperty(window, 'matchMedia', {
+  writable: true,
+  value: jest.fn().mockImplementation(query => ({
+    matches: false,
+    media: query,
+    onchange: null,
+    addListener: jest.fn(), // deprecated
+    removeListener: jest.fn(), // deprecated
+    addEventListener: jest.fn(),
+    removeEventListener: jest.fn(),
+    dispatchEvent: jest.fn(),
+  })),
+});
+
 // INITIAL RENDER TESTS
 describe('SubmissionPage', () => {
   it('renders successfully', () => {
@@ -86,7 +124,7 @@ test('output copy Button functions correctly', async() => {
   await waitFor(() => expect(screen.getByTestId("outputCopy")).toBeInTheDocument());
   const outputCopyBtn = screen.getByTestId('outputCopy');
   fireEvent.click(outputCopyBtn);
-  await waitFor(() => expect(navigator.clipboard.writeText).toHaveBeenCalledWith("# your new code will be here..."));
+  await waitFor(() => expect(navigator.clipboard.writeText).toHaveBeenCalledWith("translated code"));
 });
 
 test('input Upload Button functions correctly', async() => {
@@ -105,3 +143,11 @@ test('output Download Button functions correctly', async() => {
   fireEvent.click(outputCopyBtn);
   await waitFor(() => expect(downloadTextAsFile).toHaveBeenCalled());
 });
+
+// test('Successful translation notification', async() => {
+//   jest.clearAllTimers();
+//   render(<SubmissionPage />)
+//   const translateBtn = screen.getByTestId("translateButton");
+//   fireEvent.click(translateBtn);
+//   expect(await screen.getByText("Code translated successfully")).toBeInTheDocument();
+// })

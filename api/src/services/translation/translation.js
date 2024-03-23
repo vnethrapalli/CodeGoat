@@ -49,7 +49,7 @@ export const getTranslation = async ({ code, inLang, outLang }) => {
     "typescript" : "Typescript",
   };
 
-  const useDummyResponse = 1;
+  const useDummyResponse = 0;
   // character limit because auto detection is screwy with small code snippets
   if (useDummyResponse) {
     return {
