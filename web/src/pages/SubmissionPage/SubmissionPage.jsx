@@ -24,7 +24,6 @@ const CREATE_TRANSLATION = gql`
   }
 `
 
-
 export const languages = [
   {dropdownItem: "C++", langCode: "cpp"},
   {dropdownItem: "C#", langCode: "csharp"},
@@ -207,6 +206,7 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
             marginBottom: "25px",
           }}
           onClick={async () => {
+            console.log("hello");
             const reqUrl = `http://localhost:8910/.redwood/functions/translate`;
             const translation = await fetch(reqUrl, {
               method: "POST",
@@ -314,7 +314,7 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
         <Stack direction="row" spacing={0} justifyContent="flex-end" alignItems="center">
           <CopyButton editor={codeboxInput} isInput={input}/>
           <Divider orientation="vertical" flexItem style={{ backgroundColor: theme.palette.text.primary, width: '1%' }}/>
-          {input ? <UploadButtonInput/> : <DownloadButton/>}
+          <UploadButtonInput/>
         </Stack>
       </Stack>
     );
@@ -323,9 +323,9 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
   const NoDropdownAndButtons = ({ input }) => {
     return (
       <Stack direction="row" spacing={0} justifyContent="flex-end" alignItems="center">
-        <CopyButton editor={input ? codeboxInput : codeboxOutput}/>
+        <CopyButton editor={input ? codeboxInput : codeboxOutput} isInput={input} />
         <Divider orientation="vertical" flexItem style={{ backgroundColor: theme.palette.text.primary, width: '1%' }}/>
-        {input ? <UploadButtonInput/> : <DownloadButton/>}
+        <DownloadButton/>
       </Stack>
     );
   }

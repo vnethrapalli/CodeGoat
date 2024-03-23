@@ -1,7 +1,45 @@
-import { render, screen, fireEvent } from '@redwoodjs/testing/web';
+import { render, screen, fireEvent, waitFor } from '@redwoodjs/testing/web';
 import SubmissionPage from './SubmissionPage';
 
 // https://redwoodjs.com/docs/testing#testing-pages-layouts
+
+const assetsFetchMock = async (url) => {
+  return {
+    status: 200,
+    json: () => Promise.resolve({
+      data: "translated code"
+    })
+  }
+}
+
+beforeEach(() => {
+  fetchMock = jest.spyOn(global, "fetch")
+  .mockImplementation(assetsFetchMock);
+});
+
+afterEach(() => {
+  jest.restoreAllMocks();
+})
+
+const createMatchMedia = (width) => (query) => ({
+  matches: mediaQuery.match(query, { width }),
+  addListener: () => {},
+  removeListener: () => {}
+});
+
+Object.defineProperty(window, 'matchMedia', {
+  writable: true,
+  value: jest.fn().mockImplementation(query => ({
+    matches: false,
+    media: query,
+    onchange: null,
+    addListener: jest.fn(), // deprecated
+    removeListener: jest.fn(), // deprecated
+    addEventListener: jest.fn(),
+    removeEventListener: jest.fn(),
+    dispatchEvent: jest.fn(),
+  })),
+});
 
 // INITIAL RENDER TESTS
 describe('SubmissionPage', () => {
@@ -10,43 +48,43 @@ describe('SubmissionPage', () => {
       render(<SubmissionPage />)
     }).not.toThrow()
   })
+})
 
-  test('renders Translate Button successfully', () => {
-    render(<SubmissionPage />)
-    expect(screen.getByTestId("translateButton")).toBeInTheDocument()
-  })
+test('renders Translate Button successfully', () => {
+  render(<SubmissionPage />)
+  expect(screen.getByTestId("translateButton")).toBeInTheDocument()
+})
 
-  test('renders input copy Button successfully', () => {
-    render(<SubmissionPage />)
-    expect(screen.getByTestId("inputCopy")).toBeInTheDocument()
-  })
+test('renders input copy Button successfully', () => {
+  render(<SubmissionPage />)
+  expect(screen.getByTestId("inputCopy")).toBeInTheDocument()
+})
 
-  test('renders input Editor successfully', () => {
-    render(<SubmissionPage />)
-    expect(screen.getByTestId("inputEditor")).toBeInTheDocument()
-  })
+test('renders input Editor successfully', () => {
+  render(<SubmissionPage />)
+  expect(screen.getByTestId("inputEditor")).toBeInTheDocument()
+})
 
-  // RENDER TESTS AFTER CLICKING THE TRANSLATE BUTTON
-  test('renders output Editor when Translate Button clicked successfully', () => {
-    render(<SubmissionPage />)
-    const button = screen.getByTestId("translateButton");
-    fireEvent.click(button);
-    expect(screen.getByTestId("outputEditor")).toBeInTheDocument()
-  })
+// RENDER TESTS AFTER CLICKING THE TRANSLATE BUTTON
+test('renders output Editor when Translate Button clicked successfully', async() => {
+  render(<SubmissionPage />)
+  const button = screen.getByTestId("translateButton");
+  fireEvent.click(button);
+  await waitFor(() => expect(screen.getByTestId("outputEditor")).toBeInTheDocument())
+})
 
-  test('renders output Copy Button when Translate Button clicked successfully', () => {
-    render(<SubmissionPage />)
-    const button = screen.getByTestId("translateButton");
-    fireEvent.click(button);
-    expect(screen.getByTestId("outputCopy")).toBeInTheDocument()
-  })
+test('renders output Copy Button when Translate Button clicked successfully', async() => {
+  render(<SubmissionPage />)
+  const button = screen.getByTestId("translateButton");
+  fireEvent.click(button);
+  await waitFor(() => expect(screen.getByTestId("outputCopy")).toBeInTheDocument())
+})
 
-  test('renders output Download Button when Translate Button clicked successfully', () => {
-    render(<SubmissionPage />)
-    const button = screen.getByTestId("translateButton");
-    fireEvent.click(button);
-    expect(screen.getByTestId("downloadButton")).toBeInTheDocument()
-  })
+test('renders output Download Button when Translate Button clicked successfully', async () => {
+  render(<SubmissionPage />)
+  const button = screen.getByTestId("translateButton");
+  fireEvent.click(button);
+  await waitFor(() => expect(screen.getByTestId("downloadButton")).toBeInTheDocument())
 })
 
 // BUTTON TESTS
@@ -79,27 +117,37 @@ test('input copy Button functions correctly', () => {
   expect(navigator.clipboard.writeText).toHaveBeenCalledWith("// write some code...");
 });
 
-test('output copy Button functions correctly', () => {
+test('output copy Button functions correctly', async() => {
   render(<SubmissionPage />)
   const translateBtn = screen.getByTestId("translateButton");
-  fireEvent.click(translateBtn);
+  await waitFor(() => fireEvent.click(translateBtn));
+  await waitFor(() => expect(screen.getByTestId("outputCopy")).toBeInTheDocument());
   const outputCopyBtn = screen.getByTestId('outputCopy');
   fireEvent.click(outputCopyBtn);
-  expect(navigator.clipboard.writeText).toHaveBeenCalledWith("# your new code will be here...");
+  await waitFor(() => expect(navigator.clipboard.writeText).toHaveBeenCalledWith("translated code"));
 });
 
-test('input Upload Button functions correctly', () => {
+test('input Upload Button functions correctly', async() => {
   render(<SubmissionPage defaultReadInputFile={readInputFile}/>);
   const button = screen.getByTestId("uploadButton");
   fireEvent.click(button);
-  expect(readInputFile).toHaveBeenCalled();
+  await waitFor(() => expect(readInputFile).toHaveBeenCalled());
 });
 
-test('output Download Button functions correctly', () => {
+test('output Download Button functions correctly', async() => {
   render(<SubmissionPage defaultDownloadTextAsFile={downloadTextAsFile}/>)
   const translateBtn = screen.getByTestId("translateButton");
-  fireEvent.click(translateBtn);
+  await waitFor(() => fireEvent.click(translateBtn));
+  await waitFor(() => expect(screen.getByTestId("downloadButton")).toBeInTheDocument());
   const outputCopyBtn = screen.getByTestId('downloadButton');
   fireEvent.click(outputCopyBtn);
-  expect(downloadTextAsFile).toHaveBeenCalled();
+  await waitFor(() => expect(downloadTextAsFile).toHaveBeenCalled());
 });
+
+// test('Successful translation notification', async() => {
+//   jest.clearAllTimers();
+//   render(<SubmissionPage />)
+//   const translateBtn = screen.getByTestId("translateButton");
+//   fireEvent.click(translateBtn);
+//   expect(await screen.getByText("Code translated successfully")).toBeInTheDocument();
+// })

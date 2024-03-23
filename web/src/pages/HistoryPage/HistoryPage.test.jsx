@@ -1,5 +1,4 @@
-import { render, waitFor } from '@redwoodjs/testing/web'
-
+import { render, waitFor, screen } from '@redwoodjs/testing/web'
 import HistoryPage from './HistoryPage'
 
 //   Improve this test with help from the Redwood Testing Doc:
@@ -15,6 +14,14 @@ describe('HistoryPage', () => {
         render(<HistoryPage />)
       }).not.toThrow()
     })
-    
+  })
+
+  test('renders Title successfully', async () => {
+    mockCurrentUser({sub: "auth0|12345678901234"});
+    render(<HistoryPage />)
+
+    await waitFor(() => {
+      expect(screen.getByTestId("title")).toBeInTheDocument()
+    })
   })
 })
