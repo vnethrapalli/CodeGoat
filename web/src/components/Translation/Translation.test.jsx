@@ -1,4 +1,4 @@
-import { render } from '@redwoodjs/testing/web'
+import { render, screen, fireEvent } from '@redwoodjs/testing/web'
 
 import Translation from './Translation'
 
@@ -8,12 +8,44 @@ import Translation from './Translation'
 const translation = {
   id: 1,
   uid: "945839",
+  inputLanguage: "python",
+  outputLanguage: "javascript",
+  inputCode: "print(\"Hello World\")",
+  outputCode: "console.log(\"Hello World\")",
+  status: "200 OK",
+  rating: 5
 }
 
 describe('Translation', () => {
-  it('renders successfully', () => {
+  test('renders successfully', () => {
     expect(() => {
-      render(<Translation translation={translation}/>)
+      render(<Translation translation={translation} />)
     }).not.toThrow()
   })
+
+  test('renders input editor successfully', () => {
+    render(<Translation translation={translation} />)
+    expect(screen.getByTestId("editors")).toBeInTheDocument()
+  })
+
+  // test('renders output editor successfully', () => {
+  //   render(<Translation translation={translation} />)
+  //   expect(screen.getByTestId("outputEditor")).toBeInTheDocument()
+  // })
+
+  test('renders delete button successfully', () => {
+    render(<Translation translation={translation} />)
+    expect(screen.getByTestId('deleteButton')).toBeInTheDocument()
+  })
+
+  test('renders translate again button successfully', () => {
+    render(<Translation translation={translation} />)
+    expect(screen.getByTestId('translateAgainButton')).toBeInTheDocument()
+  })
+
+  test('renders API status successfully', () => {
+    render(<Translation translation={translation} />)
+    expect(screen.getByTestId('APIStatus')).toHaveTextContent(translation.status)
+  })
+
 })

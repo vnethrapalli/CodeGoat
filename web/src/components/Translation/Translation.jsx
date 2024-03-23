@@ -41,10 +41,11 @@ const Translation = ({ translation }) => {
 
   return (
     <Box sx={{ color: theme.palette.text.primary }}>
-      <Box sx={{ display: 'flex', alignContent: 'center', justifyContent: 'space-between' }}>
+      <Box data-testid="editors" sx={{ display: 'flex', alignContent: 'center', justifyContent: 'space-between' }}>
         <Editor
           height='500px'
           width="45%"
+          data-testid="inputEditor"
           m='10px'
           language={translation.inputLanguage}
           defaultValue="# input code"
@@ -57,8 +58,9 @@ const Translation = ({ translation }) => {
         <Editor
           height='500px'
           width="45%"
+          data-testid="outputEditor"
           language={translation.outputLanguage}
-          defaultValue="# input code"
+          defaultValue="# output code"
           value={translation.outputCode}
           theme="vs-dark"
           onMount={handleEditorDidMount}
@@ -68,7 +70,7 @@ const Translation = ({ translation }) => {
 
       <Box sx={{ marginTop: '10px', marginBottom: '5px', display: 'flex', alignContent: 'center'}}>
 
-        <Typography>
+        <Typography data-testid="APIStatus">
           API Status: {translation.status}
         </Typography>
 
@@ -98,7 +100,7 @@ const Translation = ({ translation }) => {
         >
           <IconButton
             variant="text"
-            data-testid="deleteButton"
+            data-testid="translateAgainButton"
             sx={{
               alignSelf: 'flex-end',
               fontSize: '16px',

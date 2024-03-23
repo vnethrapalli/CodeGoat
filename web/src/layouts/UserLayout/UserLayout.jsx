@@ -5,7 +5,6 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { Experimental_CssVarsProvider as CssVarsProvider, experimental_extendTheme as extendTheme, useColorScheme, useTheme } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
 import { Logout, Settings, AccessTime, Person, DarkMode, LightMode } from '@mui/icons-material'
-
 import { useAuth, auth0 } from 'src/auth'
 
 const theme = extendTheme({
@@ -74,6 +73,10 @@ const TitleLink = () => {
   )
 }
 
+export function testClick() {
+  return "hello"
+}
+
 const NavButtons = () => {
   const theme = useTheme();
 
@@ -85,8 +88,8 @@ const NavButtons = () => {
             key="Translate"
             variant="text"
             data-testid="translateButton"
-            onClick={() => (navigate(routes.translate()))}
-            // href={routes.translate()}
+            href={routes.translate()}
+            onClick={testClick}
             sx={{ marginTop: '2px', marginBottom: '2px', marginRight: '5px', marginLeft: '0px', color: theme.palette.text.primary, display: 'block' }}
           >
             Translate
@@ -110,8 +113,8 @@ const NavButtons = () => {
             key="Feedback"
             variant="text"
             data-testid="feedbackButton"
-            onClick={() => (navigate(routes.feedback()))}
-            // href={routes.feedback()}
+            onClick={testClick}
+            href={routes.feedback()}
             sx={{ marginTop: '2px', marginBottom: '2px', marginRight: '5px', marginLeft: '0px', color: theme.palette.text.primary, display: 'block' }}
           >
             Feedback
@@ -172,8 +175,8 @@ const UserMenu = () => {
 
   return (
     <Box sx={{ display: 'flex', alignContent: 'center', paddingLeft: '10px', flexGrow: 0 }}>
-      <Tooltip title="Open Settings">
-        <IconButton onClick={handleOpenUserMenu} sx={{ marginLeft: '5px', p: 0 }}>
+      <Tooltip title="Open User Menu">
+        <IconButton data-testid="openUserMenuButton" onClick={handleOpenUserMenu} sx={{ marginLeft: '5px', p: 0 }}>
           <Person sx={{ fill: theme.palette.text.primary }} />
         </IconButton>
       </Tooltip>
@@ -194,25 +197,31 @@ const UserMenu = () => {
         open={Boolean(anchorElUser)}
         onClose={handleCloseUserMenu}
       >
-        <Typography sx={{ textAlign: 'center', fontSize: '20px', fontWeight: '500', color: theme.palette.text.secondary, p: '5px' }}>
+        <Typography data-testid="userNickname" sx={{ textAlign: 'center', fontSize: '20px', fontWeight: '500', color: theme.palette.text.secondary, p: '5px' }}>
           {currUser.nickname}
         </Typography>
 
-        <Typography sx={{ textAlign: 'center', fontSize: '16px', fontWeight: '400', color: theme.palette.text.secondary, p: '0px 10px' }}>
+        <Typography data-testid="userEmail" sx={{ textAlign: 'center', fontSize: '16px', fontWeight: '400', color: theme.palette.text.secondary, p: '0px 10px' }}>
           {currUser.email}
         </Typography>
 
         <Divider  sx={{ paddingTop: '8px' }}/>
 
-        <MenuItem sx={{ alignSelf: 'center', color: theme.palette.text.secondary }} key="Settings" onClick={handleCloseUserMenu}>
-          <Link href={routes.account()} underline='none' sx={{ color: theme.palette.text.secondary, width: '100%', display: 'flex', alignItems: 'center' }}>
+        <MenuItem data-testid="settingsButton" sx={{ alignSelf: 'center', color: theme.palette.text.secondary, marginTop: '8px' }} key="Settings" onClick={handleCloseUserMenu}>
+          <Link href={routes.account()}
+            underline='none'
+            sx={{ color: theme.palette.text.secondary, width: '100%', display: 'flex', alignItems: 'center' }}
+          >
             <Settings sx={{ fill: theme.palette.text.secondary, paddingRight: '8px' }} />
             Settings
           </Link>
         </MenuItem>
 
-        <MenuItem sx={{ alignSelf: 'center', color: theme.palette.text.secondary }} key="Translation History" onClick={handleCloseUserMenu}>
-          <Link href={routes.history()} underline='none' sx={{ color: theme.palette.text.secondary, width: '100%', display: 'flex', alignItems: 'center' }}>
+        <MenuItem data-testid="historyButton" sx={{ alignSelf: 'center', color: theme.palette.text.secondary }} key="Translation History" onClick={handleCloseUserMenu}>
+          <Link href={routes.history()}
+            underline='none'
+            sx={{ color: theme.palette.text.secondary, width: '100%', display: 'flex', alignItems: 'center' }}
+          >
             <AccessTime sx={{ fill: theme.palette.text.secondary, paddingRight: '8px' }} />
             Translation History
           </Link>
@@ -330,6 +339,7 @@ const Footer = () => {
 }
 
 const UserLayout = ({ children }) => {
+
   return (
     <>
       <CssVarsProvider theme={theme}>

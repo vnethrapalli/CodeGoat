@@ -15,5 +15,6 @@ describe('HistoryPage', () => {
         render(<HistoryPage />)
       }).not.toThrow()
     })
+    
   })
 })

@@ -25,8 +25,9 @@ const Pagination = ({ count }) => {
     }
 
     items.push(
-      <Tooltip title={toolTipString}>
-        <Button variant="text" onClick={() => (navigate(routes.history({ page: i + 1 })))}
+      <Tooltip key={i+1} title={toolTipString}>
+        <Button data-testid="pageButton" variant="text"
+        onClick={() => (navigate(routes.history({ page: i + 1 })))}
         sx={{
           width: '10px',
           backgroundColor: backgroundCol,
@@ -36,7 +37,7 @@ const Pagination = ({ count }) => {
             color: textCol,
           },
           }}>
-          <Typography data-testid="titleLink" component="span"
+          <Typography component="span"
             sx={{
               // color: theme.palette.text.secondary,
               textDecoration: 'none',
