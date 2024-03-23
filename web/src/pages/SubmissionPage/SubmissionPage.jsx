@@ -145,10 +145,42 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
           outputLanguage: outputLanguage
         })
       });
-      let response = await translation.json();
+      let response = await translation;
+      let status = response.status;
+      response = await response.json();
       setOutputCodeValue(response.data);
       queueCount--;
-      toast.success("Translation completed! \nQueued Requests: " + queueCount.toString(), {duration: 1200});
+      if(status === 200) {
+        toast.success("Code translated successfully! \nQueued Requests: " + queueCount.toString(), { duration: 1500 });
+        setOutputCodeValue(response.data);
+      } else {
+        switch(status) {
+          case 429:
+            toast.error("The API has reached its rate limit. Please try again later.", { duration: 2500 });
+            break;
+          case 400:
+            toast.error("There was an error in the communication between the backend and API. Please try again.", { duration: 2500 });
+            break;
+          case 403:
+            toast.error("The length of the code is too long. Please shorten the code and try again.", { duration: 2500 });
+            break;
+          case 401:
+            toast.error("There was an error on the backend. Please try again later.", { duration: 2500 });
+            break;
+          case 404:
+            toast.error("The GPT API is unavalaible", { duration: 2500 });
+            break;
+          case 500:
+            toast.error("There was an error on the API side. Please try again.", { duration: 2500 });
+            break;
+          case 405:
+            toast.error("This action is not permitted by the API. Please try again.", { duration: 2500 });
+            break;
+          default:
+            toast.error("Error translating code.", { duration: 2500 });
+            break;
+        }
+      }
     }
 
     return (
