@@ -13,12 +13,6 @@ describe('Pagination', () => {
   })
 
   test('renders page buttons successfully', async () => {
-    render(<Pagination count={0} />)
-
-    expect(screen.findByTestId('pageButton')).toEqual({})
-  })
-
-  test('renders page buttons successfully', async () => {
     render(<Pagination count={13} />)
 
     const listPages = screen.getAllByTestId('pageButton')

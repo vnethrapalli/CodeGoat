@@ -12,7 +12,7 @@ const theme = extendTheme({
     light: {
       palette: {
         primary: {
-          main: "#F1FADA"
+          main: "#265073"
         },
         secondary: {
           main: "#2D9596"
@@ -64,7 +64,7 @@ const TitleLink = () => {
         }}
       >
         <Tooltip title='Go Home'>
-          <Link href={routes.home()} underline="none">
+          <Link href={routes.home()} underline="none" sx={{ color: theme.palette.text.primary }}>
             CodeGoat
           </Link>
         </Tooltip>
@@ -162,8 +162,14 @@ const UserMenu = () => {
     setAnchorElUser(event.currentTarget);
   };
 
+  const logout = async () => {
+    await logOut().then(() => {
+      localStorage.removeItem('user')
+    })
+  }
+
   const handleCloseUserMenuSignOut = () => {
-    logOut();
+    logout();
     setAnchorElNav(null);
   };
 
@@ -208,7 +214,7 @@ const UserMenu = () => {
         <Divider  sx={{ paddingTop: '8px' }}/>
 
         <MenuItem data-testid="settingsButton" sx={{ alignSelf: 'center', color: theme.palette.text.secondary, marginTop: '8px' }} key="Settings" onClick={handleCloseUserMenu}>
-          <Link href={routes.account()}
+          <Link href={routes.userAccount()}
             underline='none'
             sx={{ color: theme.palette.text.secondary, width: '100%', display: 'flex', alignItems: 'center' }}
           >
@@ -240,19 +246,30 @@ const UserMenu = () => {
 
 const UserButtons = () => {
   const theme = useTheme();
-  const { isAuthenticated, signUp, logOut, loading } = useAuth()
+  const { isAuthenticated, signUp, logOut, loading, userMetadata } = useAuth()
+  const [isAuth, setIsAuth] = React.useState(isAuthenticated)
 
-  if(loading) {
+  React.useEffect(() => {
+    if(isAuthenticated) {
+      setIsAuth(true)
+      if (localStorage.getItem('user') === null) {
+        auth0.getUser().then(user => {
+          delete user.updated_at
+          delete user.email_verified
+          localStorage.setItem('user', JSON.stringify(user))
+        })
+      }
+    }
+  }, [loading])
+
+  if (loading) {
     return null
   }
-
-  const [isAuth, setIsAuth] = React.useState(isAuthenticated)
 
   const login = async () => {
     await auth0.loginWithPopup().then(t => {
       setIsAuth(true)
       auth0.getUser().then(user => {
-        console.log(user);
         delete user.updated_at
         delete user.email_verified
         localStorage.setItem('user', JSON.stringify(user))
@@ -271,7 +288,7 @@ const UserButtons = () => {
         data-testid="loginButton"
         key="Log In"
         variant="text"
-        sx={{ backgroundColor: theme.palette.primary.main, color: "#265073", height: "30px", marginLeft: '14px', marginRight: '0px', borderRadius: '6px', alignSelf: 'center',
+        sx={{ backgroundColor: theme.palette.text.primary, color: "#265073", height: "30px", marginLeft: '14px', marginRight: '0px', borderRadius: '6px', alignSelf: 'center',
           '&:hover': {
             backgroundColor: '#F1FADA',
             color: "#265073",
@@ -298,6 +315,11 @@ const UserButtons = () => {
 
       {isAuth && <UserMenu />}
 
+      {/* {isAuth && <Tooltip title='Account Management'>
+        <IconButton data-testid="accountButton" sx={{ width: '10%'}} href={routes.userAccount()}>
+          <AccountBoxIcon style={{fill: theme.palette.text.primary}} sx={{fontSize: 35}} />
+        </IconButton>
+      </Tooltip>} */}
     </Grid>
   )
 }

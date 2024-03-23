@@ -1,4 +1,4 @@
-import { Metadata, useMutation} from '@redwoodjs/web';
+import { Metadata, useMutation, useQuery} from '@redwoodjs/web';
 import { Stack, Box, Button, FormControl, InputLabel, Select, MenuItem, Divider } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import DownloadIcon from '@mui/icons-material/Download';
@@ -8,6 +8,7 @@ import Editor from '@monaco-editor/react';
 import React, { useEffect, useRef } from 'react';
 import { auth0 } from 'src/auth'
 import { useParams } from '@redwoodjs/router'
+import { ConnectingAirportsOutlined } from '@mui/icons-material';
 
 const CREATE_TRANSLATION = gql`
   mutation CreateTranslationMutation($input: CreateTranslationInput!) {
@@ -22,6 +23,7 @@ const CREATE_TRANSLATION = gql`
     }
   }
 `
+
 
 export const languages = [
   {dropdownItem: "C++", langCode: "cpp"},
@@ -41,11 +43,13 @@ const extensions = {
   "typescript": ".ts"
 };
 
-const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }, props) => {
+
+const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => {
   const [inputCodeValue, setInputCodeValue] = React.useState("// write some code...");
   const [outputCodeValue, setOutputCodeValue] = React.useState("# your new code will be here...");
   const [inputLanguage, setInputLanguage] = React.useState("javascript");
   const [outputLanguage, setOutputLanguage] = React.useState("python");
+  const [status, setStatus] = React.useState("500 Server Error")
   const [output, setOutput] = React.useState(false);
   const [userId, setUserId] = React.useState()
   const theme = useTheme();
@@ -177,12 +181,8 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }, pro
     })
 
     const translate = () => {
-      createTranslation({ variables: { input: { "uid": userId, "inputLanguage": inputLanguage, "outputLanguage": outputLanguage, "inputCode": inputCodeValue, "outputCode": outputCodeValue, "rating": 5, status: "200 OK" }}});
+      createTranslation({ variables: { input: { "uid": userId, "inputLanguage": inputLanguage, "outputLanguage": outputLanguage, "inputCode": inputCodeValue, "outputCode": outputCodeValue, "rating": 5, status: status }}});
     }
-
-    const clicked = () => {
-      setOutput(true);
-    };
 
     useEffect(()=>{
       if(output){
@@ -192,27 +192,41 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }, pro
 
 
     return (
-      <>
-        <Box textAlign="center" pt={2}>
-          <Button
-            variant="contained"
-            data-testid="translateButton"
-            style={{
-              backgroundColor: theme.palette.secondary.main,
-              color: theme.palette.text.primary,
-              textTransform: 'none'
-            }}
-            sx={{
-              width: "250px",
-              borderRadius: "40px",
-              marginBottom: "25px",
-            }}
-            onClick={clicked}
-          >
-            Translate
-          </Button>
-        </Box>
-      </>
+      <Box textAlign="center" pt={2}>
+        <Button
+          variant="contained"
+          data-testid="translateButton"
+          style={{
+            backgroundColor: theme.palette.secondary.main,
+            color: theme.palette.text.primary,
+            textTransform: 'none'
+          }}
+          sx={{
+            width: "250px",
+            borderRadius: "40px",
+            marginBottom: "25px",
+          }}
+          onClick={async () => {
+            const reqUrl = `http://localhost:8910/.redwood/functions/translate`;
+            const translation = await fetch(reqUrl, {
+              method: "POST",
+              body: JSON.stringify({
+                code: inputCodeValue,
+                inputLanguage: inputLanguage,
+                outputLanguage: outputLanguage
+              })
+            });
+
+            // const reader = translation.body.getReader();
+            let response = await translation.json();
+            setStatus(translation.status + " " + translation.statusText);
+            setOutputCodeValue(response.data);
+            setOutput(true);
+          }}
+        >
+          Translate
+        </Button>
+      </Box>
     );
   }
 
@@ -338,4 +352,5 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }, pro
   );
 }
 
+// {output && <CodeOutputCell code={inputCodeValue} inLang={inputLanguage} outLang={outputLanguage} />}
 export default SubmissionPage;

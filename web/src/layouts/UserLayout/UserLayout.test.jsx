@@ -2,8 +2,8 @@ import { render, screen, fireEvent } from '@redwoodjs/testing/web'
 import mediaQuery from "css-mediaquery";
 
 jest.mock("src/auth.js");
-import { useAuth } from 'src/auth'
 import { navigate, routes } from "@redwoodjs/router";
+import { useAuth, auth0 } from 'src/auth'
 import { mocked } from "jest-mock";
 
 import UserLayout from './UserLayout'
@@ -92,6 +92,8 @@ beforeEach(() => {
   const mockId = "user";
   const mockJson = { data: "json data" };
   setLocalStorage(mockId, mockJson);
+  const mockedAuth0 = mocked(auth0);
+  mockedAuth0.getUser = jest.fn().mockResolvedValue(user);
 });
 
 describe('UserLayout', () => {
