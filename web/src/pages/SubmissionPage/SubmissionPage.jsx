@@ -6,7 +6,7 @@ import UploadFile from '@mui/icons-material/UploadFile';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import Editor from '@monaco-editor/react';
 import React, { useRef } from 'react';
-import { toast } from '@redwoodjs/web/dist/toast';
+import { Toaster, toast } from '@redwoodjs/web/dist/toast';
 
 
 export const languages = [
@@ -308,6 +308,7 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
   return (
     <>
       <Metadata title="Submission" description="Submission page"/>
+      <Toaster />
       <Stack
         direction="column"
         spacing={2}
