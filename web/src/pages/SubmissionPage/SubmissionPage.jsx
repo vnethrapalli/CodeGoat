@@ -1,12 +1,28 @@
-import { Metadata, useQuery } from '@redwoodjs/web';
+import { Metadata, useMutation, useQuery} from '@redwoodjs/web';
 import { Stack, Box, Button, FormControl, InputLabel, Select, MenuItem, Divider } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import DownloadIcon from '@mui/icons-material/Download';
 import UploadFile from '@mui/icons-material/UploadFile';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import Editor from '@monaco-editor/react';
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
+import { auth0 } from 'src/auth'
+import { useParams } from '@redwoodjs/router'
+import { ConnectingAirportsOutlined } from '@mui/icons-material';
 
+const CREATE_TRANSLATION = gql`
+  mutation CreateTranslationMutation($input: CreateTranslationInput!) {
+    createTranslation(input: $input) {
+      uid
+      inputLanguage
+      outputLanguage
+      inputCode
+      outputCode
+      rating
+      status
+    }
+  }
+`
 
 export const languages = [
   {dropdownItem: "C++", langCode: "cpp"},
@@ -16,6 +32,7 @@ export const languages = [
   {dropdownItem: "Python", langCode: "python"},
   {dropdownItem: "TypeScript", langCode: "typescript"},
 ];
+
 const extensions = {
   "cpp": ".cpp",
   "csharp": ".cs",
@@ -31,8 +48,32 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
   const [outputCodeValue, setOutputCodeValue] = React.useState("# your new code will be here...");
   const [inputLanguage, setInputLanguage] = React.useState("javascript");
   const [outputLanguage, setOutputLanguage] = React.useState("python");
+  const [status, setStatus] = React.useState("500 Server Error")
   const [output, setOutput] = React.useState(false);
+  const [userId, setUserId] = React.useState()
   const theme = useTheme();
+
+  const { code, inLang, outLang } = useParams();
+
+  useEffect(()=>{
+    auth0.getUser().then(user => {
+      if(user){
+        setUserId(user.sub);
+      }
+    })
+
+    if(code){
+      setInputCodeValue(code);
+    }
+
+    if(inLang){
+      setInputLanguage(inLang);
+    }
+
+    if(outLang){
+      setOutputLanguage(outLang);
+    }
+  },[])
 
   const CodeBox = ({ codeValue, updateCodeValue, defaultLanguage, language, defaultValue, isInput }) => {
     const editorRef = useRef(null);
@@ -68,6 +109,7 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
     defaultValue: inputCodeValue,
     isInput: true
   });
+
   const codeboxOutput = CodeBox({
     codeValue: outputCodeValue,
     updateCodeValue: (newCodeVal) => setOutputCodeValue(newCodeVal),
@@ -119,6 +161,7 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
                      color: theme.palette.text.secondary,
                   }}
                   value={lang.langCode}
+                  key={lang.langCode}
                 >
                     {lang.dropdownItem}
                 </MenuItem>
@@ -131,43 +174,59 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
   }
 
   const TranslateBtn = () => {
-    return (
-      <>
-        <Box textAlign="center" pt={2}>
-          <Button
-            variant="contained"
-            data-testid="translateButton"
-            style={{
-              backgroundColor: theme.palette.secondary.main,
-              color: theme.palette.text.primary,
-              textTransform: 'none'
-            }}
-            sx={{
-              width: "250px",
-              borderRadius: "40px",
-              marginBottom: "25px",
-            }}
-            onClick={async () => {
-              setOutput(() => true);
-              const reqUrl = `http://localhost:8910/.redwood/functions/translate`;
-              const translation = await fetch(reqUrl, {
-                method: "POST",
-                body: JSON.stringify({
-                  code: inputCodeValue,
-                  inputLanguage: inputLanguage,
-                  outputLanguage: outputLanguage
-                })
-              });
+    const [createTranslation] = useMutation(CREATE_TRANSLATION, {
+      onCompleted: () => {},
+      onError: (err) => {},
+    })
 
-              // const reader = translation.body.getReader();
-              let response = await translation.json();
-              setOutputCodeValue(response.data);
-            }}
-          >
-            Translate
-          </Button>
-        </Box>
-      </>
+    const translate = () => {
+      createTranslation({ variables: { input: { "uid": userId, "inputLanguage": inputLanguage, "outputLanguage": outputLanguage, "inputCode": inputCodeValue, "outputCode": outputCodeValue, "rating": 5, status: status }}});
+    }
+
+    useEffect(()=>{
+      if(output){
+        translate()
+      }
+    },[output])
+
+
+    return (
+      <Box textAlign="center" pt={2}>
+        <Button
+          variant="contained"
+          data-testid="translateButton"
+          style={{
+            backgroundColor: theme.palette.secondary.main,
+            color: theme.palette.text.primary,
+            textTransform: 'none'
+          }}
+          sx={{
+            width: "250px",
+            borderRadius: "40px",
+            marginBottom: "25px",
+          }}
+          onClick={async () => {
+            console.log("hello");
+            const reqUrl = `http://localhost:8910/.redwood/functions/translate`;
+            const translation = await fetch(reqUrl, {
+              method: "POST",
+              body: JSON.stringify({
+                code: inputCodeValue,
+                inputLanguage: inputLanguage,
+                outputLanguage: outputLanguage
+              })
+            });
+
+            // const reader = translation.body.getReader();
+            let response = await translation.json();
+            setStatus(translation.status + " " + translation.statusText);
+            setOutputCodeValue(response.data);
+            setOutput(true);
+          }}
+        >
+          Translate
+        </Button>
+      </Box>
     );
   }
 
@@ -255,7 +314,7 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
         <Stack direction="row" spacing={0} justifyContent="flex-end" alignItems="center">
           <CopyButton editor={codeboxInput} isInput={input}/>
           <Divider orientation="vertical" flexItem style={{ backgroundColor: theme.palette.text.primary, width: '1%' }}/>
-          {input ? <UploadButtonInput/> : <DownloadButton/>}
+          <UploadButtonInput/>
         </Stack>
       </Stack>
     );
@@ -264,9 +323,9 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
   const NoDropdownAndButtons = ({ input }) => {
     return (
       <Stack direction="row" spacing={0} justifyContent="flex-end" alignItems="center">
-        <CopyButton editor={input ? codeboxInput : codeboxOutput}/>
+        <CopyButton editor={input ? codeboxInput : codeboxOutput} isInput={input} />
         <Divider orientation="vertical" flexItem style={{ backgroundColor: theme.palette.text.primary, width: '1%' }}/>
-        {input ? <UploadButtonInput/> : <DownloadButton/>}
+        <DownloadButton/>
       </Stack>
     );
   }
