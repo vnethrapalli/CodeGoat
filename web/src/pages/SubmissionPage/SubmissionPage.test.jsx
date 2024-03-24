@@ -166,10 +166,9 @@ test('Successful translation notification', async() => {
   fetchMock = jest.spyOn(global, "fetch").mockImplementation(assetsFetchMock);
   const {unmount} = render(<SubmissionPage />)
   const translateBtn = screen.getByTestId("translateButton");
-  fireEvent.click(translateBtn);
-  setTimeout(async() => {
-    expect(await screen.getAllByText("Code translated successfully")[0]).toBeInTheDocument();
-  }, 1000);
+  await waitFor(() => fireEvent.click(translateBtn));
+
+  await waitFor(() => expect(screen.getAllByText("Code translated successfully")[0]).toBeInTheDocument())
   unmount();
   jest.clearAllMocks();
 })
@@ -186,10 +185,9 @@ test('Rate limit notification', async() => {
   fetchMock = jest.spyOn(global, "fetch").mockImplementation(assetsFetchMock);
   const {unmount} = render(<SubmissionPage />)
   const translateBtn = screen.getByTestId("translateButton");
-  fireEvent.click(translateBtn);
-  setTimeout(async() => {
-    expect(await screen.getByText("The API has reached its rate limit. Please try again later.")).toBeInTheDocument();
-  }, 1000);
+  await waitFor(() => fireEvent.click(translateBtn));
+
+  await waitFor(() => expect(screen.getByText("The API has reached its rate limit. Please try again later.")).toBeInTheDocument())
   unmount();
   jest.clearAllMocks();
 })
@@ -206,10 +204,8 @@ test('400 notification', async() => {
   fetchMock = jest.spyOn(global, "fetch").mockImplementation(assetsFetchMock);
   const {unmount} = render(<SubmissionPage />)
   const translateBtn = screen.getByTestId("translateButton");
-  fireEvent.click(translateBtn);
-  setTimeout(async() => {
-    expect(await screen.getByText("There was an error in the communication between the backend and API. Please try again.")).toBeInTheDocument();
-  }, 1000);
+  await waitFor(() => fireEvent.click(translateBtn));
+  await waitFor(() => expect(screen.getByText("There was an error in the communication between the backend and API. Please try again.")).toBeInTheDocument())
 
   unmount();
   jest.clearAllMocks();
@@ -218,7 +214,7 @@ test('400 notification', async() => {
 test('403 notification', async() => {
   const assetsFetchMock = async (url) => {
     return {
-      status: 400,
+      status: 403,
       json: () => Promise.resolve({
         data: "translated code"
       })
@@ -227,10 +223,8 @@ test('403 notification', async() => {
   fetchMock = jest.spyOn(global, "fetch").mockImplementation(assetsFetchMock);
   const {unmount} = render(<SubmissionPage />)
   const translateBtn = screen.getByTestId("translateButton");
-  fireEvent.click(translateBtn);
-  setTimeout(async() => {
-    expect(await screen.getByText("The length of the code is too long. Please shorten the code and try again.")).toBeInTheDocument();
-  }, 1000);
+  await waitFor(() => fireEvent.click(translateBtn));
+  await waitFor(() => expect(screen.getByText("The length of the code is too long. Please shorten the code and try again.")).toBeInTheDocument())
 
   unmount();
   jest.clearAllMocks();
@@ -239,7 +233,7 @@ test('403 notification', async() => {
 test('401 notification', async() => {
   const assetsFetchMock = async (url) => {
     return {
-      status: 400,
+      status: 401,
       json: () => Promise.resolve({
         data: "translated code"
       })
@@ -248,10 +242,9 @@ test('401 notification', async() => {
   fetchMock = jest.spyOn(global, "fetch").mockImplementation(assetsFetchMock);
   const {unmount} = render(<SubmissionPage />)
   const translateBtn = screen.getByTestId("translateButton");
-  fireEvent.click(translateBtn);
-  setTimeout(async() => {
-    expect(await screen.getByText("There was an error on the backend. Please try again later.")).toBeInTheDocument();
-  }, 1000);
+  await waitFor(() => fireEvent.click(translateBtn));
+
+  await waitFor(() => expect(screen.getByText("There was an error on the backend. Please try again later.")).toBeInTheDocument())
 
   unmount();
   jest.clearAllMocks();
@@ -260,7 +253,7 @@ test('401 notification', async() => {
 test('404 notification', async() => {
   const assetsFetchMock = async (url) => {
     return {
-      status: 400,
+      status: 404,
       json: () => Promise.resolve({
         data: "translated code"
       })
@@ -269,10 +262,9 @@ test('404 notification', async() => {
   fetchMock = jest.spyOn(global, "fetch").mockImplementation(assetsFetchMock);
   const {unmount} = render(<SubmissionPage />)
   const translateBtn = screen.getByTestId("translateButton");
-  fireEvent.click(translateBtn);
-  setTimeout(async() => {
-    expect(await screen.getByText("The GPT API is unavalaible")).toBeInTheDocument();
-  }, 1000);
+  await waitFor(() => fireEvent.click(translateBtn));
+
+  await waitFor(() => expect(screen.getByText("The GPT API is unavalaible")).toBeInTheDocument())
 
   unmount();
   jest.clearAllMocks();
@@ -281,7 +273,7 @@ test('404 notification', async() => {
 test('500 notification', async() => {
   const assetsFetchMock = async (url) => {
     return {
-      status: 400,
+      status: 500,
       json: () => Promise.resolve({
         data: "translated code"
       })
@@ -290,10 +282,9 @@ test('500 notification', async() => {
   fetchMock = jest.spyOn(global, "fetch").mockImplementation(assetsFetchMock);
   const {unmount} = render(<SubmissionPage />)
   const translateBtn = screen.getByTestId("translateButton");
-  fireEvent.click(translateBtn);
-  setTimeout(async() => {
-    expect(await screen.getByText("There was an error on the API side. Please try again.")).toBeInTheDocument();
-  }, 1000);
+  await waitFor(() => fireEvent.click(translateBtn));
+
+  await waitFor(() => expect(screen.getByText("There was an error on the API side. Please try again.")).toBeInTheDocument())
 
   unmount();
   jest.clearAllMocks();
@@ -302,7 +293,7 @@ test('500 notification', async() => {
 test('405 notification', async() => {
   const assetsFetchMock = async (url) => {
     return {
-      status: 400,
+      status: 405,
       json: () => Promise.resolve({
         data: "translated code"
       })
@@ -311,11 +302,9 @@ test('405 notification', async() => {
   fetchMock = jest.spyOn(global, "fetch").mockImplementation(assetsFetchMock);
   const {unmount} = render(<SubmissionPage />)
   const translateBtn = screen.getByTestId("translateButton");
-  fireEvent.click(translateBtn);
-  setTimeout(async() => {
-    expect(await screen.getByText("This action is not permitted by the API. Please try again.")).toBeInTheDocument();
-  }, 1000);
+  await waitFor(() => fireEvent.click(translateBtn));
 
+  await waitFor(() => expect(screen.getByText("This action is not permitted by the API. Please try again.")).toBeInTheDocument())
   unmount();
   jest.clearAllMocks();
 })
@@ -332,10 +321,9 @@ test('Default error notification', async() => {
   fetchMock = jest.spyOn(global, "fetch").mockImplementation(assetsFetchMock);
   const {unmount} = render(<SubmissionPage />)
   const translateBtn = screen.getByTestId("translateButton");
-  fireEvent.click(translateBtn);
-  setTimeout(async() => {
-    expect(await screen.getByText("Error translating code")).toBeInTheDocument();
-  }, 1000);
+  await waitFor(() => fireEvent.click(translateBtn));
+
+  await waitFor(() => expect(screen.getByText("Error translating code")).toBeInTheDocument())
 
   unmount();
   jest.clearAllMocks();
