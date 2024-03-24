@@ -28,6 +28,8 @@ const extensions = {
 
 let queueCount = 0;
 
+const MAXQUEUE = 5;
+
 const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile, defaultTranslationRequest }) => {
   const [inputCodeValue, setInputCodeValue] = React.useState("// write some code...");
   const [outputCodeValue, setOutputCodeValue] = React.useState("Processing...");
@@ -132,7 +134,18 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile, defau
     )
   }
 
-  const translateRequest = defaultTranslationRequest || (async () => {
+  const translateRequest = defaultTranslationRequest || (async (queueCount) => {
+    let sent = false;
+    if (queueCount < MAXQUEUE) {
+      queueCount++;
+      toast.dismiss();
+      toast.success("Your request has been sent! \nQueued Requests: " + queueCount.toString(), {duration: 1200});
+      sent = true;
+    } else {
+      toast.dismiss();
+      toast.error("Slow down there! I can't afford all those API calls lmao", {duration: 2500});
+      return sent;
+    }
     const reqUrl = `http://localhost:8910/.redwood/functions/translate`;
     const translation = await fetch(reqUrl, {
       method: "POST",
@@ -178,6 +191,7 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile, defau
           break;
       }
     }
+    return sent;
   });
 
   const TranslateBtn = () => {
@@ -203,16 +217,7 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile, defau
               setOutput(() => true);
               setQueue(queue
                 .then(() => {
-                  if (queueCount < 5) {
-                    queueCount++;
-                    toast.dismiss();
-                    toast.success("Your request has been sent! \nQueued Requests: " + queueCount.toString(), {duration: 1200});
-                    translateRequest();
-                  } else {
-                    toast.dismiss();
-                    toast.error("Slow down there! I can't afford all those API calls lmao", {duration: 2500});
-                  }
-
+                  translateRequest(queueCount);
                 })
                 .catch((err) => {console.error(err)})
                 )
@@ -328,6 +333,7 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile, defau
   return (
     <>
       <Metadata title="Submission" description="Submission page"/>
+      <Toaster />
       <Stack
         direction="column"
         spacing={2}
