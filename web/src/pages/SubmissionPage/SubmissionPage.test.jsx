@@ -316,7 +316,7 @@ describe('Notification Tests', () => {
     const translateBtn = screen.getByTestId("translateButton");
     fireEvent.click(translateBtn);
     setTimeout(async() => {
-      expect(await screen.getByText("This action is not permitted by the API. Please try again.")).toBeInTheDocument();
+      expect(await screen.getByText("This action is not permitted by the API. Please try again.").length).toBeGreaterThan(0);
     }, 1000);
 
     unmount();
@@ -348,56 +348,33 @@ describe('Notification Tests', () => {
 
 
 describe('Async and Queueing tests', () => {
+  const translationRequest = jest.fn();
+
   it('sends a toast message on submission', async() => {
-    const assetsFetchMock = async (url) => {
-      return {
-        status: 200,
-        json: () => Promise.resolve({
-          data: "translated code"
-        })
-      }
-    }
-    fetchMock = jest.spyOn(global, "fetch").mockImplementation(assetsFetchMock);
-    const {unmount} = render(<SubmissionPage />)
+    render(<SubmissionPage defaultTranslationRequest={translationRequest} />)
     const translateBtn = screen.getByTestId("translateButton");
     fireEvent.click(translateBtn);
-    setTimeout(async() => {
-      expect(await screen.getAllByText(/Your request has been sent!/i)[0]).toBeInTheDocument();
-    }, 1000);
-    unmount();
-    jest.clearAllMocks();
+
+    await waitFor(() => expect(screen.getAllByText(/Your request has been sent!/i).length).toBeGreaterThan(0));
   })
-  // const translationRequest = jest.fn().mockImplementation((x) => x < 5 ? true : false);
 
-  // it('sends a toast message on submission', async() => {
-  //   render(<SubmissionPage defaultTranslationRequest={translationRequest} />)
-  //   const translateBtn = screen.getByTestId("translateButton");
-  //   fireEvent.click(translateBtn);
+  it('sends a request when queue is empty', async() => {
+    render(<SubmissionPage defaultTranslationRequest={translationRequest} />)
+    const translateBtn = screen.getByTestId("translateButton");
+    fireEvent.click(translateBtn);
 
-  //   await waitFor(() => expect(translationRequest).toHaveReturnedWith(true));
-  // })
+    await waitFor(() => expect(screen.getAllByText(/Your request has been sent!/i).length).toBeGreaterThan(0));
+  })
 
-  // it('sends a toast message on completion', async() => {
-  //   render(<SubmissionPage />)
-  //   const translateBtn = screen.getByTestId("translateButton");
-  //   await waitFor(() => fireEvent.click(translateBtn));
+  it('sends a request when queue is not empty, not full', async() => {
+    render(<SubmissionPage defaultTranslationRequest={translationRequest} />)
+    const translateBtn = screen.getByTestId("translateButton");
+    fireEvent.click(translateBtn);
+    fireEvent.click(translateBtn);
+    fireEvent.click(translateBtn);
 
-  //   setTimeout(() => {
-  //     expect(screen.getByText('Code translated successfully!')).toBeInTheDocument()
-  //   }, 5000);
-  // })
-
-  // it('sends a request when queue is empty', async() => {
-  //   render(<SubmissionPage />)
-  //   const translateBtn = screen.getByTestId("translateButton");
-  //   await waitFor(() => fireEvent.click(translateBtn));
-  // })
-
-  // it('sends a request when queue is not empty, not full', async() => {
-  //   render(<SubmissionPage />)
-  //   const translateBtn = screen.getByTestId("translateButton");
-  //   await waitFor(() => fireEvent.click(translateBtn));
-  // })
+    await waitFor(() => expect(screen.getAllByText(/Your request has been sent!/i).length).toBeGreaterThan(2));
+  })
 
   // it('rejects a request when queue is full', async() => {
   //   render(<SubmissionPage />)
