@@ -42,13 +42,15 @@ Object.defineProperty(window, 'matchMedia', {
 });
 
 // INITIAL RENDER TESTS
-describe('Render Tests', () => {
+describe('SubmissionPage', () => {
   it('renders successfully', () => {
     expect(() => {
       render(<SubmissionPage />)
     }).not.toThrow()
   })
+})
 
+describe('Render Tests', () => {
   test('renders Translate Button successfully', () => {
     const {unmount} = render(<SubmissionPage />)
     expect(screen.getByTestId("translateButton")).toBeInTheDocument()
@@ -93,30 +95,28 @@ describe('Render Tests', () => {
   })
 })
 
-// BUTTON TESTS
-
-// some variables
-const originalClipboard = { ...global.navigator.clipboard };
-beforeEach(() => {
-  const mockClipboard = {
-    writeText: jest.fn(),
-  };
-  global.navigator.clipboard = mockClipboard;
-});
-
-afterEach(() => {
-  jest.resetAllMocks();
-  global.navigator.clipboard = originalClipboard;
-});
-
-
-// upload test variables
-const readInputFile = jest.fn();
-
-// download test variables
-const downloadTextAsFile = jest.fn();
-
 describe('Button Tests', () => {
+  // some variables
+  const originalClipboard = { ...global.navigator.clipboard };
+  beforeEach(() => {
+    const mockClipboard = {
+      writeText: jest.fn(),
+    };
+    global.navigator.clipboard = mockClipboard;
+  });
+
+  afterEach(() => {
+    jest.resetAllMocks();
+    global.navigator.clipboard = originalClipboard;
+  });
+
+
+  // upload test variables
+  const readInputFile = jest.fn();
+
+  // download test variables
+  const downloadTextAsFile = jest.fn();
+
   test('input copy Button functions correctly', () => {
     const {unmount} = render(<SubmissionPage/>)
     const button = screen.getByTestId("inputCopy");
@@ -131,7 +131,7 @@ describe('Button Tests', () => {
     await waitFor(() => fireEvent.click(translateBtn));
     await waitFor(() => expect(screen.getByTestId("outputCopy")).toBeInTheDocument());
     const outputCopyBtn = screen.getByTestId('outputCopy');
-    fireEvent.click(outputCopyBtn);
+    fireEvent.click(outputCopyBtn)
     await waitFor(() => expect(navigator.clipboard.writeText).toHaveBeenCalledWith("translated code"));
     unmount();
   });
@@ -169,10 +169,9 @@ describe('Notification Tests', () => {
     fetchMock = jest.spyOn(global, "fetch").mockImplementation(assetsFetchMock);
     const {unmount} = render(<SubmissionPage />)
     const translateBtn = screen.getByTestId("translateButton");
-    fireEvent.click(translateBtn);
-    setTimeout(async() => {
-      expect(await screen.getAllByText("Code translated successfully")[0]).toBeInTheDocument();
-    }, 1000);
+    await waitFor(() => fireEvent.click(translateBtn));
+
+    await waitFor(() => expect(screen.getAllByText(/Code translated successfully/i)[0]).toBeInTheDocument())
     unmount();
     jest.clearAllMocks();
   })
@@ -189,10 +188,9 @@ describe('Notification Tests', () => {
     fetchMock = jest.spyOn(global, "fetch").mockImplementation(assetsFetchMock);
     const {unmount} = render(<SubmissionPage />)
     const translateBtn = screen.getByTestId("translateButton");
-    fireEvent.click(translateBtn);
-    setTimeout(async() => {
-      expect(await screen.getByText("The API has reached its rate limit. Please try again later.")).toBeInTheDocument();
-    }, 1000);
+    await waitFor(() => fireEvent.click(translateBtn));
+
+    await waitFor(() => expect(screen.getByText(/The API has reached its rate limit. Please try again later/i)).toBeInTheDocument())
     unmount();
     jest.clearAllMocks();
   })
@@ -209,10 +207,8 @@ describe('Notification Tests', () => {
     fetchMock = jest.spyOn(global, "fetch").mockImplementation(assetsFetchMock);
     const {unmount} = render(<SubmissionPage />)
     const translateBtn = screen.getByTestId("translateButton");
-    fireEvent.click(translateBtn);
-    setTimeout(async() => {
-      expect(await screen.getByText("There was an error in the communication between the backend and API. Please try again.")).toBeInTheDocument();
-    }, 1000);
+    await waitFor(() => fireEvent.click(translateBtn));
+    await waitFor(() => expect(screen.getByText(/There was an error in the communication between the backend and API. Please try again/i)).toBeInTheDocument())
 
     unmount();
     jest.clearAllMocks();
@@ -221,7 +217,7 @@ describe('Notification Tests', () => {
   test('403 notification', async() => {
     const assetsFetchMock = async (url) => {
       return {
-        status: 400,
+        status: 403,
         json: () => Promise.resolve({
           data: "translated code"
         })
@@ -230,10 +226,8 @@ describe('Notification Tests', () => {
     fetchMock = jest.spyOn(global, "fetch").mockImplementation(assetsFetchMock);
     const {unmount} = render(<SubmissionPage />)
     const translateBtn = screen.getByTestId("translateButton");
-    fireEvent.click(translateBtn);
-    setTimeout(async() => {
-      expect(await screen.getByText("The length of the code is too long. Please shorten the code and try again.")).toBeInTheDocument();
-    }, 1000);
+    await waitFor(() => fireEvent.click(translateBtn));
+    await waitFor(() => expect(screen.getByText(/The length of the code is too long. Please shorten the code and try again/i)).toBeInTheDocument())
 
     unmount();
     jest.clearAllMocks();
@@ -242,7 +236,7 @@ describe('Notification Tests', () => {
   test('401 notification', async() => {
     const assetsFetchMock = async (url) => {
       return {
-        status: 400,
+        status: 401,
         json: () => Promise.resolve({
           data: "translated code"
         })
@@ -251,10 +245,9 @@ describe('Notification Tests', () => {
     fetchMock = jest.spyOn(global, "fetch").mockImplementation(assetsFetchMock);
     const {unmount} = render(<SubmissionPage />)
     const translateBtn = screen.getByTestId("translateButton");
-    fireEvent.click(translateBtn);
-    setTimeout(async() => {
-      expect(await screen.getByText("There was an error on the backend. Please try again later.")).toBeInTheDocument();
-    }, 1000);
+    await waitFor(() => fireEvent.click(translateBtn));
+
+    await waitFor(() => expect(screen.getByText(/There was an error on the backend. Please try again later/i)).toBeInTheDocument())
 
     unmount();
     jest.clearAllMocks();
@@ -263,7 +256,7 @@ describe('Notification Tests', () => {
   test('404 notification', async() => {
     const assetsFetchMock = async (url) => {
       return {
-        status: 400,
+        status: 404,
         json: () => Promise.resolve({
           data: "translated code"
         })
@@ -272,10 +265,9 @@ describe('Notification Tests', () => {
     fetchMock = jest.spyOn(global, "fetch").mockImplementation(assetsFetchMock);
     const {unmount} = render(<SubmissionPage />)
     const translateBtn = screen.getByTestId("translateButton");
-    fireEvent.click(translateBtn);
-    setTimeout(async() => {
-      expect(await screen.getByText("The GPT API is unavalaible")).toBeInTheDocument();
-    }, 1000);
+    await waitFor(() => fireEvent.click(translateBtn));
+
+    await waitFor(() => expect(screen.getByText(/The GPT API is unavalaible/i)).toBeInTheDocument())
 
     unmount();
     jest.clearAllMocks();
@@ -284,7 +276,7 @@ describe('Notification Tests', () => {
   test('500 notification', async() => {
     const assetsFetchMock = async (url) => {
       return {
-        status: 400,
+        status: 500,
         json: () => Promise.resolve({
           data: "translated code"
         })
@@ -293,10 +285,9 @@ describe('Notification Tests', () => {
     fetchMock = jest.spyOn(global, "fetch").mockImplementation(assetsFetchMock);
     const {unmount} = render(<SubmissionPage />)
     const translateBtn = screen.getByTestId("translateButton");
-    fireEvent.click(translateBtn);
-    setTimeout(async() => {
-      expect(await screen.getByText("There was an error on the API side. Please try again.")).toBeInTheDocument();
-    }, 1000);
+    await waitFor(() => fireEvent.click(translateBtn));
+
+    await waitFor(() => expect(screen.getByText(/There was an error on the API side. Please try again/i)).toBeInTheDocument())
 
     unmount();
     jest.clearAllMocks();
@@ -305,7 +296,7 @@ describe('Notification Tests', () => {
   test('405 notification', async() => {
     const assetsFetchMock = async (url) => {
       return {
-        status: 400,
+        status: 405,
         json: () => Promise.resolve({
           data: "translated code"
         })
@@ -314,11 +305,9 @@ describe('Notification Tests', () => {
     fetchMock = jest.spyOn(global, "fetch").mockImplementation(assetsFetchMock);
     const {unmount} = render(<SubmissionPage />)
     const translateBtn = screen.getByTestId("translateButton");
-    fireEvent.click(translateBtn);
-    setTimeout(async() => {
-      expect(await screen.getByText("This action is not permitted by the API. Please try again.").length).toBeGreaterThan(0);
-    }, 1000);
+    await waitFor(() => fireEvent.click(translateBtn));
 
+    await waitFor(() => expect(screen.getByText(/This action is not permitted by the API. Please try again/i)).toBeInTheDocument())
     unmount();
     jest.clearAllMocks();
   })
@@ -335,50 +324,80 @@ describe('Notification Tests', () => {
     fetchMock = jest.spyOn(global, "fetch").mockImplementation(assetsFetchMock);
     const {unmount} = render(<SubmissionPage />)
     const translateBtn = screen.getByTestId("translateButton");
-    fireEvent.click(translateBtn);
-    setTimeout(async() => {
-      expect(await screen.getByText("Error translating code")).toBeInTheDocument();
-    }, 1000);
+    await waitFor(() => fireEvent.click(translateBtn));
+
+    await waitFor(() => expect(screen.getByText(/Error translating code/i)).toBeInTheDocument())
 
     unmount();
     jest.clearAllMocks();
   })
 })
 
-
-
-describe('Async and Queueing tests', () => {
-  const translationRequest = jest.fn();
-
-  it('sends a toast message on submission', async() => {
-    render(<SubmissionPage defaultTranslationRequest={translationRequest} />)
+describe("Queuing Tests", () => {
+  it('sends a message when translation is initially requested and completed, with differing queue sizes', async() => {
+    const assetsFetchMock = async (url) => {
+      return {
+        status: 200,
+        json: () => Promise.resolve({
+          data: "translated code"
+        })
+      }
+    }
+    fetchMock = jest.spyOn(global, "fetch").mockImplementation(assetsFetchMock);
+    const {unmount} = render(<SubmissionPage />)
     const translateBtn = screen.getByTestId("translateButton");
-    fireEvent.click(translateBtn);
+    await waitFor(() => fireEvent.click(translateBtn));
 
-    await waitFor(() => expect(screen.getAllByText(/Your request has been sent!/i).length).toBeGreaterThan(0));
+    // should queue it, then remove it
+    await waitFor(() => expect(screen.getAllByText(/Queued Requests: 1/i)[0]).toBeInTheDocument())
+    await waitFor(() => expect(screen.getAllByText(/Queued Requests: 0/i)[0]).toBeInTheDocument())
+    unmount();
+    jest.clearAllMocks();
   })
 
-  it('sends a request when queue is empty', async() => {
-    render(<SubmissionPage defaultTranslationRequest={translationRequest} />)
+  it('adds a request to queue when queue is empty', async() => {
+    const assetsFetchMock = async (url) => {
+      return {
+        status: 200,
+        json: () => Promise.resolve({
+          data: "translated code"
+        })
+      }
+    }
+    fetchMock = jest.spyOn(global, "fetch").mockImplementation(assetsFetchMock);
+    const {unmount} = render(<SubmissionPage />)
     const translateBtn = screen.getByTestId("translateButton");
-    fireEvent.click(translateBtn);
+    await waitFor(() => fireEvent.click(translateBtn));
 
-    await waitFor(() => expect(screen.getAllByText(/Your request has been sent!/i).length).toBeGreaterThan(0));
+    // should make queue of length 1
+    await waitFor(() => expect(screen.getAllByText(/Your request has been sent!/i)[0]).toBeInTheDocument())
+    await waitFor(() => expect(screen.getAllByText(/Queued Requests: 1/i)[0]).toBeInTheDocument())
+    unmount();
+    jest.clearAllMocks();
   })
 
-  it('sends a request when queue is not empty, not full', async() => {
-    render(<SubmissionPage defaultTranslationRequest={translationRequest} />)
+  it('adds a request to queue when queue is not empty, not full', async() => {
+    const {unmount} = render(<SubmissionPage />)
     const translateBtn = screen.getByTestId("translateButton");
-    fireEvent.click(translateBtn);
-    fireEvent.click(translateBtn);
-    fireEvent.click(translateBtn);
+    // blast that stuff go go go
+    for (let i = 0; i < 10000; i++)
+      fireEvent.click(translateBtn)
 
-    await waitFor(() => expect(screen.getAllByText(/Your request has been sent!/i).length).toBeGreaterThan(2));
+    // surely at SOME point there will be two requests in the queue????
+    await waitFor(() => expect(screen.getAllByText(/Queued Requests: 2/i)[0]).toBeInTheDocument())
+    unmount();
+    jest.clearAllMocks();
   })
 
-  // it('rejects a request when queue is full', async() => {
-  //   render(<SubmissionPage />)
-  //   const translateBtn = screen.getByTestId("translateButton");
-  //   await waitFor(() => fireEvent.click(translateBtn));
-  // })
+  it('rejects a request to queue when queue is full', async() => {
+    const {unmount} = render(<SubmissionPage />)
+    const translateBtn = screen.getByTestId("translateButton");
+    for (let i = 0; i < 5000; i++)
+      fireEvent.click(translateBtn)
+
+    // message preventing request from being sent
+    await waitFor(() => expect(screen.getAllByText(/Slow down/i)[0]).toBeInTheDocument())
+    unmount();
+    jest.clearAllMocks();
+  })
 })

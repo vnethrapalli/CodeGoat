@@ -28,9 +28,9 @@ const extensions = {
 
 let queueCount = 0;
 
-const MAXQUEUE = 5;
+const MAXQUEUE = 2;
 
-const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile, defaultTranslationRequest }) => {
+const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => {
   const [inputCodeValue, setInputCodeValue] = React.useState("// write some code...");
   const [outputCodeValue, setOutputCodeValue] = React.useState("Processing...");
   const [inputLanguage, setInputLanguage] = React.useState("javascript");
@@ -134,17 +134,15 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile, defau
     )
   }
 
-  const translateRequest = defaultTranslationRequest || (async (queueCount) => {
-    let sent = false;
+  const translateRequest = (async () => {
     if (queueCount < MAXQUEUE) {
       queueCount++;
       toast.dismiss();
       toast.success("Your request has been sent! \nQueued Requests: " + queueCount.toString(), {duration: 1200});
-      sent = true;
     } else {
       toast.dismiss();
       toast.error("Slow down there! I can't afford all those API calls lmao", {duration: 2500});
-      return sent;
+      return;
     }
     const reqUrl = `http://localhost:8910/.redwood/functions/translate`;
     const translation = await fetch(reqUrl, {
@@ -191,7 +189,6 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile, defau
           break;
       }
     }
-    return sent;
   });
 
   const TranslateBtn = () => {
@@ -217,7 +214,7 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile, defau
               setOutput(() => true);
               setQueue(queue
                 .then(() => {
-                  translateRequest(queueCount);
+                  translateRequest();
                 })
                 .catch((err) => {console.error(err)})
                 )
