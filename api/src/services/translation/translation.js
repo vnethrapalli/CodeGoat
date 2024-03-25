@@ -35,7 +35,7 @@ export const getTranslation = async ({ code, inLang, outLang }) => {
         'description' : 'An issue occurred on the OpenAI server side.',
     },
     'permission_error' : {
-        'code' : 403,
+        'code' : 405,
         'description' : 'Your API key or token lacks the required permissions for the requested action.',
     },
   };

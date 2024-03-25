@@ -5,6 +5,7 @@ import DownloadIcon from '@mui/icons-material/Download';
 import UploadFile from '@mui/icons-material/UploadFile';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import Editor from '@monaco-editor/react';
+import { Toaster, toast } from '@redwoodjs/web/dist/toast';
 import React, { useEffect, useRef } from 'react';
 import { auth0 } from 'src/auth'
 import { useParams } from '@redwoodjs/router'
@@ -191,42 +192,75 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
 
 
     return (
-      <Box textAlign="center" pt={2}>
-        <Button
-          variant="contained"
-          data-testid="translateButton"
-          style={{
-            backgroundColor: theme.palette.secondary.main,
-            color: theme.palette.text.primary,
-            textTransform: 'none'
-          }}
-          sx={{
-            width: "250px",
-            borderRadius: "40px",
-            marginBottom: "25px",
-          }}
-          onClick={async () => {
-            console.log("hello");
-            const reqUrl = `http://localhost:8910/.redwood/functions/translate`;
-            const translation = await fetch(reqUrl, {
-              method: "POST",
-              body: JSON.stringify({
-                code: inputCodeValue,
-                inputLanguage: inputLanguage,
-                outputLanguage: outputLanguage
-              })
-            });
+      <>
+        <Box textAlign="center" pt={2}>
+          <Button
+            variant="contained"
+            data-testid="translateButton"
+            style={{
+              backgroundColor: theme.palette.secondary.main,
+              color: theme.palette.text.primary,
+              textTransform: 'none'
+            }}
+            sx={{
+              width: "250px",
+              borderRadius: "40px",
+              marginBottom: "25px",
+            }}
+            onClick={async () => {
+              const reqUrl = `http://localhost:8910/.redwood/functions/translate`;
+              const translation = await fetch(reqUrl, {
+                method: "POST",
+                body: JSON.stringify({
+                  code: inputCodeValue,
+                  inputLanguage: inputLanguage,
+                  outputLanguage: outputLanguage
+                })
+              });
 
-            // const reader = translation.body.getReader();
-            let response = await translation.json();
-            setStatus(translation.status + " " + translation.statusText);
-            setOutputCodeValue(response.data);
-            setOutput(true);
-          }}
-        >
-          Translate
-        </Button>
-      </Box>
+              // const reader = translation.body.getReader();
+              let response = await translation;
+              let status = response.status;
+              response = await response.json();
+              setOutput(true);
+              if(status === 200) {
+                toast.success("Code translated successfully", { duration: 1500 });
+                setOutputCodeValue(response.data);
+              } else {
+                switch(status) {
+                  case 429:
+                    toast.error("The API has reached its rate limit. Please try again later.", { duration: 2500 });
+                    break;
+                  case 400:
+                    toast.error("There was an error in the communication between the backend and API. Please try again.", { duration: 2500 });
+                    break;
+                  case 403:
+                    toast.error("The length of the code is too long. Please shorten the code and try again.", { duration: 2500 });
+                    break;
+                  case 401:
+                    toast.error("There was an error on the backend. Please try again later.", { duration: 2500 });
+                    break;
+                  case 404:
+                    toast.error("The GPT API is unavalaible", { duration: 2500 });
+                    break;
+                  case 500:
+                    toast.error("There was an error on the API side. Please try again.", { duration: 2500 });
+                    break;
+                  case 405:
+                    toast.error("This action is not permitted by the API. Please try again.", { duration: 2500 });
+                    break;
+                  default:
+                    toast.error("Error translating code", { duration: 2500 });
+                    break;
+                }
+              }
+
+            }}
+          >
+            Translate
+          </Button>
+        </Box>
+      </>
     );
   }
 
@@ -333,6 +367,7 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
   return (
     <>
       <Metadata title="Submission" description="Submission page"/>
+      <Toaster />
       <Stack
         direction="column"
         spacing={2}
