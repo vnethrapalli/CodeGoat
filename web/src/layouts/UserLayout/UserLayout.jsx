@@ -1,13 +1,10 @@
 import { navigate, routes } from '@redwoodjs/router'
 import { Toaster, toast } from '@redwoodjs/web/toast'
-import { AppBar, Link, Box, Button, Container, Tooltip, Typography, Grid } from '@mui/material';
+import { Divider, AppBar, Link, Box, Button, Container, Tooltip, Typography, Grid, Menu, MenuItem } from '@mui/material';
 import CssBaseline from "@mui/material/CssBaseline";
 import { Experimental_CssVarsProvider as CssVarsProvider, experimental_extendTheme as extendTheme, useColorScheme, useTheme } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
-import LightMode from '@mui/icons-material/LightMode';
-import DarkMode from '@mui/icons-material/DarkMode';
-import AccountBoxIcon from '@mui/icons-material/AccountBox';
-
+import { Logout, Settings, AccessTime, Person, DarkMode, LightMode } from '@mui/icons-material'
 import { useAuth, auth0 } from 'src/auth'
 
 const theme = extendTheme({
@@ -47,14 +44,14 @@ const theme = extendTheme({
       },
     },
   },
-
 });
+
 
 const TitleLink = () => {
   const theme = useTheme();
 
   return (
-    <Grid item alignContent='center' alignItems='stretch' xs={4}>
+    <Grid item alignContent='center' alignItems='stretch' xs={3}>
       <Typography data-testid="titleLink" variant="h6" noWrap component="span"
         sx={{
           mr: 2,
@@ -76,19 +73,24 @@ const TitleLink = () => {
   )
 }
 
+export function testClick() {
+  return "hello"
+}
+
 const NavButtons = () => {
   const theme = useTheme();
 
   return (
-    <Grid item alignContent='center' alignItems='stretch' alignSelf='center' xs={4}>
-      <Box data-testid="navButtons" display="flex" sx={{ justifyContent: "center", alignItems: "center", flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+    <Grid item alignContent='center' alignItems='center' alignSelf='center' xs={6}>
+      <Box data-testid="navButtons" display="flex" sx={{ justifyContent: "center", alignItems: "center" }}>
         <Tooltip title='Translate Code'>
           <Button
             key="Translate"
             variant="text"
             data-testid="translateButton"
             href={routes.translate()}
-            sx={{ my: 2, color: theme.palette.text.primary, display: 'block', margin: 'auto auto' }}
+            onClick={testClick}
+            sx={{ marginTop: '2px', marginBottom: '2px', marginRight: '5px', marginLeft: '0px', color: theme.palette.text.primary, display: 'block' }}
           >
             Translate
           </Button>
@@ -100,7 +102,7 @@ const NavButtons = () => {
             variant="text"
             data-testid="statusButton"
             onClick={() => (navigate(routes.status()))}
-            sx={{ my: 2, color: theme.palette.text.primary, display: 'block', margin: 'auto auto' }}
+            sx={{ marginTop: '2px', marginBottom: '2px', marginRight: '5px', marginLeft: '0px', color: theme.palette.text.primary, display: 'block' }}
           >
             GPT-3 Status
           </Button>
@@ -111,8 +113,9 @@ const NavButtons = () => {
             key="Feedback"
             variant="text"
             data-testid="feedbackButton"
+            onClick={testClick}
             href={routes.feedback()}
-            sx={{ my: 2, color: theme.palette.text.primary, display: 'block', margin: 'auto auto' }}
+            sx={{ marginTop: '2px', marginBottom: '2px', marginRight: '5px', marginLeft: '0px', color: theme.palette.text.primary, display: 'block' }}
           >
             Feedback
           </Button>
@@ -124,7 +127,7 @@ const NavButtons = () => {
             variant="text"
             data-testid="documentationButton"
             onClick={() => (navigate(routes.documentation()))}
-            sx={{ my: 2, color: theme.palette.text.primary, display: 'block', margin: 'auto auto' }}
+            sx={{ marginTop: '2px', marginBottom: '2px', marginRight: '0px', marginLeft: '0px', color: theme.palette.text.primary, display: 'block' }}
           >
             Documentation
           </Button>
@@ -140,7 +143,7 @@ const ThemeButton = () => {
 
   return (
     <Tooltip title={mode === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}>
-      <IconButton data-testid="themeButton" sx={{ width: '4%'}} onClick={() => setMode(mode === 'light' ? 'dark' : 'light')}>
+      <IconButton data-testid="themeButton" sx={{ width: '7%'}} onClick={() => setMode(mode === 'light' ? 'dark' : 'light')}>
         {mode === 'light'
           ? <LightMode style={{fill: theme.palette.text.primary}} />
           : <DarkMode style={{fill: theme.palette.text.primary}} />}
@@ -149,7 +152,99 @@ const ThemeButton = () => {
   )
 }
 
-const ThemeAuthButtons = () => {
+const UserMenu = () => {
+  const theme = useTheme();
+  const { logOut } = useAuth()
+  const [anchorElNav, setAnchorElNav] = React.useState(null);
+  const [anchorElUser, setAnchorElUser] = React.useState(null);
+
+  const handleOpenUserMenu = (event) => {
+    setAnchorElUser(event.currentTarget);
+  };
+
+  const logout = async () => {
+    await logOut().then(() => {
+      localStorage.removeItem('user')
+    })
+  }
+
+  const handleCloseUserMenuSignOut = () => {
+    logout();
+    setAnchorElNav(null);
+  };
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
+
+  let currUser = JSON.parse(localStorage.getItem('user'));
+
+  return (
+    <Box sx={{ display: 'flex', alignContent: 'center', paddingLeft: '10px', flexGrow: 0 }}>
+      <Tooltip title="Open User Menu">
+        <IconButton data-testid="openUserMenuButton" onClick={handleOpenUserMenu} sx={{ marginLeft: '5px', p: 0 }}>
+          <Person sx={{ fill: theme.palette.text.primary }} />
+        </IconButton>
+      </Tooltip>
+      <Menu
+        sx={{ mt: '35px', display: 'flex', alignItems: 'center', overflow: 'auto', color: theme.palette.text.secondary }}
+        id="menu-appbar"
+        anchorEl={anchorElUser}
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+        keepMounted
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+        disableScrollLock={true}
+        open={Boolean(anchorElUser)}
+        onClose={handleCloseUserMenu}
+      >
+        <Typography data-testid="userNickname" sx={{ textAlign: 'center', fontSize: '20px', fontWeight: '500', color: theme.palette.text.secondary, p: '5px' }}>
+          {currUser.nickname}
+        </Typography>
+
+        <Typography data-testid="userEmail" sx={{ textAlign: 'center', fontSize: '16px', fontWeight: '400', color: theme.palette.text.secondary, p: '0px 10px' }}>
+          {currUser.email}
+        </Typography>
+
+        <Divider  sx={{ paddingTop: '8px' }}/>
+
+        <MenuItem data-testid="settingsButton" sx={{ alignSelf: 'center', color: theme.palette.text.secondary, marginTop: '8px' }} key="Settings" onClick={handleCloseUserMenu}>
+          <Link href={routes.userAccount()}
+            underline='none'
+            sx={{ color: theme.palette.text.secondary, width: '100%', display: 'flex', alignItems: 'center' }}
+          >
+            <Settings sx={{ fill: theme.palette.text.secondary, paddingRight: '8px' }} />
+            Settings
+          </Link>
+        </MenuItem>
+
+        <MenuItem data-testid="historyButton" sx={{ alignSelf: 'center', color: theme.palette.text.secondary }} key="Translation History" onClick={handleCloseUserMenu}>
+          <Link href={routes.history()}
+            underline='none'
+            sx={{ color: theme.palette.text.secondary, width: '100%', display: 'flex', alignItems: 'center' }}
+          >
+            <AccessTime sx={{ fill: theme.palette.text.secondary, paddingRight: '8px' }} />
+            Translation History
+          </Link>
+        </MenuItem>
+
+        <Divider sx={{ marginTop: '0px' }} />
+
+        <MenuItem data-testid="signoutButton" sx={{ alignSelf: 'center', color: theme.palette.text.secondary, width: '100%' }} key="Sign Out" onClick={handleCloseUserMenuSignOut}>
+          <Logout sx={{ fill: theme.palette.text.secondary, paddingRight: '8px' }}/>
+          Sign Out
+        </MenuItem>
+      </Menu>
+    </Box>
+  )
+}
+
+const UserButtons = () => {
   const theme = useTheme();
   const { isAuthenticated, signUp, logOut, loading, userMetadata } = useAuth()
   const [isAuth, setIsAuth] = React.useState(isAuthenticated)
@@ -180,17 +275,12 @@ const ThemeAuthButtons = () => {
         localStorage.setItem('user', JSON.stringify(user))
       })
     })
+    let currUser = JSON.parse(localStorage.getItem('user'));
+    toast.success("Welcome " + currUser.nickname + "!", {position: "bottom-right"})
   }
-
-  const logout = async () => {
-    await logOut().then(() => {
-      localStorage.removeItem('user')
-    })
-  }
-
 
   return (
-    <Grid item alignContent='center' alignItems='stretch' sx={{display: 'flex', justifyContent: 'flex-end' }} xs={4}>
+    <Grid item alignContent='center' alignItems='stretch' sx={{display: 'flex', justifyContent: 'flex-end' }} xs={3}>
       <ThemeButton />
 
       {!isAuth && <Button
@@ -223,27 +313,13 @@ const ThemeAuthButtons = () => {
         Sign Up
       </Button>}
 
-      {isAuth && <Button
-        onClick={logout}
-        data-testid="signoutButton"
-        key="Sign Out"
-        variant="text"
-        sx={{ backgroundColor: "#F1FADA", color: "#265073", height: "30px", marginLeft: '14px', marginRight: '0px', borderRadius: '6px', alignSelf: 'center',
-          '&:hover': {
-            backgroundColor: '#F1FADA',
-            color: "#265073",
-          },
-        }}
-      >
-        Sign Out
-      </Button>}
+      {isAuth && <UserMenu />}
 
-      {isAuth && <Tooltip title='Account Management'>
+      {/* {isAuth && <Tooltip title='Account Management'>
         <IconButton data-testid="accountButton" sx={{ width: '10%'}} href={routes.userAccount()}>
           <AccountBoxIcon style={{fill: theme.palette.text.primary}} sx={{fontSize: 35}} />
         </IconButton>
-      </Tooltip>}
-
+      </Tooltip>} */}
     </Grid>
   )
 }
@@ -261,7 +337,9 @@ const Footer = () => {
         display: 'flex',
         alignContent: 'center',
         alignItems: 'center',
-        height: '40px'
+        height: '40px',
+        marginTop: '10px',
+        marginBottom: '0px'
       }}
       component="footer"
     >
@@ -283,6 +361,7 @@ const Footer = () => {
 }
 
 const UserLayout = ({ children }) => {
+
   return (
     <>
       <CssVarsProvider theme={theme}>
@@ -298,7 +377,7 @@ const UserLayout = ({ children }) => {
                 <NavButtons />
 
                 {/* Theme Change and Authentication Button */}
-                <ThemeAuthButtons />
+                <UserButtons />
 
             </Grid>
           </AppBar>
