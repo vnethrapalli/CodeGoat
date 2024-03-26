@@ -1,7 +1,7 @@
 import Editor from '@monaco-editor/react';
 import { useMutation} from '@redwoodjs/web';
 import { Link, routes, useParams } from '@redwoodjs/router';
-import { Box, Button, IconButton, Typography } from '@mui/material'
+import { Box, Button, IconButton, Typography, Rating } from '@mui/material'
 import { useTheme } from '@mui/material/styles';
 import { Repeat, Delete } from '@mui/icons-material';
 import { useRef } from 'react';
@@ -68,11 +68,19 @@ const Translation = ({ translation }) => {
         />
       </Box>
 
-      <Box sx={{ marginTop: '10px', marginBottom: '5px', display: 'flex', alignContent: 'center'}}>
+      <Box sx={{ gap: 1, marginTop: '10px', marginBottom: '5px', display: 'flex', alignContent: 'center'}}>
 
         <Typography data-testid="APIStatus">
           API Status: {translation.status}
         </Typography>
+
+        {
+          translation.rating != -1 && <Rating
+            data-testid="Rating"
+            value={translation.rating}
+            readOnly={true}
+            />
+        }
 
         <IconButton
           variant="text"

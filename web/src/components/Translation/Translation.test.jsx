@@ -16,6 +16,17 @@ const translation = {
   rating: 5
 }
 
+const translationEmptyRating = {
+  id: 1,
+  uid: "945839",
+  inputLanguage: "python",
+  outputLanguage: "javascript",
+  inputCode: "print(\"Hello World\")",
+  outputCode: "console.log(\"Hello World\")",
+  status: "200 OK",
+  rating: -1
+}
+
 describe('Translation', () => {
   test('renders successfully', () => {
     expect(() => {
@@ -48,4 +59,12 @@ describe('Translation', () => {
     expect(screen.getByTestId('APIStatus')).toHaveTextContent(translation.status)
   })
 
+  test('renders rating successfully when it exists', () => {
+    render(<Translation translation={translation} />)
+    expect(screen.getByTestId('Rating')).toBeInTheDocument()
+  })
+
+  test('does not render rating when it does not exist', () => {
+    expect(translationEmptyRating.rating).toBe(-1)
+  })
 })

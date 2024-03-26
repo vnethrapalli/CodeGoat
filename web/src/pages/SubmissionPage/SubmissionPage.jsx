@@ -1,5 +1,6 @@
-import { Metadata, useMutation, useQuery} from '@redwoodjs/web';
-import { Stack, Box, Button, FormControl, InputLabel, Select, MenuItem, Divider } from '@mui/material';
+import { Metadata, useMutation } from '@redwoodjs/web';
+import { gql, useLazyQuery } from "@apollo/client";
+import { Stack, Box, Button, FormControl, InputLabel, Select, MenuItem, Divider, Rating } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import DownloadIcon from '@mui/icons-material/Download';
 import UploadFile from '@mui/icons-material/UploadFile';
@@ -21,6 +22,24 @@ const CREATE_TRANSLATION = gql`
       outputCode
       rating
       status
+    }
+  }
+`
+
+const UPDATE_TRANSLATION = gql`
+  mutation UpdateTranslationMutation($input: UpdateTranslationInput = {}, $id: Int = 10) {
+    updateTranslation(id: $id, input: $input) {
+      rating
+    }
+  }
+`
+
+const FETCH_TRANSLATION = gql`
+  query Redwood($uid: String = "") {
+    translations(uid: $uid) {
+      translations {
+        id
+      }
     }
   }
 `
@@ -53,6 +72,7 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
   const [inputLanguage, setInputLanguage] = React.useState("javascript");
   const [outputLanguage, setOutputLanguage] = React.useState("python");
   const [status, setStatus] = React.useState("500 Server Error")
+  const [rating, setRating] = React.useState(5);
   const [output, setOutput] = React.useState(false);
   const [userId, setUserId] = React.useState()
   const theme = useTheme();
@@ -212,7 +232,7 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
       let response = translation;
       let statusCode = response.status;
       response = await response.json();
-      
+
       setOutputCodeValue(response.data);
       setOutput(true);
       queueCount--;
@@ -249,7 +269,7 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
         }
       }
 
-      translate(userId, inputLanguage, outputLanguage, inputCodeValue, response.data, 5, translation.status + " " + translation.statusText);
+      translate(userId, inputLanguage, outputLanguage, inputCodeValue, response.data, -1, translation.status + " " + translation.statusText);
     });
 
     return (
@@ -384,6 +404,63 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
     );
   }
 
+  const RatingButton = () => {
+    const [updateTranslation] = useMutation(UPDATE_TRANSLATION, {
+      onCompleted: () => {},
+      onError: (err) => {},
+    })
+
+    const [getTranslation, { loading, error, data }] = useLazyQuery(
+      FETCH_TRANSLATION,
+      {
+        variables: { uid: userId }
+      }
+    );
+
+    const provideRating = () => {
+      getTranslation();
+      console.log(data);
+      console.log(rating);
+
+      if (error)
+      {
+        toast.error("An Error Occurred", {duration: 2500, position: "top"});
+      }
+      else if (loading)
+      {
+        toast.loading("Loading...", {duration: 2500, position: "top"});
+      }
+      else
+      {
+        toast.success("Rating Submitted!", {duration: 2500, position: "top"});
+        const arr = data.translations.translations;
+        const id = arr[0].id;
+        updateTranslation({ variables: { id: id, input: { "uid": userId, "inputLanguage": inputLanguage, "outputLanguage": outputLanguage, "inputCode": inputCodeValue, "outputCode": outputCodeValue, "rating": rating, status: status }}});
+      }
+    }
+
+    return (
+      <Button
+          variant="contained"
+          style={{
+            backgroundColor: theme.palette.secondary.main,
+            color: theme.palette.text.primary,
+            textTransform: 'none'
+          }}
+          sx={{
+            width: "250px",
+            borderRadius: "40px",
+            marginBottom: "25px",
+          }}
+          onClick={() => {
+            provideRating();
+          }}
+        >
+          Rate This Translation
+        </Button>
+    );
+  }
+
   return (
     <>
       <Metadata title="Submission" description="Submission page"/>
@@ -403,6 +480,19 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
         </Stack>
       </Stack>
       <TranslateBtn/>
+      <Stack direction="column" spacing={2} justifyContent="center" alignItems="center" width='100vw'>
+        {output &&
+        <>
+          <Rating
+            defaultValue={5}
+            onChange={(event, val) => {
+              if (val == null) val = 0;
+              setRating(val);
+            }}
+          />
+          <RatingButton data-testid="ratingButton"/>
+        </>}
+      </Stack>
     </>
   );
 }
