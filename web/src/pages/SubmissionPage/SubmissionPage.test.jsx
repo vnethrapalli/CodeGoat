@@ -93,6 +93,14 @@ describe('Render Tests', () => {
     await waitFor(() => expect(screen.getByTestId("downloadButton")).toBeInTheDocument())
     unmount();
   })
+
+  test('renders output rating Button when Translate Button clicked successfully', async () => {
+    const {unmount} = render(<SubmissionPage />)
+    const button = screen.getByTestId("translateButton");
+    fireEvent.click(button);
+    await waitFor(() => expect(screen.getByTestId("ratingButton")).toBeInTheDocument())
+    unmount();
+  })
 })
 
 describe('Button Tests', () => {

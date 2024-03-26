@@ -73,6 +73,7 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
   const [outputLanguage, setOutputLanguage] = React.useState("python");
   const [status, setStatus] = React.useState("500 Server Error")
   const [rating, setRating] = React.useState(5);
+  const [refreshQuery, setRefreshQuery] = React.useState(true);
   const [output, setOutput] = React.useState(false);
   const [userId, setUserId] = React.useState()
   const theme = useTheme();
@@ -235,6 +236,7 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
 
       setOutputCodeValue(response.data);
       setOutput(true);
+      setRefreshQuery(val => !val);
       queueCount--;
 
       if(statusCode === 200) {
@@ -417,10 +419,14 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
       }
     );
 
+    useEffect(() => {
+      getTranslation();
+    }, [rating, refreshQuery]);
+
     const provideRating = () => {
       getTranslation();
-      console.log(data);
-      console.log(rating);
+      // console.log(data);
+      // console.log(rating);
 
       if (error)
       {
@@ -435,7 +441,7 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
         toast.success("Rating Submitted!", {duration: 2500, position: "top"});
         const arr = data.translations.translations;
         const id = arr[0].id;
-        updateTranslation({ variables: { id: id, input: { "uid": userId, "inputLanguage": inputLanguage, "outputLanguage": outputLanguage, "inputCode": inputCodeValue, "outputCode": outputCodeValue, "rating": rating, status: status }}});
+        updateTranslation({ variables: { id: id, input: { "rating": rating }}});
       }
     }
 
@@ -455,6 +461,7 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
           onClick={() => {
             provideRating();
           }}
+          data-testid="ratingButton"
         >
           Rate This Translation
         </Button>
@@ -490,7 +497,7 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
               setRating(val);
             }}
           />
-          <RatingButton data-testid="ratingButton"/>
+          <RatingButton/>
         </>}
       </Stack>
     </>
