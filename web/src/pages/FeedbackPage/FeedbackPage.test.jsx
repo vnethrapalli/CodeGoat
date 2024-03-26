@@ -63,7 +63,7 @@ describe('FeedbackPage', () => {
       screen.getAllByRole('radio')
     }).not.toThrow()
   })
-  
+
   it('sends a completion message upon successful submission', async() => {
     render(<FeedbackPage />)
 
@@ -81,7 +81,7 @@ describe('FeedbackPage', () => {
       }
     };
     render(<FeedbackPage data={[error]}/>)
-    
+
     const subButton = screen.getByRole('button')
     fireEvent.click(subButton)
     setTimeout(() => {

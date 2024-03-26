@@ -5,8 +5,8 @@ import DownloadIcon from '@mui/icons-material/Download';
 import UploadFile from '@mui/icons-material/UploadFile';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import Editor from '@monaco-editor/react';
-import { Toaster, toast } from '@redwoodjs/web/dist/toast';
-import React, { useEffect, useRef } from 'react';
+import { Toaster, toast } from '@redwoodjs/web/toast'
+import React, { useEffect, useRef, useState } from 'react';
 import { auth0 } from 'src/auth'
 import { useParams } from '@redwoodjs/router'
 import { ConnectingAirportsOutlined } from '@mui/icons-material';
@@ -43,10 +43,13 @@ const extensions = {
   "typescript": ".ts"
 };
 
+let queueCount = 0;
+
+const MAXQUEUE = 2;
 
 const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => {
   const [inputCodeValue, setInputCodeValue] = React.useState("// write some code...");
-  const [outputCodeValue, setOutputCodeValue] = React.useState("# your new code will be here...");
+  const [outputCodeValue, setOutputCodeValue] = React.useState("Processing...");
   const [inputLanguage, setInputLanguage] = React.useState("javascript");
   const [outputLanguage, setOutputLanguage] = React.useState("python");
   const [status, setStatus] = React.useState("500 Server Error")
@@ -174,22 +177,80 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
     )
   }
 
+
   const TranslateBtn = () => {
+    const [queue, setQueue] = React.useState(Promise.resolve())
     const [createTranslation] = useMutation(CREATE_TRANSLATION, {
       onCompleted: () => {},
-      onError: (err) => {},
+      onError: () => {},
     })
 
-    const translate = () => {
-      createTranslation({ variables: { input: { "uid": userId, "inputLanguage": inputLanguage, "outputLanguage": outputLanguage, "inputCode": inputCodeValue, "outputCode": outputCodeValue, "rating": 5, status: status }}});
+    const translate = (usId, inLang, outLang, inCode, outCode, stars, stat) => {
+      createTranslation({ variables: { input: { "uid": usId, "inputLanguage": inLang, "outputLanguage": outLang, "inputCode": inCode, "outputCode": outCode, "rating": stars, "status": stat }}});
     }
 
-    useEffect(()=>{
-      if(output){
-        translate()
+    const translateRequest = (async () => {
+      if (queueCount < MAXQUEUE) {
+        queueCount++;
+        toast.dismiss();
+        toast.success("Your request has been sent! \nQueued Requests: " + queueCount.toString(), {duration: 1200});
+      } else {
+        toast.dismiss();
+        toast.error("Slow down there! I can't afford all those API calls lmao", {duration: 2500});
+        return;
       }
-    },[output])
+      const reqUrl = `http://localhost:8910/.redwood/functions/translate`;
+      const translation = await fetch(reqUrl, {
+        method: "POST",
+        body: JSON.stringify({
+          code: inputCodeValue,
+          inputLanguage: inputLanguage,
+          outputLanguage: outputLanguage
+        })
+      });
 
+      let response = translation;
+      let statusCode = response.status;
+      response = await response.json();
+      
+      setOutputCodeValue(response.data);
+      setOutput(true);
+      queueCount--;
+
+      if(statusCode === 200) {
+        toast.success("Code translated successfully! \nQueued Requests: " + queueCount.toString(), { duration: 1500 });
+        setOutputCodeValue(response.data);
+      } else {
+        switch(statusCode) {
+          case 429:
+            toast.error("The API has reached its rate limit. Please try again later.", { duration: 2500 });
+            break;
+          case 400:
+            toast.error("There was an error in the communication between the backend and API. Please try again.", { duration: 2500 });
+            break;
+          case 403:
+            toast.error("The length of the code is too long. Please shorten the code and try again.", { duration: 2500 });
+            break;
+          case 401:
+            toast.error("There was an error on the backend. Please try again later.", { duration: 2500 });
+            break;
+          case 404:
+            toast.error("The GPT API is unavalaible", { duration: 2500 });
+            break;
+          case 500:
+            toast.error("There was an error on the API side. Please try again.", { duration: 2500 });
+            break;
+          case 405:
+            toast.error("This action is not permitted by the API. Please try again.", { duration: 2500 });
+            break;
+          default:
+            toast.error("Error translating code.", { duration: 2500 });
+            break;
+        }
+      }
+
+      translate(userId, inputLanguage, outputLanguage, inputCodeValue, response.data, 5, translation.status + " " + translation.statusText);
+    });
 
     return (
       <>
@@ -208,53 +269,12 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
               marginBottom: "25px",
             }}
             onClick={async () => {
-              const reqUrl = `http://localhost:8910/.redwood/functions/translate`;
-              const translation = await fetch(reqUrl, {
-                method: "POST",
-                body: JSON.stringify({
-                  code: inputCodeValue,
-                  inputLanguage: inputLanguage,
-                  outputLanguage: outputLanguage
+              setQueue(queue
+                .then(() => {
+                  translateRequest();
                 })
-              });
-
-              // const reader = translation.body.getReader();
-              let response = await translation;
-              let status = response.status;
-              response = await response.json();
-              setOutput(true);
-              if(status === 200) {
-                toast.success("Code translated successfully", { duration: 1500 });
-                setOutputCodeValue(response.data);
-              } else {
-                switch(status) {
-                  case 429:
-                    toast.error("The API has reached its rate limit. Please try again later.", { duration: 2500 });
-                    break;
-                  case 400:
-                    toast.error("There was an error in the communication between the backend and API. Please try again.", { duration: 2500 });
-                    break;
-                  case 403:
-                    toast.error("The length of the code is too long. Please shorten the code and try again.", { duration: 2500 });
-                    break;
-                  case 401:
-                    toast.error("There was an error on the backend. Please try again later.", { duration: 2500 });
-                    break;
-                  case 404:
-                    toast.error("The GPT API is unavalaible", { duration: 2500 });
-                    break;
-                  case 500:
-                    toast.error("There was an error on the API side. Please try again.", { duration: 2500 });
-                    break;
-                  case 405:
-                    toast.error("This action is not permitted by the API. Please try again.", { duration: 2500 });
-                    break;
-                  default:
-                    toast.error("Error translating code", { duration: 2500 });
-                    break;
-                }
-              }
-
+                .catch((err) => {console.error(err)})
+              )
             }}
           >
             Translate
