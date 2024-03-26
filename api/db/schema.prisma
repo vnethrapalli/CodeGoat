@@ -15,13 +15,25 @@ generator client {
 }
 
 model Feedback {
-  id                  Int     @id @default(autoincrement())
+  id                  Int    @id @default(autoincrement())
   submissionPage      Int
   outputPage          Int
   translationAccuracy Int
   gptAvailability     Int
   experience          Int
   comments            String
+}
+
+model Translation {
+  id             Int      @id @default(autoincrement())
+  uid            String
+  inputLanguage  String
+  outputLanguage String
+  inputCode      String
+  outputCode     String
+  createdAt      DateTime @default(now())
+  rating         Int
+  status         String   @default("200 OK")
 }
 
 model Faq {

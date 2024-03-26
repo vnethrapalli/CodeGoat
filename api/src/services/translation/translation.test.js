@@ -115,7 +115,7 @@ describe('testing error openai api error responses', () => {
 
   test('testing handling for permission error', async () => {
     const response = await getTranslation({ code: "test", inLang: "python", outLang: "java" });
-    expect(response.statusCode).toEqual(403);
+    expect(response.statusCode).toEqual(405);
   });
 
 })

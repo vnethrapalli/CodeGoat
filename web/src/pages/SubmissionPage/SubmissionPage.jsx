@@ -1,13 +1,29 @@
-import { Metadata, useQuery } from '@redwoodjs/web';
+import { Metadata, useMutation, useQuery} from '@redwoodjs/web';
 import { Stack, Box, Button, FormControl, InputLabel, Select, MenuItem, Divider } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import DownloadIcon from '@mui/icons-material/Download';
 import UploadFile from '@mui/icons-material/UploadFile';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import Editor from '@monaco-editor/react';
-import React, { useRef, useState } from 'react';
 import { Toaster, toast } from '@redwoodjs/web/toast'
+import React, { useEffect, useRef, useState } from 'react';
+import { auth0 } from 'src/auth'
+import { useParams } from '@redwoodjs/router'
+import { ConnectingAirportsOutlined } from '@mui/icons-material';
 
+const CREATE_TRANSLATION = gql`
+  mutation CreateTranslationMutation($input: CreateTranslationInput!) {
+    createTranslation(input: $input) {
+      uid
+      inputLanguage
+      outputLanguage
+      inputCode
+      outputCode
+      rating
+      status
+    }
+  }
+`
 
 export const languages = [
   {dropdownItem: "C++", langCode: "cpp"},
@@ -17,6 +33,7 @@ export const languages = [
   {dropdownItem: "Python", langCode: "python"},
   {dropdownItem: "TypeScript", langCode: "typescript"},
 ];
+
 const extensions = {
   "cpp": ".cpp",
   "csharp": ".cs",
@@ -35,8 +52,32 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
   const [outputCodeValue, setOutputCodeValue] = React.useState("Processing...");
   const [inputLanguage, setInputLanguage] = React.useState("javascript");
   const [outputLanguage, setOutputLanguage] = React.useState("python");
+  const [status, setStatus] = React.useState("500 Server Error")
   const [output, setOutput] = React.useState(false);
+  const [userId, setUserId] = React.useState()
   const theme = useTheme();
+
+  const { code, inLang, outLang } = useParams();
+
+  useEffect(()=>{
+    auth0.getUser().then(user => {
+      if(user){
+        setUserId(user.sub);
+      }
+    })
+
+    if(code){
+      setInputCodeValue(code);
+    }
+
+    if(inLang){
+      setInputLanguage(inLang);
+    }
+
+    if(outLang){
+      setOutputLanguage(outLang);
+    }
+  },[])
 
   const CodeBox = ({ codeValue, updateCodeValue, defaultLanguage, language, defaultValue, isInput }) => {
     const editorRef = useRef(null);
@@ -72,6 +113,7 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
     defaultValue: inputCodeValue,
     isInput: true
   });
+
   const codeboxOutput = CodeBox({
     codeValue: outputCodeValue,
     updateCodeValue: (newCodeVal) => setOutputCodeValue(newCodeVal),
@@ -123,6 +165,7 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
                      color: theme.palette.text.secondary,
                   }}
                   value={lang.langCode}
+                  key={lang.langCode}
                 >
                     {lang.dropdownItem}
                 </MenuItem>
@@ -193,6 +236,20 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
 
   const TranslateBtn = () => {
     const [queue, setQueue] = React.useState(Promise.resolve())
+    const [createTranslation] = useMutation(CREATE_TRANSLATION, {
+      onCompleted: () => {},
+      onError: (err) => {},
+    })
+
+    const translate = () => {
+      createTranslation({ variables: { input: { "uid": userId, "inputLanguage": inputLanguage, "outputLanguage": outputLanguage, "inputCode": inputCodeValue, "outputCode": outputCodeValue, "rating": 5, status: status }}});
+    }
+
+    useEffect(()=>{
+      if(output){
+        translate()
+      }
+    },[output])
 
     return (
       <>
@@ -210,14 +267,14 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
               borderRadius: "40px",
               marginBottom: "25px",
             }}
-            onClick={() => {
-              setOutput(() => true);
+            onClick={async () => {
               setQueue(queue
                 .then(() => {
                   translateRequest();
                 })
                 .catch((err) => {console.error(err)})
                 )
+              setOutput(true);
             }}
           >
             Translate
@@ -311,7 +368,7 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
         <Stack direction="row" spacing={0} justifyContent="flex-end" alignItems="center">
           <CopyButton editor={codeboxInput} isInput={input}/>
           <Divider orientation="vertical" flexItem style={{ backgroundColor: theme.palette.text.primary, width: '1%' }}/>
-          {input ? <UploadButtonInput/> : <DownloadButton/>}
+          <UploadButtonInput/>
         </Stack>
       </Stack>
     );
@@ -320,9 +377,9 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
   const NoDropdownAndButtons = ({ input }) => {
     return (
       <Stack direction="row" spacing={0} justifyContent="flex-end" alignItems="center">
-        <CopyButton editor={input ? codeboxInput : codeboxOutput}/>
+        <CopyButton editor={input ? codeboxInput : codeboxOutput} isInput={input} />
         <Divider orientation="vertical" flexItem style={{ backgroundColor: theme.palette.text.primary, width: '1%' }}/>
-        {input ? <UploadButtonInput/> : <DownloadButton/>}
+        <DownloadButton/>
       </Stack>
     );
   }

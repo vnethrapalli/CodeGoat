@@ -20,6 +20,7 @@ const Routes = () => {
           <Route path="/user-account" page={UserAccountPage} name="userAccount" />
           <Route path="/translate" page={SubmissionPage} name="translate" />
           <Route path="/feedback" page={FeedbackPage} name="feedback" />
+          <Route path="/history" page={HistoryPage} name="history" />
         </Set>
       </PrivateSet>
 

@@ -34,10 +34,10 @@ const FeedbackPage = () => {
 
   const [create] = useMutation(CREATE_FEEDBACK, {
     onCompleted: () => {
-      toast.success("Submitted!", {duration: 2500})
+      toast.success("Submitted!", {duration: 2500, position: "bottom-right"})
     },
     onError: () => {
-      toast.error("An error occurred.", {duration: 2500})
+      toast.error("An error occurred.", {duration: 2500, position: "bottom-right"})
     },
   })
 
