@@ -43,14 +43,13 @@ export const translationHistoryPage = ({ page = 1, uid, inLang, outLang }) => {
 
   return {
     translations: db.translation.findMany({
-      where: { uid },
+      where: { uid, inputLanguage: { in: inLang.length > 0 ? inLang : langCodes }, outputLanguage: { in: outLang.length > 0 ? outLang : langCodes } },
       take: POSTS_PER_PAGE,
       skip: offset,
       orderBy: { createdAt: 'desc' },
-      filters: { inputLanguage: { _or: } },
     }),
     count: db.translation.count({
-      where: { uid },
+      where: { uid, inputLanguage: { in: inLang.length > 0 ? inLang : langCodes }, outputLanguage: { in: outLang.length > 0 ? outLang : langCodes } },
     }),
   }
 }
