@@ -1,5 +1,7 @@
 import { db } from 'src/lib/db'
 
+const langCodes = ["cpp", "csharp", "java", "javascript", "python", "typescript"];
+
 export const translations = ({ uid }) => {
   return {
     translations: db.translation.findMany({
@@ -36,7 +38,7 @@ export const deleteTranslation = ({ id }) => {
 
 const POSTS_PER_PAGE = 10
 
-export const translationHistoryPage = ({ page = 1, uid }) => {
+export const translationHistoryPage = ({ page = 1, uid, inLang, outLang }) => {
   const offset = (page - 1) * POSTS_PER_PAGE
 
   return {
@@ -45,6 +47,7 @@ export const translationHistoryPage = ({ page = 1, uid }) => {
       take: POSTS_PER_PAGE,
       skip: offset,
       orderBy: { createdAt: 'desc' },
+      filters: { inputLanguage: { _or: } },
     }),
     count: db.translation.count({
       where: { uid },

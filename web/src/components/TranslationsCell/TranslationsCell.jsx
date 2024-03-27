@@ -95,8 +95,7 @@ export const Success = ({ translationHistoryPage }) => {
         )
       })}
 
-      <Pagination data-testid="pagination" count={translationHistoryPage.count}>
-      </Pagination>
+      <Pagination data-testid="pagination" count={translationHistoryPage.count} />
     </>
   )
 }
