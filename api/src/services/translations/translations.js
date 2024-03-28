@@ -38,18 +38,42 @@ export const deleteTranslation = ({ id }) => {
 
 const POSTS_PER_PAGE = 10
 
-export const translationHistoryPage = ({ page = 1, uid, inLang, outLang }) => {
+export const translationHistoryPage = ({ page = 1, uid, inLang, outLang, startDate, endDate }) => {
   const offset = (page - 1) * POSTS_PER_PAGE
 
   return {
     translations: db.translation.findMany({
-      where: { uid, inputLanguage: { in: inLang.length > 0 ? inLang : langCodes }, outputLanguage: { in: outLang.length > 0 ? outLang : langCodes } },
+      where: {
+        uid,
+        inputLanguage: {
+          in: inLang.length > 0 ? inLang : langCodes
+        },
+        outputLanguage: {
+          in: outLang.length > 0 ? outLang : langCodes
+        },
+        createdAt: {
+          gte: startDate,
+          lte: endDate ? endDate : Date.now()
+        },
+      },
       take: POSTS_PER_PAGE,
       skip: offset,
       orderBy: { createdAt: 'desc' },
     }),
     count: db.translation.count({
-      where: { uid, inputLanguage: { in: inLang.length > 0 ? inLang : langCodes }, outputLanguage: { in: outLang.length > 0 ? outLang : langCodes } },
+      where: {
+        uid,
+        inputLanguage: {
+          in: inLang.length > 0 ? inLang : langCodes
+        },
+        outputLanguage: {
+          in: outLang.length > 0 ? outLang : langCodes
+        },
+        createdAt: {
+          gte: startDate,
+          lte: endDate ? endDate : Date.now()
+        },
+      },
     }),
   }
 }

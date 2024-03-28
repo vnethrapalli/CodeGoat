@@ -1,5 +1,6 @@
 import { Metadata } from '@redwoodjs/web'
 import { useTheme } from '@mui/material/styles'
+import dayjs from 'dayjs';
 import { Box, Typography, FormControl, MenuItem, InputLabel, Select, OutlinedInput } from '@mui/material'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -23,6 +24,8 @@ const HistoryPage = ({ page = 1 }) => {
   const [userId, setUserId] = useState()
   const [selectedInLanguage, setSelectedInLanguage] = useState([]);
   const [selectedOutLanguage, setSelectedOutLanguage] = useState([]);
+  const [selectedStartDate, setSelectedStartDate] = useState();
+  const [selectedEndDate, setSelectedEndDate] = useState(dayjs("2025-01-01"));
 
   useEffect(()=>{
     auth0.getUser().then(user => {
@@ -101,7 +104,10 @@ const HistoryPage = ({ page = 1 }) => {
 
           <Box sx={{ width: 230, marginRight: '10px' }}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DateTimePicker label="mm/dd/yy" />
+              <DateTimePicker label="mm/dd/yy"
+              value={selectedStartDate === dayjs("1970-01-01") ? null : selectedStartDate}
+              onChange={(newValue) => setSelectedStartDate(newValue)}
+              onAccept={(value) => {setSelectedStartDate(value)}} />
             </LocalizationProvider>
           </Box>
           <Typography data-testid='title' variant='h2' component='span' align='flex-start' style={{ marginRight: '10px', color: theme.palette.text.secondary, fontSize: '22px', fontStyle: 'normal', fontWeight: '450', alignSelf: 'center' }}>
@@ -109,7 +115,13 @@ const HistoryPage = ({ page = 1 }) => {
           </Typography>
           <Box sx={{ width: 230 }}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DateTimePicker label="mm/dd/yy" fill={theme.palette.text.secondary} />
+              <DateTimePicker label="mm/dd/yy"
+              value={selectedEndDate}
+              onChange={(newValue) => setSelectedEndDate(newValue)}
+              onAccept={(value) => {
+                console.log(value);
+                setSelectedEndDate(value)
+              }} />
             </LocalizationProvider>
           </Box>
         </Box>
@@ -129,7 +141,7 @@ const HistoryPage = ({ page = 1 }) => {
 
         <Filters />
 
-        <TranslationsCell page={page} uid={userId} inLang={selectedInLanguage} outLang={selectedOutLanguage} />
+        <TranslationsCell page={page} uid={userId} inLang={selectedInLanguage} outLang={selectedOutLanguage} startDate={isNaN(selectedStartDate) ? "1970-01-01T00:00:01Z" : selectedStartDate} endDate={selectedEndDate}/>
       </Box>
     </>
   )

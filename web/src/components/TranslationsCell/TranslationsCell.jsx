@@ -16,16 +16,15 @@ export const languages = {
   "typescript": "TypeScript",
 }
 
-export const beforeQuery = ({ page, uid, inLang, outLang }) => {
-  console.log(inLang, outLang)
+export const beforeQuery = ({ page, uid, inLang, outLang, startDate, endDate}) => {
   page = page ? parseInt(page, 10) : 1
 
-  return { variables: { page, uid, inLang, outLang } }
+  return { variables: { page, uid, inLang, outLang, startDate, endDate } }
 }
 
 export const QUERY = gql`
-  query TranslationHistoryQuery($page: Int, $uid: String!, $inLang: [String!], $outLang: [String!]) {
-    translationHistoryPage(page: $page, uid: $uid, inLang: $inLang, outLang: $outLang) {
+  query TranslationHistoryQuery($page: Int, $uid: String!, $inLang: [String!], $outLang: [String!], , $startDate: DateTime!, $endDate: DateTime!) {
+    translationHistoryPage(page: $page, uid: $uid, inLang: $inLang, outLang: $outLang, startDate: $startDate, endDate: $endDate) {
       translations {
         id
         uid
