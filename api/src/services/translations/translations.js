@@ -38,7 +38,7 @@ export const deleteTranslation = ({ id }) => {
 
 const POSTS_PER_PAGE = 10
 
-export const translationHistoryPage = ({ page = 1, uid, inLang, outLang, startDate, endDate }) => {
+export const translationHistoryPage = ({ page = 1, uid, inLang, outLang, startDate, endDate, sort }) => {
   const offset = (page - 1) * POSTS_PER_PAGE
 
   return {
@@ -58,7 +58,7 @@ export const translationHistoryPage = ({ page = 1, uid, inLang, outLang, startDa
       },
       take: POSTS_PER_PAGE,
       skip: offset,
-      orderBy: { createdAt: 'desc' },
+      orderBy: { createdAt: sort },
     }),
     count: db.translation.count({
       where: {

@@ -53,7 +53,7 @@ const Pagination = ({ count }) => {
   }
 
   return (
-    <Box sx={{ display: 'flex', marginTop: '10px' }}>
+    <Box sx={{ display: 'flex', marginTop: '10px', marginBottom: '10px' }}>
       {items}
     </Box>
   )
