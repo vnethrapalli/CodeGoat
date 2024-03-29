@@ -53,7 +53,7 @@ export const translationHistoryPage = ({ page = 1, uid, inLang, outLang, startDa
         },
         createdAt: {
           gte: startDate,
-          lte: endDate ? endDate : Date.now()
+          lte: endDate,
         },
       },
       take: POSTS_PER_PAGE,
@@ -71,7 +71,7 @@ export const translationHistoryPage = ({ page = 1, uid, inLang, outLang, startDa
         },
         createdAt: {
           gte: startDate,
-          lte: endDate ? endDate : Date.now()
+          lte: endDate,
         },
       },
     }),

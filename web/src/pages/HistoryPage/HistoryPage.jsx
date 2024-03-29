@@ -26,7 +26,7 @@ const HistoryPage = ({ page = 1 }) => {
   const [selectedInLanguage, setSelectedInLanguage] = useState([]);
   const [selectedOutLanguage, setSelectedOutLanguage] = useState([]);
   const [selectedStartDate, setSelectedStartDate] = useState();
-  const [selectedEndDate, setSelectedEndDate] = useState(dayjs("2025-01-01"));
+  const [selectedEndDate, setSelectedEndDate] = useState();
   const [sort, setSort] = useState(true);
 
   useEffect(()=>{
@@ -60,12 +60,12 @@ const HistoryPage = ({ page = 1 }) => {
       <Box sx={{  width: "70%", marginBottom: '10px', marginTop: '10px' }}>
         <Grid container width="100%" spacing={2} alignItems='center' alignContent='center' justifyContent='center'>
           <Grid item alignContent='center' alignItems='stretch' sx={{display: 'flex', justifyContent: 'flex-start' }} xs={9}>
-            <Typography data-testid='filter' sx={{ color: theme.palette.text.secondary, fontSize: '22px', fontStyle: 'normal', fontWeight: '450'}}>
+            <Typography data-testid='filter' sx={{ color: theme.palette.text.secondary, fontSize: '24px', fontStyle: 'normal', fontWeight: '500'}}>
               Filter
             </Typography>
           </Grid>
           <Grid item alignContent='center' alignItems='stretch' sx={{display: 'flex', justifyContent: 'flex-start' }} xs={3}>
-            <Typography data-testid='sort' sx={{ color: theme.palette.text.secondary, fontSize: '22px', fontStyle: 'normal', fontWeight: '450'}}>
+            <Typography data-testid='sort' sx={{ marginLeft: '5px', color: theme.palette.text.secondary, fontSize: '24px', fontStyle: 'normal', fontWeight: '500'}}>
               Sort
             </Typography>
           </Grid>
@@ -144,12 +144,12 @@ const HistoryPage = ({ page = 1 }) => {
             </Box>
           </Grid>
           <Grid item alignContent='center' alignItems='stretch' sx={{display: 'flex', justifyContent: 'flex-start' }} xs={3}>
-            <Typography data-testid='sort' sx={{ color: theme.palette.text.secondary, fontSize: '16px', fontStyle: 'normal', fontWeight: '300'}}>
+            <Typography data-testid='sort' sx={{ display: 'flex', alignItems: 'center', color: theme.palette.text.secondary, fontSize: '16px', fontStyle: 'normal', fontWeight: '300'}}>
               <Button
                 onClick={() => {setSort(!sort)}}
               >
                   Translation Date
-                  {sort ? <ArrowUpward sx={{ fontSize: 'medium', marginLeft: '5px' }}/> : <ArrowDownward sx={{ fontSize: 'medium', marginLeft: '5px' }}/>
+                  {sort ? <ArrowUpward sx={{ fontSize: 'medium', marginLeft: '5px', marginBottom: '1px' }}/> : <ArrowDownward sx={{ fontSize: 'medium', marginLeft: '5px', marginBottom: '1px' }}/>
                   }
               </Button>
             </Typography>
@@ -171,7 +171,7 @@ const HistoryPage = ({ page = 1 }) => {
 
         <Filters />
 
-        <TranslationsCell page={page} uid={userId} inLang={selectedInLanguage} outLang={selectedOutLanguage} startDate={isNaN(selectedStartDate) ? "1970-01-01T00:00:01Z" : selectedStartDate} endDate={selectedEndDate} sort={sort ? 'desc' : 'asc'}/>
+        <TranslationsCell page={page} uid={userId} inLang={selectedInLanguage} outLang={selectedOutLanguage} startDate={isNaN(selectedStartDate) ? "1970-01-01T00:00:01Z" : selectedStartDate} endDate={isNaN(selectedEndDate) ? new Date(Date.now()).toISOString() : selectedEndDate} sort={sort ? 'desc' : 'asc'}/>
       </Box>
     </>
   )
