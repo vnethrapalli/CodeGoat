@@ -162,6 +162,15 @@ describe('Button Tests', () => {
     await waitFor(() => expect(downloadTextAsFile).toHaveBeenCalled());
     unmount();
   });
+
+  test('scroll to top of page on click', async() => {
+    window.scrollTo = jest.fn();
+    const {unmount} = render(<SubmissionPage defaultDownloadTextAsFile={downloadTextAsFile}/>)
+    const translateBtn = screen.getByTestId("translateButton");
+    await waitFor(() => fireEvent.click(translateBtn));
+    expect(window.scrollTo).toBeCalledWith(0, 0);
+    unmount();
+  });
 })
 
 describe('Notification Tests', () => {
