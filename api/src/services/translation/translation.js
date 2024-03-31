@@ -1,12 +1,19 @@
 import OpenAI from "openai";
 import hljs from 'highlight.js';
 import { json } from "stream/consumers";
+// import { useMonaco } from '@monaco-editor/react';
 
 export const getLanguage = (code) => {
-    let langCodes = ["cpp", "csharp", "java", "javascript", "python", "typescript"];
+    const langCodes = ["cpp", "csharp", "java", "javascript", "python", "typescript"];
     const { language } = hljs.highlightAuto(code, langCodes);
     return language;
 }
+
+// export const removeComments = (code) => {
+//   const monaco = useMonaco();
+//   const tokens = monaco.editor.tokenize(code, getLanguage(code));
+//   console.log(tokens);
+// }
 
 export const getTranslation = async ({ code, inLang, outLang }) => {
   let errorInfo = {

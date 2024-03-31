@@ -5,7 +5,7 @@ import { useTheme } from '@mui/material/styles';
 import DownloadIcon from '@mui/icons-material/Download';
 import UploadFile from '@mui/icons-material/UploadFile';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import Editor from '@monaco-editor/react';
+import Editor, { useMonaco } from '@monaco-editor/react';
 import { Toaster, toast } from '@redwoodjs/web/toast'
 import React, { useEffect, useRef, useState } from 'react';
 import { auth0 } from 'src/auth'
@@ -75,7 +75,8 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
   const [rating, setRating] = React.useState(5);
   const [refreshQuery, setRefreshQuery] = React.useState(true);
   const [output, setOutput] = React.useState(false);
-  const [userId, setUserId] = React.useState()
+  const [userId, setUserId] = React.useState();
+  const [inputMonaco, setInputMonaco] = React.useState();
   const theme = useTheme();
 
   const { code, inLang, outLang } = useParams();
@@ -101,6 +102,16 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
   },[])
 
   const CodeBox = ({ codeValue, updateCodeValue, defaultLanguage, language, defaultValue, isInput }) => {
+    const monaco = useMonaco();
+
+    useEffect(() => {
+      if(monaco) {
+        // console.log(monaco.editor.tokenize(codeValue, language));
+        // console.log(`Code Value: ${codeValue}`);
+        setInputMonaco(monaco);
+      }
+    }, [monaco]);
+
     const editorRef = useRef(null);
 
     function handleEditorDidMount(editor, monaco) {
@@ -206,7 +217,12 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
       onError: () => {},
     })
 
+    const removeComments = (inCode) => {
+      return inCode;
+    }
+
     const translate = (usId, inLang, outLang, inCode, outCode, stars, stat) => {
+      inCode = removeComments(inCode);
       createTranslation({ variables: { input: { "uid": usId, "inputLanguage": inLang, "outputLanguage": outLang, "inputCode": inCode, "outputCode": outCode, "rating": stars, "status": stat }}});
     }
 
