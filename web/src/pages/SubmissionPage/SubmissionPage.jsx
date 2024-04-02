@@ -10,7 +10,7 @@ import { Toaster, toast } from '@redwoodjs/web/toast'
 import React, { useEffect, useRef, useState } from 'react';
 import { auth0 } from 'src/auth'
 import { useParams } from '@redwoodjs/router'
-import { ConnectingAirportsOutlined } from '@mui/icons-material';
+import { ConnectingAirportsOutlined, ConstructionOutlined, ContentPasteSearchOutlined } from '@mui/icons-material';
 
 const CREATE_TRANSLATION = gql`
   mutation CreateTranslationMutation($input: CreateTranslationInput!) {
@@ -217,77 +217,136 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
       onError: () => {},
     })
 
-    const removeComments = (inCode) => {
-      return inCode;
+    const removeComments = (inCode, inLang) => {
+      let withoutComments = "";
+      const tokens = inputMonaco.editor.tokenize(inCode, inLang);
+      console.log(tokens);
+      let start = 0;
+
+      for (let i = 0; i < tokens.length; i++)
+      {
+        for (let j = 0; j < tokens[i].length; j++)
+        {
+          const tok = tokens[i][j];
+          let end;
+
+          if (j != tokens[i].length - 1) // not at last token in a line
+          {
+            end = start + (tokens[i][j+1].offset - tok.offset);
+          }
+          else if (j == tokens[i].length - 1 && i != tokens.length - 1) // at last token in a line but there are more lines to go
+          {
+            end = start;
+
+            while (tokens[i+1].length == 0) // if next line has no tokens in it
+            {
+              i++;
+              end += 2; // 2 because there is a carriage return character and a newline character in between each line
+            }
+
+            while (inCode[end] != "\r")
+            {
+              end++;
+            }
+
+            end += (2 + tokens[i+1][0].offset);
+          }
+          else // at last token on last line
+          {
+            if (!tok.type.includes("comment"))
+            {
+              withoutComments += inCode.substring(start);
+              break;
+            }
+          }
+
+          console.log(`start: ${start} end: ${end}`);
+          console.log(inCode.substring(start, end).replaceAll("\n", "&").replaceAll("\r", "|"));
+
+          if (!tok.type.includes("comment"))
+          {
+            withoutComments += inCode.substring(start, end);
+          }
+          else
+          {
+            withoutComments += "\r\n";
+          }
+
+          start = end;
+        }
+      }
+
+      return withoutComments;
     }
 
     const translate = (usId, inLang, outLang, inCode, outCode, stars, stat) => {
-      inCode = removeComments(inCode);
+      // console.log(removeComments(inCode, inLang));
       createTranslation({ variables: { input: { "uid": usId, "inputLanguage": inLang, "outputLanguage": outLang, "inputCode": inCode, "outputCode": outCode, "rating": stars, "status": stat }}});
     }
 
     const translateRequest = (async () => {
-      if (queueCount < MAXQUEUE) {
-        queueCount++;
-        toast.dismiss();
-        toast.success("Your request has been sent! \nQueued Requests: " + queueCount.toString(), {duration: 1200});
-      } else {
-        toast.dismiss();
-        toast.error("Slow down there! I can't afford all those API calls lmao", {duration: 2500});
-        return;
-      }
-      const reqUrl = `http://localhost:8910/.redwood/functions/translate`;
-      const translation = await fetch(reqUrl, {
-        method: "POST",
-        body: JSON.stringify({
-          code: inputCodeValue,
-          inputLanguage: inputLanguage,
-          outputLanguage: outputLanguage
-        })
-      });
+      // if (queueCount < MAXQUEUE) {
+      //   queueCount++;
+      //   toast.dismiss();
+      //   toast.success("Your request has been sent! \nQueued Requests: " + queueCount.toString(), {duration: 1200});
+      // } else {
+      //   toast.dismiss();
+      //   toast.error("Slow down there! I can't afford all those API calls lmao", {duration: 2500});
+      //   return;
+      // }
+      // const reqUrl = `http://localhost:8910/.redwood/functions/translate`;
+      // const translation = await fetch(reqUrl, {
+      //   method: "POST",
+      //   body: JSON.stringify({
+      //     code: inputCodeValue,
+      //     inputLanguage: inputLanguage,
+      //     outputLanguage: outputLanguage
+      //   })
+      // });
 
-      let response = translation;
-      let statusCode = response.status;
-      response = await response.json();
+      // let response = translation;
+      // let statusCode = response.status;
+      // response = await response.json();
 
-      setOutputCodeValue(response.data);
-      setOutput(true);
-      setRefreshQuery(val => !val);
-      queueCount--;
+      // setOutputCodeValue(response.data);
+      // setOutput(true);
+      // setRefreshQuery(val => !val);
+      // queueCount--;
 
-      if(statusCode === 200) {
-        toast.success("Code translated successfully! \nQueued Requests: " + queueCount.toString(), { duration: 1500 });
-        setOutputCodeValue(response.data);
-      } else {
-        switch(statusCode) {
-          case 429:
-            toast.error("The API has reached its rate limit. Please try again later.", { duration: 2500 });
-            break;
-          case 400:
-            toast.error("There was an error in the communication between the backend and API. Please try again.", { duration: 2500 });
-            break;
-          case 403:
-            toast.error("The length of the code is too long. Please shorten the code and try again.", { duration: 2500 });
-            break;
-          case 401:
-            toast.error("There was an error on the backend. Please try again later.", { duration: 2500 });
-            break;
-          case 404:
-            toast.error("The GPT API is unavalaible", { duration: 2500 });
-            break;
-          case 500:
-            toast.error("There was an error on the API side. Please try again.", { duration: 2500 });
-            break;
-          case 405:
-            toast.error("This action is not permitted by the API. Please try again.", { duration: 2500 });
-            break;
-          default:
-            toast.error("Error translating code.", { duration: 2500 });
-            break;
-        }
-      }
+      // if(statusCode === 200) {
+      //   toast.success("Code translated successfully! \nQueued Requests: " + queueCount.toString(), { duration: 1500 });
+      //   setOutputCodeValue(response.data);
+      // } else {
+      //   switch(statusCode) {
+      //     case 429:
+      //       toast.error("The API has reached its rate limit. Please try again later.", { duration: 2500 });
+      //       break;
+      //     case 400:
+      //       toast.error("There was an error in the communication between the backend and API. Please try again.", { duration: 2500 });
+      //       break;
+      //     case 403:
+      //       toast.error("The length of the code is too long. Please shorten the code and try again.", { duration: 2500 });
+      //       break;
+      //     case 401:
+      //       toast.error("There was an error on the backend. Please try again later.", { duration: 2500 });
+      //       break;
+      //     case 404:
+      //       toast.error("The GPT API is unavalaible", { duration: 2500 });
+      //       break;
+      //     case 500:
+      //       toast.error("There was an error on the API side. Please try again.", { duration: 2500 });
+      //       break;
+      //     case 405:
+      //       toast.error("This action is not permitted by the API. Please try again.", { duration: 2500 });
+      //       break;
+      //     default:
+      //       toast.error("Error translating code.", { duration: 2500 });
+      //       break;
+      //   }
+      // }
 
-      translate(userId, inputLanguage, outputLanguage, inputCodeValue, response.data, -1, translation.status + " " + translation.statusText);
+      // translate(userId, inputLanguage, outputLanguage, inputCodeValue, response.data, -1, translation.status + " " + translation.statusText);
+      console.log(removeComments(inputCodeValue, inputLanguage));
     });
 
     return (

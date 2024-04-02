@@ -1,5 +1,5 @@
 import { logger } from 'src/lib/logger'
-import { getTranslation, getLanguage, removeComments } from 'src/services/translation'
+import { getTranslation, getLanguage } from 'src/services/translation'
 
 import { useRequireAuth } from '@redwoodjs/graphql-server'
 import { authDecoder } from '@redwoodjs/auth-auth0-api'
@@ -38,9 +38,6 @@ const myHandler = async (event, _context) => {
       throw Error("Please select the right language for your code.");
     }
     let codeForTranslation = code.trim();
-
-    // removing comments before code is sent to the api
-    // removeComments(code);
 
     // get results from api call
     const response = await getTranslation({ code: codeForTranslation, inLang: inputLanguage, outLang: outputLanguage });
