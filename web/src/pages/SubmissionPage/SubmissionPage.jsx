@@ -273,7 +273,11 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
           start = end;
         }
 
-        withoutComments += "\r\n"; // carriage return character and a newline character in between each line
+        if (!(tokens[i].length == 1 && tokens[i][0].type.includes("comment")))
+        {
+          withoutComments += "\r\n"; // carriage return character and a newline character in between each line
+        }
+
         start += 2;
       }
 
