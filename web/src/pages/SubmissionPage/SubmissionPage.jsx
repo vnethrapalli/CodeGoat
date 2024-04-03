@@ -218,6 +218,11 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
     })
 
     const removeComments = (inCode, inLang) => {
+      if (inputMonaco == undefined)
+      {
+        return;
+      }
+
       let withoutComments = "";
       const tokens = inputMonaco.editor.tokenize(inCode, inLang);
       let start = 0;
