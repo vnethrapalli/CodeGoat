@@ -350,6 +350,7 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
       }
 
       translate(userId, inputLanguage, outputLanguage, inputCodeValue, response.data, -1, translation.status + " " + translation.statusText);
+      window.scrollTo(0, 0);
     });
 
     return (
