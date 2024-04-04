@@ -72,9 +72,9 @@ export const Success = ({ translationHistoryPage }) => {
               expandIcon={<ExpandMoreIcon />}
               aria-controls="panel1-content"
               id={translation.id}
-              sx={{ color: theme.palette.text.primary, minHeight: '64px', display: 'flex', margin: '0', alignContent: 'center',
-                '.css-o4b71y-MuiAccordionSummary-content.Mui-expanded': {
-                  my: '12px'
+              sx={{ color: theme.palette.text.primary, minHeight: '64px', display: 'flex', margin: '0px', alignContent: 'center',
+                '.MuiAccordion-root.Mui-expanded': {
+                  margin: '0px'
                 }
               }}
             >

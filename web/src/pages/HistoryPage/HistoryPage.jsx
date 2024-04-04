@@ -8,7 +8,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { auth0 } from 'src/auth'
-import { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { QUERY as TranslationQuery } from 'src/components/TranslationsCell'
 import TranslationsCell from 'src/components/TranslationsCell'
 
@@ -31,14 +31,14 @@ const DELETE_ALL_TRANSLATIONS = gql`
 
 const HistoryPage = ({ page = 1 }) => {
   const theme = useTheme();
-  const [userId, setUserId] = useState()
-  const [selectedInLanguage, setSelectedInLanguage] = useState([]);
-  const [selectedOutLanguage, setSelectedOutLanguage] = useState([]);
-  const [selectedStartDate, setSelectedStartDate] = useState();
-  const [selectedEndDate, setSelectedEndDate] = useState();
-  const [sort, setSort] = useState(1);
-  const [inSort, setInSort] = useState(0);
-  const [outSort, setOutSort] = useState(0);
+  const [userId, setUserId] = React.useState()
+  const [selectedInLanguage, setSelectedInLanguage] = React.useState([]);
+  const [selectedOutLanguage, setSelectedOutLanguage] = React.useState([]);
+  const [selectedStartDate, setSelectedStartDate] = React.useState();
+  const [selectedEndDate, setSelectedEndDate] = React.useState();
+  const [sort, setSort] = React.useState(1);
+  const [inSort, setInSort] = React.useState(0);
+  const [outSort, setOutSort] = React.useState(0);
 
   useEffect(()=>{
     auth0.getUser().then(user => {

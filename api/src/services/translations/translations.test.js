@@ -189,7 +189,7 @@ describe('filtering and sorting', () => {
   })
 
   test('returns a sorted translation asc', async () => {
-    const record = await translationHistoryPage({ uid: 'qwerty', sort: 'asc' });
+    const record = await translationHistoryPage({ uid: 'qwerty', sort: 2 });
 
     record.translations.then(async function(value) {
       expect(value[0].createdAt).toEqual(new Date('2021-07-02T00:00:00Z'));
@@ -197,7 +197,7 @@ describe('filtering and sorting', () => {
   })
 
   test('returns a sorted translation desc', async () => {
-    const record = await translationHistoryPage({ uid: 'qwerty', sort: 'desc' });
+    const record = await translationHistoryPage({ uid: 'qwerty', sort: 1 });
 
     record.translations.then(async function(value) {
       expect(value[0].createdAt).toEqual(new Date('2024-01-01T00:00:00Z'));
@@ -205,7 +205,7 @@ describe('filtering and sorting', () => {
   })
 
   test('returns a filtered and sorted translation', async () => {
-    const record = await translationHistoryPage({ uid: 'qwerty', inLang: ['python'], outLang: ['cpp'], sort: 'asc'});
+    const record = await translationHistoryPage({ uid: 'qwerty', inLang: ['python'], outLang: ['cpp'], sort: 2});
 
     record.translations.then(async function(value) {
       expect(value).toHaveLength(2);
@@ -214,7 +214,7 @@ describe('filtering and sorting', () => {
   })
 
   test('returns a filtered and sorted translation 2', async () => {
-    const record = await translationHistoryPage({ uid: 'qwerty', inLang: ['cpp'], outLang: ['python'], sort: 'desc', startDate: '2021-07-01T00:00:00Z', endDate: '2021-07-05T00:00:00Z'});
+    const record = await translationHistoryPage({ uid: 'qwerty', inLang: ['cpp'], outLang: ['python'], sort: 1, startDate: '2021-07-01T00:00:00Z', endDate: '2021-07-05T00:00:00Z'});
 
     record.translations.then(async function(value) {
       expect(value).toHaveLength(2);
