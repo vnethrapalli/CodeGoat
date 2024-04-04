@@ -69,8 +69,8 @@ describe('translations', () => {
 })
 
 describe('filtering and sorting', () => {
-  beforeEach(async () => {
-    const data = await createTranslation({
+  beforeAll(async () => {
+    await createTranslation({
       input: {
         uid: 'qwerty',
         inputLanguage: 'cpp',
@@ -83,7 +83,7 @@ describe('filtering and sorting', () => {
       }
     })
 
-    const data2 = await createTranslation({
+    await createTranslation({
       input: {
         uid: 'qwerty',
         inputLanguage: 'python',
@@ -95,51 +95,116 @@ describe('filtering and sorting', () => {
         status: '200 OK'
       }
     })
+
+    await createTranslation({
+      input: {
+        uid: 'qwerty',
+        inputLanguage: 'python',
+        outputLanguage: 'cpp',
+        inputCode: 'String',
+        outputCode: 'String',
+        createdAt: '2021-07-01T00:00:00Z',
+        rating: 5,
+        status: '200 OK'
+      }
+    })
+
+    await createTranslation({
+      input: {
+        uid: 'qwerty',
+        inputLanguage: 'javascript',
+        outputLanguage: 'python',
+        inputCode: 'String',
+        outputCode: 'String',
+        createdAt: '2021-07-01T00:00:00Z',
+        rating: 5,
+        status: '200 OK'
+      }
+    })
+
+    await createTranslation({
+      input: {
+        uid: 'qwerty',
+        inputLanguage: 'cpp',
+        outputLanguage: 'javascript',
+        inputCode: 'String',
+        outputCode: 'String',
+        createdAt: '2021-07-01T00:00:00Z',
+        rating: 5,
+        status: '200 OK'
+      }
+    })
   })
 
   test('returns a filtered translation inLang', async () => {
-    const record = await translationHistoryPage({ uid: 'qwerty', inLang: ['cpp'] });
+    const record = await translationHistoryPage({ uid: 'qwerty', inLang: ['python'] });
 
     record.translations.then(function(value) {
-      // console.log(value);
-      expect(value).toHaveLength(1);
+      expect(value).toHaveLength(2);
     });
-
   })
 
-  // scenario('returns a filtered translation outLang', async (scenario) => {
-  //   const result = await translationHistoryPage({ uid: scenario.uid })
+  test('returns a filtered translation outLang', async () => {
+    const record = await translationHistoryPage({ uid: 'qwerty', outLang: ['python'] });
 
-  //   expect(result).toEqual(scenario.translation.one)
-  // })
+    record.translations.then(function(value) {
+      expect(value).toHaveLength(2);
+    });
+  })
 
-  // scenario('returns a filtered translation inLang outLang', async (scenario) => {
-  //   const result = await translationHistoryPage({ uid: scenario.uid })
+  test('returns a filtered translation inLang outLang', async () => {
+    const record = await translationHistoryPage({ uid: 'qwerty', inLang: ['python'], outLang: ['cpp'] });
 
-  //   expect(result).toEqual(scenario.translation.one)
-  // })
+    record.translations.then(async function(value) {
+      expect(value).toHaveLength(2);
+    });
+  })
 
-  // scenario('returns a filtered translation date', async (scenario) => {
-  //   const result = await translationHistoryPage({ uid: scenario.uid })
+  test('returns a filtered translation date', async () => {
+    const record = await translationHistoryPage({ uid: 'qwerty' });
 
-  //   expect(result).toEqual(scenario.translation.one)
-  // })
+    record.translations.then(async function(value) {
+      expect(value).toHaveLength(2);
+    });
+  })
 
-  // scenario('returns a filtered translation dates', async (scenario) => {
-  //   const result = await translationHistoryPage({ uid: scenario.uid })
+  test('returns a filtered translation dates', async () => {
+    const record = await translationHistoryPage({ uid: 'qwerty' });
 
-  //   expect(result).toEqual(scenario.translation.one)
-  // })
+    record.translations.then(async function(value) {
+      expect(value).toHaveLength(2);
+    });
+  })
 
-  // scenario('returns a sorted translation asc', async (scenario) => {
-  //   const result = await translationHistoryPage({ uid: scenario.uid })
+  test('returns a sorted translation asc', async () => {
+    const record = await translationHistoryPage({ uid: 'qwerty' });
 
-  //   expect(result).toEqual(scenario.translation.one)
-  // })
+    record.translations.then(async function(value) {
+      expect(value).toHaveLength(2);
+    });
+  })
 
-  // scenario('returns a sorted translation desc', async (scenario) => {
-  //   const result = await translationHistoryPage({ uid: scenario.uid })
+  test('returns a sorted translation desc', async () => {
+    const record = await translationHistoryPage({ uid: 'qwerty' });
 
-  //   expect(result).toEqual(scenario.translation.one)
-  // })
+    record.translations.then(async function(value) {
+      expect(value).toHaveLength(2);
+    });
+  })
+
+  test('returns a filtered and sorted translation', async () => {
+    const record = await translationHistoryPage({ uid: 'qwerty', inLang: ['python'], outLang: ['cpp'] });
+
+    record.translations.then(async function(value) {
+      expect(value).toHaveLength(2);
+    });
+  })
+
+  test('returns a filtered and sorted translation 2', async () => {
+    const record = await translationHistoryPage({ uid: 'qwerty', inLang: ['python'], outLang: ['cpp'] });
+
+    record.translations.then(async function(value) {
+      expect(value).toHaveLength(2);
+    });
+  })
 })

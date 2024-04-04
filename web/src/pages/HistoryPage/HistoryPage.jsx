@@ -28,6 +28,8 @@ const HistoryPage = ({ page = 1 }) => {
   const [selectedStartDate, setSelectedStartDate] = useState();
   const [selectedEndDate, setSelectedEndDate] = useState();
   const [sort, setSort] = useState(true);
+  const [inSort, setInSort] = useState(0);
+  const [outSort, setOutSort] = useState(0);
 
   useEffect(()=>{
     auth0.getUser().then(user => {
@@ -58,93 +60,102 @@ const HistoryPage = ({ page = 1 }) => {
 
     return (
       <Box sx={{  width: "70%", marginBottom: '10px', marginTop: '10px' }}>
-        <Grid container width="100%" spacing={2} alignItems='center' alignContent='center' justifyContent='center'>
-          <Grid item alignContent='center' alignItems='stretch' sx={{display: 'flex', justifyContent: 'flex-start' }} xs={9}>
+        <Grid container width="100%" spacing={2}>
+          <Grid item sx={{display: 'flex', flexDirection: 'column' }} xs={9}>
             <Typography data-testid='filter' sx={{ color: theme.palette.text.secondary, fontSize: '24px', fontStyle: 'normal', fontWeight: '500'}}>
               Filter
             </Typography>
-          </Grid>
-          <Grid item alignContent='center' alignItems='stretch' sx={{display: 'flex', justifyContent: 'flex-start' }} xs={3}>
-            <Typography data-testid='sort' sx={{ marginLeft: '5px', color: theme.palette.text.secondary, fontSize: '24px', fontStyle: 'normal', fontWeight: '500'}}>
+            <Box sx={{ display: 'flex' }}>
+              <FormControl sx={{ marginTop: '0px', marginRight: '10px', height: 20, width: 175 }}>
+                <InputLabel id="demo-multiple-name-label">Input Language</InputLabel>
+                <Select
+                  labelId="filter-inputLanguage"
+                  id="filter-inputLanguage"
+                  multiple
+                  value={selectedInLanguage}
+                  onChange={handleInputChange}
+                  input={<OutlinedInput label="Input Language" />}
+                >
+                  {languages.map((lang) => (
+                    <MenuItem
+                      key={lang.langCode}
+                      value={lang.langCode}
+                    >
+                      {lang.dropdownItem}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+
+              <FormControl sx={{ marginTop: '0px', marginRight: '10px', height: 20, width: 175 }}>
+                <InputLabel id="demo-multiple-name-label">Output Language</InputLabel>
+                <Select
+                  labelId="filter-outputLanguage"
+                  id="filter-outputLanguage"
+                  multiple
+                  value={selectedOutLanguage}
+                  onChange={handleOutputChange}
+                  input={<OutlinedInput label="Output Language" />}
+                >
+                  {languages.map((lang) => (
+                    <MenuItem
+                      key={lang.langCode}
+                      value={lang.langCode}
+                    >
+                      {lang.dropdownItem}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+
+              <Box sx={{ width: 150, marginRight: '10px' }}>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DateTimePicker
+                    views={['year', 'month', 'day']}
+                    label="mm/dd/yy"
+                    value={selectedStartDate}
+                    onChange={(newValue) => setSelectedStartDate(newValue)}
+                    onAccept={(value) => {setSelectedStartDate(value)}}
+                  />
+                </LocalizationProvider>
+              </Box>
+              <Typography data-testid='to' variant='h2' component='span' alignSelf='flex-start' style={{ marginRight: '10px', color: theme.palette.text.secondary, fontSize: '22px', fontStyle: 'normal', fontWeight: '450', alignSelf: 'center' }}>
+                to
+              </Typography>
+              <Box sx={{ width: 150 }}>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DateTimePicker
+                    views={['year', 'month', 'day']}
+                    label="mm/dd/yy"
+                    value={selectedEndDate}
+                    onChange={(newValue) => setSelectedEndDate(newValue)}
+                    onAccept={(value) => {
+                      setSelectedEndDate(value)
+                    }}
+                  />
+                </LocalizationProvider>
+              </Box>
+            </Box>
+
+            <br></br>
+            <Typography data-testid='sort' sx={{ color: theme.palette.text.secondary, fontSize: '24px', fontStyle: 'normal', fontWeight: '500'}}>
               Sort
             </Typography>
-          </Grid>
-        </Grid>
 
-        <Grid container width="100%" spacing={2} alignItems='center' alignContent='center' justifyContent='center'>
-          <Grid item alignContent='center' alignItems='stretch' sx={{display: 'flex', justifyContent: 'flex-start' }} xs={9}>
-            <FormControl sx={{ marginTop: '0px', marginRight: '10px', height: 20, width: 175 }}>
-              <InputLabel id="demo-multiple-name-label">Input Language</InputLabel>
-              <Select
-                labelId="filter-inputLanguage"
-                id="filter-inputLanguage"
-                multiple
-                value={selectedInLanguage}
-                onChange={handleInputChange}
-                input={<OutlinedInput label="Input Language" />}
-              >
-                {languages.map((lang) => (
-                  <MenuItem
-                    key={lang.langCode}
-                    value={lang.langCode}
-                  >
-                    {lang.dropdownItem}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-
-            <FormControl sx={{ marginTop: '0px', marginRight: '10px', height: 20, width: 175 }}>
-              <InputLabel id="demo-multiple-name-label">Output Language</InputLabel>
-              <Select
-                labelId="filter-outputLanguage"
-                id="filter-outputLanguage"
-                multiple
-                value={selectedOutLanguage}
-                onChange={handleOutputChange}
-                input={<OutlinedInput label="Output Language" />}
-              >
-                {languages.map((lang) => (
-                  <MenuItem
-                    key={lang.langCode}
-                    value={lang.langCode}
-                  >
-                    {lang.dropdownItem}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-
-            <Box sx={{ width: 150, marginRight: '10px' }}>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DateTimePicker
-                  views={['year', 'month', 'day']}
-                  label="mm/dd/yy"
-                  value={selectedStartDate}
-                  onChange={(newValue) => setSelectedStartDate(newValue)}
-                  onAccept={(value) => {setSelectedStartDate(value)}}
-                />
-              </LocalizationProvider>
-            </Box>
-            <Typography data-testid='to' variant='h2' component='span' alignSelf='flex-start' style={{ marginRight: '10px', color: theme.palette.text.secondary, fontSize: '22px', fontStyle: 'normal', fontWeight: '450', alignSelf: 'center' }}>
-              to
-            </Typography>
-            <Box sx={{ width: 150 }}>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DateTimePicker
-                  views={['year', 'month', 'day']}
-                  label="mm/dd/yy"
-                  value={selectedEndDate}
-                  onChange={(newValue) => setSelectedEndDate(newValue)}
-                  onAccept={(value) => {
-                    setSelectedEndDate(value)
-                  }}
-                />
-              </LocalizationProvider>
-            </Box>
-          </Grid>
-          <Grid item alignContent='center' alignItems='stretch' sx={{display: 'flex', justifyContent: 'flex-start' }} xs={3}>
             <Typography data-testid='sort' sx={{ display: 'flex', alignItems: 'center', color: theme.palette.text.secondary, fontSize: '16px', fontStyle: 'normal', fontWeight: '300'}}>
+              <Button
+                onClick={() => {inSort != 0 ? setInSort(inSort * -1) : setInSort(1)}}
+              >
+                  Input Language
+                  {inSort != 0 ? (inSort == 1 ? <ArrowUpward sx={{ fontSize: 'medium', marginLeft: '5px', marginBottom: '1px' }}/> : <ArrowDownward sx={{ fontSize: 'medium', marginLeft: '5px', marginBottom: '1px'}} />) : null}
+              </Button>
+              <Button
+                onClick={() => {setSort(!sort)}}
+              >
+                  Output Language
+                  {sort ? <ArrowUpward sx={{ fontSize: 'medium', marginLeft: '5px', marginBottom: '1px' }}/> : <ArrowDownward sx={{ fontSize: 'medium', marginLeft: '5px', marginBottom: '1px' }}/>
+                  }
+              </Button>
               <Button
                 onClick={() => {setSort(!sort)}}
               >
@@ -153,6 +164,13 @@ const HistoryPage = ({ page = 1 }) => {
                   }
               </Button>
             </Typography>
+          </Grid>
+          <Grid item sx={{ }} xs={3}>
+            <Button
+              onClick={() => {setSort(true); setSelectedInLanguage([]); setSelectedOutLanguage([]); setSelectedStartDate(undefined); setSelectedEndDate(undefined); setInSort(0); setOutSort(0);}}
+            >
+                Clear All Filters/Sort
+            </Button>
           </Grid>
         </Grid>
       </Box>
