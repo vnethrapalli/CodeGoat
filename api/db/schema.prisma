@@ -5,8 +5,9 @@
 // https://www.prisma.io/docs/orm/prisma-migrate
 
 datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
+  provider          = "postgresql"
+  url               = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
 generator client {
@@ -37,7 +38,7 @@ model Translation {
 }
 
 model Faq {
-  id                  Int     @id @default(autoincrement())
-  question            String
-  answer              String
+  id       Int    @id @default(autoincrement())
+  question String
+  answer   String
 }

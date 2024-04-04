@@ -15,8 +15,8 @@ export const standard = (/* vars, { ctx, req } */) => ({
     {
       id: 43,
       uid: "945839",
-      inputLanguage: "python",
-      outputLanguage: "javascript",
+      inputLanguage: "cpp",
+      outputLanguage: "python",
       inputCode: "print(\"Hello World\")",
       outputCode: "console.log(\"Hello World\")",
       createdAt: "2024-03-21T02:30:35.700Z",
@@ -26,8 +26,8 @@ export const standard = (/* vars, { ctx, req } */) => ({
     {
       id: 44,
       uid: "945839",
-      inputLanguage: "python",
-      outputLanguage: "javascript",
+      inputLanguage: "java",
+      outputLanguage: "cpp",
       inputCode: "print(\"Hello World\")",
       outputCode: "console.log(\"Hello World\")",
       createdAt: "2024-03-21T02:30:35.700Z",

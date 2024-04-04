@@ -126,7 +126,7 @@ const HistoryPage = ({ page = 1 }) => {
                 />
               </LocalizationProvider>
             </Box>
-            <Typography data-testid='to' variant='h2' component='span' align='flex-start' style={{ marginRight: '10px', color: theme.palette.text.secondary, fontSize: '22px', fontStyle: 'normal', fontWeight: '450', alignSelf: 'center' }}>
+            <Typography data-testid='to' variant='h2' component='span' alignSelf='flex-start' style={{ marginRight: '10px', color: theme.palette.text.secondary, fontSize: '22px', fontStyle: 'normal', fontWeight: '450', alignSelf: 'center' }}>
               to
             </Typography>
             <Box sx={{ width: 150 }}>

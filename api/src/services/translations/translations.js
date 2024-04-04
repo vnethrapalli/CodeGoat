@@ -38,7 +38,7 @@ export const deleteTranslation = ({ id }) => {
 
 const POSTS_PER_PAGE = 10
 
-export const translationHistoryPage = ({ page = 1, uid, inLang, outLang, startDate, endDate, sort }) => {
+export const translationHistoryPage = ({ page = 1, uid, inLang = [], outLang = [], startDate = "1970-01-01T00:00:01Z", endDate = new Date(Date.now()).toISOString(), sort = "desc"}) => {
   const offset = (page - 1) * POSTS_PER_PAGE
 
   return {

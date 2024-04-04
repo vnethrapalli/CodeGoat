@@ -4,6 +4,7 @@ import {
   createTranslation,
   updateTranslation,
   deleteTranslation,
+  translationHistoryPage
 } from './translations'
 
 // Generated boilerplate tests do not account for all circumstances
@@ -65,4 +66,80 @@ describe('translations', () => {
 
     expect(result).toEqual(null)
   })
+})
+
+describe('filtering and sorting', () => {
+  beforeEach(async () => {
+    const data = await createTranslation({
+      input: {
+        uid: 'qwerty',
+        inputLanguage: 'cpp',
+        outputLanguage: 'python',
+        inputCode: 'String',
+        outputCode: 'String',
+        createdAt: '2021-07-01T00:00:00Z',
+        rating: 5,
+        status: '200 OK'
+      }
+    })
+
+    const data2 = await createTranslation({
+      input: {
+        uid: 'qwerty',
+        inputLanguage: 'python',
+        outputLanguage: 'cpp',
+        inputCode: 'String',
+        outputCode: 'String',
+        createdAt: '2021-07-01T00:00:00Z',
+        rating: 5,
+        status: '200 OK'
+      }
+    })
+  })
+
+  test('returns a filtered translation inLang', async () => {
+    const record = await translationHistoryPage({ uid: 'qwerty', inLang: ['cpp'] });
+
+    record.translations.then(function(value) {
+      // console.log(value);
+      expect(value).toHaveLength(1);
+    });
+
+  })
+
+  // scenario('returns a filtered translation outLang', async (scenario) => {
+  //   const result = await translationHistoryPage({ uid: scenario.uid })
+
+  //   expect(result).toEqual(scenario.translation.one)
+  // })
+
+  // scenario('returns a filtered translation inLang outLang', async (scenario) => {
+  //   const result = await translationHistoryPage({ uid: scenario.uid })
+
+  //   expect(result).toEqual(scenario.translation.one)
+  // })
+
+  // scenario('returns a filtered translation date', async (scenario) => {
+  //   const result = await translationHistoryPage({ uid: scenario.uid })
+
+  //   expect(result).toEqual(scenario.translation.one)
+  // })
+
+  // scenario('returns a filtered translation dates', async (scenario) => {
+  //   const result = await translationHistoryPage({ uid: scenario.uid })
+
+  //   expect(result).toEqual(scenario.translation.one)
+  // })
+
+  // scenario('returns a sorted translation asc', async (scenario) => {
+  //   const result = await translationHistoryPage({ uid: scenario.uid })
+
+  //   expect(result).toEqual(scenario.translation.one)
+  // })
+
+  // scenario('returns a sorted translation desc', async (scenario) => {
+  //   const result = await translationHistoryPage({ uid: scenario.uid })
+
+  //   expect(result).toEqual(scenario.translation.one)
+  // })
 })
