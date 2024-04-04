@@ -3,7 +3,7 @@ import hljs from 'highlight.js';
 import { json } from "stream/consumers";
 
 export const getLanguage = (code) => {
-    let langCodes = ["cpp", "csharp", "java", "javascript", "python", "typescript"];
+    const langCodes = ["cpp", "csharp", "java", "javascript", "python", "typescript"];
     const { language } = hljs.highlightAuto(code, langCodes);
     return language;
 }

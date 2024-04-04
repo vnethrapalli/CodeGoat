@@ -41,6 +41,239 @@ Object.defineProperty(window, 'matchMedia', {
   })),
 });
 
+// remove comments method specifically for testing with hard coded tokens
+const testRemoveComments = (inCode) => {
+  let withoutComments = "";
+  const tokens = [
+    [],
+    [
+        {
+            "offset": 0,
+            "type": "comment.java",
+            "language": "java"
+        }
+    ],
+    [
+        {
+            "offset": 0,
+            "type": "comment.java",
+            "language": "java"
+        },
+        {
+            "offset": 15,
+            "type": "",
+            "language": "java"
+        },
+        {
+            "offset": 17,
+            "type": "keyword.public.java",
+            "language": "java"
+        },
+        {
+            "offset": 23,
+            "type": "",
+            "language": "java"
+        },
+        {
+            "offset": 24,
+            "type": "keyword.static.java",
+            "language": "java"
+        },
+        {
+            "offset": 30,
+            "type": "",
+            "language": "java"
+        },
+        {
+            "offset": 31,
+            "type": "keyword.void.java",
+            "language": "java"
+        },
+        {
+            "offset": 35,
+            "type": "",
+            "language": "java"
+        },
+        {
+            "offset": 36,
+            "type": "identifier.java",
+            "language": "java"
+        },
+        {
+            "offset": 40,
+            "type": "delimiter.parenthesis.java",
+            "language": "java"
+        },
+        {
+            "offset": 41,
+            "type": "identifier.java",
+            "language": "java"
+        },
+        {
+            "offset": 47,
+            "type": "delimiter.square.java",
+            "language": "java"
+        },
+        {
+            "offset": 49,
+            "type": "",
+            "language": "java"
+        },
+        {
+            "offset": 50,
+            "type": "identifier.java",
+            "language": "java"
+        },
+        {
+            "offset": 54,
+            "type": "delimiter.parenthesis.java",
+            "language": "java"
+        },
+        {
+            "offset": 55,
+            "type": "comment.java",
+            "language": "java"
+        }
+    ],
+    [
+        {
+            "offset": 0,
+            "type": "delimiter.curly.java",
+            "language": "java"
+        }
+    ],
+    [
+        {
+            "offset": 0,
+            "type": "",
+            "language": "java"
+        },
+        {
+            "offset": 1,
+            "type": "identifier.java",
+            "language": "java"
+        },
+        {
+            "offset": 7,
+            "type": "delimiter.java",
+            "language": "java"
+        },
+        {
+            "offset": 8,
+            "type": "identifier.java",
+            "language": "java"
+        },
+        {
+            "offset": 11,
+            "type": "delimiter.java",
+            "language": "java"
+        },
+        {
+            "offset": 12,
+            "type": "identifier.java",
+            "language": "java"
+        },
+        {
+            "offset": 19,
+            "type": "delimiter.parenthesis.java",
+            "language": "java"
+        },
+        {
+            "offset": 20,
+            "type": "string.java",
+            "language": "java"
+        },
+        {
+            "offset": 34,
+            "type": "delimiter.parenthesis.java",
+            "language": "java"
+        },
+        {
+            "offset": 35,
+            "type": "delimiter.java",
+            "language": "java"
+        }
+    ],
+    [
+        {
+            "offset": 0,
+            "type": "delimiter.curly.java",
+            "language": "java"
+        }
+    ],
+    [
+        {
+            "offset": 0,
+            "type": "comment.java",
+            "language": "java"
+        }
+    ],
+    [],
+    []
+  ];
+  let start = 0;
+
+  for (let i = 0; i < tokens.length; i++)
+  {
+    for (let j = 0; j < tokens[i].length; j++)
+    {
+      const tok = tokens[i][j];
+      let end;
+
+      if (j != tokens[i].length - 1) // not at last token in a line
+      {
+        end = start + (tokens[i][j+1].offset - tok.offset);
+
+        if (!tok.type.includes("comment"))
+        {
+          withoutComments += inCode.substring(start, end);
+        }
+
+        // console.log(`start: ${start} end: ${end}`);
+        // console.log(inCode.substring(start, end).replaceAll("\n", "&").replaceAll("\r", "|"));
+      }
+      else if (j == tokens[i].length - 1 && i != tokens.length - 1) // at last token in a line but there are more lines to go
+      {
+        end = start;
+
+        while (inCode[end] != "\r")
+        {
+          end++;
+        }
+
+        if (!tok.type.includes("comment"))
+        {
+          withoutComments += inCode.substring(start, end);
+        }
+
+        // console.log(`start: ${start} end: ${end}`);
+        // console.log(inCode.substring(start, end).replaceAll("\n", "&").replaceAll("\r", "|"));
+      }
+      else // at last token on last line
+      {
+        if (!tok.type.includes("comment"))
+        {
+          withoutComments += inCode.substring(start);
+        }
+
+        // console.log(`start: ${start} end: -1`);
+        // console.log(inCode.substring(start).replaceAll("\n", "&").replaceAll("\r", "|"));
+      }
+
+      start = end;
+    }
+
+    if (!(tokens[i].length == 1 && tokens[i][0].type.includes("comment")))
+    {
+      withoutComments += "\r\n"; // carriage return character and a newline character in between each line
+    }
+
+    start += 2;
+  }
+
+  return withoutComments;
+}
+
 // INITIAL RENDER TESTS
 describe('SubmissionPage', () => {
   it('renders successfully', () => {
@@ -160,6 +393,15 @@ describe('Button Tests', () => {
     const outputCopyBtn = screen.getByTestId('downloadButton');
     fireEvent.click(outputCopyBtn);
     await waitFor(() => expect(downloadTextAsFile).toHaveBeenCalled());
+    unmount();
+  });
+
+  test('scroll to top of page on click', async() => {
+    window.scrollTo = jest.fn();
+    const {unmount} = render(<SubmissionPage defaultDownloadTextAsFile={downloadTextAsFile}/>)
+    const translateBtn = screen.getByTestId("translateButton");
+    await waitFor(() => fireEvent.click(translateBtn));
+    expect(window.scrollTo).toBeCalledWith(0, 0);
     unmount();
   });
 })
@@ -406,5 +648,13 @@ describe("Queuing Tests", () => {
     }, 5000);
     unmount();
     jest.clearAllMocks();
+  })
+})
+
+describe("Code Cleaning", () => {
+  it("Removes Comments Successfully", async() => {
+    const inCode = "\r\n// comment 1\r\n/* comment 2 */ \tpublic static void main(String[] args)// comment 3\r\n{\r\n\tSystem.out.println(\"hello world!\");\r\n}\r\n// comment 4\r\n\r\n";
+    const cleaned = testRemoveComments(inCode);
+    expect(cleaned).not.toContain("comment");
   })
 })
