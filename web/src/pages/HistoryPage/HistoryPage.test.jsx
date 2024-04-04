@@ -1,4 +1,5 @@
-import { act, render, waitFor, screen, fireEvent } from '@redwoodjs/testing/web'
+import { render, waitFor, screen, fireEvent, within } from '@redwoodjs/testing/web'
+import userEvent from "@testing-library/user-event";
 import HistoryPage from './HistoryPage'
 
 //   Improve this test with help from the Redwood Testing Doc:
@@ -101,14 +102,16 @@ describe('Filter and Sort Values', () => {
 
   test('sets date sort', async () => {
     const setState = jest.fn();
+    const setInLang = jest.fn();
+    const setOutLang = jest.fn();
     const setSort = jest.fn();
     const setInSort = jest.fn();
     const setOutSort = jest.fn();
     jest
       .spyOn(React, 'useState')
       .mockImplementationOnce(initState => [initState, setState])
-      .mockImplementationOnce(initState => [initState, setState])
-      .mockImplementationOnce(initState => [initState, setState])
+      .mockImplementationOnce(inLang => [inLang, setInLang])
+      .mockImplementationOnce(outLang => [outLang, setOutLang])
       .mockImplementationOnce(initState => [initState, setState])
       .mockImplementationOnce(initState => [initState, setState])
       .mockImplementationOnce(sort => [sort, setSort])
@@ -121,5 +124,64 @@ describe('Filter and Sort Values', () => {
     fireEvent.click(button);
 
     expect(setSort).toHaveBeenCalledWith(2);
+  })
+
+  test('sets input filter', async () => {
+    const setState = jest.fn();
+    const setInLang = jest.fn();
+    const setOutLang = jest.fn();
+    const setSort = jest.fn();
+    const setInSort = jest.fn();
+    const setOutSort = jest.fn();
+
+    jest
+      .spyOn(React, 'useState')
+      .mockImplementationOnce(initState => [initState, setState])
+      .mockImplementationOnce(inLang => [inLang, setInLang])
+      .mockImplementationOnce(outLang => [outLang, setOutLang])
+      .mockImplementationOnce(initState => [initState, setState])
+      .mockImplementationOnce(initState => [initState, setState])
+      .mockImplementationOnce(sort => [sort, setSort])
+      .mockImplementationOnce(inSort => [inSort, setInSort])
+      .mockImplementationOnce(outSort => [outSort, setOutSort]);
+
+    render(<HistoryPage />)
+
+    const wrapperNode = screen.getByTestId("inputLanguage")
+
+    const selectNode = wrapperNode.childNodes[1];
+    fireEvent.change(selectNode, { target: { value: ["java"] } });
+
+    expect(setInLang).toHaveBeenCalledWith(["java"]);
+  })
+
+  test('sets output filter', async () => {
+    const setState = jest.fn();
+    const setInLang = jest.fn();
+    const setOutLang = jest.fn();
+    const setSort = jest.fn();
+    const setInSort = jest.fn();
+    const setOutSort = jest.fn();
+
+    jest
+      .spyOn(React, 'useState')
+      .mockImplementationOnce(initState => [initState, setState])
+      .mockImplementationOnce(inLang => [inLang, setInLang])
+      .mockImplementationOnce(outLang => [outLang, setOutLang])
+      .mockImplementationOnce(initState => [initState, setState])
+      .mockImplementationOnce(initState => [initState, setState])
+      .mockImplementationOnce(sort => [sort, setSort])
+      .mockImplementationOnce(inSort => [inSort, setInSort])
+      .mockImplementationOnce(outSort => [outSort, setOutSort]);
+
+    render(<HistoryPage />)
+
+    const wrapperNode = screen.getByTestId("outputLanguage")
+
+    const selectNode = wrapperNode.childNodes[1];
+    fireEvent.change(selectNode, { target: { value: ["java"] } });
+
+    expect(setOutLang).toHaveBeenCalledWith(["java"]);
+
   })
 })

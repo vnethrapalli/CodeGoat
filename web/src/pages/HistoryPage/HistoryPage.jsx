@@ -99,6 +99,7 @@ const HistoryPage = ({ page = 1 }) => {
                     <MenuItem
                       key={lang.langCode}
                       value={lang.langCode}
+                      data-testid="inOptions"
                     >
                       {lang.dropdownItem}
                     </MenuItem>
@@ -128,11 +129,10 @@ const HistoryPage = ({ page = 1 }) => {
                 </Select>
               </FormControl>
 
-              <Box sx={{ width: 150, marginRight: '10px' }}>
+              <Box data-testid='start' sx={{ width: 150, marginRight: '10px' }}>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DateTimePicker
                     views={['year', 'month', 'day']}
-                    data-testid='start'
                     label="mm/dd/yy"
                     value={selectedStartDate}
                     onChange={(newValue) => setSelectedStartDate(newValue)}
