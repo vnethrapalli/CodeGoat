@@ -32,10 +32,11 @@ const myHandler = async (event, _context) => {
       throw Error("please provide all three of code, input language, and output language");
     }
 
-    // only for code snippets with 500 chars or greater because auto detection is screwy for small code snippets
-    if (getLanguage(code) !== inputLanguage && code.length >= 500) {
+    const detectedLanguage = getLanguage(code);
+
+    if (detectedLanguage !== inputLanguage) {
       statusCode = 400;
-      throw Error("Please select the right language for your code.");
+      throw Error(`${detectedLanguage} was detected but you selected ${inputLanguage}. Please select the right language.`);
     }
     let codeForTranslation = code.trim();
 

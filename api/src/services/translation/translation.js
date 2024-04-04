@@ -4,7 +4,12 @@ import { json } from "stream/consumers";
 
 export const getLanguage = (code) => {
     const langCodes = ["cpp", "csharp", "java", "javascript", "python", "typescript"];
-    const { language } = hljs.highlightAuto(code, langCodes);
+    const { language, relevance, secondBest } = hljs.highlightAuto(code, langCodes);
+    console.log(`
+      language: ${language}
+      relevance: ${relevance}
+      secondBest: ${secondBest}
+    `)
     return language;
 }
 
