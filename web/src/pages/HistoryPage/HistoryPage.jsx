@@ -1,14 +1,15 @@
-import { Metadata } from '@redwoodjs/web'
+import { Metadata, useMutation } from '@redwoodjs/web'
+
 import { useTheme } from '@mui/material/styles'
 import dayjs from 'dayjs';
-import { Button, Grid, Box, Typography, FormControl, MenuItem, InputLabel, Select, OutlinedInput } from '@mui/material'
-import { ArrowDownward, ArrowUpward } from '@mui/icons-material'
+import { IconButton, Button, Grid, Box, Typography, FormControl, MenuItem, InputLabel, Select, OutlinedInput } from '@mui/material'
+import { ArrowDownward, ArrowUpward, Delete } from '@mui/icons-material'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { auth0 } from 'src/auth'
 import { useEffect, useState } from 'react'
-
+import { QUERY as TranslationQuery } from 'src/components/TranslationsCell'
 import TranslationsCell from 'src/components/TranslationsCell'
 
 export const languages = [
@@ -20,6 +21,14 @@ export const languages = [
   {dropdownItem: "TypeScript", langCode: "typescript"},
 ];
 
+const DELETE_ALL_TRANSLATIONS = gql`
+  mutation DeleteTranslationMutation($uid: String!) {
+    deleteTranslations(uid: $uid) {
+      id
+    }
+  }
+`
+
 const HistoryPage = ({ page = 1 }) => {
   const theme = useTheme();
   const [userId, setUserId] = useState()
@@ -27,7 +36,7 @@ const HistoryPage = ({ page = 1 }) => {
   const [selectedOutLanguage, setSelectedOutLanguage] = useState([]);
   const [selectedStartDate, setSelectedStartDate] = useState();
   const [selectedEndDate, setSelectedEndDate] = useState();
-  const [sort, setSort] = useState(true);
+  const [sort, setSort] = useState(1);
   const [inSort, setInSort] = useState(0);
   const [outSort, setOutSort] = useState(0);
 
@@ -40,6 +49,15 @@ const HistoryPage = ({ page = 1 }) => {
   },[])
 
   const Filters = () => {
+    const [deleteTranslations] = useMutation(DELETE_ALL_TRANSLATIONS, {
+      onCompleted: () => {},
+      refetchQueries: [{ query: TranslationQuery, variables: { page: Number(page), uid: userId } }],
+    })
+
+    const delAll = () => {
+      deleteTranslations({ variables: { uid: userId } });
+    }
+
     const handleInputChange = (event) => {
       const {
         target: { value },
@@ -59,7 +77,7 @@ const HistoryPage = ({ page = 1 }) => {
     };
 
     return (
-      <Box sx={{  width: "70%", marginBottom: '10px', marginTop: '10px' }}>
+      <Box sx={{ width: "70%", marginBottom: '10px', marginTop: '10px' }}>
         <Grid container width="100%" spacing={2}>
           <Grid item sx={{display: 'flex', flexDirection: 'column' }} xs={9}>
             <Typography data-testid='filter' sx={{ color: theme.palette.text.secondary, fontSize: '24px', fontStyle: 'normal', fontWeight: '500'}}>
@@ -71,6 +89,7 @@ const HistoryPage = ({ page = 1 }) => {
                 <Select
                   labelId="filter-inputLanguage"
                   id="filter-inputLanguage"
+                  data-testid="inputLanguage"
                   multiple
                   value={selectedInLanguage}
                   onChange={handleInputChange}
@@ -92,6 +111,7 @@ const HistoryPage = ({ page = 1 }) => {
                 <Select
                   labelId="filter-outputLanguage"
                   id="filter-outputLanguage"
+                  data-testid="outputLanguage"
                   multiple
                   value={selectedOutLanguage}
                   onChange={handleOutputChange}
@@ -112,6 +132,7 @@ const HistoryPage = ({ page = 1 }) => {
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DateTimePicker
                     views={['year', 'month', 'day']}
+                    data-testid='start'
                     label="mm/dd/yy"
                     value={selectedStartDate}
                     onChange={(newValue) => setSelectedStartDate(newValue)}
@@ -126,6 +147,7 @@ const HistoryPage = ({ page = 1 }) => {
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DateTimePicker
                     views={['year', 'month', 'day']}
+                    data-testid='end'
                     label="mm/dd/yy"
                     value={selectedEndDate}
                     onChange={(newValue) => setSelectedEndDate(newValue)}
@@ -142,35 +164,59 @@ const HistoryPage = ({ page = 1 }) => {
               Sort
             </Typography>
 
-            <Typography data-testid='sort' sx={{ display: 'flex', alignItems: 'center', color: theme.palette.text.secondary, fontSize: '16px', fontStyle: 'normal', fontWeight: '300'}}>
+            <Typography sx={{ display: 'flex', alignItems: 'center', color: theme.palette.text.secondary, fontSize: '16px', fontStyle: 'normal', fontWeight: '300'}}>
               <Button
-                onClick={() => {inSort != 0 ? setInSort(inSort * -1) : setInSort(1)}}
+                onClick={() => {inSort != 0 ? setInSort(inSort + 1) : setInSort(1)}}
+                data-testid='inputSort'
               >
                   Input Language
-                  {inSort != 0 ? (inSort == 1 ? <ArrowUpward sx={{ fontSize: 'medium', marginLeft: '5px', marginBottom: '1px' }}/> : <ArrowDownward sx={{ fontSize: 'medium', marginLeft: '5px', marginBottom: '1px'}} />) : null}
+                  {inSort%3 != 0 ? (inSort%3 == 1 ? <ArrowUpward sx={{ fontSize: 'medium', marginLeft: '5px', marginBottom: '1px' }}/> : <ArrowDownward sx={{ fontSize: 'medium', marginLeft: '5px', marginBottom: '1px'}} />) : null}
               </Button>
               <Button
-                onClick={() => {setSort(!sort)}}
+                onClick={() => {outSort != 0 ? setOutSort(outSort + 1) : setOutSort(1)}}
+                data-testid='outputSort'
               >
                   Output Language
-                  {sort ? <ArrowUpward sx={{ fontSize: 'medium', marginLeft: '5px', marginBottom: '1px' }}/> : <ArrowDownward sx={{ fontSize: 'medium', marginLeft: '5px', marginBottom: '1px' }}/>
-                  }
+                  {outSort%3 != 0 ? (outSort%3 == 1 ? <ArrowUpward sx={{ fontSize: 'medium', marginLeft: '5px', marginBottom: '1px' }}/> : <ArrowDownward sx={{ fontSize: 'medium', marginLeft: '5px', marginBottom: '1px'}} />) : null}
               </Button>
               <Button
-                onClick={() => {setSort(!sort)}}
+                onClick={() => {sort != 0 ? setSort(sort + 1) : setSort(1)}}
+                data-testid='dateSort'
               >
                   Translation Date
-                  {sort ? <ArrowUpward sx={{ fontSize: 'medium', marginLeft: '5px', marginBottom: '1px' }}/> : <ArrowDownward sx={{ fontSize: 'medium', marginLeft: '5px', marginBottom: '1px' }}/>
-                  }
+                  {sort%3 != 0 ? (sort%3 == 1 ? <ArrowUpward sx={{ fontSize: 'medium', marginLeft: '5px', marginBottom: '1px' }}/> : <ArrowDownward sx={{ fontSize: 'medium', marginLeft: '5px', marginBottom: '1px'}} />) : null}
               </Button>
             </Typography>
           </Grid>
-          <Grid item sx={{ }} xs={3}>
-            <Button
-              onClick={() => {setSort(true); setSelectedInLanguage([]); setSelectedOutLanguage([]); setSelectedStartDate(undefined); setSelectedEndDate(undefined); setInSort(0); setOutSort(0);}}
-            >
-                Clear All Filters/Sort
-            </Button>
+          <Grid item sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', alignContent: 'center' }} xs={3}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'center', alignContent: 'center' }}>
+              <Button
+                onClick={() => {setSort(1); setSelectedInLanguage([]); setSelectedOutLanguage([]); setSelectedStartDate(undefined); setSelectedEndDate(undefined); setInSort(0); setOutSort(0);}}
+                sx={{ marginBottom: '10px' }}
+                data-testid="resetButton"
+                variant="text"
+              >
+                  Reset All Filters/Sorts
+              </Button>
+              <IconButton
+                variant="text"
+                data-testid="deleteAllButton"
+                onClick={delAll}
+                sx={{
+                  fontSize: 'inherit',
+                  fontWeight: 'inherit',
+                  borderRadius: "4px",
+                  backgroundColor: '#7A0707',
+                  color: theme.palette.text.primary,
+                  '&::hover': {
+                    backgroundColor: '#7A0707',
+                    color: theme.palette.text.primary,
+                  }
+                }}
+              >
+                <Delete sx={{ fill: theme.palette.text.primary, paddingRight: '5px'}} /> Delete All History
+              </IconButton>
+            </Box>
           </Grid>
         </Grid>
       </Box>
@@ -189,7 +235,7 @@ const HistoryPage = ({ page = 1 }) => {
 
         <Filters />
 
-        <TranslationsCell page={page} uid={userId} inLang={selectedInLanguage} outLang={selectedOutLanguage} startDate={isNaN(selectedStartDate) ? "1970-01-01T00:00:01Z" : selectedStartDate} endDate={isNaN(selectedEndDate) ? new Date(Date.now()).toISOString() : selectedEndDate} sort={sort ? 'desc' : 'asc'}/>
+        <TranslationsCell page={page} uid={userId} inLang={selectedInLanguage} outLang={selectedOutLanguage} startDate={isNaN(selectedStartDate) ? "1970-01-01T00:00:01Z" : selectedStartDate} endDate={isNaN(selectedEndDate) ? new Date(Date.now()).toISOString() : selectedEndDate} sort={sort} inSort={inSort} outSort={outSort}/>
       </Box>
     </>
   )

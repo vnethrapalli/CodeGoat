@@ -16,15 +16,15 @@ export const languages = {
   "typescript": "TypeScript",
 }
 
-export const beforeQuery = ({ page, uid, inLang, outLang, startDate, endDate, sort}) => {
+export const beforeQuery = ({ page, uid, inLang, outLang, startDate, endDate, sort, inSort, outSort}) => {
   page = page ? parseInt(page, 10) : 1
 
-  return { variables: { page, uid, inLang, outLang, startDate, endDate, sort } }
+  return { variables: { page, uid, inLang, outLang, startDate, endDate, sort, inSort, outSort } }
 }
 
 export const QUERY = gql`
-  query TranslationHistoryQuery($page: Int, $uid: String!, $inLang: [String!], $outLang: [String!], , $startDate: DateTime!, $endDate: DateTime!, $sort: String!) {
-    translationHistoryPage(page: $page, uid: $uid, inLang: $inLang, outLang: $outLang, startDate: $startDate, endDate: $endDate, sort: $sort) {
+  query TranslationHistoryQuery($page: Int, $uid: String!, $inLang: [String!], $outLang: [String!], , $startDate: DateTime!, $endDate: DateTime!, $sort: Int, $inSort: Int, $outSort: Int) {
+    translationHistoryPage(page: $page, uid: $uid, inLang: $inLang, outLang: $outLang, startDate: $startDate, endDate: $endDate, sort: $sort, inSort: $inSort, outSort: $outSort) {
       translations {
         id
         uid
@@ -73,10 +73,6 @@ export const Success = ({ translationHistoryPage }) => {
               aria-controls="panel1-content"
               id={translation.id}
               sx={{ color: theme.palette.text.primary, minHeight: '64px', display: 'flex', margin: '0', alignContent: 'center',
-                // '&:not(:last-child)': {
-                // },
-                // '&::before': {
-                // },
                 '.css-o4b71y-MuiAccordionSummary-content.Mui-expanded': {
                   my: '12px'
                 }
@@ -85,7 +81,8 @@ export const Success = ({ translationHistoryPage }) => {
               <Typography data-testid="languageInfo">
                 {languages[translation.inputLanguage]} &#8594; {languages[translation.outputLanguage]}
               </Typography>
-              {prettyDate(translation)}
+              <Tooltip title={translation.createdAt}>{prettyDate(translation)}</Tooltip>
+
             </AccordionSummary>
 
             <AccordionDetails>
@@ -99,6 +96,3 @@ export const Success = ({ translationHistoryPage }) => {
     </>
   )
 }
-
-
-//ADD SORTING BY INPUT AND OUTPUT LANGUAGE
