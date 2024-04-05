@@ -13,7 +13,7 @@ export const schema = gql`
 
   type Query {
     translationHistoryPage(page: Int, uid: String!, inLang: [String!], outLang: [String!], startDate: DateTime!, endDate: DateTime!, sort: Int, inSort: Int, outSort: Int): TranslationHistoryPage @requireAuth
-    translations(uid: String!): TranslationsList @skipAuth
+    translations(uid: String!): TranslationsList @requireAuth
     translation(id: Int!): Translation @requireAuth
   }
 
