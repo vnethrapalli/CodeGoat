@@ -20,7 +20,7 @@ const HomePage = () => {
       <Metadata title="Home" description="Home page" />
 
       <Box display="flex" flexDirection='column' justifyContent="center" alignItems="center">
-        <Paper elevation={0} style={{ display: 'flex', padding: '20px', marginTop: '20px', marginBottom: '20px', width: '99%', height: '75vh', borderRadius: '10px', background: 'linear-gradient(90deg, #F1FADA, #1E3231)', backgroundColor: theme.palette.secondary.main }}>
+        <Paper elevation={0} style={{ display: 'flex', padding: '20px',  marginBottom: '20px', width: '99%', height: '75vh', borderRadius: '10px', background: 'linear-gradient(90deg, #F1FADA, #1E3231)', backgroundColor: theme.palette.secondary.main }}>
           <Typography data-testid='title' variant='h2' component='span' align='right' style={{ width: '100%', borderRadius: '8px' , color: theme.palette.text.primary, fontSize: '52px', fontStyle: 'normal', fontWeight: '600'}}>
             Code Translator
           </Typography>

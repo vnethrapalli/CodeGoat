@@ -5,12 +5,12 @@ import { useTheme } from '@mui/material/styles';
 import DownloadIcon from '@mui/icons-material/Download';
 import UploadFile from '@mui/icons-material/UploadFile';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import Editor from '@monaco-editor/react';
+import Editor, { useMonaco } from '@monaco-editor/react';
 import { Toaster, toast } from '@redwoodjs/web/toast'
 import React, { useEffect, useRef, useState } from 'react';
 import { auth0 } from 'src/auth'
 import { useParams } from '@redwoodjs/router'
-import { ConnectingAirportsOutlined } from '@mui/icons-material';
+import { ConfirmationNumberOutlined, ConnectingAirportsOutlined, ConstructionOutlined, ContentPasteSearchOutlined } from '@mui/icons-material';
 
 const CREATE_TRANSLATION = gql`
   mutation CreateTranslationMutation($input: CreateTranslationInput!) {
@@ -75,7 +75,8 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
   const [rating, setRating] = React.useState(5);
   const [refreshQuery, setRefreshQuery] = React.useState(true);
   const [output, setOutput] = React.useState(false);
-  const [userId, setUserId] = React.useState()
+  const [userId, setUserId] = React.useState();
+  const [inputMonaco, setInputMonaco] = React.useState();
   const theme = useTheme();
 
   const { code, inLang, outLang } = useParams();
@@ -101,6 +102,16 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
   },[])
 
   const CodeBox = ({ codeValue, updateCodeValue, defaultLanguage, language, defaultValue, isInput }) => {
+    const monaco = useMonaco();
+
+    useEffect(() => {
+      if(monaco) {
+        // console.log(monaco.editor.tokenize(codeValue, language));
+        // console.log(`Code Value: ${codeValue}`);
+        setInputMonaco(monaco);
+      }
+    }, [monaco]);
+
     const editorRef = useRef(null);
 
     function handleEditorDidMount(editor, monaco) {
@@ -206,6 +217,78 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
       onError: () => {},
     })
 
+    const removeComments = (inCode, inLang) => {
+      if (inputMonaco == undefined)
+      {
+        return;
+      }
+
+      let withoutComments = "";
+      const tokens = inputMonaco.editor.tokenize(inCode, inLang);
+      let start = 0;
+      // console.log(tokens);
+
+      for (let i = 0; i < tokens.length; i++)
+      {
+        for (let j = 0; j < tokens[i].length; j++)
+        {
+          const tok = tokens[i][j];
+          let end;
+
+          if (j != tokens[i].length - 1) // not at last token in a line
+          {
+            end = start + (tokens[i][j+1].offset - tok.offset);
+
+            if (!tok.type.includes("comment"))
+            {
+              withoutComments += inCode.substring(start, end);
+            }
+
+            // console.log(`start: ${start} end: ${end}`);
+            // console.log(inCode.substring(start, end).replaceAll("\n", "&").replaceAll("\r", "|"));
+          }
+          else if (j == tokens[i].length - 1 && i != tokens.length - 1) // at last token in a line but there are more lines to go
+          {
+            end = start;
+
+            while (inCode[end] != "\r")
+            {
+              end++;
+            }
+
+            if (!tok.type.includes("comment"))
+            {
+              withoutComments += inCode.substring(start, end);
+            }
+
+            // console.log(`start: ${start} end: ${end}`);
+            // console.log(inCode.substring(start, end).replaceAll("\n", "&").replaceAll("\r", "|"));
+          }
+          else // at last token on last line
+          {
+            if (!tok.type.includes("comment"))
+            {
+              withoutComments += inCode.substring(start);
+            }
+
+            // console.log(`start: ${start} end: -1`);
+            // console.log(inCode.substring(start).replaceAll("\n", "&").replaceAll("\r", "|"));
+          }
+
+          start = end;
+        }
+
+        if (!(tokens[i].length == 1 && tokens[i][0].type.includes("comment")))
+        {
+          withoutComments += "\r\n"; // carriage return character and a newline character in between each line
+        }
+
+        start += 2;
+      }
+
+      return withoutComments;
+    }
+
     const translate = (usId, inLang, outLang, inCode, outCode, stars, stat) => {
       createTranslation({ variables: { input: { "uid": usId, "inputLanguage": inLang, "outputLanguage": outLang, "inputCode": inCode, "outputCode": outCode, "rating": stars, "status": stat }}});
     }
@@ -224,7 +307,7 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
       const translation = await fetch(reqUrl, {
         method: "POST",
         body: JSON.stringify({
-          code: inputCodeValue,
+          code: removeComments(inputCodeValue, inputLanguage),
           inputLanguage: inputLanguage,
           outputLanguage: outputLanguage
         })
@@ -272,6 +355,7 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
       }
 
       translate(userId, inputLanguage, outputLanguage, inputCodeValue, response.data, -1, translation.status + " " + translation.statusText);
+      window.scrollTo(0, 0);
     });
 
     return (
