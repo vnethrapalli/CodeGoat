@@ -38,7 +38,7 @@ model Translation {
 }
 
 model Faq {
-  id                  Int     @id @default(autoincrement())
-  question            String
-  answer              String
+  id       Int    @id @default(autoincrement())
+  question String
+  answer   String
 }

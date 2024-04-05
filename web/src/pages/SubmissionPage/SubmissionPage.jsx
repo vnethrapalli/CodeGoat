@@ -570,8 +570,9 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
           {output && codeboxOutput}
         </Stack>
       </Stack>
-      <TranslateBtn/>
-      <Stack direction="column" spacing={2} justifyContent="center" alignItems="center" width='100vw'>
+
+      <Stack direction="column" spacing={2} justifyContent="center" alignItems="center" width='100%'>
+        <TranslateBtn/>
         {output &&
         <>
           <Rating
