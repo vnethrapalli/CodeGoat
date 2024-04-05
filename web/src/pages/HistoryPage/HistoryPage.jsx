@@ -22,7 +22,7 @@ export const languages = [
 ];
 
 const DELETE_ALL_TRANSLATIONS = gql`
-  mutation DeleteTranslationMutation($uid: String!) {
+  mutation DeleteAllTranslationsMutation($uid: String!) {
     deleteTranslations(uid: $uid) {
       id
     }

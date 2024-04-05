@@ -1,11 +1,12 @@
 import { navigate, routes } from '@redwoodjs/router'
 import { Toaster, toast } from '@redwoodjs/web/toast'
-import { Divider, AppBar, Link, Box, Button, Container, Tooltip, Typography, Grid, Menu, MenuItem } from '@mui/material';
-import CssBaseline from "@mui/material/CssBaseline";
+import { IconButton, Divider, AppBar, Link, Box, Button, Container, Tooltip, Typography, Grid, Menu, MenuItem, useScrollTrigger, CssBaseline } from '@mui/material';
 import { Experimental_CssVarsProvider as CssVarsProvider, experimental_extendTheme as extendTheme, useColorScheme, useTheme } from '@mui/material/styles';
-import IconButton from '@mui/material/IconButton';
+import { makeStyles } from "@mui/styles";
 import { Logout, Settings, AccessTime, Person, DarkMode, LightMode } from '@mui/icons-material'
 import { useAuth, auth0 } from 'src/auth'
+import PropTypes from 'prop-types';
+
 
 const theme = extendTheme({
   colorSchemes: {
@@ -22,7 +23,8 @@ const theme = extendTheme({
         },
         text: {
           primary: "#F1FADA",
-          secondary: "#265073"
+          secondary: "#265073",
+          success: "#265073",
         }
       },
     },
@@ -35,11 +37,12 @@ const theme = extendTheme({
           main: "#344955"
         },
         background: {
-          default: "#35374B"
+          default: "#1E3231"
         },
         text: {
           primary: "#F1FADA",
-          secondary: "#F1FADA"
+          secondary: "#F1FADA",
+          success: "#F1FADA",
         }
       },
     },
@@ -56,15 +59,14 @@ const TitleLink = () => {
         sx={{
           mr: 2,
           display: { xs: 'none', md: 'flex' },
-          fontWeight: 700,
+          fontWeight: 550,
           fontSize: 30,
-          color: theme.palette.text.primary,
-          textDecoration: 'none',
+          color: theme.palette.text.secondary,
           marginLeft: "20px",
         }}
       >
         <Tooltip title='Go Home'>
-          <Link href={routes.home()} underline="none" sx={{ color: theme.palette.text.primary }}>
+          <Link href={routes.home()} underline="none" sx={{ color: theme.palette.text.secondary }}>
             CodeGoat
           </Link>
         </Tooltip>
@@ -90,23 +92,23 @@ const NavButtons = () => {
             data-testid="translateButton"
             href={routes.translate()}
             onClick={testClick}
-            sx={{ marginTop: '2px', marginBottom: '2px', marginRight: '5px', marginLeft: '0px', color: theme.palette.text.primary, display: 'block' }}
+            sx={{ marginTop: '2px', marginBottom: '2px', marginRight: '5px', marginLeft: '0px', color: theme.palette.text.secondary, display: 'block' }}
           >
             Translate
           </Button>
         </Tooltip>
 
-        <Tooltip title='Check API Status'>
+        {/* <Tooltip title='Check API Status'>
           <Button
             key="Status"
             variant="text"
             data-testid="statusButton"
             onClick={() => (navigate(routes.status()))}
-            sx={{ marginTop: '2px', marginBottom: '2px', marginRight: '5px', marginLeft: '0px', color: theme.palette.text.primary, display: 'block' }}
+            sx={{ marginTop: '2px', marginBottom: '2px', marginRight: '5px', marginLeft: '0px', color: theme.palette.text.secondary, display: 'block' }}
           >
             GPT-3 Status
           </Button>
-        </Tooltip>
+        </Tooltip> */}
 
         <Tooltip title='Give Feedback'>
           <Button
@@ -115,7 +117,7 @@ const NavButtons = () => {
             data-testid="feedbackButton"
             onClick={testClick}
             href={routes.feedback()}
-            sx={{ marginTop: '2px', marginBottom: '2px', marginRight: '5px', marginLeft: '0px', color: theme.palette.text.primary, display: 'block' }}
+            sx={{ marginTop: '2px', marginBottom: '2px', marginRight: '5px', marginLeft: '0px', color: theme.palette.text.secondary, display: 'block' }}
           >
             Feedback
           </Button>
@@ -127,7 +129,7 @@ const NavButtons = () => {
             variant="text"
             data-testid="documentationButton"
             onClick={() => (navigate(routes.documentation()))}
-            sx={{ marginTop: '2px', marginBottom: '2px', marginRight: '0px', marginLeft: '0px', color: theme.palette.text.primary, display: 'block' }}
+            sx={{ marginTop: '2px', marginBottom: '2px', marginRight: '0px', marginLeft: '0px', color: theme.palette.text.secondary, display: 'block' }}
           >
             Documentation
           </Button>
@@ -145,15 +147,22 @@ const ThemeButton = () => {
     <Tooltip title={mode === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}>
       <IconButton data-testid="themeButton" sx={{ width: '7%'}} onClick={() => setMode(mode === 'light' ? 'dark' : 'light')}>
         {mode === 'light'
-          ? <LightMode style={{fill: theme.palette.text.primary}} />
-          : <DarkMode style={{fill: theme.palette.text.primary}} />}
+          ? <LightMode style={{fill: theme.palette.text.secondary}} />
+          : <DarkMode style={{fill: theme.palette.text.secondary}} />}
       </IconButton>
     </Tooltip>
   )
 }
 
+export const useStyles = makeStyles((theme) => ({
+  menuPaper: {
+    backgroundColor: theme.palette.background.default,
+  }
+}));
+
 const UserMenu = () => {
   const theme = useTheme();
+  const classes = useStyles();
   const { logOut } = useAuth()
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -183,7 +192,7 @@ const UserMenu = () => {
     <Box sx={{ display: 'flex', alignContent: 'center', paddingLeft: '10px', flexGrow: 0 }}>
       <Tooltip title="Open User Menu">
         <IconButton data-testid="openUserMenuButton" onClick={handleOpenUserMenu} sx={{ marginLeft: '5px', p: 0 }}>
-          <Person sx={{ fill: theme.palette.text.primary }} />
+          <Person sx={{ fill: theme.palette.text.secondary }} />
         </IconButton>
       </Tooltip>
       <Menu
@@ -199,6 +208,7 @@ const UserMenu = () => {
           vertical: 'top',
           horizontal: 'right',
         }}
+        classes={{ paper: classes.menuPaper }}
         disableScrollLock={true}
         open={Boolean(anchorElUser)}
         onClose={handleCloseUserMenu}
@@ -330,7 +340,7 @@ const Footer = () => {
   return (
     <Box
       sx={{
-        backgroundColor: '#265073',
+        backgroundColor: theme.palette.background.default,
         position: 'relative',
         bottom: 0,
         width: '100%',
@@ -346,7 +356,7 @@ const Footer = () => {
       <Container>
         <Typography component='span' variant="body2"
           sx={{
-            color: theme.palette.text.primary,
+            color: theme.palette.text.secondary,
             display: 'flex',
             justifyContent: 'center'
           }}>
@@ -360,6 +370,53 @@ const Footer = () => {
   )
 }
 
+function ElevationScroll(props) {
+  const { children, window } = props;
+  // Note that you normally won't need to set the window ref as useScrollTrigger
+  // will default to window.
+  // This is only being set here because the demo is in an iframe.
+  const trigger = useScrollTrigger({
+    disableHysteresis: true,
+    threshold: 0,
+    target: window ? window() : undefined,
+  });
+
+  return React.cloneElement(children, {
+    elevation: trigger ? 4 : 0,
+  });
+}
+
+ElevationScroll.propTypes = {
+  children: PropTypes.element.isRequired,
+  /**
+   * Injected by the documentation to work in an iframe.
+   * You won't need it on your project.
+   */
+  window: PropTypes.func,
+};
+
+const NavBar = (props) => {
+  const theme = useTheme();
+
+  return (
+    <ElevationScroll {...props}>
+      <AppBar position="sticky" sx={{ background: theme.palette.background.default, marginBottom: '20px', height: '10%' }}>
+        <Grid container width="100%" spacing={2} alignItems='center' alignContent='center' justifyContent='center'>
+            {/* Title/Home Link */}
+            <TitleLink />
+
+            {/* Navigation Buttons */}
+            <NavButtons />
+
+            {/* Theme Change and Authentication Button */}
+            <UserButtons />
+
+        </Grid>
+      </AppBar>
+    </ElevationScroll>
+  )
+}
+
 const UserLayout = ({ children }) => {
 
   return (
@@ -368,20 +425,10 @@ const UserLayout = ({ children }) => {
         <CssBaseline />
         <Toaster />
         <Box minHeight='100vh'>
-          <AppBar position="sticky" sx={{ background: '#265073', marginBottom: '20px', height: '10%' }}>
-            <Grid container width="100%" spacing={2} alignItems='center' alignContent='center' justifyContent='center'>
-                {/* Title/Home Link */}
-                <TitleLink />
+          {/* Static Navigation Bar */}
+          <NavBar />
 
-                {/* Navigation Buttons */}
-                <NavButtons />
-
-                {/* Theme Change and Authentication Button */}
-                <UserButtons />
-
-            </Grid>
-          </AppBar>
-
+          {/* Page Content */}
           <main>{children}</main>
 
           {/* Static Footer */}
