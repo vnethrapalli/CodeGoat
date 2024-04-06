@@ -60,16 +60,8 @@ const extensions = {
 };
 
 let queueCount = 0;
+
 const MAXQUEUE = 2;
-
-monaco.editor.defineTheme('default', {
-  base: 'vs-dark',
-  inherit: true,
-  rules: [],
-  colors: {"editor.background": "#F1FADA",}
-});
-
-monaco.editor.setTheme('default')
 
 const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => {
   const [inputCodeValue, setInputCodeValue] = React.useState("// write some code...");
@@ -108,6 +100,7 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
 
   const CodeBox = ({ codeValue, updateCodeValue, defaultLanguage, language, defaultValue, isInput }) => {
     const monaco = useMonaco();
+    const theme = useTheme();
 
     useEffect(() => {
       if(monaco) {
@@ -123,8 +116,15 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
       editorRef.current = editor;
     }
 
+    // const customTheme = {
+    //   base: 'vs',
+    //   inherit: true,
+    //   rules: [],
+    //   colors: {"editor.background": theme.palette.background.default}
+    // };
+
     return (
-      <Paper data-testid={isInput ? "inputEditor" : "outputEditor"}>
+      <Paper square={false} variant="outlined" elevation={6} data-testid={isInput ? "inputEditor" : "outputEditor"}>
         <Editor
           height='600px'
           width="40vw"
@@ -133,10 +133,14 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
           language={language}
           defaultValue={defaultValue}
           value={codeValue}
+          // theme="myCustomTheme"
           theme="vs-dark"
           onMount={handleEditorDidMount}
           onChange={updateCodeValue}
           title={isInput ? "inputEditor" : "outputEditor"}
+          // beforeMount={(monaco) => {
+          //   monaco.editor.defineTheme('myCustomTheme', customTheme);
+          // }}
         />
       </Paper>
     );
