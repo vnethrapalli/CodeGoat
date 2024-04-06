@@ -1,5 +1,7 @@
 import { render, screen, fireEvent, waitFor } from '@redwoodjs/testing/web'
 import { configure } from '@testing-library/react'
+import user from '@testing-library/user-event'
+import { act } from 'react-dom/test-utils';
 import FeedbackPage from './FeedbackPage'
 
 //   Improve this test with help from the Redwood Testing Doc:
@@ -65,8 +67,24 @@ describe('FeedbackPage', () => {
       }).not.toThrow()
     })
   })
+  describe('Button Functionality', () => {
+    it('accepts text input', async() => {
+      render(<FeedbackPage />)
+      const comments = screen.getByRole('textbox');
+      await user.type(comments, "Bababooey");
 
-  describe("Handling", () => {
+      expect(comments).toHaveValue("Bababooey")
+    })
+    it('accepts radio button clicks', async() => {
+      render(<FeedbackPage />)
+      const radio = screen.getAllByRole('radio')[0];
+      await user.click(radio);
+
+      expect(radio).toBeChecked()
+    })
+  })
+
+  describe("Submission Handling", () => {
     // it('prevents submission of out of range values', async() => {
 
     // })
