@@ -47,7 +47,18 @@ export const getCurrentUser = async (decoded) => {
  * @returns {boolean} - If the currentUser is authenticated
  */
 export const isAuthenticated = () => {
-  return !!context.currentUser
+
+  if (!context.currentUser) {
+    return false
+  } else {
+    if(context.currentUser.exp < Math.floor(new Date().getTime() / 1000)) {
+      return false
+    } else {
+      return true
+    }
+  }
+
+  // return !!context.currentUser
 }
 
 /**
