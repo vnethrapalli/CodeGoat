@@ -45,7 +45,7 @@ export const Success = ({ feedback }) => {
     {
       onCompleted: () => {
         toast.success('Feedback updated')
-        navigate(routes.feedbacks())
+        navigate(routes.feedback())
       },
       onError: (error) => {
         toast.error(error.message)

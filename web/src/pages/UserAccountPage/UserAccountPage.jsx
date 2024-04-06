@@ -91,10 +91,10 @@ const UserAccountPage = () => {
         localStorage.setItem('user', JSON.stringify(user))
       })
 
-      toast.success(response.message, {duration: 2500})
+      toast.success(response.message, {duration: 2500, position: 'bottom-right'})
 
     } catch (error) {
-      toast.error(error.message, {duration: 2500})
+      toast.error(error.message, {duration: 2500, position: 'bottom-right'})
     }
 
   }
@@ -114,7 +114,7 @@ const UserAccountPage = () => {
         throw new Error('Failed to delete account')
       }
 
-      toast.success(response.message, {duration: 1500})
+      toast.success(response.message, {duration: 1500, position: 'bottom-right'})
       setTimeout(() => {
         logOut().then(() => {
           localStorage.removeItem('user')
@@ -123,7 +123,7 @@ const UserAccountPage = () => {
       }, 1500)
 
     } catch (error) {
-      toast.error(error.message, {duration: 2500})
+      toast.error(error.message, {duration: 2500, position: 'bottom-right'})
     }
   }
 

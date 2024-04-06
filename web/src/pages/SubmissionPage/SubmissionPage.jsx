@@ -1,16 +1,13 @@
 import { Metadata, useMutation } from '@redwoodjs/web';
 import { gql, useLazyQuery } from "@apollo/client";
-import { Stack, Box, Button, FormControl, InputLabel, Select, MenuItem, Divider, Rating } from '@mui/material';
+import { Paper, Stack, Box, Button, FormControl, InputLabel, Select, MenuItem, Divider, Rating } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import DownloadIcon from '@mui/icons-material/Download';
-import UploadFile from '@mui/icons-material/UploadFile';
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import Editor, { useMonaco } from '@monaco-editor/react';
 import { Toaster, toast } from '@redwoodjs/web/toast'
 import React, { useEffect, useRef, useState } from 'react';
 import { auth0 } from 'src/auth'
 import { useParams } from '@redwoodjs/router'
-import { ConfirmationNumberOutlined, ConnectingAirportsOutlined, ConstructionOutlined, ContentPasteSearchOutlined } from '@mui/icons-material';
+import { ConfirmationNumberOutlined, ConnectingAirportsOutlined, ConstructionOutlined, ContentPasteSearchOutlined, Download, UploadFile, ContentCopy } from '@mui/icons-material';
 
 const CREATE_TRANSLATION = gql`
   mutation CreateTranslationMutation($input: CreateTranslationInput!) {
@@ -63,8 +60,16 @@ const extensions = {
 };
 
 let queueCount = 0;
-
 const MAXQUEUE = 2;
+
+monaco.editor.defineTheme('default', {
+  base: 'vs-dark',
+  inherit: true,
+  rules: [],
+  colors: {"editor.background": "#F1FADA",}
+});
+
+monaco.editor.setTheme('default')
 
 const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => {
   const [inputCodeValue, setInputCodeValue] = React.useState("// write some code...");
@@ -119,7 +124,7 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
     }
 
     return (
-      <div data-testid={isInput ? "inputEditor" : "outputEditor"}>
+      <Paper data-testid={isInput ? "inputEditor" : "outputEditor"}>
         <Editor
           height='600px'
           width="40vw"
@@ -133,7 +138,7 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
           onChange={updateCodeValue}
           title={isInput ? "inputEditor" : "outputEditor"}
         />
-      </div>
+      </Paper>
     );
   }
 
@@ -297,10 +302,10 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
       if (queueCount < MAXQUEUE) {
         queueCount++;
         toast.dismiss();
-        toast.success("Your request has been sent! \nQueued Requests: " + queueCount.toString(), {duration: 1200});
+        toast.success("Your request has been sent! \nQueued Requests: " + queueCount.toString(), {duration: 1200, position: 'bottom-right'});
       } else {
         toast.dismiss();
-        toast.error("Slow down there! I can't afford all those API calls lmao", {duration: 2500});
+        toast.error("Slow down there! I can't afford all those API calls lmao", {duration: 2500, position: 'bottom-right'});
         return;
       }
       const reqUrl = `http://localhost:8910/.redwood/functions/translate`;
@@ -323,33 +328,33 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
       queueCount--;
 
       if(statusCode === 200) {
-        toast.success("Code translated successfully! \nQueued Requests: " + queueCount.toString(), { duration: 1500 });
+        toast.success("Code translated successfully! \nQueued Requests: " + queueCount.toString(), { duration: 1500, position: 'bottom-right' });
         setOutputCodeValue(response.data);
       } else {
         switch(statusCode) {
           case 429:
-            toast.error("The API has reached its rate limit. Please try again later.", { duration: 2500 });
+            toast.error("The API has reached its rate limit. Please try again later.", { duration: 2500, position: 'bottom-right' });
             break;
           case 400:
-            toast.error("There was an error in the communication between the backend and API. Please try again.", { duration: 2500 });
+            toast.error("There was an error in the communication between the backend and API. Please try again.", { duration: 2500, position: 'bottom-right' });
             break;
           case 403:
-            toast.error("The length of the code is too long. Please shorten the code and try again.", { duration: 2500 });
+            toast.error("The length of the code is too long. Please shorten the code and try again.", { duration: 2500, position: 'bottom-right' });
             break;
           case 401:
-            toast.error("There was an error on the backend. Please try again later.", { duration: 2500 });
+            toast.error("There was an error on the backend. Please try again later.", { duration: 2500, position: 'bottom-right' });
             break;
           case 404:
-            toast.error("The GPT API is unavalaible", { duration: 2500 });
+            toast.error("The GPT API is unavalaible", { duration: 2500, position: 'bottom-right' });
             break;
           case 500:
-            toast.error("There was an error on the API side. Please try again.", { duration: 2500 });
+            toast.error("There was an error on the API side. Please try again.", { duration: 2500, position: 'bottom-right' });
             break;
           case 405:
-            toast.error("This action is not permitted by the API. Please try again.", { duration: 2500 });
+            toast.error("This action is not permitted by the API. Please try again.", { duration: 2500, position: 'bottom-right' });
             break;
           default:
-            toast.error("Error translating code.", { duration: 2500 });
+            toast.error("Error translating code.", { duration: 2500, position: 'bottom-right' });
             break;
         }
       }
@@ -406,7 +411,7 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
         }}
         data-testid={isInput ? "inputCopy" : "outputCopy"}
       >
-        <ContentCopyIcon sx={{ fill: theme.palette.text.primary }} />
+        <ContentCopy sx={{ fill: theme.palette.text.primary }} />
       </Button>
     );
   }
@@ -459,7 +464,7 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
         }}
         data-testid="downloadButton"
         >
-        <DownloadIcon sx={{ fill: theme.palette.text.primary }} />
+        <Download sx={{ fill: theme.palette.text.primary }} />
       </Button>
     )
   }
@@ -514,15 +519,15 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
 
       if (error)
       {
-        toast.error("An Error Occurred", {duration: 2500, position: "top"});
+        toast.error("An Error Occurred", {duration: 2500, position: 'bottom-right'});
       }
       else if (loading)
       {
-        toast.loading("Loading...", {duration: 2500, position: "top"});
+        toast.loading("Loading...", {duration: 2500, position: 'bottom-right'});
       }
       else
       {
-        toast.success("Rating Submitted!", {duration: 2500, position: "top"});
+        toast.success("Rating Submitted!", {duration: 2500, position: 'bottom-right'});
         const arr = data.translations.translations;
         const id = arr[0].id;
         updateTranslation({ variables: { id: id, input: { "rating": rating }}});

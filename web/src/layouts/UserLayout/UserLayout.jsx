@@ -55,12 +55,12 @@ const TitleLink = () => {
 
   return (
     <Grid item alignContent='center' alignItems='stretch' xs={3}>
-      <Typography data-testid="titleLink" variant="h6" noWrap component="span"
+      <Typography data-testid="titleLink" noWrap
         sx={{
           mr: 2,
-          display: { xs: 'none', md: 'flex' },
-          fontWeight: 550,
-          fontSize: 30,
+          display: 'flex',
+          fontWeight: 500,
+          fontSize: 28,
           color: theme.palette.text.secondary,
           marginLeft: "20px",
         }}
@@ -145,7 +145,7 @@ const ThemeButton = () => {
 
   return (
     <Tooltip title={mode === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}>
-      <IconButton data-testid="themeButton" sx={{ width: '7%'}} onClick={() => setMode(mode === 'light' ? 'dark' : 'light')}>
+      <IconButton data-testid="themeButton" sx={{ display: 'inline-flex', width: '7%'}} onClick={() => setMode(mode === 'light' ? 'dark' : 'light')}>
         {mode === 'light'
           ? <LightMode style={{fill: theme.palette.text.secondary}} />
           : <DarkMode style={{fill: theme.palette.text.secondary}} />}
@@ -191,7 +191,7 @@ const UserMenu = () => {
   return (
     <Box sx={{ display: 'flex', alignContent: 'center', paddingLeft: '10px', flexGrow: 0 }}>
       <Tooltip title="Open User Menu">
-        <IconButton data-testid="openUserMenuButton" onClick={handleOpenUserMenu} sx={{ marginLeft: '5px', p: 0 }}>
+        <IconButton data-testid="openUserMenuButton" onClick={handleOpenUserMenu} sx={{ display: 'inline-flex' }}>
           <Person sx={{ fill: theme.palette.text.secondary }} />
         </IconButton>
       </Tooltip>
@@ -290,7 +290,7 @@ const UserButtons = () => {
   }
 
   return (
-    <Grid item alignContent='center' alignItems='stretch' sx={{display: 'flex', justifyContent: 'flex-end' }} xs={3}>
+    <Grid item alignContent='center' alignItems='stretch' sx={{display: 'flex', justifyContent: 'flex-end', paddingRight: '10px' }} xs={3}>
       <ThemeButton />
 
       {!isAuth && <Button
@@ -401,7 +401,7 @@ const NavBar = (props) => {
   return (
     <ElevationScroll {...props}>
       <AppBar position="sticky" sx={{ background: theme.palette.background.default, marginBottom: '20px', height: '10%' }}>
-        <Grid container width="100%" spacing={2} alignItems='center' alignContent='center' justifyContent='center'>
+        <Grid container width="100%" spacing={0} alignItems='center' alignContent='center' justifyContent='center'>
             {/* Title/Home Link */}
             <TitleLink />
 
