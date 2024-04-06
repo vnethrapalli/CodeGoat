@@ -1,5 +1,5 @@
 import { navigate, routes } from '@redwoodjs/router'
-import { useMutation } from '@redwoodjs/web'
+import { Metadata, useMutation } from '@redwoodjs/web'
 
 import { Button, TextField, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
@@ -129,6 +129,7 @@ const UserAccountPage = () => {
 
   return (
     <>
+      <Metadata title="Account" description="Account Settings"/>
       <Toaster />
       <Typography variant='h2' component='h2' align='left' style={{color:theme.palette.text.secondary, fontSize: '36px', fontStyle: 'normal', fontWeight: '600', margin: '1%', marginBottom: '2%'}}>Account</Typography>
 

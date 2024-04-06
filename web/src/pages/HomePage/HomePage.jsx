@@ -58,7 +58,7 @@ const HomePage = () => {
 
         <Box ref={myRef}></Box>
 
-        <Typography data-testid='description' style={{ padding: '25px', marginTop: '25px', marginBottom: '0px', width: '90%', color: theme.palette.text.success, fontSize: '24px', fontStyle: 'normal', fontWeight: '300'}}>
+        <Typography data-testid='description' style={{ padding: '25px', marginTop: '25px', marginBottom: '0px', width: '90%', color: theme.palette.text.secondary, fontSize: '24px', fontStyle: 'normal', fontWeight: '300'}}>
           This tool uses an AI model to convert your code from one programming language to another. We provide support for a variety of languages such as:
 
           <List dense disablePadding sx={{ listStyleType: 'disc', pl: 4, marginTop: '5px', marginBottom: '0px'}}>
@@ -70,8 +70,8 @@ const HomePage = () => {
           </List>
         </Typography>
 
-        <Typography data-testid='tutorial' style={{ padding: '25px', marginTop: '20px', marginBottom: '10px', width: '90%', color: theme.palette.text.success, fontSize: '24px', fontStyle: 'normal', fontWeight: '300'}}>
-          <Typography variant='h4' component='span' style={{ padding: '0px', margin: '0px', color: theme.palette.text.success, fontSize: '32px', fontStyle: 'normal', fontWeight: '550'}}>
+        <Typography data-testid='tutorial' style={{ padding: '25px', marginTop: '20px', marginBottom: '10px', width: '90%', color: theme.palette.text.secondary, fontSize: '24px', fontStyle: 'normal', fontWeight: '300'}}>
+          <Typography variant='h4' component='span' style={{ padding: '0px', margin: '0px', color: theme.palette.text.secondary, fontSize: '32px', fontStyle: 'normal', fontWeight: '550'}}>
             Getting Started
           </Typography>
 

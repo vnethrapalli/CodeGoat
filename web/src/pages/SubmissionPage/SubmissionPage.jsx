@@ -1,6 +1,6 @@
 import { Metadata, useMutation } from '@redwoodjs/web';
 import { gql, useLazyQuery } from "@apollo/client";
-import { Paper, Stack, Box, Button, FormControl, InputLabel, Select, MenuItem, Divider, Rating } from '@mui/material';
+import { Grid, Paper, Stack, Box, Button, FormControl, InputLabel, Select, MenuItem, Divider, Rating } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import Editor, { useMonaco } from '@monaco-editor/react';
 import { Toaster, toast } from '@redwoodjs/web/toast'
@@ -60,7 +60,6 @@ const extensions = {
 };
 
 let queueCount = 0;
-
 const MAXQUEUE = 2;
 
 const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => {
@@ -124,7 +123,7 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
     // };
 
     return (
-      <Paper square={false} variant="outlined" elevation={6} data-testid={isInput ? "inputEditor" : "outputEditor"}>
+      <Paper square={false} elevation={6} data-testid={isInput ? "inputEditor" : "outputEditor"}>
         <Editor
           height='600px'
           width="40vw"
@@ -199,6 +198,15 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
               variant="outlined"
               value={language}
               onChange={e => setLanguage(e.target.value)}
+              inputProps={{
+                MenuProps: {
+                  MenuListProps: {
+                    sx: {
+                        backgroundColor: theme.palette.background.default,
+                    }
+                  }
+                }
+              }}
             >
               {languages.map((lang) => (
                 <MenuItem
@@ -217,7 +225,6 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
       </>
     )
   }
-
 
   const TranslateBtn = () => {
     const [queue, setQueue] = React.useState(Promise.resolve())
@@ -374,13 +381,13 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
             variant="contained"
             data-testid="translateButton"
             style={{
-              backgroundColor: theme.palette.secondary.main,
-              color: theme.palette.text.primary,
+              backgroundColor: theme.palette.text.success,
+              color: theme.palette.background.default,
               textTransform: 'none'
             }}
             sx={{
-              width: "250px",
-              borderRadius: "40px",
+              width: "200px",
+              borderRadius: "6px",
               marginBottom: "25px",
             }}
             onClick={async () => {
@@ -406,16 +413,16 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
           navigator.clipboard.writeText(editor.props.children.props.value)
         }}
         style={{
-          backgroundColor: theme.palette.secondary.main,
+          backgroundColor: theme.palette.text.success,
           textTransform: 'none',
-          borderTopLeftRadius: '10px',
-          borderBottomLeftRadius: '10px',
+          borderTopLeftRadius: '6px',
+          borderBottomLeftRadius: '6px',
           borderTopRightRadius: '0px',
           borderBottomRightRadius: '0px'
         }}
         data-testid={isInput ? "inputCopy" : "outputCopy"}
       >
-        <ContentCopy sx={{ fill: theme.palette.text.primary }} />
+        <ContentCopy sx={{ fill: theme.palette.background.default }} />
       </Button>
     );
   }
@@ -434,17 +441,17 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
           <Button
             component="span"
             style={{
-              backgroundColor: theme.palette.secondary.main,
+              backgroundColor: theme.palette.text.success,
               textTransform: 'none',
               borderTopLeftRadius: '0px',
               borderBottomLeftRadius: '0px',
-              borderTopRightRadius: '10px',
-              borderBottomRightRadius: '10px'
+              borderTopRightRadius: '6px',
+              borderBottomRightRadius: '6px'
             }}
             onClick={readInputFile}
             data-testid="uploadButton"
           >
-            <UploadFile sx={{ fill: theme.palette.text.primary }} />
+            <UploadFile sx={{ fill: theme.palette.background.default }} />
           </Button>
         </label>
       </>
@@ -455,12 +462,12 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
     return (
       <Button
         style={{
-          backgroundColor: theme.palette.secondary.main,
+          backgroundColor: theme.palette.text.success,
           textTransform: 'none',
           borderTopLeftRadius: '0px',
           borderBottomLeftRadius: '0px',
-          borderTopRightRadius: '10px',
-          borderBottomRightRadius: '10px'
+          borderTopRightRadius: '6px',
+          borderBottomRightRadius: '6px'
         }}
         onClick={() => {
           // console.log(outputLanguage);
@@ -468,7 +475,7 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
         }}
         data-testid="downloadButton"
         >
-        <Download sx={{ fill: theme.palette.text.primary }} />
+        <Download sx={{ fill: theme.palette.background.default }} />
       </Button>
     )
   }
@@ -482,7 +489,7 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
         </Stack>
         <Stack direction="row" spacing={0} justifyContent="flex-end" alignItems="center">
           <CopyButton editor={codeboxInput} isInput={input}/>
-          <Divider orientation="vertical" flexItem style={{ backgroundColor: theme.palette.text.primary, width: '1%' }}/>
+          <Divider orientation="vertical" flexItem style={{ backgroundColor: theme.palette.background.default, width: '1%' }}/>
           <UploadButtonInput/>
         </Stack>
       </Stack>
@@ -493,7 +500,7 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
     return (
       <Stack direction="row" spacing={0} justifyContent="flex-end" alignItems="center">
         <CopyButton editor={input ? codeboxInput : codeboxOutput} isInput={input} />
-        <Divider orientation="vertical" flexItem style={{ backgroundColor: theme.palette.text.primary, width: '1%' }}/>
+        <Divider orientation="vertical" flexItem style={{ backgroundColor: theme.palette.background.default, width: '1%' }}/>
         <DownloadButton/>
       </Stack>
     );
@@ -542,13 +549,13 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
       <Button
           variant="contained"
           style={{
-            backgroundColor: theme.palette.secondary.main,
-            color: theme.palette.text.primary,
+            backgroundColor: theme.palette.text.success,
+            color: theme.palette.background.default,
             textTransform: 'none'
           }}
           sx={{
-            width: "250px",
-            borderRadius: "40px",
+            width: "200px",
+            borderRadius: "6px",
             marginBottom: "25px",
           }}
           onClick={() => {
@@ -563,7 +570,7 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
 
   return (
     <>
-      <Metadata title="Submission" description="Submission page"/>
+      <Metadata title="Translate" description="Translation Page"/>
       <Toaster />
       <Stack
         direction="column"
@@ -598,5 +605,4 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
   );
 }
 
-// {output && <CodeOutputCell code={inputCodeValue} inLang={inputLanguage} outLang={outputLanguage} />}
 export default SubmissionPage;

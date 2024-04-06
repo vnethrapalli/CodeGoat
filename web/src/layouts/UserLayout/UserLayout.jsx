@@ -1,4 +1,4 @@
-import { navigate, routes } from '@redwoodjs/router'
+import { navigate, routes, useParams, useLocation } from '@redwoodjs/router'
 import { Toaster, toast } from '@redwoodjs/web/toast'
 import { IconButton, Divider, AppBar, Link, Box, Button, Container, Tooltip, Typography, Grid, Menu, MenuItem, useScrollTrigger, CssBaseline } from '@mui/material';
 import { Experimental_CssVarsProvider as CssVarsProvider, experimental_extendTheme as extendTheme, useColorScheme, useTheme } from '@mui/material/styles';
@@ -6,6 +6,7 @@ import { makeStyles } from "@mui/styles";
 import { Logout, Settings, AccessTime, Person, DarkMode, LightMode } from '@mui/icons-material'
 import { useAuth, auth0 } from 'src/auth'
 import PropTypes from 'prop-types';
+import { useEffect } from 'react';
 
 
 const theme = extendTheme({
@@ -19,12 +20,12 @@ const theme = extendTheme({
           main: "#2D9596"
         },
         background: {
-          default: "#F1FADA"
+          default: "#F1FADA",
         },
         text: {
           primary: "#F1FADA",
           secondary: "#265073",
-          success: "#265073",
+          success: "#536D5A",
         }
       },
     },
@@ -37,12 +38,12 @@ const theme = extendTheme({
           main: "#344955"
         },
         background: {
-          default: "#1E3231"
+          default: "#1E3231",
         },
         text: {
           primary: "#F1FADA",
           secondary: "#F1FADA",
-          success: "#F1FADA",
+          success: "#536D5A",
         }
       },
     },
@@ -81,6 +82,7 @@ export function testClick() {
 
 const NavButtons = () => {
   const theme = useTheme();
+  const page = useLocation().pathname.split('/')[1]
 
   return (
     <Grid item alignContent='center' alignItems='center' alignSelf='center' xs={6}>
@@ -92,7 +94,8 @@ const NavButtons = () => {
             data-testid="translateButton"
             href={routes.translate()}
             onClick={testClick}
-            sx={{ marginTop: '2px', marginBottom: '2px', marginRight: '5px', marginLeft: '0px', color: theme.palette.text.secondary, display: 'block' }}
+            sx={{ marginTop: '2px', marginBottom: '2px', marginRight: '5px', marginLeft: '0px', color: theme.palette.text.secondary, display: 'block'}}
+            style={page==="translate" ? {textDecoration: 'underline', textUnderlineOffset: '5px'} : {}}
           >
             Translate
           </Button>
@@ -118,6 +121,7 @@ const NavButtons = () => {
             onClick={testClick}
             href={routes.feedback()}
             sx={{ marginTop: '2px', marginBottom: '2px', marginRight: '5px', marginLeft: '0px', color: theme.palette.text.secondary, display: 'block' }}
+            style={page==="feedback" ? {textDecoration: 'underline', textUnderlineOffset: '5px'} : {}}
           >
             Feedback
           </Button>
@@ -130,6 +134,7 @@ const NavButtons = () => {
             data-testid="documentationButton"
             onClick={() => (navigate(routes.documentation()))}
             sx={{ marginTop: '2px', marginBottom: '2px', marginRight: '0px', marginLeft: '0px', color: theme.palette.text.secondary, display: 'block' }}
+            style={page==="documentation" ? {textDecoration: 'underline', textUnderlineOffset: '5px'} : {}}
           >
             Documentation
           </Button>
@@ -156,7 +161,7 @@ const ThemeButton = () => {
 
 export const useStyles = makeStyles((theme) => ({
   menuPaper: {
-    backgroundColor: theme.palette.background.default,
+    backgroundColor: theme.palette.background.default + ' !important',
   }
 }));
 
@@ -290,7 +295,7 @@ const UserButtons = () => {
   }
 
   return (
-    <Grid item alignContent='center' alignItems='stretch' sx={{display: 'flex', justifyContent: 'flex-end', paddingRight: '10px' }} xs={3}>
+    <Grid item alignContent='center' alignItems='stretch' sx={{display: 'flex', justifyContent: 'flex-end', paddingRight: '5px' }} xs={3}>
       <ThemeButton />
 
       {!isAuth && <Button
@@ -400,7 +405,7 @@ const NavBar = (props) => {
 
   return (
     <ElevationScroll {...props}>
-      <AppBar position="sticky" sx={{ background: theme.palette.background.default, marginBottom: '20px', height: '10%' }}>
+      <AppBar position="sticky" sx={{ background: theme.palette.background.default, marginBottom: '20px', paddingTop: '5px', paddingBottom: '5px', height: '10%' }}>
         <Grid container width="100%" spacing={0} alignItems='center' alignContent='center' justifyContent='center'>
             {/* Title/Home Link */}
             <TitleLink />

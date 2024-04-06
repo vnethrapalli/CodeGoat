@@ -59,6 +59,7 @@ const FeedbackPage = () => {
 
   return (
     <>
+      <Metadata title="Feedback" description="Submit Feedback"/>
       <Box display="flex" flexDirection='column' justifyContent="center" alignItems="center">
       <Typography variant='h2' component='h2' align='center' style={{color: theme.palette.text.secondary, fontSize: '52px', fontStyle: 'normal', fontWeight: '600'}}>Feedback</Typography>
         <Form onSubmit={onSubmit}>
