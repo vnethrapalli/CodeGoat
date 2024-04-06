@@ -23,6 +23,7 @@ model Feedback {
   gptAvailability     Int
   experience          Int
   comments            String
+  createdAt           DateTime @default(now())
 }
 
 model Translation {

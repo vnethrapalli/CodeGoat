@@ -44,7 +44,34 @@ const FeedbackPage = () => {
   // Gets the input into the database
   const onSubmit = (data) => {
     data.preventDefault();
-    create({ variables: { input: {"submissionPage":sub, "outputPage":out, "translationAccuracy":acc, "gptAvailability":gpt, "experience":exp, "comments":com} } })
+    let submitted = true;
+    if (!(sub <= 10 || sub >= 0)) {
+      toast.error("Invalid 'Submission Page' rating!");
+      submitted = false;
+    }
+    if (!(out <= 10 || out >= 0)) {
+      toast.error("Invalid 'Output Page' rating!");
+      submitted = false;
+    }
+    if (!(acc <= 10 || acc >= 0)) {
+      toast.error("Invalid 'Translation Accuracy' rating!");
+      submitted = false;
+    }
+    if (!(acc <= 10 || acc >= 0)) {
+      toast.error("Invalid 'GPT-3 Availability' rating!");
+      submitted = false;
+    }
+    if (!(acc <= 10 || acc >= 0)) {
+      toast.error("Invalid 'Overall Experience' rating!");
+      submitted = false;
+    }
+    if (sub === 0 && out === 0 && acc === 0 && gpt === 0 && exp === 0 && com === "") {
+      toast.error("Please try to fill out SOMETHING!");
+      submitted = false;
+    }
+    if (submitted) {
+      create({ variables: { input: {"submissionPage":sub, "outputPage":out, "translationAccuracy":acc, "gptAvailability":gpt, "experience":exp, "comments":com} } })
+    }
   }
   // By default, hover is not on
   const [hover, setHover] = React.useState(-1);
@@ -208,13 +235,15 @@ const FeedbackPage = () => {
             sx={{
               display: "flex",
               justifyContent: "center",
-              size: "lg",
+              width: "100%"
             }}
           >
             <TextareaAutosize
               name="comments"
               value={com}
               minRows={5}
+              cols={100}
+              style ={{width: 300}}
               placeholder="Type here."
               onChange={(event) => {
                 setCom(event.target.value);
