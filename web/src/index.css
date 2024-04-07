@@ -19,11 +19,14 @@
   border-width: '1px';
 }
 
-
 .MuiPickersDay-today {
   color: var(--mui-palette-text-success) !important;
 }
 
 .MuiSelect-select {
   color: var(--mui-palette-text-secondary) !important;
+}
+
+.MuiOutlinedInput-notchedOutline {
+  border-color: var(--mui-palette-primary-main) !important;
 }

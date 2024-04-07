@@ -44,11 +44,11 @@ const DocumentationPage = () => {
 
         <Typography data-testid='whatgpt' component='span' style={{ backgroundColor: theme.palette.secondary.main, padding: '25px', marginTop: '20px', marginBottom: '20px', width: '85%', borderRadius: '20px', color: theme.palette.text.primary, fontSize: '24px', fontStyle: 'normal', fontWeight: '300'}}>
           <Typography variant='h4' component='span' style={{ backgroundColor: theme.palette.secondary.main, padding: '0px', margin: '0px', color: theme.palette.text.primary, fontSize: '32px', fontStyle: 'normal', fontWeight: '550'}}>
-            What is GPT-3?
+            What is GPT-3.5?
           </Typography>
           <Typography style={{ backgroundColor: theme.palette.secondary.main, padding: '5px', marginTop: '20px', marginBottom: '0px', borderRadius: '20px', color: theme.palette.text.primary, fontSize: '24px', fontStyle: 'normal', fontWeight: '300'}}>
             <Link data-testid='gpt link' href="https://platform.openai.com/docs/introduction">GPT</Link> is a natural language processing model developed by OpenAI, which uses a deep learning
-            architecture that has seen massive use in recent years. In our tool, we use GPT-3, since GPT-4 costs more overall.
+            architecture that has seen massive use in recent years. In our tool, we use GPT-3.5 Turbo, since GPT-4 costs more overall.
           </Typography>
         </Typography>
 

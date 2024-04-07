@@ -8,7 +8,6 @@ import { useAuth, auth0 } from 'src/auth'
 import PropTypes from 'prop-types';
 import { useEffect } from 'react';
 
-
 const theme = extendTheme({
   colorSchemes: {
     light: {
@@ -85,7 +84,7 @@ const NavButtons = () => {
   const page = useLocation().pathname.split('/')[1]
 
   return (
-    <Grid item alignContent='center' alignItems='center' alignSelf='center' xs={6}>
+    <Grid item display='flex' alignContent='center' alignItems='center' justifyContent='center' xs={6}>
       <Box data-testid="navButtons" display="flex" sx={{ justifyContent: "center", alignItems: "center" }}>
         <Tooltip title='Translate Code'>
           <Button

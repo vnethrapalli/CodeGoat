@@ -67,7 +67,7 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
   const [outputCodeValue, setOutputCodeValue] = React.useState("Processing...");
   const [inputLanguage, setInputLanguage] = React.useState("javascript");
   const [outputLanguage, setOutputLanguage] = React.useState("python");
-  const [status, setStatus] = React.useState("500 Server Error")
+  // const [status, setStatus] = React.useState("500 Server Error")
   const [rating, setRating] = React.useState(5);
   const [refreshQuery, setRefreshQuery] = React.useState(true);
   const [output, setOutput] = React.useState(false);
@@ -123,10 +123,10 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
     // };
 
     return (
-      <Paper square={false} elevation={6} data-testid={isInput ? "inputEditor" : "outputEditor"}>
+      <Paper square={false} elevation={6} data-testid={isInput ? "inputEditor" : "outputEditor"} width='100%'>
         <Editor
           height='600px'
-          width="40vw"
+          width="100%"
           m='10px'
           defaultLanguage={defaultLanguage}
           language={language}
@@ -189,40 +189,38 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
 
   const LangDropdown = ({ text, language, setLanguage }) => {
     return (
-      <>
-        <Stack direction="column" spacing={0.5}>
-          <InputLabel>{text}</InputLabel>
-          <FormControl size='small'>
-            <Select
-              style={{ color: theme.palette.text.secondary }}
-              variant="outlined"
-              value={language}
-              onChange={e => setLanguage(e.target.value)}
-              inputProps={{
-                MenuProps: {
-                  MenuListProps: {
-                    sx: {
-                        backgroundColor: theme.palette.background.default,
-                    }
+      <Box>
+        <InputLabel>{text}</InputLabel>
+        <FormControl size='small'>
+          <Select
+            style={{ color: theme.palette.text.secondary, minWidth: '100px' }}
+            variant="outlined"
+            value={language}
+            onChange={e => setLanguage(e.target.value)}
+            inputProps={{
+              MenuProps: {
+                MenuListProps: {
+                  sx: {
+                      backgroundColor: theme.palette.background.default,
                   }
                 }
-              }}
-            >
-              {languages.map((lang) => (
-                <MenuItem
-                  style={{
-                     color: theme.palette.text.secondary,
-                  }}
-                  value={lang.langCode}
-                  key={lang.langCode}
-                >
-                    {lang.dropdownItem}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </Stack>
-      </>
+              }
+            }}
+          >
+            {languages.map((lang) => (
+              <MenuItem
+                style={{
+                    color: theme.palette.text.secondary,
+                }}
+                value={lang.langCode}
+                key={lang.langCode}
+              >
+                  {lang.dropdownItem}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </Box>
     )
   }
 
@@ -382,7 +380,7 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
             data-testid="translateButton"
             style={{
               backgroundColor: theme.palette.text.success,
-              color: theme.palette.background.default,
+              color: theme.palette.text.primary,
               textTransform: 'none'
             }}
             sx={{
@@ -418,11 +416,12 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
           borderTopLeftRadius: '6px',
           borderBottomLeftRadius: '6px',
           borderTopRightRadius: '0px',
-          borderBottomRightRadius: '0px'
+          borderBottomRightRadius: '0px',
+          height: '40px'
         }}
         data-testid={isInput ? "inputCopy" : "outputCopy"}
       >
-        <ContentCopy sx={{ fill: theme.palette.background.default }} />
+        <ContentCopy sx={{ fill: theme.palette.text.primary }} />
       </Button>
     );
   }
@@ -446,12 +445,13 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
               borderTopLeftRadius: '0px',
               borderBottomLeftRadius: '0px',
               borderTopRightRadius: '6px',
-              borderBottomRightRadius: '6px'
+              borderBottomRightRadius: '6px',
+              height: '40px'
             }}
             onClick={readInputFile}
             data-testid="uploadButton"
           >
-            <UploadFile sx={{ fill: theme.palette.background.default }} />
+            <UploadFile sx={{ fill: theme.palette.text.primary }} />
           </Button>
         </label>
       </>
@@ -467,7 +467,8 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
           borderTopLeftRadius: '0px',
           borderBottomLeftRadius: '0px',
           borderTopRightRadius: '6px',
-          borderBottomRightRadius: '6px'
+          borderBottomRightRadius: '6px',
+          height: '40px'
         }}
         onClick={() => {
           // console.log(outputLanguage);
@@ -475,34 +476,41 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
         }}
         data-testid="downloadButton"
         >
-        <Download sx={{ fill: theme.palette.background.default }} />
+        <Download sx={{ fill: theme.palette.text.primary }} />
       </Button>
     )
   }
 
   const DropdownAndButtons = ({ input }) => {
     return (
-      <Stack direction="row" justifyContent="space-between" alignItems="center" width={'40vw'}>
-        <Stack direction="row" spacing={2} justifyContent="flex-start" alignItems="center">
-          <LangDropdown text="Source Language" language={inputLanguage} setLanguage={(newLang) => setInputLanguage(newLang)} />
-          <LangDropdown text="Target Language" language={outputLanguage} setLanguage={(newLang) => setOutputLanguage(newLang)} />
-        </Stack>
-        <Stack direction="row" spacing={0} justifyContent="flex-end" alignItems="center">
+      <Grid container direction="row" justifyContent="center" alignItems="center" width='100%' height="100%">
+        <Grid item direction="row" display='flex' justifyContent="flex-start" alignItems="center" xs={9}>
+          <Box>
+            <LangDropdown text="Source Language" language={inputLanguage} setLanguage={(newLang) => setInputLanguage(newLang)} />
+          </Box>
+          <Box sx={{ marginLeft: '10px' }}>
+            <LangDropdown text="Target Language" language={outputLanguage} setLanguage={(newLang) => setOutputLanguage(newLang)} />
+          </Box>
+        </Grid>
+        <Grid label="hello" item direction="row" spacing={0} sx={{ display: 'flex', justifyContent: 'flex-end', alignContent: 'flex-end', alignItems: "flex-end", minHeight: '100%' }} xs={3}>
           <CopyButton editor={codeboxInput} isInput={input}/>
-          <Divider orientation="vertical" flexItem style={{ backgroundColor: theme.palette.background.default, width: '1%' }}/>
+          <Divider orientation="vertical"  style={{ backgroundColor: theme.palette.background.default, width: '0.5%', height: '40px' }}/>
           <UploadButtonInput/>
-        </Stack>
-      </Stack>
+        </Grid>
+      </Grid>
     );
   }
 
   const NoDropdownAndButtons = ({ input }) => {
     return (
-      <Stack direction="row" spacing={0} justifyContent="flex-end" alignItems="center">
-        <CopyButton editor={input ? codeboxInput : codeboxOutput} isInput={input} />
-        <Divider orientation="vertical" flexItem style={{ backgroundColor: theme.palette.background.default, width: '1%' }}/>
-        <DownloadButton/>
-      </Stack>
+      <Grid container direction="row" justifyContent="center" alignItems="center" width='100%' height="100%">
+        <Grid item xs={9} />
+        <Grid label="hello" item direction="row" spacing={0} sx={{ display: 'flex', justifyContent: 'flex-end', alignContent: 'flex-end', alignItems: "flex-end", minHeight: '100%' }} xs={3}>
+          <CopyButton editor={input ? codeboxInput : codeboxOutput} isInput={input} />
+          <Divider orientation="vertical" style={{ backgroundColor: theme.palette.background.default, width: '0.5%', height: '40px' }}/>
+          <DownloadButton/>
+        </Grid>
+      </Grid>
     );
   }
 
@@ -572,35 +580,56 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
     <>
       <Metadata title="Translate" description="Translation Page"/>
       <Toaster />
-      <Stack
-        direction="column"
-        spacing={2}
-        alignItems="center"
-      >
-        <Stack direction="row" spacing={4} justifyContent="space-between" alignItems="center" width={output ? '80vw' : '40vw'}>
-          <DropdownAndButtons input={true} />
-          {output && <NoDropdownAndButtons input={false} />}
-        </Stack>
-        <Stack direction="row" spacing={4} justifyContent="space-between" alignItems="center" width={output ? '80vw' : '40vw'}>
-          {codeboxInput}
-          {output && codeboxOutput}
-        </Stack>
-      </Stack>
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', alignSelf: 'center', flexWrap: 'wrap', width: '100%'}}>
+        <Grid
+          container
+          direction="row"
+          spacing={2}
+          sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', alignSelf: 'center'}}
+          width='100%'
+        >
+          <Grid item xs />
+          <Grid item direction="column" justifyContent="space-between" alignItems="center" width='100%' height='100%' xs={output ? 10 : 5}>
+            <Grid container direction="row" width='100%' height='100%' marginBottom='10px' spacing={2}>
+              <Grid item xs={output ? 6 : 12}>
+                <DropdownAndButtons input={true} />
+              </Grid>
+              {output &&
+              <Grid item xs={6} spacing={0} sx={{ display: 'flex', justifyContent: 'flex-end', alignContent: 'flex-end', alignItems: "flex-end", minHeight: '100%' }}>
+                <NoDropdownAndButtons input={false} />
+              </Grid>
+              }
+            </Grid>
+            <Grid container direction="row" width='100%' height='100%' spacing={2}>
+              <Grid item xs={output ? 6 : 12}>
+                {codeboxInput}
+              </Grid>
 
-      <Stack direction="column" spacing={2} justifyContent="center" alignItems="center" width='100%'>
-        <TranslateBtn/>
-        {output &&
-        <>
-          <Rating
-            defaultValue={5}
-            onChange={(event, val) => {
-              if (val == null) val = 0;
-              setRating(val);
-            }}
-          />
-          <RatingButton/>
-        </>}
-      </Stack>
+              {output &&
+                <Grid item xs={6}>
+                  {codeboxOutput}
+                </Grid>
+              }
+            </Grid>
+          </Grid>
+          <Grid item xs />
+        </Grid>
+
+        <Stack direction="column" spacing={2} justifyContent="center" alignItems="center" width='100%'>
+          <TranslateBtn/>
+          {output &&
+          <>
+            <Rating
+              defaultValue={5}
+              onChange={(event, val) => {
+                if (val == null) val = 0;
+                setRating(val);
+              }}
+            />
+            <RatingButton/>
+          </>}
+        </Stack>
+      </Box>
     </>
   );
 }

@@ -10,7 +10,6 @@ import { auth0 } from 'src/auth'
 import React, { useEffect } from 'react'
 import { QUERY as TranslationQuery } from 'src/components/TranslationsCell'
 import TranslationsCell from 'src/components/TranslationsCell'
-import { useStyles } from 'src/layouts/UserLayout/UserLayout';
 
 export const languages = [
   {dropdownItem: "C++", langCode: "cpp"},
@@ -31,7 +30,6 @@ const DELETE_ALL_TRANSLATIONS = gql`
 
 const HistoryPage = ({ page = 1 }) => {
   const theme = useTheme();
-  const classes = useStyles();
   const [userId, setUserId] = React.useState()
   const [selectedInLanguage, setSelectedInLanguage] = React.useState([]);
   const [selectedOutLanguage, setSelectedOutLanguage] = React.useState([]);
@@ -97,7 +95,7 @@ const HistoryPage = ({ page = 1 }) => {
           Filter
         </Typography>
         <Box sx={{ display: 'flex' }}>
-          <FormControl sx={{ marginTop: '0px', marginRight: '10px', height: 20, width: 175 }}>
+          <FormControl sx={{ marginTop: '0px', marginRight: '10px', height: '20px', width: 175 }}>
             <InputLabel id="demo-multiple-name-label">Input Language</InputLabel>
             <Select
               labelId="filter-inputLanguage"
