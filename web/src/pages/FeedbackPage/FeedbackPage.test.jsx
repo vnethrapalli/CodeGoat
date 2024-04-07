@@ -83,44 +83,72 @@ describe('FeedbackPage', () => {
       expect(radio).toBeChecked()
     })
     it('accepts submit button clicks', async() => {
+      const onHandle = jest.fn()
+      render(<FeedbackPage defaultOnHandle={onHandle} />)
+      const submit = screen.getByRole('button')
+      await user.click(submit)
+
+      expect(onHandle).toHaveBeenCalled()
+    })
+  })
+
+  describe("Submission Handling", () => {
+    it('prevents submission of out of range values', async() => {
+      const ratings = {
+        "sub": 100,
+        "out": -10,
+        "acc": 1342340,
+        "gpt": 1,
+        "exp": -453,
+      }
       const onSubmit = jest.fn()
-      render(<FeedbackPage onSubmitDefault={onSubmit} />)
+      render(<FeedbackPage defaultOnSubmit={onSubmit} defaultRatings={ratings}/>)
+      const submit = screen.getByRole('button')
+      await user.click(submit)
+
+      expect(onSubmit).not.toHaveBeenCalled()
+    })
+    it('prevents completely empty submissions', async() => {
+      const onSubmit = jest.fn()
+      render(<FeedbackPage defaultOnSubmit={onSubmit}/>)
+      const submit = screen.getByRole('button')
+      await user.click(submit)
+
+      expect(onSubmit).not.toHaveBeenCalled()
+    })
+    // it('prevents double submissions in short span of time', async() => {
+
+    // })
+    it('handles other unexpected errors', async() => {
+      const ratings = {
+        "sub": "incorrect",
+        "out": null,
+        "acc": 6,
+        "gpt": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+        "exp": 7,
+      }
+      const onSubmit = jest.fn()
+      render(<FeedbackPage defaultOnSubmit={onSubmit} defaultRatings={ratings}/>)
+      const submit = screen.getByRole('button')
+      await user.click(submit)
+
+      expect(onSubmit).not.toHaveBeenCalled()
+    })
+    it('successfully submits', async() => {
+      const ratings = {
+        "sub": 10,
+        "out": 3,
+        "acc": 1,
+        "gpt": 1,
+        "exp": 6,
+      }
+      const onSubmit = jest.fn()
+      render(<FeedbackPage defaultOnSubmit={onSubmit} defaultRatings={ratings}/>)
       const submit = screen.getByRole('button')
       await user.click(submit)
 
       expect(onSubmit).toHaveBeenCalled()
     })
-  })
-
-  describe("Submission Handling", () => {
-    // it('prevents submission of out of range values', async() => {
-
-    // })
-    // it('prevents completely empty submissions', async() => {
-    //   fetchMock = jest.spyOn(global, "fetch").mockImplementation(assetsFetchMock);
-    //   //const submit = screen.getByRole('button', { name: /submit/i})
-    //   for (let i = 0; i < 10; i++)
-    //     await waitFor(() => {fireEvent.submit(screen.getByTestId('ratingForm'))})
-    //   screen.debug(undefined, Infinity)
-    //   await waitFor(() => {expect(screen.getAllByText(/Please/i)[0]).toBeInTheDocument()}, { timeout: 4000});
-
-    // })
-    // it('sends an error message upon other types of errors', async() => {
-
-    // })
-    // it('sends a completion message upon successful submission', async() => {
-
-    // })
-
-    // it('sends a completion message upon successful submission', async() => {
-    //   render(<FeedbackPage />)
-
-    //   const subButton = screen.getByRole('button')
-    //   fireEvent.click(subButton)
-    //   setTimeout(() => {
-    //     expect(screen.findByText('Submitted!')).toBeInTheDocument()
-    //   }, 5000);
-    // })
 
     // it('sends an error message upon other errors', async() => {
     //   const error = {

@@ -19,7 +19,7 @@ const CREATE_FEEDBACK = gql`
     }
   }
 `
-const FeedbackPage = ({ onSubmitDefault }) => {
+const FeedbackPage = ({ defaultOnSubmit, defaultOnHandle, defaultRatings }) => {
   const theme = useTheme();
   // This is for getting the correct color to display when hovered / unhovered
   // Alpha controls the transparency; prevents needing another color added to the UserLayout palette
@@ -41,27 +41,26 @@ const FeedbackPage = ({ onSubmitDefault }) => {
     },
   })
 
-  // Gets the input into the database
-  const onSubmit = onSubmitDefault || (async(data) => {
+  const handleSubmit = defaultOnHandle || ((data) => {
     data.preventDefault();
     let submitted = true;
-    if (!(sub <= 10 || sub >= 0)) {
+    if (!(sub <= 10 && sub >= 0)) {
       toast.error("Invalid 'Submission Page' rating!");
       submitted = false;
     }
-    if (!(out <= 10 || out >= 0)) {
+    if (!(out <= 10 && out >= 0)) {
       toast.error("Invalid 'Output Page' rating!");
       submitted = false;
     }
-    if (!(acc <= 10 || acc >= 0)) {
+    if (!(acc <= 10 && acc >= 0)) {
       toast.error("Invalid 'Translation Accuracy' rating!");
       submitted = false;
     }
-    if (!(acc <= 10 || acc >= 0)) {
+    if (!(gpt <= 10 && gpt >= 0)) {
       toast.error("Invalid 'GPT-3 Availability' rating!");
       submitted = false;
     }
-    if (!(acc <= 10 || acc >= 0)) {
+    if (!(exp <= 10 && exp >= 0)) {
       toast.error("Invalid 'Overall Experience' rating!");
       submitted = false;
     }
@@ -70,25 +69,29 @@ const FeedbackPage = ({ onSubmitDefault }) => {
       submitted = false;
     }
     if (submitted) {
-      create({ variables: { input: {"submissionPage":sub, "outputPage":out, "translationAccuracy":acc, "gptAvailability":gpt, "experience":exp, "comments":com} } })
+      onSubmit();
     }
+  });
+
+  const onSubmit = defaultOnSubmit || (async(data) => {
+    create({ variables: { input: {"submissionPage":sub, "outputPage":out, "translationAccuracy":acc, "gptAvailability":gpt, "experience":exp, "comments":com} } })
   });
   // By default, hover is not on
   const [hover, setHover] = React.useState(-1);
 
   // Set the variables to 0 / empty initially
-  const [sub, setSub] = React.useState(0);
-  const [out, setOut] = React.useState(0);
-  const [acc, setAcc] = React.useState(0);
-  const [gpt, setGPT] = React.useState(0);
-  const [exp, setExp] = React.useState(0);
+  const [sub, setSub] = React.useState(defaultRatings ? defaultRatings["sub"] : 0);
+  const [out, setOut] = React.useState(defaultRatings ? defaultRatings["out"] : 0);
+  const [acc, setAcc] = React.useState(defaultRatings ? defaultRatings["acc"] : 0);
+  const [gpt, setGPT] = React.useState(defaultRatings ? defaultRatings["gpt"] : 0);
+  const [exp, setExp] = React.useState(defaultRatings ? defaultRatings["exp"] : 0);
   const [com, setCom] = React.useState("");
 
   return (
     <>
       <Box display="flex" flexDirection='column' justifyContent="center" alignItems="center">
       <Typography variant='h2' component='h2' align='center' style={{color: theme.palette.text.secondary, fontSize: '52px', fontStyle: 'normal', fontWeight: '600'}}>Feedback</Typography>
-        <Form data-testid="ratingForm" onSubmit={onSubmit}>
+        <Form data-testid="ratingForm" onSubmit={handleSubmit}>
           <Typography variant='h5' component='h5' align='center' style={{color: theme.palette.text.secondary}}>Submission Page</Typography>
           <Box
             sx={{
@@ -250,7 +253,7 @@ const FeedbackPage = ({ onSubmitDefault }) => {
               }}
             ></TextareaAutosize>
           </Box>
-          <Button name="submit" type="submit" sx={{ my: 2, color: theme.palette.text.primary, display: 'block', margin: 'auto auto' }} style={{color: theme.palette.text.secondary}} onClick={onSubmit}>Submit</Button>
+          <Button name="submit" type="submit" sx={{ my: 2, color: theme.palette.text.primary, display: 'block', margin: 'auto auto' }} style={{color: theme.palette.text.secondary}} onClick={handleSubmit}>Submit</Button>
         </Form>
       </Box>
     </>
