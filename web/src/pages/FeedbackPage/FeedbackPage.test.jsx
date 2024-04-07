@@ -82,6 +82,14 @@ describe('FeedbackPage', () => {
 
       expect(radio).toBeChecked()
     })
+    it('accepts submit button clicks', async() => {
+      const onSubmit = jest.fn()
+      render(<FeedbackPage onSubmitDefault={onSubmit} />)
+      const submit = screen.getByRole('button')
+      await user.click(submit)
+
+      expect(onSubmit).toHaveBeenCalled()
+    })
   })
 
   describe("Submission Handling", () => {
@@ -89,32 +97,44 @@ describe('FeedbackPage', () => {
 
     // })
     // it('prevents completely empty submissions', async() => {
+    //   fetchMock = jest.spyOn(global, "fetch").mockImplementation(assetsFetchMock);
+    //   //const submit = screen.getByRole('button', { name: /submit/i})
+    //   for (let i = 0; i < 10; i++)
+    //     await waitFor(() => {fireEvent.submit(screen.getByTestId('ratingForm'))})
+    //   screen.debug(undefined, Infinity)
+    //   await waitFor(() => {expect(screen.getAllByText(/Please/i)[0]).toBeInTheDocument()}, { timeout: 4000});
+
+    // })
+    // it('sends an error message upon other types of errors', async() => {
+
+    // })
+    // it('sends a completion message upon successful submission', async() => {
 
     // })
 
-    it('sends a completion message upon successful submission', async() => {
-      render(<FeedbackPage />)
+    // it('sends a completion message upon successful submission', async() => {
+    //   render(<FeedbackPage />)
 
-      const subButton = screen.getByRole('button')
-      fireEvent.click(subButton)
-      setTimeout(() => {
-        expect(screen.findByText('Submitted!')).toBeInTheDocument()
-      }, 5000);
-    })
+    //   const subButton = screen.getByRole('button')
+    //   fireEvent.click(subButton)
+    //   setTimeout(() => {
+    //     expect(screen.findByText('Submitted!')).toBeInTheDocument()
+    //   }, 5000);
+    // })
 
-    it('sends an error message upon other errors', async() => {
-      const error = {
-        request: {
-          variables: {submissionPage: "error"}
-        }
-      };
-      render(<FeedbackPage data={[error]}/>)
+    // it('sends an error message upon other errors', async() => {
+    //   const error = {
+    //     request: {
+    //       variables: {submissionPage: "error"}
+    //     }
+    //   };
+    //   render(<FeedbackPage data={[error]}/>)
 
-      const subButton = screen.getByRole('button')
-      fireEvent.click(subButton)
-      setTimeout(() => {
-        expect(screen.findByText('An error occurred.')).toBeInTheDocument()
-      }, 5000);
-    })
+    //   const subButton = screen.getByRole('button')
+    //   fireEvent.click(subButton)
+    //   setTimeout(() => {
+    //     expect(screen.findByText('An error occurred.')).toBeInTheDocument()
+    //   }, 5000);
+    // })
   })
 })

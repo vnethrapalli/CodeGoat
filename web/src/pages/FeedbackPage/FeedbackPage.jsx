@@ -19,7 +19,7 @@ const CREATE_FEEDBACK = gql`
     }
   }
 `
-const FeedbackPage = () => {
+const FeedbackPage = ({ onSubmitDefault }) => {
   const theme = useTheme();
   // This is for getting the correct color to display when hovered / unhovered
   // Alpha controls the transparency; prevents needing another color added to the UserLayout palette
@@ -42,7 +42,7 @@ const FeedbackPage = () => {
   })
 
   // Gets the input into the database
-  const onSubmit = (data) => {
+  const onSubmit = onSubmitDefault || (async(data) => {
     data.preventDefault();
     let submitted = true;
     if (!(sub <= 10 || sub >= 0)) {
@@ -72,7 +72,7 @@ const FeedbackPage = () => {
     if (submitted) {
       create({ variables: { input: {"submissionPage":sub, "outputPage":out, "translationAccuracy":acc, "gptAvailability":gpt, "experience":exp, "comments":com} } })
     }
-  }
+  });
   // By default, hover is not on
   const [hover, setHover] = React.useState(-1);
 
@@ -88,7 +88,7 @@ const FeedbackPage = () => {
     <>
       <Box display="flex" flexDirection='column' justifyContent="center" alignItems="center">
       <Typography variant='h2' component='h2' align='center' style={{color: theme.palette.text.secondary, fontSize: '52px', fontStyle: 'normal', fontWeight: '600'}}>Feedback</Typography>
-        <Form onSubmit={onSubmit}>
+        <Form data-testid="ratingForm" onSubmit={onSubmit}>
           <Typography variant='h5' component='h5' align='center' style={{color: theme.palette.text.secondary}}>Submission Page</Typography>
           <Box
             sx={{
@@ -250,7 +250,7 @@ const FeedbackPage = () => {
               }}
             ></TextareaAutosize>
           </Box>
-          <Button type="submit" sx={{ my: 2, color: theme.palette.text.primary, display: 'block', margin: 'auto auto' }} style={{color: theme.palette.text.secondary}} onClick={onSubmit}>Submit</Button>
+          <Button name="submit" type="submit" sx={{ my: 2, color: theme.palette.text.primary, display: 'block', margin: 'auto auto' }} style={{color: theme.palette.text.secondary}} onClick={onSubmit}>Submit</Button>
         </Form>
       </Box>
     </>
