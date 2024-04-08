@@ -37,7 +37,7 @@ const DocumentationPage = () => {
 
         <Box style={{ padding: '25px', paddingBottom: '0px', marginTop: '20px', marginBottom: '0px', width: '85%'}}>
           <Typography data-testid='description' component="span" sx={{color: theme.palette.text.secondary, fontSize: '24px', fontStyle: 'normal', fontWeight: '300'}}>
-            This tool was created using <Link data-testid='redwood link' href="https://redwoodjs.com/docs/introduction">Redwood</Link>, a full-stack web framework. As such, most of the technologies we employ are provided and are
+            This tool was created using <Link data-testid='redwood link' href="https://redwoodjs.com/docs/introduction" sx={{textDecoration: 'underline' + '!important', textUnderlineOffset: '5px' + " !important" }}>Redwood</Link>, a full-stack web framework. As such, most of the technologies we employ are provided and are
             seamlessly integrated into our workflow and development of our tool. This includes:
           </Typography>
 
@@ -73,7 +73,7 @@ const DocumentationPage = () => {
               component="a"
               href="https://storybook.js.org/"
             >
-              <img src="Images/storybook.png" alt="Storybook Icon" style={{ width: '25px', height: '25px', objectFit: 'contain', objectPosition: 'center', marginRight: '5px'}} />
+              <img src="Images/storybook.png" alt="Storybook Icon" style={{ width: '25px', height: '25px', objectFit: 'contain', objectPosition: 'center', marginRight: '10px'}} />
               <ListItemText
                 primary="Storybook"
               />
@@ -96,7 +96,7 @@ const DocumentationPage = () => {
           </Typography>
 
           <Typography component="span" style={{ marginTop: '20px', marginBottom: '0px', borderRadius: '20px', color: theme.palette.text.secondary, fontSize: '24px', fontStyle: 'normal', fontWeight: '300'}}>
-            <Link data-testid='gpt link' href="https://platform.openai.com/docs/introduction">GPT</Link> is a natural language processing model developed by OpenAI, which uses a deep learning
+            <Link data-testid='gpt link' href="https://platform.openai.com/docs/introduction" sx={{textDecoration: 'underline' + '!important', textUnderlineOffset: '5px' + " !important" }}>GPT</Link> is a natural language processing model developed by OpenAI, which uses a deep learning
             architecture that has seen massive use in recent years. In our tool, we use GPT-3.5 Turbo, since GPT-4 costs more overall.
           </Typography>
         </Typography>

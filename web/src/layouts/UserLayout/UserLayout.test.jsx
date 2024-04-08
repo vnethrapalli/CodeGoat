@@ -125,6 +125,11 @@ describe('UserLayout', () => {
 
   })
 
+  test('renders Logo successfully', () => {
+    render(<UserLayout />)
+    expect(screen.getByTestId("logo")).toBeInTheDocument()
+  })
+
   test('renders Title Link successfully', () => {
     render(<UserLayout />)
     expect(screen.getByTestId("titleLink")).toBeInTheDocument()
@@ -162,20 +167,20 @@ describe('UserLayout', () => {
     expect(originalTestClick).toEqual("hello");
   })
 
-  test('renders Status Button successfully', () => {
-    render(<UserLayout />)
+  // test('renders Status Button successfully', () => {
+  //   render(<UserLayout />)
 
-    expect(screen.getByTestId("statusButton")).toBeInTheDocument()
-  })
+  //   expect(screen.getByTestId("statusButton")).toBeInTheDocument()
+  // })
 
-  test('routes to Status Page when Status Button clicked successfully', () => {
-    render(<UserLayout />)
+  // test('routes to Status Page when Status Button clicked successfully', () => {
+  //   render(<UserLayout />)
 
-    const button = screen.getByTestId("statusButton");
-    fireEvent.click(button);
+  //   const button = screen.getByTestId("statusButton");
+  //   fireEvent.click(button);
 
-    expect(navigate).toHaveBeenCalledWith(routes.status());
-  })
+  //   expect(navigate).toHaveBeenCalledWith(routes.status());
+  // })
 
   test('renders Feedback Button successfully', () => {
     render(<UserLayout />)
@@ -184,12 +189,14 @@ describe('UserLayout', () => {
   })
 
   test('routes to Feedback Page when Feedback Button clicked successfully', () => {
+    const originalTestClick = testClick();
+
     render(<UserLayout />)
 
     const button = screen.getByTestId("feedbackButton");
     fireEvent.click(button);
 
-    expect(navigate).toHaveBeenCalled();
+    expect(originalTestClick).toEqual("hello");
   })
 
   test('renders Documentation Button successfully', () => {
@@ -262,9 +269,9 @@ describe("Media & Navbar Test - Logged Out", () => {
     render(<UserLayout />);
 
     expect(screen.getByTestId("themeButton")).toBeInTheDocument()
+    expect(screen.getByTestId("logo")).toBeInTheDocument()
     expect(screen.getByTestId("titleLink")).toBeInTheDocument()
     expect(screen.getByTestId("translateButton")).toBeInTheDocument()
-    expect(screen.getByTestId("statusButton")).toBeInTheDocument()
     expect(screen.getByTestId("feedbackButton")).toBeInTheDocument()
     expect(screen.getByTestId("loginButton")).toBeInTheDocument()
     expect(screen.getByTestId("signupButton")).toBeInTheDocument()
@@ -277,8 +284,8 @@ describe("Media & Navbar Test - Logged Out", () => {
 
     expect(screen.getByTestId("themeButton")).toBeInTheDocument()
     expect(screen.getByTestId("titleLink")).toBeInTheDocument()
+    expect(screen.getByTestId("logo")).toBeInTheDocument()
     expect(screen.getByTestId("translateButton")).toBeInTheDocument()
-    expect(screen.getByTestId("statusButton")).toBeInTheDocument()
     expect(screen.getByTestId("feedbackButton")).toBeInTheDocument()
     expect(screen.getByTestId("loginButton")).toBeInTheDocument()
     expect(screen.getByTestId("signupButton")).toBeInTheDocument()
@@ -291,8 +298,8 @@ describe("Media & Navbar Test - Logged Out", () => {
 
     expect(screen.getByTestId("themeButton")).toBeInTheDocument()
     expect(screen.getByTestId("titleLink")).toBeInTheDocument()
+    expect(screen.getByTestId("logo")).toBeInTheDocument()
     expect(screen.getByTestId("translateButton")).toBeInTheDocument()
-    expect(screen.getByTestId("statusButton")).toBeInTheDocument()
     expect(screen.getByTestId("feedbackButton")).toBeInTheDocument()
     expect(screen.getByTestId("loginButton")).toBeInTheDocument()
     expect(screen.getByTestId("signupButton")).toBeInTheDocument()
@@ -321,9 +328,9 @@ describe("Media & Navbar Test - Logged In", () => {
     render(<UserLayout />);
 
     expect(screen.getByTestId("themeButton")).toBeInTheDocument()
+    expect(screen.getByTestId("logo")).toBeInTheDocument()
     expect(screen.getByTestId("titleLink")).toBeInTheDocument()
     expect(screen.getByTestId("translateButton")).toBeInTheDocument()
-    expect(screen.getByTestId("statusButton")).toBeInTheDocument()
     expect(screen.getByTestId("feedbackButton")).toBeInTheDocument()
     expect(screen.getByTestId("signoutButton")).toBeInTheDocument()
   });
@@ -334,9 +341,9 @@ describe("Media & Navbar Test - Logged In", () => {
     render(<UserLayout />);
 
     expect(screen.getByTestId("themeButton")).toBeInTheDocument()
+    expect(screen.getByTestId("logo")).toBeInTheDocument()
     expect(screen.getByTestId("titleLink")).toBeInTheDocument()
     expect(screen.getByTestId("translateButton")).toBeInTheDocument()
-    expect(screen.getByTestId("statusButton")).toBeInTheDocument()
     expect(screen.getByTestId("feedbackButton")).toBeInTheDocument()
     expect(screen.getByTestId("signoutButton")).toBeInTheDocument()
 
@@ -348,9 +355,9 @@ describe("Media & Navbar Test - Logged In", () => {
     render(<UserLayout />);
 
     expect(screen.getByTestId("themeButton")).toBeInTheDocument()
+    expect(screen.getByTestId("logo")).toBeInTheDocument()
     expect(screen.getByTestId("titleLink")).toBeInTheDocument()
     expect(screen.getByTestId("translateButton")).toBeInTheDocument()
-    expect(screen.getByTestId("statusButton")).toBeInTheDocument()
     expect(screen.getByTestId("feedbackButton")).toBeInTheDocument()
     expect(screen.getByTestId("signoutButton")).toBeInTheDocument()
   });

@@ -29,7 +29,7 @@ const HomePage = () => {
             CodeGoat
           </Typography>
 
-          <Typography data-testid='title' variant='h2' component='span' align='right' style={{ width: '100%', color: theme.palette.text.primary, fontSize: '45px', fontStyle: 'normal', fontWeight: '600'}}>
+          <Typography data-testid='phrase' variant='h2' component='span' align='right' style={{ width: '100%', color: theme.palette.text.primary, fontSize: '45px', fontStyle: 'normal', fontWeight: '600'}}>
             Effortless Code Translation, Elevated Results.
           </Typography>
 
@@ -50,7 +50,7 @@ const HomePage = () => {
             <Button
               key="Translate"
               variant="text"
-              data-testid="translateButton"
+              data-testid="translateNowButton"
               href={routes.translate()}
               align='right'
               sx={{ color: theme.palette.text.primary, fontSize: '24px', marginTop: '10px', textDecoration: 'underline', textUnderlineOffset: '5px',
