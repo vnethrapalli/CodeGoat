@@ -46,12 +46,18 @@ export const getTranslation = async ({ code, inLang, outLang }) => {
   };
 
   let langcodeToLang = {
-    "cpp" : "C++",
-    "csharp" : "C#",
-    "java" : "Java",
-    "javascript" : "Javascript",
-    "python" : "Python",
-    "typescript" : "Typescript",
+    "c": "C",
+    "cpp": "C++",
+    "csharp": "C#",
+    "go": "Go",
+    "java": "Java",
+    "javascript": "JavaScript",
+    "kotlin": "Kotlin",
+    "php": "PHP",
+    "python": "Python",
+    "ruby": "Ruby",
+    "rust": "Rust",
+    "typescript": "TypeScript"
   };
 
   const useDummyResponse = 0;

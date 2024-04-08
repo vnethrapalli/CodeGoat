@@ -45,20 +45,32 @@ const FETCH_TRANSLATION = gql`
 `
 
 export const languages = [
+  {dropdownItem: "C", langCode: "c"},
   {dropdownItem: "C++", langCode: "cpp"},
   {dropdownItem: "C#", langCode: "csharp"},
+  {dropdownItem: "Go", langCode: "go"},
   {dropdownItem: "Java", langCode: "java"},
   {dropdownItem: "JavaScript", langCode: "javascript"},
+  {dropdownItem: "Kotlin", langCode: "kotlin"},
+  {dropdownItem: "PHP", langCode: "php"},
   {dropdownItem: "Python", langCode: "python"},
+  {dropdownItem: "Ruby", langCode: "ruby"},
+  {dropdownItem: "Rust", langCode: "rust"},
   {dropdownItem: "TypeScript", langCode: "typescript"},
 ];
 
 const extensions = {
+  "c": ".c",
   "cpp": ".cpp",
   "csharp": ".cs",
+  "go": ".go",
   "java": ".java",
   "javascript": ".js",
+  "kotlin": ".kt",
+  "php": ".php",
   "python": ".py",
+  "ruby": ".rb",
+  "rust": ".rs",
   "typescript": ".ts"
 };
 
