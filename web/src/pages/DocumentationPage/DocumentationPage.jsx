@@ -148,7 +148,8 @@ const DocumentationPage = () => {
             sx={{
               display: "flex",
               justifyContent: "center",
-              size: "lg",
+              alignSelf: 'center',
+              width: "85%",
             }}
           >
         <Form data-testid='search'>
@@ -156,7 +157,7 @@ const DocumentationPage = () => {
             sx={{ input: { color: theme.palette.text.secondary }, '&:active fieldset': {borderColor: theme.palette.text.secondary} }}
             id="search-bar"
             className="text"
-            width="65%"
+            width="100%"
             onInput={(e) => {
               setSearchQuery(e.target.value);
             }}
