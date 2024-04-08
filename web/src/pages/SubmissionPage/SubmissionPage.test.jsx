@@ -658,3 +658,24 @@ describe("Code Cleaning", () => {
     expect(cleaned).not.toContain("comment");
   })
 })
+
+describe("Auto Detection Mismatch", () => {
+  it('User Can Translate Anyway Even if Mismatch Occurs', async() => {
+    const assetsFetchMock = async (url) => {
+      return {
+        status: 400,
+        json: () => Promise.resolve({
+          data: "Java was detected but you selected Python. Please select the right language."
+        })
+      }
+    }
+    fetchMock = jest.spyOn(global, "fetch").mockImplementation(assetsFetchMock);
+    const {unmount} = render(<SubmissionPage />)
+    const translateBtn = screen.getByTestId("translateButton");
+    await waitFor(() => fireEvent.click(translateBtn));
+    await waitFor(() => expect(screen.getByTestId("translateButton").textContent).toBe("Translate Anyway"));
+
+    unmount();
+    jest.clearAllMocks();
+  })
+})
