@@ -117,7 +117,8 @@ export const getTranslation = async ({ code, inLang, outLang }) => {
       let msg = `
       Please convert the following ${langcodeToLang[inLang]} code into the ${langcodeToLang[outLang]} programming language\n\n
       ${code}
-      `.trim();
+      `;
+
       messages.push({ role : "user", content: msg });
       // console.log(messages);
 

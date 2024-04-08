@@ -146,6 +146,7 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
           onMount={handleEditorDidMount}
           onChange={updateCodeValue}
           title={isInput ? "inputEditor" : "outputEditor"}
+          options={!isInput ? {readOnly: true} : {}}
         />
       </div>
     );
@@ -237,6 +238,11 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
       {
         firstLanguageMismatch.current = false;
         setIgnoreLanguageMismatch(true);
+      }
+      else if (!re.test(outputCodeValue))
+      {
+        firstLanguageMismatch.current = true;
+        setIgnoreLanguageMismatch(false);
       }
     }, [outputCodeValue]);
 
@@ -332,7 +338,8 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
         body: JSON.stringify({
           code: removeComments(inputCodeValue, inputLanguage),
           inputLanguage: inputLanguage,
-          outputLanguage: outputLanguage
+          outputLanguage: outputLanguage,
+          ignoreLanguageMismatch: ignoreLanguageMismatch
         })
       });
 

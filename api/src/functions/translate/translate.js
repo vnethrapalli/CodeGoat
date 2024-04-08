@@ -25,19 +25,22 @@ import { getCurrentUser, isAuthenticated } from 'src/lib/auth'
 const myHandler = async (event, _context) => {
   let statusCode = 200;
   try {
-    const { code, inputLanguage, outputLanguage } = JSON.parse(event.body);
+    const { code, inputLanguage, outputLanguage, ignoreLanguageMismatch } = JSON.parse(event.body);
 
     if (code === undefined || inputLanguage === undefined || outputLanguage === undefined) {
       statusCode = 400;
       throw Error("please provide all three of code, input language, and output language");
     }
 
-    const detectedLanguage = getLanguage(code);
-
-    if (detectedLanguage !== inputLanguage) {
-      statusCode = 400;
-      throw Error(`${detectedLanguage} was detected but you selected ${inputLanguage}. Please select the right language.`);
+    if (!ignoreLanguageMismatch)
+    {
+      const detectedLanguage = getLanguage(code);
+      if (detectedLanguage !== inputLanguage) {
+        statusCode = 400;
+        throw Error(`${detectedLanguage} was detected but you selected ${inputLanguage}. Please select the right language.`);
+      }
     }
+
     let codeForTranslation = code.trim();
 
     // get results from api call
