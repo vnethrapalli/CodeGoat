@@ -67,7 +67,7 @@ const TitleLink = () => {
       >
         <Tooltip title='Go Home'>
           <Link href={routes.home()} underline="none" sx={{ color: theme.palette.text.secondary }}>
-            <img src={theme.palette.mode === "light" ? "goat2.png" : "goat3.png"} alt="Code Translator Logo" style={{ width: '100%', height: 'auto', maxWidth: '25px', maxHeight: '50px', objectFit: 'contain', objectPosition: 'center', marginLeft: "15px", marginRight: '5px' }} />
+            <img src={theme.palette.mode === "light" ? "Images/goat2.png" : "Images/goat3.png"} alt="Code Translator Logo" style={{ width: '100%', height: 'auto', maxWidth: '25px', maxHeight: '50px', objectFit: 'contain', objectPosition: 'center', marginLeft: "15px", marginRight: '5px' }} />
             CodeGoat
           </Link>
         </Tooltip>

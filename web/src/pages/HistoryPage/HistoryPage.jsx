@@ -244,8 +244,8 @@ const HistoryPage = ({ page = 1 }) => {
               onClick={delAll}
               sx={{
                 fontSize: '15px',
-                fontWeight: '525',
-                borderRadius: "6px",
+                fontWeight: '500',
+                borderRadius: "4px",
                 textTransform: 'uppercase',
                 backgroundColor: '#CC0C0C',
                 color: theme.palette.text.primary,
