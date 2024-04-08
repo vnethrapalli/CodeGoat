@@ -35,58 +35,60 @@ const DocumentationPage = () => {
       <Box display="flex" flexDirection='column' justifyContent="center" alignItems="center">
         <Typography variant='h1' component='h1' align='center' style={{color: theme.palette.text.secondary, fontSize: '40px', fontStyle: 'normal', fontWeight: '500'}}>Technologies</Typography>
 
-        <Typography data-testid='description' component="span" style={{ padding: '25px', paddingBottom: '0px', marginTop: '20px', marginBottom: '0px', width: '85%', color: theme.palette.text.secondary, fontSize: '24px', fontStyle: 'normal', fontWeight: '300'}}>
-          This tool was created using <Link data-testid='redwood link' href="https://redwoodjs.com/docs/introduction">Redwood</Link>, a full-stack web framework. As such, most of the technologies we employ are provided and are
-          seamlessly integrated into our workflow and development of our tool. This includes:
-        </Typography>
+        <Box style={{ padding: '25px', paddingBottom: '0px', marginTop: '20px', marginBottom: '0px', width: '85%'}}>
+          <Typography data-testid='description' component="span" sx={{color: theme.palette.text.secondary, fontSize: '24px', fontStyle: 'normal', fontWeight: '300'}}>
+            This tool was created using <Link data-testid='redwood link' href="https://redwoodjs.com/docs/introduction">Redwood</Link>, a full-stack web framework. As such, most of the technologies we employ are provided and are
+            seamlessly integrated into our workflow and development of our tool. This includes:
+          </Typography>
 
-        <List style={{ padding: '5px', marginBottom: '0px', width: '85%', color: theme.palette.text.secondary, fontSize: '28px', fontStyle: 'normal', fontWeight: '300'}}>
-          <ListItem
-            component="a"
-            href="https://reactjs.org"
-          >
-            <img src="Images/react.png" alt="React Icon" style={{ width: '3%', height: '3%', objectFit: 'contain', objectPosition: 'center', marginRight: '5px'}} />
-            <ListItemText
-              primary="React"
-            />
-          </ListItem>
-          <ListItem
-            component="a"
-            href="https://www.prisma.io/"
-          >
-            <img src="Images/prismaHD.png" alt="Prisma Icon" style={{ width: '3%', height: '3%', objectFit: 'contain', objectPosition: 'center',  marginRight: '5px' }} />
-            <ListItemText
-              primary="Prisma"
-            />
-          </ListItem>
-          <ListItem
-            component="a"
-            href="https://www.graphql.com/"
-          >
-            <img src="Images/graphql.png" alt="GrahphQL Icon" style={{ width: '3%', height: '3%', objectFit: 'contain', objectPosition: 'center', marginRight: '5px' }} />
-            <ListItemText
-              primary="GrahphQL"
-            />
-          </ListItem>
-          <ListItem
-            component="a"
-            href="https://storybook.js.org/"
-          >
-            <img src="Images/storybook.png" alt="Storybook Icon" style={{ width: '3%', height: '3%', objectFit: 'contain', objectPosition: 'center', marginRight: '5px'}} />
-            <ListItemText
-              primary="Storybook"
-            />
-          </ListItem>
-          <ListItem
-            component="a"
-            href="https://jestjs.io/"
-          >
-            <img src="Images/jest.png" alt="Jest Icon" style={{ width: '3%', height: '3%', objectFit: 'contain', objectPosition: 'center', marginRight: '5px' }} />
-            <ListItemText
-              primary="Jest"
-            />
-          </ListItem>
-        </List>
+          <List style={{ width: "6%", padding: '0px', marginBottom: '0px', color: theme.palette.text.secondary, fontSize: '28px', fontStyle: 'normal', fontWeight: '300'}}>
+            <ListItem
+              component="a"
+              href="https://reactjs.org"
+            >
+              <img src="Images/react.png" alt="React Icon" style={{ width: '25px', height: '25px', objectFit: 'contain', objectPosition: 'center', marginRight: '5px'}} />
+              <ListItemText
+                primary="React"
+              />
+            </ListItem>
+            <ListItem
+              component="a"
+              href="https://www.prisma.io/"
+            >
+              <img src="Images/prismaHD.png" alt="Prisma Icon" style={{ width: '25px', height: '25px', objectFit: 'contain', objectPosition: 'center',  marginRight: '5px' }} />
+              <ListItemText
+                primary="Prisma"
+              />
+            </ListItem>
+            <ListItem
+              component="a"
+              href="https://www.graphql.com/"
+            >
+              <img src="Images/graphql.png" alt="GrahphQL Icon" style={{ width: '25px', height: '25px', objectFit: 'contain', objectPosition: 'center', marginRight: '5px' }} />
+              <ListItemText
+                primary="GrahphQL"
+              />
+            </ListItem>
+            <ListItem
+              component="a"
+              href="https://storybook.js.org/"
+            >
+              <img src="Images/storybook.png" alt="Storybook Icon" style={{ width: '25px', height: '25px', objectFit: 'contain', objectPosition: 'center', marginRight: '5px'}} />
+              <ListItemText
+                primary="Storybook"
+              />
+            </ListItem>
+            <ListItem
+              component="a"
+              href="https://jestjs.io/"
+            >
+              <img src="Images/jest.png" alt="Jest Icon" style={{ width: '25px', height: '25px', objectFit: 'contain', objectPosition: 'center', marginRight: '5px' }} />
+              <ListItemText
+                primary="Jest"
+              />
+            </ListItem>
+          </List>
+        </Box>
 
         <Typography data-testid='whatgpt' component="span" style={{ padding: '25px', marginTop: '20px', marginBottom: '20px', width: '85%', borderRadius: '20px', color: theme.palette.text.primary, fontSize: '24px', fontStyle: 'normal', fontWeight: '300'}}>
           <Typography variant='h4' style={{ padding: '0px', margin: '0px', color: theme.palette.text.secondary, fontSize: '32px', fontStyle: 'normal', fontWeight: '550'}}>
