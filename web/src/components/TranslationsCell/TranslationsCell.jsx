@@ -62,7 +62,7 @@ export const Success = ({ translationHistoryPage }) => {
 
   return (
     <>
-      {translationHistoryPage.count == 0 && <Typography data-testid="noTranslations" sx={{color: theme.palette.text.secondary, marginTop: '35px', textTransform: 'uppercase' }}>No translations found</Typography>}
+      {translationHistoryPage.count == 0 && <Typography data-testid="noTranslations" sx={{color: theme.palette.text.secondary, marginTop: '35px', fontWeight: 600, textTransform: 'uppercase', textDecoration: 'underline', textUnderlineOffset: '5px' }}>No translations found</Typography>}
 
       {translationHistoryPage.translations.map((translation) => {
         return (

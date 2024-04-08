@@ -30,3 +30,50 @@
 .MuiOutlinedInput-notchedOutline {
   border-color: var(--mui-palette-primary-main) !important;
 }
+
+.darkGradient {
+  background: linear-gradient(0deg, #F1FADA, 30%, #1E3231);
+}
+
+.lightGradient {
+  background: linear-gradient(0deg, #1E3231, 30%, #F1FADA);
+}
+
+.darkGradientTextColor {
+  color: #F1FADA;
+}
+
+.lightGradientTextColor {
+  color: #1E3231;
+}
+
+
+/* Complex transition (gradients in different directions) */
+/* .complex {
+  background: transparent;
+}
+
+.complex::before, .complex::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: -1;
+}
+
+.complex::before {
+  background: linear-gradient(0deg, #1E3231, 30%, #F1FADA);
+}
+
+.complex::after {
+  background: linear-gradient(0deg, #F1FADA, 30%, #1E3231);
+  transition: 1s opacity ease-out;
+}
+
+.complex:hover::after {
+  opacity: 0;
+} */
+
+/* background: 'linear-gradient(0deg, #F1FADA, 30%, #1E3231)'  */

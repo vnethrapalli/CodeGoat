@@ -23,10 +23,14 @@ const HomePage = () => {
       <Metadata title="Home" description="Home page" />
 
       <Box display="flex" flexDirection='column' justifyContent="center" alignItems="center">
-        <Paper elevation={0} style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', padding: '20px', width: '99%', height: '85vh', borderRadius: '10px', background: 'linear-gradient(90deg, #F1FADA, 35%, #1E3231)', backgroundColor: theme.palette.secondary.main }}>
+        <Paper elevation={0} style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', padding: '20px', width: '100%', height: '95vh', borderRadius: '0px', background: 'linear-gradient(90deg, #F1FADA, 30%, #1E3231)', backgroundColor: theme.palette.secondary.main }}>
 
-          <Typography data-testid='title' variant='h2' component='span' align='right' style={{ width: '100%', color: theme.palette.text.primary, fontSize: '96px', fontStyle: 'normal', fontWeight: '600'}}>
-            Code Translator
+          <Typography data-testid='title' variant='h1' component='span' align='right' style={{ width: '100%', color: theme.palette.text.primary, fontSize: '96px', fontStyle: 'normal', fontWeight: '600'}}>
+            CodeGoat
+          </Typography>
+
+          <Typography data-testid='title' variant='h2' component='span' align='right' style={{ width: '100%', color: theme.palette.text.primary, fontSize: '45px', fontStyle: 'normal', fontWeight: '600'}}>
+            Effortless Code Translation, Elevated Results.
           </Typography>
 
           <Tooltip title='Scroll Down For More Information'>
@@ -35,7 +39,7 @@ const HomePage = () => {
               variant="text"
               data-testid="moreInfoButton"
               onClick={executeScroll}
-              sx={{ display: 'flex', position: 'absolute', left: '50%', top: '86%', transform: 'translateX(-50%)', color: theme.palette.text.primary, fontSize: '16px' }}
+              sx={{ display: 'flex', position: 'absolute', left: '50%', top: '90%', transform: 'translateX(-50%)', color: theme.palette.text.primary, fontSize: '16px' }}
             >
               More Info
               <KeyboardArrowDown />
@@ -49,7 +53,7 @@ const HomePage = () => {
               data-testid="translateButton"
               href={routes.translate()}
               align='right'
-              sx={{ color: theme.palette.text.primary, fontSize: '20px', marginTop: '10px', textDecoration: 'underline', textUnderlineOffset: '5px',
+              sx={{ color: theme.palette.text.primary, fontSize: '24px', marginTop: '10px', textDecoration: 'underline', textUnderlineOffset: '5px',
                 '&:hover': {
                   textDecoration: 'underline',
                   textUnderlineOffset: '5px',

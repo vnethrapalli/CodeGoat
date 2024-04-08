@@ -555,24 +555,24 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
 
     return (
       <Button
-          variant="contained"
-          style={{
-            backgroundColor: theme.palette.text.success,
-            color: theme.palette.background.default,
-            textTransform: 'none'
-          }}
-          sx={{
-            width: "200px",
-            borderRadius: "6px",
-            marginBottom: "25px",
-          }}
-          onClick={() => {
-            provideRating();
-          }}
-          data-testid="ratingButton"
-        >
-          Rate This Translation
-        </Button>
+        variant="contained"
+        style={{
+          backgroundColor: theme.palette.text.success,
+          color: theme.palette.text.primary,
+          textTransform: 'none'
+        }}
+        sx={{
+          width: "200px",
+          borderRadius: "6px",
+          marginBottom: "25px",
+        }}
+        onClick={() => {
+          provideRating();
+        }}
+        data-testid="ratingButton"
+      >
+        Rate This Translation
+      </Button>
     );
   }
 

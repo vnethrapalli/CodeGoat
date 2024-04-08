@@ -243,9 +243,9 @@ const HistoryPage = ({ page = 1 }) => {
               data-testid="deleteAllButton"
               onClick={delAll}
               sx={{
-                fontSize: 'inherit',
-                fontWeight: 'inherit',
-                borderRadius: "4px",
+                fontSize: '15px',
+                fontWeight: '525',
+                borderRadius: "6px",
                 textTransform: 'uppercase',
                 backgroundColor: '#CC0C0C',
                 color: theme.palette.text.primary,

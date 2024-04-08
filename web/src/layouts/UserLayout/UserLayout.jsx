@@ -54,7 +54,7 @@ const TitleLink = () => {
   const theme = useTheme();
 
   return (
-    <Grid item alignContent='center' alignItems='stretch' xs={3}>
+    <Grid item display="flex" alignContent='center' alignItems='stretch' xs={3}>
       <Typography data-testid="titleLink" noWrap
         sx={{
           mr: 2,
@@ -62,11 +62,12 @@ const TitleLink = () => {
           fontWeight: 500,
           fontSize: 28,
           color: theme.palette.text.secondary,
-          marginLeft: "20px",
+          marginLeft: "5px",
         }}
       >
         <Tooltip title='Go Home'>
           <Link href={routes.home()} underline="none" sx={{ color: theme.palette.text.secondary }}>
+            <img src={theme.palette.mode === "light" ? "goat2.png" : "goat3.png"} alt="Code Translator Logo" style={{ width: '100%', height: 'auto', maxWidth: '25px', maxHeight: '50px', objectFit: 'contain', objectPosition: 'center', marginLeft: "15px", marginRight: '5px' }} />
             CodeGoat
           </Link>
         </Tooltip>
@@ -165,6 +166,7 @@ export const useStyles = makeStyles((theme) => ({
 }));
 
 const UserMenu = () => {
+  const page = useLocation().pathname.split('/')[1]
   const theme = useTheme();
   const classes = useStyles();
   const { logOut } = useAuth()
@@ -231,6 +233,7 @@ const UserMenu = () => {
           <Link href={routes.userAccount()}
             underline='none'
             sx={{ color: theme.palette.text.secondary, width: '100%', display: 'flex', alignItems: 'center' }}
+            style={page==="user-account" ? {textDecoration: 'underline', textUnderlineOffset: '5px'} : {}}
           >
             <Settings sx={{ fill: theme.palette.text.secondary, paddingRight: '8px' }} />
             Settings
@@ -240,6 +243,7 @@ const UserMenu = () => {
         <MenuItem data-testid="historyButton" sx={{ alignSelf: 'center', color: theme.palette.text.secondary }} key="Translation History" onClick={handleCloseUserMenu}>
           <Link href={routes.history()}
             underline='none'
+            style={page==="history" ? {textDecoration: 'underline', textUnderlineOffset: '5px'} : {}}
             sx={{ color: theme.palette.text.secondary, width: '100%', display: 'flex', alignItems: 'center' }}
           >
             <AccessTime sx={{ fill: theme.palette.text.secondary, paddingRight: '8px' }} />
@@ -294,7 +298,7 @@ const UserButtons = () => {
   }
 
   return (
-    <Grid item alignContent='center' alignItems='stretch' sx={{display: 'flex', justifyContent: 'flex-end', paddingRight: '5px' }} xs={3}>
+    <Grid item alignContent='center' alignItems='stretch' sx={{display: 'flex', justifyContent: 'flex-end', paddingRight: '10px' }} xs={3}>
       <ThemeButton />
 
       {!isAuth && <Button
@@ -328,12 +332,6 @@ const UserButtons = () => {
       </Button>}
 
       {isAuth && <UserMenu />}
-
-      {/* {isAuth && <Tooltip title='Account Management'>
-        <IconButton data-testid="accountButton" sx={{ width: '10%'}} href={routes.userAccount()}>
-          <AccountBoxIcon style={{fill: theme.palette.text.primary}} sx={{fontSize: 35}} />
-        </IconButton>
-      </Tooltip>} */}
     </Grid>
   )
 }
@@ -404,7 +402,7 @@ const NavBar = (props) => {
 
   return (
     <ElevationScroll {...props}>
-      <AppBar position="sticky" sx={{ background: theme.palette.background.default, marginBottom: '20px', paddingTop: '5px', paddingBottom: '5px', height: '10%' }}>
+      <AppBar position="sticky" sx={{ background: theme.palette.background.default, marginBottom: '5px', paddingTop: '5px', paddingBottom: '5px', height: '10%' }}>
         <Grid container width="100%" spacing={0} alignItems='center' alignContent='center' justifyContent='center'>
             {/* Title/Home Link */}
             <TitleLink />
