@@ -98,7 +98,7 @@ describe('FeedbackPage', () => {
         "sub": 100,
         "out": -10,
         "acc": 1342340,
-        "gpt": 1,
+        "gpt": 12,
         "exp": -453,
       }
       const onSubmit = jest.fn()
@@ -107,6 +107,13 @@ describe('FeedbackPage', () => {
       await user.click(submit)
 
       expect(onSubmit).not.toHaveBeenCalled()
+      setTimeout(() => {
+        expect(screen.findByText(/Invalid 'Submission Page' rating/i)).toBeInTheDocument()
+        expect(screen.findByText(/Invalid 'Output Page' rating/i)).toBeInTheDocument()
+        expect(screen.findByText(/Invalid 'Translation Accuracy' rating/i)).toBeInTheDocument()
+        expect(screen.findByText(/Invalid 'GPT-3 Availability' rating/i)).toBeInTheDocument()
+        expect(screen.findByText(/Invalid 'Overall Experience' rating/i)).toBeInTheDocument()
+      }, 4000);
     })
     it('prevents completely empty submissions', async() => {
       const onSubmit = jest.fn()
@@ -115,10 +122,10 @@ describe('FeedbackPage', () => {
       await user.click(submit)
 
       expect(onSubmit).not.toHaveBeenCalled()
+      setTimeout(() => {
+        expect(screen.findByText(/Please try to fill out SOMETHING/i)).toBeInTheDocument()
+      }, 4000);
     })
-    // it('prevents double submissions in short span of time', async() => {
-
-    // })
     it('handles other unexpected errors', async() => {
       const ratings = {
         "sub": "incorrect",
@@ -133,6 +140,9 @@ describe('FeedbackPage', () => {
       await user.click(submit)
 
       expect(onSubmit).not.toHaveBeenCalled()
+      setTimeout(() => {
+        expect(screen.findByText(/An error occurred/i)).toBeInTheDocument()
+      }, 4000);
     })
     it('successfully submits', async() => {
       const ratings = {
@@ -148,21 +158,9 @@ describe('FeedbackPage', () => {
       await user.click(submit)
 
       expect(onSubmit).toHaveBeenCalled()
+      setTimeout(() => {
+        expect(screen.findByText(/Submitted!/i)).toBeInTheDocument()
+      }, 4000);
     })
-
-    // it('sends an error message upon other errors', async() => {
-    //   const error = {
-    //     request: {
-    //       variables: {submissionPage: "error"}
-    //     }
-    //   };
-    //   render(<FeedbackPage data={[error]}/>)
-
-    //   const subButton = screen.getByRole('button')
-    //   fireEvent.click(subButton)
-    //   setTimeout(() => {
-    //     expect(screen.findByText('An error occurred.')).toBeInTheDocument()
-    //   }, 5000);
-    // })
   })
 })
