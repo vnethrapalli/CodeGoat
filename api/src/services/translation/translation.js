@@ -3,14 +3,27 @@ import hljs from 'highlight.js';
 import { json } from "stream/consumers";
 
 export const getLanguage = (code) => {
-    const langCodes = ["cpp", "csharp", "java", "javascript", "python", "typescript"];
-    const { language, relevance, secondBest } = hljs.highlightAuto(code, langCodes);
-    console.log(`
-      language: ${language}
-      relevance: ${relevance}
-      secondBest: ${secondBest}
-    `)
-    return language;
+  const langCodes = [
+    "c",
+    "cpp",
+    "csharp",
+    "go",
+    "java",
+    "javascript",
+    "kotlin",
+    "php",
+    "python",
+    "ruby",
+    "rust",
+    "typescript"
+  ];
+  const { language } = hljs.highlightAuto(code, langCodes);
+  // console.log(`
+  //   language: ${language}
+  //   relevance: ${relevance}
+  //   secondBest: ${secondBest}
+  // `)
+  return language;
 }
 
 export const getTranslation = async ({ code, inLang, outLang }) => {
@@ -112,7 +125,7 @@ export const getTranslation = async ({ code, inLang, outLang }) => {
       const completion = await openai.chat.completions.create({
         messages: messages,
         model: "gpt-3.5-turbo",
-        max_tokens: 128,
+        max_tokens: 2048,
       });
 
       // for testing, if bad response throw exception so it is caught

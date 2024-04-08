@@ -86,6 +86,8 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
   const [status, setStatus] = React.useState("500 Server Error")
   const [rating, setRating] = React.useState(5);
   const [refreshQuery, setRefreshQuery] = React.useState(true);
+  const [ignoreLanguageMismatch, setIgnoreLanguageMismatch] = React.useState(false);
+  const firstLanguageMismatch = useRef(true);
   const [output, setOutput] = React.useState(false);
   const [userId, setUserId] = React.useState();
   const [inputMonaco, setInputMonaco] = React.useState();
@@ -228,6 +230,15 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
       onCompleted: () => {},
       onError: () => {},
     })
+
+    useEffect(() => {
+      const re = /^(.+ was detected but you selected .+. Please select the right language.)$/
+      if (re.test(outputCodeValue) && firstLanguageMismatch.current)
+      {
+        firstLanguageMismatch.current = false;
+        setIgnoreLanguageMismatch(true);
+      }
+    }, [outputCodeValue]);
 
     const removeComments = (inCode, inLang) => {
       if (inputMonaco == undefined)
@@ -395,7 +406,7 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
               )
             }}
           >
-            Translate
+            {ignoreLanguageMismatch ? "Translate Anyway" : "Translate"}
           </Button>
         </Box>
       </>
