@@ -48,26 +48,26 @@
 }
 
 a:link {
-  color: #F1FADA;
+  color: var(--mui-palette-text-secondary);
   background-color: transparent;
   text-decoration: none;
 }
 
 a:visited {
-  color: #F1FADA;
+  color: var(--mui-palette-text-secondary);
   background-color: transparent;
   text-decoration: none;
 }
 
 a:hover {
-  color: #F1FADA;
+  color: var(--mui-palette-text-secondary);
   background-color: transparent;
   text-decoration: underline;
   text-underline-offset: 5px;
 }
 
 a:active {
-  color: #F1FADA;
+  color: var(--mui-palette-text-secondary);
   background-color: transparent;
   text-decoration: underline;
   text-underline-offset: 5px;

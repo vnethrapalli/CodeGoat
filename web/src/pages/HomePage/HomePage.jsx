@@ -53,7 +53,7 @@ const HomePage = () => {
               data-testid="translateNowButton"
               href={routes.translate()}
               align='right'
-              sx={{ color: theme.palette.text.primary, fontSize: '24px', marginTop: '10px', textDecoration: 'underline', textUnderlineOffset: '5px',
+              sx={{ color: theme.palette.text.primary + "!important", fontSize: '24px', marginTop: '10px', textDecoration: 'underline', textUnderlineOffset: '5px',
                 '&:hover': {
                   textDecoration: 'underline',
                   textUnderlineOffset: '5px',
