@@ -62,12 +62,14 @@ export const Success = ({ translationHistoryPage }) => {
 
   return (
     <>
+      {translationHistoryPage.count == 0 && <Typography data-testid="noTranslations" sx={{color: theme.palette.text.secondary, marginTop: '35px', fontWeight: 600, textTransform: 'uppercase', textDecoration: 'underline', textUnderlineOffset: '5px' }}>No translations found</Typography>}
+
       {translationHistoryPage.translations.map((translation) => {
         return (
           <Accordion
             data-testid="accordion"
             key={translation.id}
-            sx={{ backgroundColor: theme.palette.secondary.main, width: '70%', marginBottom: '5px', marginTop: '5px' }}>
+            sx={{ backgroundColor: theme.palette.text.success, width: '70%', marginBottom: '5px', marginTop: '5px' }}>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="panel1-content"

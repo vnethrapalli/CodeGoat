@@ -6,10 +6,64 @@ import { Button, Box, Rating, Typography } from '@mui/material'
 import { styled } from '@mui/material/styles';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import LensIcon from '@mui/icons-material/Lens';
-import { TextareaAutosize } from '@mui/base/TextareaAutosize';
+// import { TextareaAutosize } from '@mui/base/TextareaAutosize';
 import { useTheme } from '@mui/material/styles';
 import { alpha } from "@mui/material";
+import { TextareaAutosize as BaseTextareaAutosize } from '@mui/base/TextareaAutosize';
+// import { styled } from '@mui/system';
 
+const blue = {
+  100: '#DAECFF',
+  200: '#b6daff',
+  400: '#3399FF',
+  500: '#007FFF',
+  600: '#0072E5',
+  900: '#003A75',
+};
+
+const grey = {
+  50: '#F3F6F9',
+  100: '#E5EAF2',
+  200: '#DAE2ED',
+  300: '#C7D0DD',
+  400: '#B0B8C4',
+  500: '#9DA8B7',
+  600: '#6B7A90',
+  700: '#434D5B',
+  800: '#303740',
+  900: '#1C2025',
+};
+
+const TextareaAutosize = styled(BaseTextareaAutosize)(
+  ({ theme }) => `
+  box-sizing: border-box;
+  width: 70%;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.5;
+  padding: 8px 12px;
+  border-radius: 8px;
+  color: ${theme.palette.mode === 'dark' ? grey[300] : grey[900]};
+  background: ${theme.palette.mode === 'dark' ? grey[900] : '#fff'};
+  border: 1px solid ${theme.palette.mode === 'dark' ? grey[700] : grey[200]};
+  box-shadow: 0px 2px 2px ${theme.palette.mode === 'dark' ? grey[900] : grey[50]};
+
+  &:hover {
+    border-color: ${blue[400]};
+  }
+
+  &:focus {
+    border-color: ${blue[400]};
+    box-shadow: 0 0 0 3px ${theme.palette.mode === 'dark' ? blue[600] : blue[200]};
+  }
+
+  // firefox
+  &:focus-visible {
+    outline: 0;
+  }
+`,
+)
 
 // For the sql stuff
 const CREATE_FEEDBACK = gql`
@@ -89,6 +143,7 @@ const FeedbackPage = ({ defaultOnSubmit, defaultOnHandle, defaultRatings }) => {
 
   return (
     <>
+      <Metadata title="Feedback" description="Submit Feedback"/>
       <Box display="flex" flexDirection='column' justifyContent="center" alignItems="center">
       <Typography variant='h2' component='h2' align='center' style={{color: theme.palette.text.secondary, fontSize: '52px', fontStyle: 'normal', fontWeight: '600'}}>Feedback</Typography>
         <Form data-testid="ratingForm" onSubmit={handleSubmit}>
@@ -99,6 +154,7 @@ const FeedbackPage = ({ defaultOnSubmit, defaultOnHandle, defaultRatings }) => {
               alignItems: 'center',
               fontSize: "1.5rem",
               justifyContent:"center",
+              marginBottom: '10px',
             }}
           >
             <StyledRating
@@ -128,6 +184,7 @@ const FeedbackPage = ({ defaultOnSubmit, defaultOnHandle, defaultRatings }) => {
               alignItems: 'center',
               fontSize: "1.5rem",
               justifyContent:"center",
+              marginBottom: '10px',
             }}
           >
             <StyledRating
@@ -156,6 +213,7 @@ const FeedbackPage = ({ defaultOnSubmit, defaultOnHandle, defaultRatings }) => {
               alignItems: 'center',
               fontSize: "1.5rem",
               justifyContent:"center",
+              marginBottom: '10px',
             }}
           >
             <StyledRating
@@ -184,6 +242,7 @@ const FeedbackPage = ({ defaultOnSubmit, defaultOnHandle, defaultRatings }) => {
               alignItems: 'center',
               fontSize: "1.5rem",
               justifyContent:"center",
+              marginBottom: '10px',
             }}
           >
             <StyledRating
@@ -212,6 +271,7 @@ const FeedbackPage = ({ defaultOnSubmit, defaultOnHandle, defaultRatings }) => {
               alignItems: 'center',
               fontSize: "1.5rem",
               justifyContent:"center",
+              marginBottom: '10px',
             }}
           >
             <StyledRating
@@ -242,16 +302,15 @@ const FeedbackPage = ({ defaultOnSubmit, defaultOnHandle, defaultRatings }) => {
             }}
           >
             <TextareaAutosize
+              aria-label="empty textarea"
               name="comments"
-              value={com}
+              placeholder="Type your comments here."
               minRows={5}
-              cols={100}
-              style ={{width: 300}}
-              placeholder="Type here."
+              value={com}
               onChange={(event) => {
                 setCom(event.target.value);
               }}
-            ></TextareaAutosize>
+            />
           </Box>
           <Button name="submit" type="submit" sx={{ my: 2, color: theme.palette.text.primary, display: 'block', margin: 'auto auto' }} style={{color: theme.palette.text.secondary}} onClick={handleSubmit}>Submit</Button>
         </Form>

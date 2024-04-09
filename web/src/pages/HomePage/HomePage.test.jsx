@@ -35,6 +35,24 @@ describe('HomePage', () => {
     expect(screen.getByTestId("title")).toBeInTheDocument()
   })
 
+  it('renders Phrase successfully', () => {
+    render(<HomePage />)
+
+    expect(screen.getByTestId("phrase")).toBeInTheDocument()
+  })
+
+  it('renders moreInfoButton successfully', () => {
+    render(<HomePage />)
+
+    expect(screen.getByTestId("moreInfoButton")).toBeInTheDocument()
+  })
+
+  it('renders translateNow successfully', () => {
+    render(<HomePage />)
+
+    expect(screen.getByTestId("translateNowButton")).toBeInTheDocument()
+  })
+
   it('renders Description successfully', () => {
     render(<HomePage />)
 
@@ -57,6 +75,9 @@ describe("Media Test", () => {
     render(<HomePage />);
 
     expect(screen.getByTestId("title")).toBeInTheDocument()
+    expect(screen.getByTestId("phrase")).toBeInTheDocument()
+    expect(screen.getByTestId("moreInfoButton")).toBeInTheDocument()
+    expect(screen.getByTestId("translateNowButton")).toBeInTheDocument()
     expect(screen.getByTestId("description")).toBeInTheDocument()
     expect(screen.getByTestId("tutorial")).toBeInTheDocument()
   });
@@ -67,6 +88,8 @@ describe("Media Test", () => {
     render(<HomePage />);
 
     expect(screen.getByTestId("title")).toBeInTheDocument()
+    expect(screen.getByTestId("moreInfoButton")).toBeInTheDocument()
+    expect(screen.getByTestId("translateNowButton")).toBeInTheDocument()
     expect(screen.getByTestId("description")).toBeInTheDocument()
     expect(screen.getByTestId("tutorial")).toBeInTheDocument()
   });
@@ -77,6 +100,8 @@ describe("Media Test", () => {
     render(<HomePage />);
 
     expect(screen.getByTestId("title")).toBeInTheDocument()
+    expect(screen.getByTestId("moreInfoButton")).toBeInTheDocument()
+    expect(screen.getByTestId("translateNowButton")).toBeInTheDocument()
     expect(screen.getByTestId("description")).toBeInTheDocument()
     expect(screen.getByTestId("tutorial")).toBeInTheDocument()
   });
