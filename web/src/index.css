@@ -1,0 +1,105 @@
+.css-j86r-MuiPaper-root-MuiPickersPopper-paper {
+  background-color: var(--mui-palette-background-default) !important;
+  color: var(--mui-palette-text-success) !important;
+}
+
+.css-7pgdaa-MuiButtonBase-root-MuiPickersDay-root {
+  color: var(--mui-palette-text-success) !important;
+}
+
+.css-7pgdaa-MuiButtonBase-root-MuiPickersDay-root.Mui-selected {
+  background-color: var(--mui-palette-background-default) !important;
+  color: var(--mui-palette-text-success) !important;
+  font-weight: 900;
+}
+.css-1ii0jxc-MuiButtonBase-root-MuiPickersDay-root.Mui-selected {
+  background-color: var(--mui-palette-background-default) !important;
+  color: var(--mui-palette-text-success) !important;
+  font-weight: 9000;
+  border-width: '1px';
+}
+
+.MuiPickersDay-today {
+  color: var(--mui-palette-text-success) !important;
+}
+
+.MuiSelect-select {
+  color: var(--mui-palette-text-secondary) !important;
+}
+
+.MuiOutlinedInput-notchedOutline {
+  border-color: var(--mui-palette-primary-main) !important;
+}
+
+.darkGradient {
+  background: linear-gradient(0deg, #F1FADA, 30%, #1E3231);
+}
+
+.lightGradient {
+  background: linear-gradient(0deg, #1E3231, 30%, #F1FADA);
+}
+
+.darkGradientTextColor {
+  color: #F1FADA;
+}
+
+.lightGradientTextColor {
+  color: #1E3231;
+}
+
+a:link {
+  color: var(--mui-palette-text-secondary);
+  background-color: transparent;
+  text-decoration: none;
+}
+
+a:visited {
+  color: var(--mui-palette-text-secondary);
+  background-color: transparent;
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--mui-palette-text-secondary);
+  background-color: transparent;
+  text-decoration: underline;
+  text-underline-offset: 5px;
+}
+
+a:active {
+  color: var(--mui-palette-text-secondary);
+  background-color: transparent;
+  text-decoration: underline;
+  text-underline-offset: 5px;
+}
+
+
+/* Complex transition (gradients in different directions) */
+/* .complex {
+  background: transparent;
+}
+
+.complex::before, .complex::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: -1;
+}
+
+.complex::before {
+  background: linear-gradient(0deg, #1E3231, 30%, #F1FADA);
+}
+
+.complex::after {
+  background: linear-gradient(0deg, #F1FADA, 30%, #1E3231);
+  transition: 1s opacity ease-out;
+}
+
+.complex:hover::after {
+  opacity: 0;
+} */
+
+/* background: 'linear-gradient(0deg, #F1FADA, 30%, #1E3231)'  */

@@ -3,7 +3,7 @@
 This is the `Segmentation Cult`'s code translation project for CS490. This application will allow you to translate your code from one programming language to another programming language, and is powered by GPT-3 for the translation and code checking.
 
 
-Here is what our project's file structure looks like.
+Here is what our project's basic file structure looks like.
 
 ```
 ├── api
@@ -45,13 +45,15 @@ Here is what our project's file structure looks like.
         └── Routes.jsx
 ```
 
-Redwood sets up the project with an `api` folder for the back end and the `web` folder for the front end. In the `web` folder, all the React components and their Storybook stories are stored. The `api` folder contains the Prisma schema, backend services, and files related to authentication.
+This project uses the [RedwoodJS](https://redwoodjs.com/) framework, which includes [ReactJS](https://react.dev/) for the frontend, [MaterialUI](https://mui.com/material-ui/) as a component library, [GraphQL](https://graphql.org/) for our API, [NodeJS](https://nodejs.org/en) for our backend, [Prisma](https://www.prisma.io/) and SQL for our database, [Auth0](https://auth0.com/) for authentication, and [Jest](https://jestjs.io/) for unit testing.
+
+Redwood sets up the project with an `api` folder for the backend and the `web` folder for the frontend. In the `web` folder, all the React components and their Storybook stories are stored. The `api` folder contains the Prisma schema, backend services, and files related to authentication.
 
 ## Our Application
 
 ### Getting Started
 
-Once opening the website, you will find yourself on our landing page, which provides some general information about our application. From here, you can access the _Status_ page, which tells you about the availability of the ChatGPT API which powers our site. Addtionally you can visit our _Documentation_ page to see visual guides for how to use the platform, as well as answers to common questions about our service.
+Once opening the website, you will find yourself on our landing page, which provides some general information about our application. You can visit our _Documentation_ page to see visual guides for how to use the platform, as well as answers to common questions about our service.
 
 Before the code translation service can be used, you must create an account and ensure that you are logged in. For new users, click on the signup button on the top right of the navbar at the top and follow the indicated steps. Returning users can log in via the login button also at the right side of the navbar.
 

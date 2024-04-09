@@ -28,11 +28,14 @@
   "dependencies": {
     "@apollo/react-hooks": "^4.0.0",
     "@monaco-editor/react": "^4.6.0",
+    "@mui/styles": "^5.15.15",
+    "@mui/x-date-pickers": "^7.0.0",
     "auth0": "^4.3.1",
     "axios": "^1.6.8",
     "axios-concurrency": "^1.0.4",
     "css-mediaquery": "^0.1.2",
     "cwait": "^1.1.2",
+    "dayjs": "^1.11.10",
     "openai": "^4.29.0"
   }
 }

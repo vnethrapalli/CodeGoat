@@ -4,6 +4,7 @@ import {
   createTranslation,
   updateTranslation,
   deleteTranslation,
+  translationHistoryPage
 } from './translations'
 
 // Generated boilerplate tests do not account for all circumstances
@@ -64,5 +65,160 @@ describe('translations', () => {
     const result = await translation({ id: original.id })
 
     expect(result).toEqual(null)
+  })
+})
+
+describe('filtering and sorting', () => {
+  beforeAll(async () => {
+    await createTranslation({
+      input: {
+        uid: 'qwerty',
+        inputLanguage: 'cpp',
+        outputLanguage: 'python',
+        inputCode: 'String',
+        outputCode: 'String',
+        createdAt: '2021-07-02T00:00:00Z',
+        rating: 5,
+        status: '200 OK'
+      }
+    })
+    await createTranslation({
+      input: {
+        uid: 'qwerty',
+        inputLanguage: 'cpp',
+        outputLanguage: 'python',
+        inputCode: 'String',
+        outputCode: 'String',
+        createdAt: '2021-07-03T00:00:00Z',
+        rating: 5,
+        status: '200 OK'
+      }
+    })
+
+    await createTranslation({
+      input: {
+        uid: 'qwerty',
+        inputLanguage: 'python',
+        outputLanguage: 'cpp',
+        inputCode: 'String',
+        outputCode: 'String',
+        createdAt: '2022-09-01T00:00:00Z',
+        rating: 5,
+        status: '200 OK'
+      }
+    })
+
+    await createTranslation({
+      input: {
+        uid: 'qwerty',
+        inputLanguage: 'python',
+        outputLanguage: 'cpp',
+        inputCode: 'String',
+        outputCode: 'String',
+        createdAt: '2022-07-05T00:00:00Z',
+        rating: 5,
+        status: '200 OK'
+      }
+    })
+
+    await createTranslation({
+      input: {
+        uid: 'qwerty',
+        inputLanguage: 'javascript',
+        outputLanguage: 'python',
+        inputCode: 'String',
+        outputCode: 'String',
+        createdAt: '2023-07-01T00:00:00Z',
+        rating: 5,
+        status: '200 OK'
+      }
+    })
+
+    await createTranslation({
+      input: {
+        uid: 'qwerty',
+        inputLanguage: 'cpp',
+        outputLanguage: 'javascript',
+        inputCode: 'String',
+        outputCode: 'String',
+        createdAt: '2024-01-01T00:00:00Z',
+        rating: 5,
+        status: '200 OK'
+      }
+    })
+  })
+
+  test('returns a filtered translation inLang', async () => {
+    const record = await translationHistoryPage({ uid: 'qwerty', inLang: ['python'] });
+
+    record.translations.then(function(value) {
+      expect(value).toHaveLength(2);
+    });
+  })
+
+  test('returns a filtered translation outLang', async () => {
+    const record = await translationHistoryPage({ uid: 'qwerty', outLang: ['python'] });
+
+    record.translations.then(function(value) {
+      expect(value).toHaveLength(3);
+    });
+  })
+
+  test('returns a filtered translation inLang outLang', async () => {
+    const record = await translationHistoryPage({ uid: 'qwerty', inLang: ['python'], outLang: ['cpp'] });
+
+    record.translations.then(async function(value) {
+      expect(value).toHaveLength(2);
+    });
+  })
+
+  test('returns a filtered translation date', async () => {
+    const record = await translationHistoryPage({ uid: 'qwerty', startDate: '2022-07-01T00:00:00Z'});
+
+    record.translations.then(async function(value) {
+      expect(value).toHaveLength(4);
+    });
+  })
+
+  test('returns a filtered translation dates', async () => {
+    const record = await translationHistoryPage({ uid: 'qwerty', startDate: '2022-07-01T00:00:00Z', endDate: '2023-07-02T00:00:00Z' });
+
+    record.translations.then(async function(value) {
+      expect(value).toHaveLength(3);
+    });
+  })
+
+  test('returns a sorted translation asc', async () => {
+    const record = await translationHistoryPage({ uid: 'qwerty', sort: 2 });
+
+    record.translations.then(async function(value) {
+      expect(value[0].createdAt).toEqual(new Date('2021-07-02T00:00:00Z'));
+    });
+  })
+
+  test('returns a sorted translation desc', async () => {
+    const record = await translationHistoryPage({ uid: 'qwerty', sort: 1 });
+
+    record.translations.then(async function(value) {
+      expect(value[0].createdAt).toEqual(new Date('2024-01-01T00:00:00Z'));
+    });
+  })
+
+  test('returns a filtered and sorted translation', async () => {
+    const record = await translationHistoryPage({ uid: 'qwerty', inLang: ['python'], outLang: ['cpp'], sort: 2});
+
+    record.translations.then(async function(value) {
+      expect(value).toHaveLength(2);
+      expect(value[0].createdAt).toEqual(new Date('2022-07-05T00:00:00Z'));
+    });
+  })
+
+  test('returns a filtered and sorted translation 2', async () => {
+    const record = await translationHistoryPage({ uid: 'qwerty', inLang: ['cpp'], outLang: ['python'], sort: 1, startDate: '2021-07-01T00:00:00Z', endDate: '2021-07-05T00:00:00Z'});
+
+    record.translations.then(async function(value) {
+      expect(value).toHaveLength(2);
+      expect(value[0].createdAt).toEqual(new Date('2021-07-03T00:00:00Z'));
+    });
   })
 })

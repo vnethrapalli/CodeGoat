@@ -26,7 +26,7 @@ const Routes = () => {
 
       <Set wrap={UserLayout}>
         <Route path="/" page={HomePage} name="home" />
-        <Route path="/status" page={StatusPage} name="status" />
+        {/* <Route path="/status" page={StatusPage} name="status" /> */}
         <Route path="/documentation" page={DocumentationPage} name="documentation" />
       </Set>
 
