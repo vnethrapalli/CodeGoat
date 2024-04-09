@@ -1,5 +1,5 @@
 import { render, screen, fireEvent, waitFor } from '@redwoodjs/testing/web';
-import userEvent from '@testing-library/user-event'
+import userEvent from '@testing-library/user-event';
 import SubmissionPage from './SubmissionPage';
 
 // https://redwoodjs.com/docs/testing#testing-pages-layouts
@@ -664,27 +664,6 @@ describe("Code Cleaning", () => {
 
 describe("Auto Detection Mismatch", () => {
   it('User Can Translate Anyway Even if Mismatch Occurs', async() => {
-    const assetsFetchMock = async (url) => {
-      return {
-        status: 400,
-        json: () => Promise.resolve({
-          data: "Java was detected but you selected Python. Please select the right language."
-        })
-      }
-    }
-    fetchMock = jest.spyOn(global, "fetch").mockImplementation(assetsFetchMock);
-    const {unmount} = render(<SubmissionPage />);
-    const user = userEvent.setup();
-    const translateBtn = screen.getByTestId("translateButton");
-    await waitFor(() => expect(screen.getByTestId("translateButton").textContent).toBe("Translate"));
-    await user.click(translateBtn);
-    await waitFor(() => expect(screen.getByTestId("translateButton").textContent).toBe("Translate Anyway"));
-
-    unmount();
-    jest.clearAllMocks();
-  })
-
-  it('Button Goes Back to Normal if User Translates Anyway', async() => {
     const assetsFetchMock = async (url) => {
       return {
         status: 400,
