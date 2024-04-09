@@ -137,7 +137,19 @@ describe('language detection errors',  () => {
 
 describe('empty code errors',  () => {
   it('code is comments only', async () => {
-    const cleanedCode = "\r\n   \r\n\t\t\t\r\n";
-    console.log(whitespaceOnly(cleanedCode));
+    const httpEvent = mockHttpEvent({
+      method: "POST",
+      body: JSON.stringify({
+        code: "\r\n   \r\n\t\t\t\r\n",
+        inputLanguage: "java",
+        outputLanguage: "javascript"
+      })
+    })
+
+    const result = await handler(httpEvent);
+    const body = result.body;
+
+    expect(result.statusCode).toBe(400);
+    expect(body.data).toEqual("Code is empty or consists of comments only. Please provide some non-empty code.");
   });
 });
