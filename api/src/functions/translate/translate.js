@@ -43,7 +43,7 @@ const myHandler = async (event, _context) => {
       throw Error("Code is empty or consists of comments only. Please provide some non-empty code.");
     }
 
-    if (!ignoreLanguageMismatch)
+    if (!ignoreLanguageMismatch && code.length >= 250)
     {
       const detectedLanguage = getLanguage(code);
       if (detectedLanguage !== inputLanguage) {

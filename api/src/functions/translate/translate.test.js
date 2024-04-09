@@ -78,7 +78,7 @@ describe('code, input, and output is required',  () => {
 });
 
 describe('language detection errors',  () => {
-  it('selected language and detected language are different', async () => {
+  it('selected language and detected language are different, large code snippet', async () => {
     const httpEvent = mockHttpEvent({
       method: "POST",
       body: JSON.stringify({
@@ -132,6 +132,22 @@ describe('language detection errors',  () => {
 
     expect(result.statusCode).toBe(400);
     expect(body.data).toEqual("java was detected but you selected python. Please select the right language.");
+  });
+
+  it('selected language and detected language are detected to be different, small code snippet', async () => {
+    const httpEvent = mockHttpEvent({
+      method: "POST",
+      body: JSON.stringify({
+        inputLanguage: 'python',
+        outputLanguage: 'javascript',
+        code: `print("hello world")`
+      }),
+    });
+
+    const result = await handler(httpEvent);
+    const body = result.body;
+
+    expect(result.statusCode).toBe(200);
   });
 });
 
