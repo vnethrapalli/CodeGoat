@@ -1,5 +1,5 @@
 import { mockHttpEvent } from '@redwoodjs/testing/api'
-import { handler } from './translate'
+import { handler, whitespaceOnly } from './translate'
 
 //   Improve this test with help from the Redwood Testing Doc:
 //    https://redwoodjs.com/docs/testing#testing-functions
@@ -132,5 +132,12 @@ describe('language detection errors',  () => {
 
     expect(result.statusCode).toBe(400);
     expect(body.data).toEqual("java was detected but you selected python. Please select the right language.");
+  });
+});
+
+describe('empty code errors',  () => {
+  it('code is comments only', async () => {
+    const cleanedCode = "\r\n   \r\n\t\t\t\r\n";
+    console.log(whitespaceOnly(cleanedCode));
   });
 });

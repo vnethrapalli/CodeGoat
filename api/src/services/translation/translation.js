@@ -115,7 +115,7 @@ export const getTranslation = async ({ code, inLang, outLang }) => {
 
       /* construct main message request */
       let msg = `
-      Please convert the following ${langcodeToLang[inLang]} code into the ${langcodeToLang[outLang]} programming language\n\n
+      Please give me a translation of the following ${langcodeToLang[inLang]} code into the ${langcodeToLang[outLang]} programming language. The output should contain the translated code only, do not include backticks for code formatting.\n\n
       ${code}
       `;
 
