@@ -78,7 +78,7 @@ describe('code, input, and output is required',  () => {
 });
 
 describe('language detection errors',  () => {
-  it('>=500 chars and selected language and detected language are different', async () => {
+  it('selected language and detected language are different, large code snippet', async () => {
     const httpEvent = mockHttpEvent({
       method: "POST",
       body: JSON.stringify({
@@ -131,55 +131,16 @@ describe('language detection errors',  () => {
     const body = result.body;
 
     expect(result.statusCode).toBe(400);
-    expect(body.data).toEqual("Please select the right language for your code.");
+    expect(body.data).toEqual("java was detected but you selected python. Please select the right language.");
   });
 
-  it('>=500 chars and selected language and detected language are the same', async () => {
+  it('selected language and detected language are detected to be different, small code snippet', async () => {
     const httpEvent = mockHttpEvent({
       method: "POST",
       body: JSON.stringify({
-        inputLanguage: 'java',
+        inputLanguage: 'python',
         outputLanguage: 'javascript',
-        code: `
-          public class OracleJdbcTest
-          {
-            String driverClass = "oracle.jdbc.driver.OracleDriver";
-
-            Connection con;
-
-            public void init(FileInputStream fs) throws ClassNotFoundException, SQLException, FileNotFoundException, IOException
-            {
-              Properties props = new Properties();
-              props.load(fs);
-              String url = props.getProperty("db.url");
-              String userName = props.getProperty("db.user");
-              String password = props.getProperty("db.password");
-              Class.forName(driverClass);
-
-              con=DriverManager.getConnection(url, userName, password);
-            }
-
-            public void fetch() throws SQLException, IOException
-            {
-              PreparedStatement ps = con.prepareStatement("select SYSDATE from dual");
-              ResultSet rs = ps.executeQuery();
-
-              while (rs.next())
-              {
-                // do the thing you do
-              }
-              rs.close();
-              ps.close();
-            }
-
-            public static void main(String[] args)
-            {
-              OracleJdbcTest test = new OracleJdbcTest();
-              test.init();
-              test.fetch();
-            }
-          }
-        `
+        code: `print("hello world")`
       }),
     });
 
@@ -188,24 +149,23 @@ describe('language detection errors',  () => {
 
     expect(result.statusCode).toBe(200);
   });
+});
 
-  it('<500 chars, language discrepancy should be ignored', async () => {
+describe('empty code errors',  () => {
+  it('code is comments only', async () => {
     const httpEvent = mockHttpEvent({
       method: "POST",
       body: JSON.stringify({
-        inputLanguage: 'javascript',
-        outputLanguage: 'python',
-        code: `
-        def add(a, b):
-          return a + b
-        print(add(1, 2))
-        `
-      }),
+        code: "\r\n   \r\n\t\t\t\r\n",
+        inputLanguage: "java",
+        outputLanguage: "javascript"
+      })
     })
 
     const result = await handler(httpEvent);
     const body = result.body;
 
-    expect(result.statusCode).toBe(200);
+    expect(result.statusCode).toBe(400);
+    expect(body.data).toEqual("Code is empty or consists of comments only. Please provide some non-empty code.");
   });
 });

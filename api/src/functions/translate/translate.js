@@ -22,21 +22,36 @@ import { getCurrentUser, isAuthenticated } from 'src/lib/auth'
  * @param { Context } context - contains information about the invocation,
  * function, and execution environment.
  */
+
+const whitespaceOnly = (str) => {
+  return /^\s*$/.test(str);
+}
+
 const myHandler = async (event, _context) => {
   let statusCode = 200;
   try {
-    const { code, inputLanguage, outputLanguage } = JSON.parse(event.body);
+    const { code, inputLanguage, outputLanguage, ignoreLanguageMismatch } = JSON.parse(event.body);
 
     if (code === undefined || inputLanguage === undefined || outputLanguage === undefined) {
       statusCode = 400;
       throw Error("please provide all three of code, input language, and output language");
     }
 
-    // only for code snippets with 500 chars or greater because auto detection is screwy for small code snippets
-    if (getLanguage(code) !== inputLanguage && code.length >= 500) {
+    if (code.length == 0 || whitespaceOnly(code))
+    {
       statusCode = 400;
-      throw Error("Please select the right language for your code.");
+      throw Error("Code is empty or consists of comments only. Please provide some non-empty code.");
     }
+
+    if (!ignoreLanguageMismatch && code.length >= 250)
+    {
+      const detectedLanguage = getLanguage(code);
+      if (detectedLanguage !== inputLanguage) {
+        statusCode = 400;
+        throw Error(`${detectedLanguage} was detected but you selected ${inputLanguage}. Please select the right language.`);
+      }
+    }
+
     let codeForTranslation = code.trim();
 
     // get results from api call

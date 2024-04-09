@@ -8,13 +8,19 @@ import Pagination from 'src/components/Pagination'
 const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 
 export const languages = {
+  "c": "C",
   "cpp": "C++",
   "csharp": "C#",
+  "go": "Go",
   "java": "Java",
   "javascript": "JavaScript",
+  "kotlin": "Kotlin",
+  "php": "PHP",
   "python": "Python",
-  "typescript": "TypeScript",
-}
+  "ruby": "Ruby",
+  "rust": "Rust",
+  "typescript": "TypeScript"
+};
 
 export const beforeQuery = ({ page, uid, inLang, outLang, startDate, endDate, sort, inSort, outSort}) => {
   page = page ? parseInt(page, 10) : 1

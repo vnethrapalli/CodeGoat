@@ -42,20 +42,32 @@ const FETCH_TRANSLATION = gql`
 `
 
 export const languages = [
+  {dropdownItem: "C", langCode: "c"},
   {dropdownItem: "C++", langCode: "cpp"},
   {dropdownItem: "C#", langCode: "csharp"},
+  {dropdownItem: "Go", langCode: "go"},
   {dropdownItem: "Java", langCode: "java"},
   {dropdownItem: "JavaScript", langCode: "javascript"},
+  {dropdownItem: "Kotlin", langCode: "kotlin"},
+  {dropdownItem: "PHP", langCode: "php"},
   {dropdownItem: "Python", langCode: "python"},
+  {dropdownItem: "Ruby", langCode: "ruby"},
+  {dropdownItem: "Rust", langCode: "rust"},
   {dropdownItem: "TypeScript", langCode: "typescript"},
 ];
 
 const extensions = {
+  "c": ".c",
   "cpp": ".cpp",
   "csharp": ".cs",
+  "go": ".go",
   "java": ".java",
   "javascript": ".js",
+  "kotlin": ".kt",
+  "php": ".php",
   "python": ".py",
+  "ruby": ".rb",
+  "rust": ".rs",
   "typescript": ".ts"
 };
 
@@ -70,6 +82,8 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
   // const [status, setStatus] = React.useState("500 Server Error")
   const [rating, setRating] = React.useState(5);
   const [refreshQuery, setRefreshQuery] = React.useState(true);
+  const [ignoreLanguageMismatch, setIgnoreLanguageMismatch] = React.useState(false);
+  const firstLanguageMismatch = useRef(true);
   const [output, setOutput] = React.useState(false);
   const [userId, setUserId] = React.useState();
   const [inputMonaco, setInputMonaco] = React.useState();
@@ -137,6 +151,8 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
           onMount={handleEditorDidMount}
           onChange={updateCodeValue}
           title={isInput ? "inputEditor" : "outputEditor"}
+          options={!isInput ? {readOnly: true} : {}}
+
           // beforeMount={(monaco) => {
           //   monaco.editor.defineTheme('myCustomTheme', customTheme);
           // }}
@@ -231,6 +247,20 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
       onError: () => {},
     })
 
+    useEffect(() => {
+      const re = /^(.+ was detected but you selected .+. Please select the right language.)$/
+      if (re.test(outputCodeValue) && firstLanguageMismatch.current)
+      {
+        firstLanguageMismatch.current = false;
+        setIgnoreLanguageMismatch(true);
+      }
+      else if (!re.test(outputCodeValue))
+      {
+        firstLanguageMismatch.current = true;
+        setIgnoreLanguageMismatch(false);
+      }
+    }, [outputCodeValue]);
+
     const removeComments = (inCode, inLang) => {
       if (inputMonaco == undefined)
       {
@@ -323,7 +353,8 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
         body: JSON.stringify({
           code: removeComments(inputCodeValue, inputLanguage),
           inputLanguage: inputLanguage,
-          outputLanguage: outputLanguage
+          outputLanguage: outputLanguage,
+          ignoreLanguageMismatch: ignoreLanguageMismatch
         })
       });
 
@@ -397,7 +428,7 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
               )
             }}
           >
-            Translate
+            {ignoreLanguageMismatch ? "Translate Anyway" : "Translate"}
           </Button>
         </Box>
       </>

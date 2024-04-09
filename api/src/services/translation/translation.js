@@ -3,9 +3,27 @@ import hljs from 'highlight.js';
 import { json } from "stream/consumers";
 
 export const getLanguage = (code) => {
-    const langCodes = ["cpp", "csharp", "java", "javascript", "python", "typescript"];
-    const { language } = hljs.highlightAuto(code, langCodes);
-    return language;
+  const langCodes = [
+    "c",
+    "cpp",
+    "csharp",
+    "go",
+    "java",
+    "javascript",
+    "kotlin",
+    "php",
+    "python",
+    "ruby",
+    "rust",
+    "typescript"
+  ];
+  const { language } = hljs.highlightAuto(code, langCodes);
+  // console.log(`
+  //   language: ${language}
+  //   relevance: ${relevance}
+  //   secondBest: ${secondBest}
+  // `)
+  return language;
 }
 
 export const getTranslation = async ({ code, inLang, outLang }) => {
@@ -41,12 +59,18 @@ export const getTranslation = async ({ code, inLang, outLang }) => {
   };
 
   let langcodeToLang = {
-    "cpp" : "C++",
-    "csharp" : "C#",
-    "java" : "Java",
-    "javascript" : "Javascript",
-    "python" : "Python",
-    "typescript" : "Typescript",
+    "c": "C",
+    "cpp": "C++",
+    "csharp": "C#",
+    "go": "Go",
+    "java": "Java",
+    "javascript": "JavaScript",
+    "kotlin": "Kotlin",
+    "php": "PHP",
+    "python": "Python",
+    "ruby": "Ruby",
+    "rust": "Rust",
+    "typescript": "TypeScript"
   };
 
   const useDummyResponse = 0;
@@ -91,9 +115,10 @@ export const getTranslation = async ({ code, inLang, outLang }) => {
 
       /* construct main message request */
       let msg = `
-      Please convert the following ${langcodeToLang[inLang]} code into the ${langcodeToLang[outLang]} programming language\n\n
+      Please give me a translation of the following ${langcodeToLang[inLang]} code into the ${langcodeToLang[outLang]} programming language. Provide no backticks at the beginning and end:\n\n
       ${code}
-      `.trim();
+      `;
+
       messages.push({ role : "user", content: msg });
       // console.log(messages);
 
@@ -101,7 +126,7 @@ export const getTranslation = async ({ code, inLang, outLang }) => {
       const completion = await openai.chat.completions.create({
         messages: messages,
         model: "gpt-3.5-turbo",
-        max_tokens: 128,
+        max_tokens: 2048,
       });
 
       // for testing, if bad response throw exception so it is caught

@@ -1,4 +1,5 @@
 import { render, screen, fireEvent, waitFor } from '@redwoodjs/testing/web';
+import userEvent from '@testing-library/user-event';
 import SubmissionPage from './SubmissionPage';
 
 // https://redwoodjs.com/docs/testing#testing-pages-layouts
@@ -627,8 +628,9 @@ describe("Queuing Tests", () => {
   it('adds a request to queue when queue is not empty, not full', async () => {
     const {unmount} = render(<SubmissionPage />)
     const translateBtn = screen.getByTestId("translateButton");
+    const user = userEvent.setup();
     for (let i = 0; i < 100; i++)
-      fireEvent.click(translateBtn)
+      await user.click(translateBtn)
 
     setTimeout(async () => {
       expect(await screen.getAllByText(/Queued Requests: 2/i)[0]).toBeInTheDocument()
@@ -640,8 +642,9 @@ describe("Queuing Tests", () => {
   it('rejects a request to queue when queue is full', async () => {
     const {unmount} = render(<SubmissionPage />)
     const translateBtn = screen.getByTestId("translateButton");
+    const user = userEvent.setup();
     for (let i = 0; i < 100; i++)
-      fireEvent.click(translateBtn)
+      await user.click(translateBtn)
 
     setTimeout(async () => {
       expect(await screen.getAllByText(/Slow down/i)[0]).toBeInTheDocument()
@@ -656,5 +659,28 @@ describe("Code Cleaning", () => {
     const inCode = "\r\n// comment 1\r\n/* comment 2 */ \tpublic static void main(String[] args)// comment 3\r\n{\r\n\tSystem.out.println(\"hello world!\");\r\n}\r\n// comment 4\r\n\r\n";
     const cleaned = testRemoveComments(inCode);
     expect(cleaned).not.toContain("comment");
+  })
+})
+
+describe("Auto Detection Mismatch", () => {
+  it('User Can Translate Anyway Even if Mismatch Occurs', async() => {
+    const assetsFetchMock = async (url) => {
+      return {
+        status: 400,
+        json: () => Promise.resolve({
+          data: "Java was detected but you selected Python. Please select the right language."
+        })
+      }
+    }
+    fetchMock = jest.spyOn(global, "fetch").mockImplementation(assetsFetchMock);
+    const {unmount} = render(<SubmissionPage />);
+    const user = userEvent.setup();
+    const translateBtn = screen.getByTestId("translateButton");
+    await waitFor(() => expect(screen.getByTestId("translateButton").textContent).toBe("Translate"));
+    await user.click(translateBtn);
+    await waitFor(() => expect(screen.getByTestId("translateButton").textContent).toBe("Translate Anyway"));
+
+    unmount();
+    jest.clearAllMocks();
   })
 })
