@@ -23,6 +23,7 @@ model Feedback {
   gptAvailability     Int
   experience          Int
   comments            String
+  createdAt           DateTime @default(now())
 }
 
 model Translation {
@@ -38,7 +39,7 @@ model Translation {
 }
 
 model Faq {
-  id                  Int     @id @default(autoincrement())
-  question            String
-  answer              String
+  id       Int    @id @default(autoincrement())
+  question String
+  answer   String
 }

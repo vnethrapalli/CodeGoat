@@ -1,5 +1,5 @@
 import { navigate, routes } from '@redwoodjs/router'
-import { useMutation } from '@redwoodjs/web'
+import { Metadata, useMutation } from '@redwoodjs/web'
 
 import { Button, TextField, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
@@ -91,10 +91,10 @@ const UserAccountPage = () => {
         localStorage.setItem('user', JSON.stringify(user))
       })
 
-      toast.success(response.message, {duration: 2500})
+      toast.success(response.message, {duration: 2500, position: 'bottom-right'})
 
     } catch (error) {
-      toast.error(error.message, {duration: 2500})
+      toast.error(error.message, {duration: 2500, position: 'bottom-right'})
     }
 
   }
@@ -114,7 +114,7 @@ const UserAccountPage = () => {
         throw new Error('Failed to delete account')
       }
 
-      toast.success(response.message, {duration: 1500})
+      toast.success(response.message, {duration: 1500, position: 'bottom-right'})
       setTimeout(() => {
         logOut().then(() => {
           localStorage.removeItem('user')
@@ -123,19 +123,20 @@ const UserAccountPage = () => {
       }, 1500)
 
     } catch (error) {
-      toast.error(error.message, {duration: 2500})
+      toast.error(error.message, {duration: 2500, position: 'bottom-right'})
     }
   }
 
   return (
     <>
+      <Metadata title="Account" description="Account Settings"/>
       <Toaster />
       <Typography variant='h2' component='h2' align='left' style={{color:theme.palette.text.secondary, fontSize: '36px', fontStyle: 'normal', fontWeight: '600', margin: '1%', marginBottom: '2%'}}>Account</Typography>
 
       <Box
         component="form"
         sx={{
-          '& .MuiTextField-root': { m: 1, width: '25ch' },
+          height: '72vh', '& .MuiTextField-root': { m: 1, width: '25ch', },
         }}
         noValidate
         autoComplete="off"
@@ -144,9 +145,29 @@ const UserAccountPage = () => {
           <TextField id="outlined-basic" data-testid="email" label="Email" variant="outlined" inputProps={{...inputStyle, readOnly: true}} value={email} style={{margin: '1%', display: 'block'}}/>
           <TextField id="outlined-basic" data-testid="username" label="Name" variant="outlined" inputProps={{...inputStyle}} defaultValue={username} style={{margin: '1%', display: 'block'}} onChange={handleUsernameChange} error={usernameError.error} helperText={usernameError.helperText}/>
 
-          <Button variant="contained" style={{backgroundColor: theme.palette.secondary.main, color: theme.palette.primary.main, margin: '1%', display: 'block'}} onClick={updateData} disabled={usernameError.error}>Save</Button>
+          <Button
+            variant="contained"
+            style={{
+              backgroundColor: theme.palette.text.success,
+              color: theme.palette.text.primary,
+              textTransform: 'none'
+            }}
+            sx={{
+              width: "28ch",
+              borderRadius: "6px",
+              marginBottom: "25px",
+              margin: '1%',
+              display: 'block'
+            }}
+            onClick={updateData}
+            disabled={usernameError.error}
+          >
+            Save
+          </Button>
 
-          <Button variant="contained" style={{backgroundColor: 'red', color: theme.palette.primary.main, margin: '1%', display: 'block'}} onClick={()=> {setIsDeleteAccount(!isDeleteAccount)}}>Delete Account</Button>
+          {/* <Button variant="contained" style={{backgroundColor: theme.palette.secondary.main, color: theme.palette.primary.main, margin: '1%', display: 'block'}} onClick={updateData} disabled={usernameError.error}>Save</Button> */}
+
+          <Button variant="contained" style={{backgroundColor: 'red', color: theme.palette.text.primary, margin: '1%', display: 'block', width: "28ch" }} onClick={()=> {setIsDeleteAccount(!isDeleteAccount)}}>Delete Account</Button>
           <Modal
             open={isDeleteAccount}
             onClose={() => setIsDeleteAccount(false)}

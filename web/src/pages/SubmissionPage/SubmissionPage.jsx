@@ -1,16 +1,13 @@
 import { Metadata, useMutation } from '@redwoodjs/web';
 import { gql, useLazyQuery } from "@apollo/client";
-import { Stack, Box, Button, FormControl, InputLabel, Select, MenuItem, Divider, Rating } from '@mui/material';
+import { Grid, Paper, Stack, Box, Button, FormControl, InputLabel, Select, MenuItem, Divider, Rating } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import DownloadIcon from '@mui/icons-material/Download';
-import UploadFile from '@mui/icons-material/UploadFile';
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import Editor, { useMonaco } from '@monaco-editor/react';
 import { Toaster, toast } from '@redwoodjs/web/toast'
 import React, { useEffect, useRef, useState } from 'react';
 import { auth0 } from 'src/auth'
 import { useParams } from '@redwoodjs/router'
-import { ConfirmationNumberOutlined, ConnectingAirportsOutlined, ConstructionOutlined, ContentPasteSearchOutlined } from '@mui/icons-material';
+import { ConfirmationNumberOutlined, ConnectingAirportsOutlined, ConstructionOutlined, ContentPasteSearchOutlined, Download, UploadFile, ContentCopy } from '@mui/icons-material';
 
 const CREATE_TRANSLATION = gql`
   mutation CreateTranslationMutation($input: CreateTranslationInput!) {
@@ -75,7 +72,6 @@ const extensions = {
 };
 
 let queueCount = 0;
-
 const MAXQUEUE = 2;
 
 const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => {
@@ -83,7 +79,7 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
   const [outputCodeValue, setOutputCodeValue] = React.useState("Processing...");
   const [inputLanguage, setInputLanguage] = React.useState("javascript");
   const [outputLanguage, setOutputLanguage] = React.useState("python");
-  const [status, setStatus] = React.useState("500 Server Error")
+  // const [status, setStatus] = React.useState("500 Server Error")
   const [rating, setRating] = React.useState(5);
   const [refreshQuery, setRefreshQuery] = React.useState(true);
   const [ignoreLanguageMismatch, setIgnoreLanguageMismatch] = React.useState(false);
@@ -117,6 +113,7 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
 
   const CodeBox = ({ codeValue, updateCodeValue, defaultLanguage, language, defaultValue, isInput }) => {
     const monaco = useMonaco();
+    const theme = useTheme();
 
     useEffect(() => {
       if(monaco) {
@@ -132,23 +129,35 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
       editorRef.current = editor;
     }
 
+    // const customTheme = {
+    //   base: 'vs',
+    //   inherit: true,
+    //   rules: [],
+    //   colors: {"editor.background": theme.palette.background.default}
+    // };
+
     return (
-      <div data-testid={isInput ? "inputEditor" : "outputEditor"}>
+      <Paper square={false} elevation={6} data-testid={isInput ? "inputEditor" : "outputEditor"} width='100%'>
         <Editor
           height='600px'
-          width="40vw"
+          width="100%"
           m='10px'
           defaultLanguage={defaultLanguage}
           language={language}
           defaultValue={defaultValue}
           value={codeValue}
+          // theme="myCustomTheme"
           theme="vs-dark"
           onMount={handleEditorDidMount}
           onChange={updateCodeValue}
           title={isInput ? "inputEditor" : "outputEditor"}
           options={!isInput ? {readOnly: true} : {}}
+
+          // beforeMount={(monaco) => {
+          //   monaco.editor.defineTheme('myCustomTheme', customTheme);
+          // }}
         />
-      </div>
+      </Paper>
     );
   }
 
@@ -196,34 +205,40 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
 
   const LangDropdown = ({ text, language, setLanguage }) => {
     return (
-      <>
-        <Stack direction="column" spacing={0.5}>
-          <InputLabel>{text}</InputLabel>
-          <FormControl size='small'>
-            <Select
-              style={{ color: theme.palette.text.secondary }}
-              variant="outlined"
-              value={language}
-              onChange={e => setLanguage(e.target.value)}
-            >
-              {languages.map((lang) => (
-                <MenuItem
-                  style={{
-                     color: theme.palette.text.secondary,
-                  }}
-                  value={lang.langCode}
-                  key={lang.langCode}
-                >
-                    {lang.dropdownItem}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </Stack>
-      </>
+      <Box>
+        <InputLabel>{text}</InputLabel>
+        <FormControl size='small'>
+          <Select
+            style={{ color: theme.palette.text.secondary, minWidth: '100px' }}
+            variant="outlined"
+            value={language}
+            onChange={e => setLanguage(e.target.value)}
+            inputProps={{
+              MenuProps: {
+                MenuListProps: {
+                  sx: {
+                      backgroundColor: theme.palette.background.default,
+                  }
+                }
+              }
+            }}
+          >
+            {languages.map((lang) => (
+              <MenuItem
+                style={{
+                    color: theme.palette.text.secondary,
+                }}
+                value={lang.langCode}
+                key={lang.langCode}
+              >
+                  {lang.dropdownItem}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </Box>
     )
   }
-
 
   const TranslateBtn = () => {
     const [queue, setQueue] = React.useState(Promise.resolve())
@@ -326,10 +341,10 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
       if (queueCount < MAXQUEUE) {
         queueCount++;
         toast.dismiss();
-        toast.success("Your request has been sent! \nQueued Requests: " + queueCount.toString(), {duration: 1200});
+        toast.success("Your request has been sent! \nQueued Requests: " + queueCount.toString(), {duration: 1200, position: 'bottom-right'});
       } else {
         toast.dismiss();
-        toast.error("Slow down there! I can't afford all those API calls lmao", {duration: 2500});
+        toast.error("Slow down there! I can't afford all those API calls lmao", {duration: 2500, position: 'bottom-right'});
         return;
       }
       const reqUrl = `http://localhost:8910/.redwood/functions/translate`;
@@ -353,33 +368,33 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
       queueCount--;
 
       if(statusCode === 200) {
-        toast.success("Code translated successfully! \nQueued Requests: " + queueCount.toString(), { duration: 1500 });
+        toast.success("Code translated successfully! \nQueued Requests: " + queueCount.toString(), { duration: 1500, position: 'bottom-right' });
         setOutputCodeValue(response.data);
       } else {
         switch(statusCode) {
           case 429:
-            toast.error("The API has reached its rate limit. Please try again later.", { duration: 2500 });
+            toast.error("The API has reached its rate limit. Please try again later.", { duration: 2500, position: 'bottom-right' });
             break;
           case 400:
-            toast.error("There was an error in the communication between the backend and API. Please try again.", { duration: 2500 });
+            toast.error("There was an error in the communication between the backend and API. Please try again.", { duration: 2500, position: 'bottom-right' });
             break;
           case 403:
-            toast.error("The length of the code is too long. Please shorten the code and try again.", { duration: 2500 });
+            toast.error("The length of the code is too long. Please shorten the code and try again.", { duration: 2500, position: 'bottom-right' });
             break;
           case 401:
-            toast.error("There was an error on the backend. Please try again later.", { duration: 2500 });
+            toast.error("There was an error on the backend. Please try again later.", { duration: 2500, position: 'bottom-right' });
             break;
           case 404:
-            toast.error("The GPT API is unavalaible", { duration: 2500 });
+            toast.error("The GPT API is unavalaible", { duration: 2500, position: 'bottom-right' });
             break;
           case 500:
-            toast.error("There was an error on the API side. Please try again.", { duration: 2500 });
+            toast.error("There was an error on the API side. Please try again.", { duration: 2500, position: 'bottom-right' });
             break;
           case 405:
-            toast.error("This action is not permitted by the API. Please try again.", { duration: 2500 });
+            toast.error("This action is not permitted by the API. Please try again.", { duration: 2500, position: 'bottom-right' });
             break;
           default:
-            toast.error("Error translating code.", { duration: 2500 });
+            toast.error("Error translating code.", { duration: 2500, position: 'bottom-right' });
             break;
         }
       }
@@ -395,13 +410,13 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
             variant="contained"
             data-testid="translateButton"
             style={{
-              backgroundColor: theme.palette.secondary.main,
+              backgroundColor: theme.palette.text.success,
               color: theme.palette.text.primary,
               textTransform: 'none'
             }}
             sx={{
-              width: "250px",
-              borderRadius: "40px",
+              width: "200px",
+              borderRadius: "6px",
               marginBottom: "25px",
             }}
             onClick={async () => {
@@ -427,16 +442,17 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
           navigator.clipboard.writeText(editor.props.children.props.value)
         }}
         style={{
-          backgroundColor: theme.palette.secondary.main,
+          backgroundColor: theme.palette.text.success,
           textTransform: 'none',
-          borderTopLeftRadius: '10px',
-          borderBottomLeftRadius: '10px',
+          borderTopLeftRadius: '6px',
+          borderBottomLeftRadius: '6px',
           borderTopRightRadius: '0px',
-          borderBottomRightRadius: '0px'
+          borderBottomRightRadius: '0px',
+          height: '40px'
         }}
         data-testid={isInput ? "inputCopy" : "outputCopy"}
       >
-        <ContentCopyIcon sx={{ fill: theme.palette.text.primary }} />
+        <ContentCopy sx={{ fill: theme.palette.text.primary }} />
       </Button>
     );
   }
@@ -455,12 +471,13 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
           <Button
             component="span"
             style={{
-              backgroundColor: theme.palette.secondary.main,
+              backgroundColor: theme.palette.text.success,
               textTransform: 'none',
               borderTopLeftRadius: '0px',
               borderBottomLeftRadius: '0px',
-              borderTopRightRadius: '10px',
-              borderBottomRightRadius: '10px'
+              borderTopRightRadius: '6px',
+              borderBottomRightRadius: '6px',
+              height: '40px'
             }}
             onClick={readInputFile}
             data-testid="uploadButton"
@@ -476,12 +493,13 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
     return (
       <Button
         style={{
-          backgroundColor: theme.palette.secondary.main,
+          backgroundColor: theme.palette.text.success,
           textTransform: 'none',
           borderTopLeftRadius: '0px',
           borderBottomLeftRadius: '0px',
-          borderTopRightRadius: '10px',
-          borderBottomRightRadius: '10px'
+          borderTopRightRadius: '6px',
+          borderBottomRightRadius: '6px',
+          height: '40px'
         }}
         onClick={() => {
           // console.log(outputLanguage);
@@ -489,34 +507,41 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
         }}
         data-testid="downloadButton"
         >
-        <DownloadIcon sx={{ fill: theme.palette.text.primary }} />
+        <Download sx={{ fill: theme.palette.text.primary }} />
       </Button>
     )
   }
 
   const DropdownAndButtons = ({ input }) => {
     return (
-      <Stack direction="row" justifyContent="space-between" alignItems="center" width={'40vw'}>
-        <Stack direction="row" spacing={2} justifyContent="flex-start" alignItems="center">
-          <LangDropdown text="Source Language" language={inputLanguage} setLanguage={(newLang) => setInputLanguage(newLang)} />
-          <LangDropdown text="Target Language" language={outputLanguage} setLanguage={(newLang) => setOutputLanguage(newLang)} />
-        </Stack>
-        <Stack direction="row" spacing={0} justifyContent="flex-end" alignItems="center">
+      <Grid container direction="row" justifyContent="center" alignItems="center" width='100%' height="100%">
+        <Grid item direction="row" display='flex' justifyContent="flex-start" alignItems="center" xs={9}>
+          <Box>
+            <LangDropdown text="Source Language" language={inputLanguage} setLanguage={(newLang) => setInputLanguage(newLang)} />
+          </Box>
+          <Box sx={{ marginLeft: '10px' }}>
+            <LangDropdown text="Target Language" language={outputLanguage} setLanguage={(newLang) => setOutputLanguage(newLang)} />
+          </Box>
+        </Grid>
+        <Grid label="hello" item direction="row" spacing={0} sx={{ display: 'flex', justifyContent: 'flex-end', alignContent: 'flex-end', alignItems: "flex-end", minHeight: '100%' }} xs={3}>
           <CopyButton editor={codeboxInput} isInput={input}/>
-          <Divider orientation="vertical" flexItem style={{ backgroundColor: theme.palette.text.primary, width: '1%' }}/>
+          <Divider orientation="vertical"  style={{ backgroundColor: theme.palette.background.default, width: '0.5%', height: '40px' }}/>
           <UploadButtonInput/>
-        </Stack>
-      </Stack>
+        </Grid>
+      </Grid>
     );
   }
 
   const NoDropdownAndButtons = ({ input }) => {
     return (
-      <Stack direction="row" spacing={0} justifyContent="flex-end" alignItems="center">
-        <CopyButton editor={input ? codeboxInput : codeboxOutput} isInput={input} />
-        <Divider orientation="vertical" flexItem style={{ backgroundColor: theme.palette.text.primary, width: '1%' }}/>
-        <DownloadButton/>
-      </Stack>
+      <Grid container direction="row" justifyContent="center" alignItems="center" width='100%' height="100%">
+        <Grid item xs={9} />
+        <Grid label="hello" item direction="row" spacing={0} sx={{ display: 'flex', justifyContent: 'flex-end', alignContent: 'flex-end', alignItems: "flex-end", minHeight: '100%' }} xs={3}>
+          <CopyButton editor={input ? codeboxInput : codeboxOutput} isInput={input} />
+          <Divider orientation="vertical" style={{ backgroundColor: theme.palette.background.default, width: '0.5%', height: '40px' }}/>
+          <DownloadButton/>
+        </Grid>
+      </Grid>
     );
   }
 
@@ -544,15 +569,15 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
 
       if (error)
       {
-        toast.error("An Error Occurred", {duration: 2500, position: "top"});
+        toast.error("An Error Occurred", {duration: 2500, position: 'bottom-right'});
       }
       else if (loading)
       {
-        toast.loading("Loading...", {duration: 2500, position: "top"});
+        toast.loading("Loading...", {duration: 2500, position: 'bottom-right'});
       }
       else
       {
-        toast.success("Rating Submitted!", {duration: 2500, position: "top"});
+        toast.success("Rating Submitted!", {duration: 2500, position: 'bottom-right'});
         const arr = data.translations.translations;
         const id = arr[0].id;
         updateTranslation({ variables: { id: id, input: { "rating": rating }}});
@@ -561,62 +586,83 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
 
     return (
       <Button
-          variant="contained"
-          style={{
-            backgroundColor: theme.palette.secondary.main,
-            color: theme.palette.text.primary,
-            textTransform: 'none'
-          }}
-          sx={{
-            width: "250px",
-            borderRadius: "40px",
-            marginBottom: "25px",
-          }}
-          onClick={() => {
-            provideRating();
-          }}
-          data-testid="ratingButton"
-        >
-          Rate This Translation
-        </Button>
+        variant="contained"
+        style={{
+          backgroundColor: theme.palette.text.success,
+          color: theme.palette.text.primary,
+          textTransform: 'none'
+        }}
+        sx={{
+          width: "200px",
+          borderRadius: "6px",
+          marginBottom: "25px",
+        }}
+        onClick={() => {
+          provideRating();
+        }}
+        data-testid="ratingButton"
+      >
+        Rate This Translation
+      </Button>
     );
   }
 
   return (
     <>
-      <Metadata title="Submission" description="Submission page"/>
+      <Metadata title="Translate" description="Translation Page"/>
       <Toaster />
-      <Stack
-        direction="column"
-        spacing={2}
-        alignItems="center"
-      >
-        <Stack direction="row" spacing={4} justifyContent="space-between" alignItems="center" width={output ? '80vw' : '40vw'}>
-          <DropdownAndButtons input={true} />
-          {output && <NoDropdownAndButtons input={false} />}
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', alignSelf: 'center', flexWrap: 'wrap', width: '100%'}}>
+        <Grid
+          container
+          direction="row"
+          spacing={2}
+          sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', alignSelf: 'center'}}
+          width='100%'
+        >
+          <Grid item xs />
+          <Grid item direction="column" justifyContent="space-between" alignItems="center" width='100%' height='100%' xs={output ? 10 : 5}>
+            <Grid container direction="row" width='100%' height='100%' marginBottom='10px' spacing={2}>
+              <Grid item xs={output ? 6 : 12}>
+                <DropdownAndButtons input={true} />
+              </Grid>
+              {output &&
+              <Grid item xs={6} spacing={0} sx={{ display: 'flex', justifyContent: 'flex-end', alignContent: 'flex-end', alignItems: "flex-end", minHeight: '100%' }}>
+                <NoDropdownAndButtons input={false} />
+              </Grid>
+              }
+            </Grid>
+            <Grid container direction="row" width='100%' height='100%' spacing={2}>
+              <Grid item xs={output ? 6 : 12}>
+                {codeboxInput}
+              </Grid>
+
+              {output &&
+                <Grid item xs={6}>
+                  {codeboxOutput}
+                </Grid>
+              }
+            </Grid>
+          </Grid>
+          <Grid item xs />
+        </Grid>
+
+        <Stack direction="column" spacing={2} justifyContent="center" alignItems="center" width='100%'>
+          <TranslateBtn/>
+          {output &&
+          <>
+            <Rating
+              defaultValue={5}
+              onChange={(event, val) => {
+                if (val == null) val = 0;
+                setRating(val);
+              }}
+            />
+            <RatingButton/>
+          </>}
         </Stack>
-        <Stack direction="row" spacing={4} justifyContent="space-between" alignItems="center" width={output ? '80vw' : '40vw'}>
-          {codeboxInput}
-          {output && codeboxOutput}
-        </Stack>
-      </Stack>
-      <TranslateBtn/>
-      <Stack direction="column" spacing={2} justifyContent="center" alignItems="center" width='100vw'>
-        {output &&
-        <>
-          <Rating
-            defaultValue={5}
-            onChange={(event, val) => {
-              if (val == null) val = 0;
-              setRating(val);
-            }}
-          />
-          <RatingButton/>
-        </>}
-      </Stack>
+      </Box>
     </>
   );
 }
 
-// {output && <CodeOutputCell code={inputCodeValue} inLang={inputLanguage} outLang={outputLanguage} />}
 export default SubmissionPage;

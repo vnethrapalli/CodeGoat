@@ -22,15 +22,15 @@ export const languages = {
   "typescript": "TypeScript"
 };
 
-export const beforeQuery = ({ page, uid }) => {
+export const beforeQuery = ({ page, uid, inLang, outLang, startDate, endDate, sort, inSort, outSort}) => {
   page = page ? parseInt(page, 10) : 1
 
-  return { variables: { page, uid } }
+  return { variables: { page, uid, inLang, outLang, startDate, endDate, sort, inSort, outSort } }
 }
 
 export const QUERY = gql`
-  query TranslationHistoryQuery($page: Int, $uid: String!) {
-    translationHistoryPage(page: $page, uid: $uid) {
+  query TranslationHistoryQuery($page: Int, $uid: String!, $inLang: [String!], $outLang: [String!], , $startDate: DateTime!, $endDate: DateTime!, $sort: Int, $inSort: Int, $outSort: Int) {
+    translationHistoryPage(page: $page, uid: $uid, inLang: $inLang, outLang: $outLang, startDate: $startDate, endDate: $endDate, sort: $sort, inSort: $inSort, outSort: $outSort) {
       translations {
         id
         uid
@@ -68,30 +68,29 @@ export const Success = ({ translationHistoryPage }) => {
 
   return (
     <>
+      {translationHistoryPage.count == 0 && <Typography data-testid="noTranslations" sx={{color: theme.palette.text.secondary, marginTop: '35px', fontWeight: 600, textTransform: 'uppercase', textDecoration: 'underline', textUnderlineOffset: '5px' }}>No translations found</Typography>}
+
       {translationHistoryPage.translations.map((translation) => {
         return (
           <Accordion
             data-testid="accordion"
             key={translation.id}
-            sx={{ backgroundColor: theme.palette.secondary.main, width: '70%', marginBottom: '5px', marginTop: '5px' }}>
+            sx={{ backgroundColor: theme.palette.text.success, width: '70%', marginBottom: '5px', marginTop: '5px' }}>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="panel1-content"
               id={translation.id}
-              sx={{ color: theme.palette.text.primary, minHeight: '64px', display: 'flex', margin: '0', alignContent: 'center',
-                // '&:not(:last-child)': {
-                // },
-                // '&::before': {
-                // },
-                '.css-o4b71y-MuiAccordionSummary-content.Mui-expanded': {
-                  my: '12px'
+              sx={{ color: theme.palette.text.primary, minHeight: '64px', display: 'flex', margin: '0px', alignContent: 'center',
+                '.MuiAccordion-root.Mui-expanded': {
+                  margin: '0px'
                 }
               }}
             >
               <Typography data-testid="languageInfo">
                 {languages[translation.inputLanguage]} &#8594; {languages[translation.outputLanguage]}
               </Typography>
-              {prettyDate(translation)}
+              <Tooltip title={translation.createdAt}>{prettyDate(translation)}</Tooltip>
+
             </AccordionSummary>
 
             <AccordionDetails>
@@ -101,8 +100,7 @@ export const Success = ({ translationHistoryPage }) => {
         )
       })}
 
-      <Pagination data-testid="pagination" count={translationHistoryPage.count}>
-      </Pagination>
+      <Pagination data-testid="pagination" count={translationHistoryPage.count} />
     </>
   )
 }
