@@ -23,7 +23,7 @@ import { getCurrentUser, isAuthenticated } from 'src/lib/auth'
  * function, and execution environment.
  */
 
-export const whitespaceOnly = (str) => {
+const whitespaceOnly = (str) => {
   return /^\s*$/.test(str);
 }
 

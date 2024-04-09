@@ -1,5 +1,5 @@
 import { mockHttpEvent } from '@redwoodjs/testing/api'
-import { handler, whitespaceOnly } from './translate'
+import { handler } from './translate'
 
 //   Improve this test with help from the Redwood Testing Doc:
 //    https://redwoodjs.com/docs/testing#testing-functions
