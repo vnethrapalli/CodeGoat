@@ -11,14 +11,7 @@ import React, { useEffect } from 'react'
 import { QUERY as TranslationQuery } from 'src/components/TranslationsCell'
 import TranslationsCell from 'src/components/TranslationsCell'
 
-export const languages = [
-  {dropdownItem: "C++", langCode: "cpp"},
-  {dropdownItem: "C#", langCode: "csharp"},
-  {dropdownItem: "Java", langCode: "java"},
-  {dropdownItem: "JavaScript", langCode: "javascript"},
-  {dropdownItem: "Python", langCode: "python"},
-  {dropdownItem: "TypeScript", langCode: "typescript"},
-];
+import { languages } from "web/src/pages/SubmissionPage/SubmissionPage"
 
 const DELETE_ALL_TRANSLATIONS = gql`
   mutation DeleteAllTranslationsMutation($uid: String!) {
@@ -50,7 +43,7 @@ const HistoryPage = ({ page = 1 }) => {
   const Filters = () => {
     const [deleteTranslations] = useMutation(DELETE_ALL_TRANSLATIONS, {
       onCompleted: (count) => {},
-      refetchQueries: [{ query: TranslationQuery, variables: { page: Number(page), uid: userId, startDate: "1970-01-01T00:00:01Z", endDate: new Date(Date.now()).toISOString() }}],
+      refetchQueries: [{ query: TranslationQuery, variables: { page: Number(page), uid: userId, inLang: [], outLang: [], startDate: "1970-01-01T00:00:01Z", endDate: new Date(Date.now()).toISOString() }}],
     })
 
     const delAll = () => {

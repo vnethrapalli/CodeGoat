@@ -1,6 +1,6 @@
 import { db } from 'src/lib/db'
 
-const langCodes = ["cpp", "csharp", "java", "javascript", "python", "typescript"];
+const langCodes = [ "c", "cpp", "csharp", "java", "javascript", "python", "typescript", "go", "rust", "ruby", "kotlin", "php"];
 
 export const translations = ({ uid }) => {
   return {
