@@ -25,11 +25,14 @@ export const languages = {
 export const beforeQuery = ({ page, uid, inLang, outLang, startDate, endDate, sort, inSort, outSort}) => {
   page = page ? parseInt(page, 10) : 1
 
+  startDate = isNaN(startDate) ? "1970-01-01T00:00:01Z" : startDate
+  endDate = isNaN(endDate) ? new Date().getFullYear() + 1 + "-01-01T00:00:01Z" : endDate
+
   return { variables: { page, uid, inLang, outLang, startDate, endDate, sort, inSort, outSort } }
 }
 
 export const QUERY = gql`
-  query TranslationHistoryQuery($page: Int, $uid: String!, $inLang: [String!], $outLang: [String!], $startDate: DateTime!, $endDate: DateTime!, $sort: Int, $inSort: Int, $outSort: Int) {
+  query translationHistoryPage($page: Int, $uid: String!, $inLang: [String!]!, $outLang: [String!]!, $startDate: DateTime, $endDate: DateTime, $sort: Int!, $inSort: Int!, $outSort: Int!) {
     translationHistoryPage(page: $page, uid: $uid, inLang: $inLang, outLang: $outLang, startDate: $startDate, endDate: $endDate, sort: $sort, inSort: $inSort, outSort: $outSort) {
       translations {
         id
@@ -52,7 +55,8 @@ export const Failure = ({ error }) => (
   <div style={{ color: 'red' }}>Error: {error?.message}</div>
 )
 
-export const Success = ({ translationHistoryPage }) => {
+export const Success = ({ translationHistoryPage, page, uid, inLang, outLang, startDate, endDate, sort, inSort, outSort }) => {
+
   const theme = useTheme();
 
   const prettyDate = (translation) => {
@@ -89,12 +93,11 @@ export const Success = ({ translationHistoryPage }) => {
               <Typography data-testid="languageInfo">
                 {languages[translation.inputLanguage]} &#8594; {languages[translation.outputLanguage]}
               </Typography>
-              <Tooltip title={translation.createdAt}>{prettyDate(translation)}</Tooltip>
-
+              <Tooltip title={new Date(translation.createdAt).toISOString()}>{prettyDate(translation)}</Tooltip>
             </AccordionSummary>
 
             <AccordionDetails>
-              <TranslationCell id={translation.id}/>
+              <TranslationCell id={translation.id} page={page} uid={uid} inLang={inLang} outLang={outLang} startDate={startDate} endDate={endDate} sort={sort} inSort={inSort} outSort={outSort} />
             </AccordionDetails>
           </Accordion>
         )

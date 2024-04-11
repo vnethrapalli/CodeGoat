@@ -10,7 +10,6 @@ import { auth0 } from 'src/auth'
 import React, { useEffect } from 'react'
 import { QUERY as TranslationQuery } from 'src/components/TranslationsCell'
 import TranslationsCell from 'src/components/TranslationsCell'
-
 import { languages } from "web/src/pages/SubmissionPage/SubmissionPage"
 
 const DELETE_ALL_TRANSLATIONS = gql`
@@ -20,6 +19,10 @@ const DELETE_ALL_TRANSLATIONS = gql`
     }
   }
 `
+
+export const delAll = (deleteTranslations, userId) => {
+  deleteTranslations({ variables: { uid: userId } });
+}
 
 const HistoryPage = ({ page = 1 }) => {
   const theme = useTheme();
@@ -31,6 +34,7 @@ const HistoryPage = ({ page = 1 }) => {
   const [sort, setSort] = React.useState(1);
   const [inSort, setInSort] = React.useState(0);
   const [outSort, setOutSort] = React.useState(0);
+  const [reload, setReload] = React.useState(false);
 
   useEffect(()=>{
     auth0.getUser().then(user => {
@@ -40,15 +44,12 @@ const HistoryPage = ({ page = 1 }) => {
     })
   },[])
 
-  const Filters = () => {
-    const [deleteTranslations] = useMutation(DELETE_ALL_TRANSLATIONS, {
-      onCompleted: (count) => {},
-      refetchQueries: [{ query: TranslationQuery, variables: { page: Number(page), uid: userId, inLang: [], outLang: [], startDate: "1970-01-01T00:00:01Z", endDate: new Date(Date.now()).toISOString() }}],
-    })
+  const [deleteTranslations] = useMutation(DELETE_ALL_TRANSLATIONS, {
+    onCompleted: (DeleteCount) => {setReload(true); /*console.log("Translations deleted:", DeleteCount.deleteAllTranslations.count)*/},
+    refetchQueries: [{ query: TranslationQuery, variables: { page: Number(page), uid: userId, inLang: selectedInLanguage, outLang: selectedOutLanguage, startDate: isNaN(selectedStartDate) ? "1970-01-01T00:00:01Z" : selectedStartDate, endDate: isNaN(selectedEndDate) ? new Date().getFullYear() + 1 + "-01-01T00:00:01Z" : selectedEndDate, sort: sort, inSort: inSort, outSort: outSort }}],
+  })
 
-    const delAll = () => {
-      deleteTranslations({ variables: { uid: userId } });
-    }
+  const Filters = () => {
 
     const handleInputChange = (event) => {
       const {
@@ -70,14 +71,14 @@ const HistoryPage = ({ page = 1 }) => {
 
     const handleStartDateChange = (date) => {
       if(date != null){
-        console.log(date);
+        // console.log(date);
         setSelectedStartDate(date);
       }
     }
 
     const handleEndDateChange = (date) => {
       if(date != null){
-        console.log(date);
+        // console.log(date);
         setSelectedEndDate(date);
       }
     }
@@ -159,7 +160,7 @@ const HistoryPage = ({ page = 1 }) => {
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DateTimePicker
                 views={['year', 'month', 'day']}
-                label="mm/dd/yy"
+                label="mm/dd/yyyy"
                 value={selectedStartDate}
                 onChange={(newValue) => handleStartDateChange(newValue)}
                 onAccept={(value) => {handleStartDateChange(value)}}
@@ -179,7 +180,7 @@ const HistoryPage = ({ page = 1 }) => {
               <DateTimePicker
                 views={['year', 'month', 'day']}
                 data-testid='end'
-                label="mm/dd/yy"
+                label="mm/dd/yyyy"
                 value={selectedEndDate}
                 onChange={(newValue) => handleEndDateChange(newValue)}
                 onAccept={(value) => {handleEndDateChange(value)}}
@@ -234,7 +235,7 @@ const HistoryPage = ({ page = 1 }) => {
             <IconButton
               variant="text"
               data-testid="deleteAllButton"
-              onClick={delAll}
+              onClick={() => {delAll(deleteTranslations, userId)}}
               sx={{
                 fontSize: '15px',
                 fontWeight: '500',
@@ -268,7 +269,7 @@ const HistoryPage = ({ page = 1 }) => {
 
         <Filters />
 
-        <TranslationsCell page={page} uid={userId} inLang={selectedInLanguage} outLang={selectedOutLanguage} startDate={isNaN(selectedStartDate) ? "1970-01-01T00:00:01Z" : selectedStartDate} endDate={isNaN(selectedEndDate) ? new Date(Date.now()).toISOString() : selectedEndDate} sort={sort} inSort={inSort} outSort={outSort}/>
+        <TranslationsCell page={page} uid={userId} inLang={selectedInLanguage} outLang={selectedOutLanguage} startDate={isNaN(selectedStartDate) ? "1970-01-01T00:00:01Z" : selectedStartDate} endDate={isNaN(selectedEndDate) ? new Date().getFullYear() + 1 + "-01-01T00:00:01Z" : selectedEndDate} sort={sort} inSort={inSort} outSort={outSort}/>
       </Box>
     </>
   )
