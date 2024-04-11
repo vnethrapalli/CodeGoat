@@ -48,17 +48,17 @@ export const getCurrentUser = async (decoded) => {
  */
 export const isAuthenticated = () => {
 
-  if (!context.currentUser) {
-    return false
-  } else {
-    if(context.currentUser.exp < Math.floor(new Date().getTime() / 1000)) {
-      return false
-    } else {
-      return true
-    }
-  }
+  // if (!context.currentUser) {
+  //   return false
+  // } else {
+  //   if(context.currentUser.exp < Math.floor(new Date().getTime() / 1000)) {
+  //     return false
+  //   } else {
+  //     return true
+  //   }
+  // }
 
-  // return !!context.currentUser
+  return !!context.currentUser
 }
 
 /**

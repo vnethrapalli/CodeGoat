@@ -36,7 +36,7 @@ export const deleteTranslation = ({ id }) => {
   })
 }
 
-export const deleteTranslations = ({ uid }) => {
+export const deleteAllTranslations = ({ uid }) => {
   return db.translation.deleteMany({
     where: { uid },
   })

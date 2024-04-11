@@ -31,6 +31,7 @@ const HistoryPage = ({ page = 1 }) => {
   const [sort, setSort] = React.useState(1);
   const [inSort, setInSort] = React.useState(0);
   const [outSort, setOutSort] = React.useState(0);
+  const [reload, setReload] = React.useState(false);
 
   useEffect(()=>{
     auth0.getUser().then(user => {
@@ -41,8 +42,8 @@ const HistoryPage = ({ page = 1 }) => {
   },[])
 
   const [deleteTranslations] = useMutation(DELETE_ALL_TRANSLATIONS, {
-    onCompleted: (count) => {},
-    refetchQueries: [{ query: TranslationQuery, variables: { page: Number(page), uid: userId, inLang: [], outLang: [], startDate: "1970-01-01T00:00:01Z", endDate: "2050-01-01T00:00:01Z", sort: 1, inSort: 0, outSort: 0 }}],
+    onCompleted: (DeleteCount) => {/*console.log("Translations deleted:", DeleteCount.deleteAllTranslations.count)*/},
+    refetchQueries: [{ query: TranslationQuery, variables: { page: Number(page), uid: userId, inLang: selectedInLanguage, outLang: selectedOutLanguage, startDate: isNaN(selectedStartDate) ? "1970-01-01T00:00:01Z" : selectedStartDate, endDate: isNaN(selectedEndDate) ? new Date().getFullYear() + 1 + "-01-01T00:00:01Z" : selectedEndDate, sort: sort, inSort: inSort, outSort: outSort }}],
   })
 
   const delAll = () => {
