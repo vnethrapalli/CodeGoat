@@ -40,15 +40,16 @@ const HistoryPage = ({ page = 1 }) => {
     })
   },[])
 
-  const Filters = () => {
-    const [deleteTranslations] = useMutation(DELETE_ALL_TRANSLATIONS, {
-      onCompleted: (count) => {},
-      refetchQueries: [{ query: TranslationQuery, variables: { page: Number(page), uid: userId, inLang: [], outLang: [], startDate: "1970-01-01T00:00:01Z", endDate: new Date(Date.now()).toISOString() }}],
-    })
+  const [deleteTranslations] = useMutation(DELETE_ALL_TRANSLATIONS, {
+    onCompleted: (count) => {},
+    refetchQueries: [{ query: TranslationQuery, variables: { page: Number(page), uid: userId, inLang: [], outLang: [], startDate: "1970-01-01T00:00:01Z", endDate: "2050-01-01T00:00:01Z", sort: 1, inSort: 0, outSort: 0 }}],
+  })
 
-    const delAll = () => {
-      deleteTranslations({ variables: { uid: userId } });
-    }
+  const delAll = () => {
+    deleteTranslations({ variables: { uid: userId } });
+  }
+
+  const Filters = () => {
 
     const handleInputChange = (event) => {
       const {
@@ -70,14 +71,14 @@ const HistoryPage = ({ page = 1 }) => {
 
     const handleStartDateChange = (date) => {
       if(date != null){
-        console.log(date);
+        // console.log(date);
         setSelectedStartDate(date);
       }
     }
 
     const handleEndDateChange = (date) => {
       if(date != null){
-        console.log(date);
+        // console.log(date);
         setSelectedEndDate(date);
       }
     }
@@ -159,7 +160,7 @@ const HistoryPage = ({ page = 1 }) => {
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DateTimePicker
                 views={['year', 'month', 'day']}
-                label="mm/dd/yy"
+                label="mm/dd/yyyy"
                 value={selectedStartDate}
                 onChange={(newValue) => handleStartDateChange(newValue)}
                 onAccept={(value) => {handleStartDateChange(value)}}
@@ -179,7 +180,7 @@ const HistoryPage = ({ page = 1 }) => {
               <DateTimePicker
                 views={['year', 'month', 'day']}
                 data-testid='end'
-                label="mm/dd/yy"
+                label="mm/dd/yyyy"
                 value={selectedEndDate}
                 onChange={(newValue) => handleEndDateChange(newValue)}
                 onAccept={(value) => {handleEndDateChange(value)}}
@@ -268,7 +269,7 @@ const HistoryPage = ({ page = 1 }) => {
 
         <Filters />
 
-        <TranslationsCell page={page} uid={userId} inLang={selectedInLanguage} outLang={selectedOutLanguage} startDate={isNaN(selectedStartDate) ? "1970-01-01T00:00:01Z" : selectedStartDate} endDate={isNaN(selectedEndDate) ? new Date(Date.now()).toISOString() : selectedEndDate} sort={sort} inSort={inSort} outSort={outSort}/>
+        <TranslationsCell page={page} uid={userId} inLang={selectedInLanguage} outLang={selectedOutLanguage} startDate={isNaN(selectedStartDate) ? "1970-01-01T00:00:01Z" : selectedStartDate} endDate={isNaN(selectedEndDate) ? new Date().getFullYear() + 1 + "-01-01T00:00:01Z" : selectedEndDate} sort={sort} inSort={inSort} outSort={outSort}/>
       </Box>
     </>
   )

@@ -515,7 +515,7 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
   const DropdownAndButtons = ({ input }) => {
     return (
       <Grid container direction="row" justifyContent="center" alignItems="center" width='100%' height="100%">
-        <Grid item direction="row" display='flex' justifyContent="flex-start" alignItems="center" xs={9}>
+        <Grid item display='flex' justifyContent="flex-start" alignItems="center" xs={9}>
           <Box>
             <LangDropdown text="Source Language" language={inputLanguage} setLanguage={(newLang) => setInputLanguage(newLang)} />
           </Box>
@@ -523,7 +523,7 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
             <LangDropdown text="Target Language" language={outputLanguage} setLanguage={(newLang) => setOutputLanguage(newLang)} />
           </Box>
         </Grid>
-        <Grid label="hello" item direction="row" spacing={0} sx={{ display: 'flex', justifyContent: 'flex-end', alignContent: 'flex-end', alignItems: "flex-end", minHeight: '100%' }} xs={3}>
+        <Grid item sx={{ display: 'flex', justifyContent: 'flex-end', alignContent: 'flex-end', alignItems: "flex-end", minHeight: '100%' }} xs={3}>
           <CopyButton editor={codeboxInput} isInput={input}/>
           <Divider orientation="vertical"  style={{ backgroundColor: theme.palette.background.default, width: '0.5%', height: '40px' }}/>
           <UploadButtonInput/>
@@ -536,7 +536,7 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
     return (
       <Grid container direction="row" justifyContent="center" alignItems="center" width='100%' height="100%">
         <Grid item xs={9} />
-        <Grid label="hello" item direction="row" spacing={0} sx={{ display: 'flex', justifyContent: 'flex-end', alignContent: 'flex-end', alignItems: "flex-end", minHeight: '100%' }} xs={3}>
+        <Grid item sx={{ display: 'flex', justifyContent: 'flex-end', alignContent: 'flex-end', alignItems: "flex-end", minHeight: '100%' }} xs={3}>
           <CopyButton editor={input ? codeboxInput : codeboxOutput} isInput={input} />
           <Divider orientation="vertical" style={{ backgroundColor: theme.palette.background.default, width: '0.5%', height: '40px' }}/>
           <DownloadButton/>
@@ -620,13 +620,13 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
           width='100%'
         >
           <Grid item xs />
-          <Grid item direction="column" justifyContent="space-between" alignItems="center" width='100%' height='100%' xs={output ? 10 : 5}>
+          <Grid item justifyContent="space-between" alignItems="center" width='100%' height='100%' xs={output ? 10 : 5}>
             <Grid container direction="row" width='100%' height='100%' marginBottom='10px' spacing={2}>
               <Grid item xs={output ? 6 : 12}>
                 <DropdownAndButtons input={true} />
               </Grid>
               {output &&
-              <Grid item xs={6} spacing={0} sx={{ display: 'flex', justifyContent: 'flex-end', alignContent: 'flex-end', alignItems: "flex-end", minHeight: '100%' }}>
+              <Grid item xs={6} sx={{ display: 'flex', justifyContent: 'flex-end', alignContent: 'flex-end', alignItems: "flex-end", minHeight: '100%' }}>
                 <NoDropdownAndButtons input={false} />
               </Grid>
               }

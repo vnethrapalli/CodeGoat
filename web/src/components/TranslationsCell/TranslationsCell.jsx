@@ -1,7 +1,9 @@
 import TranslationCell from 'src/components/TranslationCell'
-import { Accordion, AccordionActions, AccordionSummary, AccordionDetails, Tooltip, Typography } from '@mui/material'
+import { Link, routes, navigate, useParams } from '@redwoodjs/router';
+import { Accordion, AccordionActions, AccordionSummary, AccordionDetails, Tooltip, Typography, IconButton } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useTheme } from '@mui/material/styles'
+import { Repeat, Delete } from '@mui/icons-material';
 
 import Pagination from 'src/components/Pagination'
 
@@ -29,13 +31,14 @@ export const beforeQuery = ({ page, uid, inLang, outLang, startDate, endDate, so
 }
 
 export const QUERY = gql`
-  query TranslationHistoryQuery($page: Int, $uid: String!, $inLang: [String!], $outLang: [String!], $startDate: DateTime!, $endDate: DateTime!, $sort: Int, $inSort: Int, $outSort: Int) {
+  query translationHistoryPage($page: Int, $uid: String!, $inLang: [String!]!, $outLang: [String!]!, $startDate: DateTime!, $endDate: DateTime!, $sort: Int!, $inSort: Int!, $outSort: Int!) {
     translationHistoryPage(page: $page, uid: $uid, inLang: $inLang, outLang: $outLang, startDate: $startDate, endDate: $endDate, sort: $sort, inSort: $inSort, outSort: $outSort) {
       translations {
         id
         uid
         inputLanguage
         outputLanguage
+        inputCode
         createdAt
         status
       }
@@ -52,7 +55,8 @@ export const Failure = ({ error }) => (
   <div style={{ color: 'red' }}>Error: {error?.message}</div>
 )
 
-export const Success = ({ translationHistoryPage }) => {
+export const Success = ({ translationHistoryPage, page, uid, inLang, outLang, startDate, endDate, sort, inSort, outSort }) => {
+
   const theme = useTheme();
 
   const prettyDate = (translation) => {
@@ -89,12 +93,35 @@ export const Success = ({ translationHistoryPage }) => {
               <Typography data-testid="languageInfo">
                 {languages[translation.inputLanguage]} &#8594; {languages[translation.outputLanguage]}
               </Typography>
-              <Tooltip title={translation.createdAt}>{prettyDate(translation)}</Tooltip>
+              <Tooltip title={new Date(translation.createdAt).toISOString()}>{prettyDate(translation)}</Tooltip>
+
+              <Link
+                to={routes.translate({code: translation.inputCode, inLang: translation.inputLanguage, outLang: translation.outputLanguage})}
+              >
+                <IconButton
+                  data-testid="translateAgainButton"
+                  sx={{
+                    alignSelf: 'flex-end',
+                    fontSize: '16px',
+                    height: "30px",
+                    borderRadius: "4px",
+                    marginLeft: "10px",
+                    backgroundColor: '#76AB42',
+                    color: theme.palette.text.primary,
+                    '&::hover': {
+                      backgroundColor: '#76AB42',
+                      color: theme.palette.text.primary,
+                    }
+                  }}
+                >
+                  <Repeat sx={{ fill: theme.palette.text.primary}} />
+                </IconButton>
+              </Link>
 
             </AccordionSummary>
 
             <AccordionDetails>
-              <TranslationCell id={translation.id}/>
+              <TranslationCell id={translation.id} page={page} uid={uid} inLang={inLang} outLang={outLang} startDate={startDate} endDate={endDate} sort={sort} inSort={inSort} outSort={outSort} />
             </AccordionDetails>
           </Accordion>
         )
