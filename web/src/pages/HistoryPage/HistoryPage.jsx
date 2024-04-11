@@ -15,7 +15,7 @@ import { languages } from "web/src/pages/SubmissionPage/SubmissionPage"
 
 const DELETE_ALL_TRANSLATIONS = gql`
   mutation DeleteAllTranslationsMutation($uid: String!) {
-    deleteTranslations(uid: $uid) {
+    deleteAllTranslations(uid: $uid) {
       count
     }
   }
