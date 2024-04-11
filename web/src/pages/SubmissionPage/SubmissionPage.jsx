@@ -77,34 +77,18 @@ const MAXQUEUE = 2;
 const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => {
   const [inputCodeValue, setInputCodeValue] = React.useState("// write some code...");
   const [outputCodeValue, setOutputCodeValue] = React.useState("Processing...");
-  const [translationOccurred, setTranslationOccurred] = React.useState(false);
   const [inputLanguage, setInputLanguage] = React.useState("javascript");
   const [outputLanguage, setOutputLanguage] = React.useState("python");
   // const [status, setStatus] = React.useState("500 Server Error")
   const [rating, setRating] = React.useState(5);
   const [refreshQuery, setRefreshQuery] = React.useState(true);
   const [ignoreLanguageMismatch, setIgnoreLanguageMismatch] = React.useState(false);
-  const ignoreLanguageMismatchRef = useRef(false);
   const [output, setOutput] = React.useState(false);
   const [userId, setUserId] = React.useState();
   const [inputMonaco, setInputMonaco] = React.useState();
   const theme = useTheme();
 
   const { code, inLang, outLang } = useParams();
-
-  useEffect(() => {
-    const re = /^(.+ was detected but you selected .+. Please select the right language.)$/
-    if (re.test(outputCodeValue) && !ignoreLanguageMismatchRef.current)
-    {
-      ignoreLanguageMismatchRef.current = true;
-      setIgnoreLanguageMismatch(true);
-    }
-    else if (!re.test(outputCodeValue) && ignoreLanguageMismatchRef.current)
-    {
-      ignoreLanguageMismatchRef.current = false;
-      setIgnoreLanguageMismatch(false);
-    }
-  }, [translationOccurred]);
 
   useEffect(()=>{
     auth0.getUser().then(user => {
@@ -181,7 +165,6 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
     codeValue: inputCodeValue,
     updateCodeValue: ((newCodeVal) => {
       setInputCodeValue(newCodeVal)
-      ignoreLanguageMismatchRef.current = false;
       setIgnoreLanguageMismatch(false);
     }),
     defaultLanguage: inputLanguage,
@@ -380,15 +363,21 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
       if(statusCode === 200) {
         toast.success("Code translated successfully! \nQueued Requests: " + queueCount.toString(), { duration: 1500, position: 'bottom-right' });
         setOutputCodeValue(response.data);
-        setTranslationOccurred(!translationOccurred);
+        setIgnoreLanguageMismatch(false);
       } else {
         switch(statusCode) {
           case 429:
             toast.error("The API has reached its rate limit. Please try again later.", { duration: 2500, position: 'bottom-right' });
             break;
           case 400:
-            setTranslationOccurred(!translationOccurred);
             toast.error("There was an error in the communication between the backend and API. Please try again.", { duration: 2500, position: 'bottom-right' });
+            const re = /^(.+ was detected but you selected .+. Please select the right language.)$/
+            if (re.test(response.data))
+            {
+              setIgnoreLanguageMismatch(true);
+              return;
+            }
+
             break;
           case 403:
             toast.error("The length of the code is too long. Please shorten the code and try again.", { duration: 2500, position: 'bottom-right' });
@@ -411,11 +400,7 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
         }
       }
 
-      if (ignoreLanguageMismatch)
-      {
-        translate(userId, inputLanguage, outputLanguage, inputCodeValue, response.data, -1, translation.status + " " + translation.statusText);
-      }
-
+      translate(userId, inputLanguage, outputLanguage, inputCodeValue, response.data, -1, translation.status + " " + translation.statusText);
       window.scrollTo(0, 0);
     });
 
