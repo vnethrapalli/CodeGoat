@@ -29,7 +29,7 @@ export const beforeQuery = ({ page, uid, inLang, outLang, startDate, endDate, so
 }
 
 export const QUERY = gql`
-  query TranslationHistoryQuery($page: Int, $uid: String!, $inLang: [String!], $outLang: [String!], , $startDate: DateTime!, $endDate: DateTime!, $sort: Int, $inSort: Int, $outSort: Int) {
+  query TranslationHistoryQuery($page: Int, $uid: String!, $inLang: [String!], $outLang: [String!], $startDate: DateTime!, $endDate: DateTime!, $sort: Int, $inSort: Int, $outSort: Int) {
     translationHistoryPage(page: $page, uid: $uid, inLang: $inLang, outLang: $outLang, startDate: $startDate, endDate: $endDate, sort: $sort, inSort: $inSort, outSort: $outSort) {
       translations {
         id

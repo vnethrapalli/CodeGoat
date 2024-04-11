@@ -32,7 +32,7 @@ const Translation = ({ translation }) => {
 
   const [deleteTranslation] = useMutation(DELETE_TRANSLATION, {
     onCompleted: () => {},
-    refetchQueries: [{ query: TranslationQuery, variables: { page: Number(page), uid: userId } }],
+    refetchQueries: [{ query: TranslationQuery, variables: { page: Number(page), uid: userId, inLang: [], outLang: [], startDate: "1970-01-01T00:00:01Z", endDate: new Date(Date.now()).toISOString(), sort: 1, inSort: 0, outSort: 0 }}],
   })
 
   const del = () => {

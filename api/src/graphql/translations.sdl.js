@@ -41,7 +41,7 @@ export const schema = gql`
     createTranslation(input: CreateTranslationInput!): Translation! @requireAuth
     updateTranslation(id: Int!, input: UpdateTranslationInput!): Translation! @requireAuth
     deleteTranslation(id: Int!): Translation! @requireAuth
-    deleteTranslations(uid: String!): DeleteCount! @requireAuth
+    deleteAllTranslations(uid: String!): DeleteCount! @requireAuth
   }
 
   type TranslationHistoryPage {
