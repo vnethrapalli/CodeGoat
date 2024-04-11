@@ -4,6 +4,7 @@ import {
   createTranslation,
   updateTranslation,
   deleteTranslation,
+  deleteAllTranslations,
   translationHistoryPage
 } from './translations'
 
@@ -65,6 +66,14 @@ describe('translations', () => {
     const result = await translation({ id: original.id })
 
     expect(result).toEqual(null)
+  })
+
+  scenario('deletes all translations', async (scenario) => {
+    const original = await deleteAllTranslations({
+      id: scenario.translation.one.uid,
+    })
+
+    expect(original.count).toEqual(3)
   })
 })
 

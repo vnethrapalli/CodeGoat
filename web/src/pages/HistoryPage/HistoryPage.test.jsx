@@ -1,9 +1,18 @@
-import { render, waitFor, screen, fireEvent, within } from '@redwoodjs/testing/web'
-import userEvent from "@testing-library/user-event";
+import { render, waitFor, screen, fireEvent } from '@redwoodjs/testing/web'
 import HistoryPage from './HistoryPage'
 
-//   Improve this test with help from the Redwood Testing Doc:
-//   https://redwoodjs.com/docs/testing#testing-pages-layouts
+import { delAll } from './HistoryPage';
+
+jest.mock('./HistoryPage', () => {
+  const originalModule = jest.requireActual('./HistoryPage');
+
+  //Mock the default export and named export 'foo'
+  return {
+    __esModule: true,
+    ...originalModule,
+    delAll: jest.fn(() => 'mocked delAll'),
+  };
+});
 
 describe('HistoryPage', () => {
 
@@ -183,5 +192,14 @@ describe('Filter and Sort Values', () => {
 
     expect(setOutLang).toHaveBeenCalledWith(["java"]);
 
+  })
+
+  test('clicks delete all button', async () => {
+    render(<HistoryPage />)
+
+    const button = screen.getByTestId('deleteAllButton');
+    fireEvent.click(button);
+
+    expect(delAll()).toBe("mocked delAll");
   })
 })

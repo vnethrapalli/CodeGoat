@@ -10,7 +10,6 @@ import { auth0 } from 'src/auth'
 import React, { useEffect } from 'react'
 import { QUERY as TranslationQuery } from 'src/components/TranslationsCell'
 import TranslationsCell from 'src/components/TranslationsCell'
-
 import { languages } from "web/src/pages/SubmissionPage/SubmissionPage"
 
 const DELETE_ALL_TRANSLATIONS = gql`
@@ -20,6 +19,10 @@ const DELETE_ALL_TRANSLATIONS = gql`
     }
   }
 `
+
+export const delAll = (deleteTranslations, userId) => {
+  deleteTranslations({ variables: { uid: userId } });
+}
 
 const HistoryPage = ({ page = 1 }) => {
   const theme = useTheme();
@@ -42,13 +45,9 @@ const HistoryPage = ({ page = 1 }) => {
   },[])
 
   const [deleteTranslations] = useMutation(DELETE_ALL_TRANSLATIONS, {
-    onCompleted: (DeleteCount) => {/*console.log("Translations deleted:", DeleteCount.deleteAllTranslations.count)*/},
+    onCompleted: (DeleteCount) => {setReload(true); /*console.log("Translations deleted:", DeleteCount.deleteAllTranslations.count)*/},
     refetchQueries: [{ query: TranslationQuery, variables: { page: Number(page), uid: userId, inLang: selectedInLanguage, outLang: selectedOutLanguage, startDate: isNaN(selectedStartDate) ? "1970-01-01T00:00:01Z" : selectedStartDate, endDate: isNaN(selectedEndDate) ? new Date().getFullYear() + 1 + "-01-01T00:00:01Z" : selectedEndDate, sort: sort, inSort: inSort, outSort: outSort }}],
   })
-
-  const delAll = () => {
-    deleteTranslations({ variables: { uid: userId } });
-  }
 
   const Filters = () => {
 
@@ -236,7 +235,7 @@ const HistoryPage = ({ page = 1 }) => {
             <IconButton
               variant="text"
               data-testid="deleteAllButton"
-              onClick={delAll}
+              onClick={() => {delAll(deleteTranslations, userId)}}
               sx={{
                 fontSize: '15px',
                 fontWeight: '500',
