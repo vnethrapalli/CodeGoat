@@ -1,4 +1,4 @@
-import { render } from '@redwoodjs/testing/web'
+import { render, screen } from '@redwoodjs/testing/web'
 import { Loading, Empty, Failure, Success } from './TranslationCell'
 import { standard } from './TranslationCell.mock'
 
@@ -37,5 +37,72 @@ describe('TranslationCell', () => {
     expect(() => {
       render(<Success translation={standard().translation} />)
     }).not.toThrow()
+  })
+})
+
+//   Improve this test with help from the Redwood Testing Doc:
+//    https://redwoodjs.com/docs/testing#testing-components
+
+const translation = {
+  id: 1,
+  uid: "945839",
+  inputLanguage: "python",
+  outputLanguage: "javascript",
+  inputCode: "print(\"Hello World\")",
+  outputCode: "console.log(\"Hello World\")",
+  status: "200 OK",
+  rating: 5
+}
+
+const translationEmptyRating = {
+  id: 1,
+  uid: "945839",
+  inputLanguage: "python",
+  outputLanguage: "javascript",
+  inputCode: "print(\"Hello World\")",
+  outputCode: "console.log(\"Hello World\")",
+  status: "200 OK",
+  rating: -1
+}
+
+describe('renders all components', () => {
+  test('renders successfully', () => {
+    expect(() => {
+      render(<Success translation={translation} />)
+    }).not.toThrow()
+  })
+
+  test('renders input editor successfully', () => {
+    render(<Success translation={translation} />)
+    expect(screen.getByTestId("editors")).toBeInTheDocument()
+  })
+
+  // test('renders output editor successfully', () => {
+  //   render(<Translation translation={translation} />)
+  //   expect(screen.getByTestId("outputEditor")).toBeInTheDocument()
+  // })
+
+  test('renders delete button successfully', () => {
+    render(<Success translation={translation} />)
+    expect(screen.getByTestId('deleteButton')).toBeInTheDocument()
+  })
+
+  test('renders translate again button successfully', () => {
+    render(<Success translation={translation} />)
+    expect(screen.getByTestId('translateAgainButton')).toBeInTheDocument()
+  })
+
+  test('renders API status successfully', () => {
+    render(<Success translation={translation} />)
+    expect(screen.getByTestId('APIStatus')).toHaveTextContent(translation.status)
+  })
+
+  test('renders rating successfully when it exists', () => {
+    render(<Success translation={translation} />)
+    expect(screen.getByTestId('Rating')).toBeInTheDocument()
+  })
+
+  test('does not render rating when it does not exist', () => {
+    expect(translationEmptyRating.rating).toBe(-1)
   })
 })
