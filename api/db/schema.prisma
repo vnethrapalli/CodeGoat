@@ -43,3 +43,10 @@ model Faq {
   question String
   answer   String
 }
+
+model user {
+  uid           String @id
+  email         String
+  hash          String
+  createdAt     DateTime @default(now())
+}
