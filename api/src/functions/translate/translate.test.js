@@ -1,11 +1,8 @@
 import { mockHttpEvent } from '@redwoodjs/testing/api'
 import { handler } from './translate'
-import { go } from './CodeSnippets';
 
 //   Improve this test with help from the Redwood Testing Doc:
 //    https://redwoodjs.com/docs/testing#testing-functions
-
-const SECONDS = 1000;
 
 const mockCreate = jest.fn().mockImplementationOnce(async () => {
   return {
@@ -170,25 +167,5 @@ describe('empty code errors',  () => {
 
     expect(result.statusCode).toBe(400);
     expect(body.data).toEqual("Code is empty or consists of comments only. Please provide some non-empty code.");
-  });
-});
-
-describe('detection for variety of structures/languages', () => {
-  const outputLanguage = "python";
-
-  it('Go', async () => {
-
-  }, SECONDS * 60);
-
-  it('PHP', async () => {
-
-  });
-
-  it('Ruby', async () => {
-
-  });
-
-  it('Kotlin', async () => {
-
   });
 });
