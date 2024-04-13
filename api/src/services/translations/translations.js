@@ -87,3 +87,9 @@ export const translationHistoryPage = ({ page = 1, uid, inLang = [], outLang = [
     }),
   }
 }
+
+export const translationCount = ({ }) => {
+  return {
+    count: db.translation.count()
+  }
+}
