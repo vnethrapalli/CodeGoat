@@ -26,6 +26,7 @@ export const generateCode = async ({ user_id }) => {
     const transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST,
       port: process.env.SMTP_PORT,
+      secure: false,
       auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASS
@@ -33,7 +34,10 @@ export const generateCode = async ({ user_id }) => {
     })
 
     const info = await transporter.sendMail({
-      from: process.env.SMTP_FROM,
+      from: {
+        name: "CodeGoat",
+        address: "codegoat@gmail.com"
+      },
       to: user.email,
       subject: 'Your CodeGoat OTP',
       text: `Your One Time Password is ${code}`
@@ -76,6 +80,14 @@ export const verifyCode = async ({ user_id, code }) => {
 }
 
 export const addUser = async ({ user_id, email }) => {
+
+  const isUser = await db.user.findUnique({
+    where: { user_id }
+  })
+
+  if (isUser) {
+    return JSON.stringify({ statusCode: 400, message: "User already exists" })
+  }
 
   const user = await db.user.create({
     data: {
