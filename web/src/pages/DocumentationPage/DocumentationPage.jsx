@@ -12,6 +12,9 @@ import { Grid, Box, Typography, Link, IconButton, List, ListItemIcon, ListItemTe
 
 import QuestionsCell from 'src/components/QuestionsCell'
 import DownloadIcon from '@mui/icons-material/Download';
+import { Divider } from '@mui/material';
+import Stack from '@mui/material/Stack';
+
 
 
 const DocumentationPage = () => {
@@ -21,8 +24,8 @@ const DocumentationPage = () => {
   return (
     <>
       <Metadata title="Documentation" description="Documentation Page" />
+
       <Typography variant='h2' component='h2' align='center' style={{color: theme.palette.text.secondary, fontSize: '52px', fontStyle: 'normal', fontWeight: '600'}}>Documentation</Typography>
-      {
         <div
           style={{
             display: "flex",
@@ -33,7 +36,7 @@ const DocumentationPage = () => {
           }}
         >
       <Box display="flex" flexDirection='column' justifyContent="center" alignItems="center">
-        <Typography variant='h1' component='h1' align='center' style={{color: theme.palette.text.secondary, fontSize: '40px', fontStyle: 'normal', fontWeight: '500'}}>Technologies</Typography>
+        <Divider variant='h1' component='h1' align='center' style={{color: theme.palette.text.secondary, fontSize: '40px', fontStyle: 'normal', fontWeight: '500', width: '90%'}}>Technologies</Divider>
 
         <Box style={{ padding: '25px', paddingBottom: '0px', marginTop: '20px', marginBottom: '0px', width: '85%'}}>
           <Typography data-testid='description' component="span" sx={{color: theme.palette.text.secondary, fontSize: '24px', fontStyle: 'normal', fontWeight: '300'}}>
@@ -113,7 +116,7 @@ const DocumentationPage = () => {
           </Typography>
         </Typography>
 
-        <Typography variant='h1' component='h1' align='center' style={{color: theme.palette.text.secondary, fontSize: '42px', fontStyle: 'normal', fontWeight: '600', marginTop: '30px'}}>Downloadable Guides</Typography>
+        <Divider variant='h1' component='h1' align='center' style={{color: theme.palette.text.secondary, fontSize: '40px', fontStyle: 'normal', fontWeight: '500', width: '90%'}}>Downloadable Guides</Divider>
 
         <Box display="flex" flexDirection="row" justifyContent="center" alignItems="center">
           <Typography variant='h1' component='h1' align='center' style={{color: theme.palette.text.secondary, fontSize: '24px', fontStyle: 'normal', fontWeight: '300'}}>CodeGoat Walkthrough</Typography>
@@ -141,23 +144,15 @@ const DocumentationPage = () => {
         </Box>
 
         <br></br>
-        <Typography variant='h1' component='h1' align='center' style={{color: theme.palette.text.secondary, fontSize: '42px', fontStyle: 'normal', fontWeight: '600'}}>FAQ</Typography>
+        <Divider variant='h1' component='h1' align='center' style={{color: theme.palette.text.secondary, fontSize: '40px', fontStyle: 'normal', fontWeight: '500', width: '90%'}}>FAQ</Divider>
       </Box>
       <br></br>
-        <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignSelf: 'center',
-              width: "85%",
-            }}
-          >
         <Form data-testid='search'>
           <TextField
             sx={{ input: { color: theme.palette.text.secondary }, '&:active fieldset': {borderColor: theme.palette.text.secondary} }}
             id="search-bar"
             className="text"
-            width="100%"
+            style={{width:'97%'}}
             onInput={(e) => {
               setSearchQuery(e.target.value);
             }}
@@ -170,11 +165,13 @@ const DocumentationPage = () => {
             <SearchIcon style={{ fill: theme.palette.text.secondary, size:"xl" }} />
           </IconButton>
         </Form>
-        </Box>
         <br></br>
         <QuestionsCell searchQuery={searchQuery}/>
+
       </div>
-      }
+
+
+
     </>
   )
 }
