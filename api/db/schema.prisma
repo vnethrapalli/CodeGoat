@@ -47,6 +47,6 @@ model Faq {
 model user {
   uid           String @id
   email         String
-  hash          String
+  hash          String @default("")
   createdAt     DateTime @default(now())
 }

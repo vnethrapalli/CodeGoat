@@ -1,5 +1,5 @@
 -- CreateTable
-CREATE TABLE "Feedback" (
+CREATE TABLE IF NOT EXISTS "Feedback" (
     "id" SERIAL NOT NULL,
     "submissionPage" INTEGER NOT NULL,
     "outputPage" INTEGER NOT NULL,
@@ -12,7 +12,7 @@ CREATE TABLE "Feedback" (
 );
 
 -- CreateTable
-CREATE TABLE "Translation" (
+CREATE TABLE IF NOT EXISTS "Translation" (
     "id" SERIAL NOT NULL,
     "uid" TEXT NOT NULL,
     "inputLanguage" TEXT NOT NULL,
@@ -27,7 +27,7 @@ CREATE TABLE "Translation" (
 );
 
 -- CreateTable
-CREATE TABLE "Faq" (
+CREATE TABLE IF NOT EXISTS "Faq" (
     "id" SERIAL NOT NULL,
     "question" TEXT NOT NULL,
     "answer" TEXT NOT NULL,

@@ -7,6 +7,7 @@ import { Logout, Settings, AccessTime, Person, DarkMode, LightMode } from '@mui/
 import { useAuth, auth0 } from 'src/auth'
 import PropTypes from 'prop-types';
 import { useEffect } from 'react';
+import { useMutation } from '@redwoodjs/web';
 
 const theme = extendTheme({
   colorSchemes: {
@@ -266,6 +267,19 @@ const UserButtons = () => {
   const theme = useTheme();
   const { isAuthenticated, signUp, logOut, loading, userMetadata } = useAuth()
   const [isAuth, setIsAuth] = React.useState(isAuthenticated)
+  const ADD_USER_MUTATION = gql`
+    mutation AddUser($user_id: String!, $email: String!) {
+      addUser(user_id: $user_id, email: $email)
+    }
+  `
+  const GENERATE_OTP_MUTATION = gql`
+    mutation GenerateOTP($user_id: String!) {
+      generateCode(user_id: $user_id)
+    }
+  `
+
+  const [addUser] = useMutation(ADD_USER_MUTATION)
+  const [generateOTP] = useMutation(GENERATE_OTP_MUTATION)
 
   React.useEffect(() => {
     if(isAuthenticated) {
@@ -287,10 +301,26 @@ const UserButtons = () => {
   const login = async () => {
     await auth0.loginWithPopup().then(t => {
       setIsAuth(true)
-      auth0.getUser().then(user => {
+      auth0.getUser().then(async user => {
         delete user.updated_at
         delete user.email_verified
         localStorage.setItem('user', JSON.stringify(user))
+        const { data } = await addUser({
+          variables: { user_id: user.sub, email: user.email }
+        })
+
+        const {data: otp_data} = await generateOTP({
+          variables: { user_id: user.sub }
+        })
+
+        const otp_response = JSON.parse(otp_data.generateCode)
+
+        if (otp_response.statusCode === 500) {
+          toast.error(otp_response.message, {position: "bottom-right", duration: 2500})
+          await logOut().then(() => {
+            localStorage.removeItem('user')
+          })
+        }
       })
     })
     let currUser = JSON.parse(localStorage.getItem('user'));

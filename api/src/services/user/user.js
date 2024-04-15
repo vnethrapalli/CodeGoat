@@ -13,18 +13,19 @@ export const generateCode = async ({ user_id }) => {
   const hash = await bcrypt.hash(code, 10)
 
   const user = await db.user.update({
-    where: { user_id },
+    where: { uid: user_id },
     data: {
-      hash
+      hash: hash,
+      createdAt: new Date(Date.now()).toISOString()
     }
   })
 
   if (!user) {
-    return JSON.stringify({ statusCode: 500, message: "Failed to generate code" })
+    return JSON.stringify({ statusCode: 500, message: "Failed to generate One Time Password" })
   } else {
 
     const transporter = nodemailer.createTransport({
-      host: process.env.SMTP_HOST,
+      host: process.env.SMTP_SERVER,
       port: process.env.SMTP_PORT,
       secure: false,
       auth: {
@@ -40,10 +41,10 @@ export const generateCode = async ({ user_id }) => {
       },
       to: user.email,
       subject: 'Your CodeGoat OTP',
-      text: `Your One Time Password is ${code}`
+      html: `<p>Your One Time Password is: <strong>${code}</strong>.<br>This password will expire in 5 minutes.</p>`
     })
 
-    return JSON.stringify({ statusCode: 200, message: "Code generated successfully" })
+    return JSON.stringify({ statusCode: 200, message: "One Time Password mailed successfully" })
   }
 }
 
@@ -56,11 +57,11 @@ export const verifyCode = async ({ user_id, code }) => {
     return JSON.stringify({ statusCode: 404, message: "User not found" })
   }
 
-  if(!user.hash) {
+  if(!user.hash || user.hash === "") {
     return JSON.stringify({ statusCode: 400, message: "No code was generated" })
   }
 
-  if(user.created_at < new Date(Date.now() - 300000)) {
+  if(user.createdAt < new Date(Date.now() - 300000)) {
     return JSON.stringify({ statusCode: 400, message: "Code expired" })
   }
 
@@ -82,7 +83,7 @@ export const verifyCode = async ({ user_id, code }) => {
 export const addUser = async ({ user_id, email }) => {
 
   const isUser = await db.user.findUnique({
-    where: { user_id }
+    where: { uid: user_id}
   })
 
   if (isUser) {
@@ -91,8 +92,8 @@ export const addUser = async ({ user_id, email }) => {
 
   const user = await db.user.create({
     data: {
-      user_id,
-      email
+      uid: user_id,
+      email: email
     }
   })
 
