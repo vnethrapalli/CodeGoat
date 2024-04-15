@@ -442,7 +442,7 @@ const UserButtons = () => {
     left: '50%',
     transform: 'translate(-50%, -50%)',
     width: '40%',
-    bgcolor: theme.palette.secondary.main,
+    bgcolor: theme.palette.background.default,
     border: '2px solid #000',
     boxShadow: 24,
     p: 4,
@@ -556,8 +556,8 @@ const UserButtons = () => {
           <Button
             variant="contained"
             style={{
-              backgroundColor: theme.palette.text.success,
-              color: theme.palette.text.primary,
+              backgroundColor: theme.palette.text.secondary,
+              color: theme.palette.background.default,
               margin: '1%',
               display: 'inline-block',
             }}
@@ -568,8 +568,10 @@ const UserButtons = () => {
           <Button
             variant="contained"
             style={{
-              backgroundColor: theme.palette.text.primary,
-              color: theme.palette.secondary.main,
+              backgroundColor: theme.palette.background.default,
+              color: theme.palette.text.secondary,
+              border: '1px solid ' + theme.palette.text.secondary,
+              boxShadow: 'none',
               margin: '1%',
               display: 'inline-block',
             }}
