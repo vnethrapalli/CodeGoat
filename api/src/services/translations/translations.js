@@ -16,7 +16,24 @@ export const translationStats = async ({ uid }) => {
   });
 
 
-  /* stores information regarding language translation pairs (ie. frequency, average rating, etc) */
+  var now = new Date();
+  const recents = await db.translation.findMany({
+    where: {
+      uid: uid,
+      createdAt: {
+        gte: new Date(now.getFullYear(), now.getMonth(), now.getDate() - (7-1))
+      }
+    },
+    orderBy: [
+      { createdAt: 'asc' }
+    ],
+    select: {
+      createdAt: true
+    }
+  });
+
+
+  /* stores information regarding all language translation pairs (ie. frequency, average rating, etc) */
   let data = {}
   for (const pair of results) {
     let key = [pair['inputLanguage'], pair['outputLanguage']].join(',');
@@ -29,7 +46,7 @@ export const translationStats = async ({ uid }) => {
     }
   }
 
-   // console.log(JSON.stringify(data));
+  /* finds most frequent pair of input and output languages for translations */
   var mostFreqPair = ['', ''];
   var maxfreq = 0;
   for (const pair in data) {
@@ -41,12 +58,26 @@ export const translationStats = async ({ uid }) => {
     }
   }
 
-  console.log(maxfreq)
+  /* counting the number of translation made each day in the past 7 days (including today) */
+  dateFreqs = {};
+  for (let i = 6; i >= 0; i--) {
+    const dt = new Date(now.getFullYear(), now.getMonth(), now.getDate() - i)
+    dateFreqs[dt] = 0;
+  }
+  for (const pair of recents) {
+    let key = new Date(pair['createdAt'].getFullYear(), pair['createdAt'].getMonth(), pair['createdAt'].getDate());
+    dateFreqs[key] += 1;
+  }
+
+  console.log('beepbeep')
+  console.log(typeof Object.keys(dateFreqs)[0])
 
   return {
     count: db.translation.count({ where: { uid } }),
     favPair: mostFreqPair,
-    favPairFreq: maxfreq
+    favPairFreq: maxfreq,
+    weekDates: Object.keys(dateFreqs),
+    weekRequests: Object.values(dateFreqs)
   }
 }
 

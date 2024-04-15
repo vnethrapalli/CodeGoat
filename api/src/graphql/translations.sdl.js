@@ -54,6 +54,8 @@ export const schema = gql`
     count: Int!
     favPair: [String]
     favPairFreq: Int
+    weekDates: [String!]!
+    weekRequests: [Int!]!
   }
 
   type DeleteCount {

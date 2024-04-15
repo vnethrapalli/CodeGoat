@@ -1,5 +1,6 @@
 import { Box, Typography, Divider, Grid } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
+import { LineChart } from '@mui/x-charts/LineChart';
 
 // export const beforeQuery = (props) => {
 //   return {
@@ -14,6 +15,8 @@ export const QUERY = gql`
       count
       favPair
       favPairFreq
+      weekDates
+      weekRequests
     }
   }
 `
@@ -28,8 +31,15 @@ export const Failure = ({ error }) => (
 
 export const Success = ({ stats }) => {
   const theme = useTheme();
-  console.log(stats)
 
+  /* convert date string to date object */
+  const weekDates = stats.weekDates.map((val) => {
+    console.log(val)
+    return new Date(val);
+  });
+
+
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   return (
     <>
       <Box sx={{ width: "70%", marginBottom: '10px', marginTop: '10px' }}>
@@ -49,7 +59,22 @@ export const Success = ({ stats }) => {
           </Grid>
 
           <Grid item xs={6} sx={{ border: 1}}>
-
+            <LineChart
+              xAxis={[
+                {
+                  scaleType: 'time',
+                  data: weekDates,
+                  valueFormatter: (dt, context) =>
+                    `${months[dt.getMonth()]} ${dt.getDate()}`
+                }
+              ]}
+              series={[
+                {
+                  data: stats.weekRequests,
+                },
+              ]}
+              height={300}
+            />
           </Grid>
         </Grid>
 
