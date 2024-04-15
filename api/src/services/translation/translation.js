@@ -135,7 +135,7 @@ export const getTranslation = async ({ code, inLang, outLang }) => {
       }
 
       // console.log("gpt response!");
-      // console.log(completion);
+      console.log(completion);
       // console.log(completion.choices[0]);
 
       return {
@@ -148,7 +148,7 @@ export const getTranslation = async ({ code, inLang, outLang }) => {
       }
     }
     catch (err) {
-      // console.log(err)
+      console.log(err)
       if (!err.type) {
         err = JSON.parse(err);
       }

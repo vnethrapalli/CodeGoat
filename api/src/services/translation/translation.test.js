@@ -2,135 +2,139 @@ import { c, cpp, csharp, go, java, javascript, kotlin, php, python, ruby, rust, 
 import { forLoop, _function, object, ifStatement, recursion, _import, countSubstr } from './codeSnippets';
 import { getLanguage } from './translation';
 
-const MILLIS_PER_SEC = 1000;
+// -----------------------------------------------------------------------------------------------------------------------------------------
+// Unit tests for code snippets are commented out because you don't want to get rate limited. Uncomment them and comment back after testing.
+// -----------------------------------------------------------------------------------------------------------------------------------------
 
-describe("testing GPT for variety of languages", () => {
-  const { getTranslation } = require('./translation');
+// const MILLIS_PER_SEC = 1000;
 
-  test('c', async () => {
-    const response = await getTranslation({ code: c, inLang: "c", outLang: "python" });
-    setTimeout(() => {
-      expect(getLanguage(response.body.translation)).toBe("python");
-    }, MILLIS_PER_SEC * 20);
-  }, MILLIS_PER_SEC * 100);
+// describe("testing GPT for variety of languages", () => {
+//   const { getTranslation } = require('./translation');
 
-  // test('cpp', async () => {
-  //   const response = await getTranslation({ code: cpp, inLang: "cpp", outLang: "python" });
-  //   setTimeout(() => {
-  //     expect(getLanguage(response.body.translation)).toBe("python");
-  //   }, MILLIS_PER_SEC * 20);
-  // }, MILLIS_PER_SEC * 100);
+//   test('c', async () => {
+//     const response = await getTranslation({ code: c, inLang: "c", outLang: "python" });
+//     setTimeout(() => {
+//       expect(getLanguage(response.body.translation)).toBe("python");
+//     }, MILLIS_PER_SEC * 20);
+//   }, MILLIS_PER_SEC * 100);
 
-  // test('csharp', async () => {
-  //   const response = await getTranslation({ code: csharp, inLang: "csharp", outLang: "python" });
-  //   setTimeout(() => {
-  //     expect(getLanguage(response.body.translation)).toBe("python");
-  //   }, MILLIS_PER_SEC * 20);
-  // }, MILLIS_PER_SEC * 100);
+//   // test('cpp', async () => {
+//   //   const response = await getTranslation({ code: cpp, inLang: "cpp", outLang: "python" });
+//   //   setTimeout(() => {
+//   //     expect(getLanguage(response.body.translation)).toBe("python");
+//   //   }, MILLIS_PER_SEC * 20);
+//   // }, MILLIS_PER_SEC * 100);
 
-  test('go', async () => {
-    const response = await getTranslation({ code: go, inLang: "go", outLang: "python" });
-    setTimeout(() => {
-      expect(getLanguage(response.body.translation)).toBe("python");
-    }, MILLIS_PER_SEC * 20);
-  }, MILLIS_PER_SEC * 100);
+//   // test('csharp', async () => {
+//   //   const response = await getTranslation({ code: csharp, inLang: "csharp", outLang: "python" });
+//   //   setTimeout(() => {
+//   //     expect(getLanguage(response.body.translation)).toBe("python");
+//   //   }, MILLIS_PER_SEC * 20);
+//   // }, MILLIS_PER_SEC * 100);
 
-  // test('java', async () => {
-  //   const response = await getTranslation({ code: java, inLang: "java", outLang: "python" });
-  //   setTimeout(() => {
-  //     expect(getLanguage(response.body.translation)).toBe("python");
-  //   }, MILLIS_PER_SEC * 20);
-  // }, MILLIS_PER_SEC * 100);
+//   test('go', async () => {
+//     const response = await getTranslation({ code: go, inLang: "go", outLang: "python" });
+//     setTimeout(() => {
+//       expect(getLanguage(response.body.translation)).toBe("python");
+//     }, MILLIS_PER_SEC * 20);
+//   }, MILLIS_PER_SEC * 100);
 
-  // test('javascript', async () => {
-  //   const response = await getTranslation({ code: javascript, inLang: "javascript", outLang: "python" });
-  //   setTimeout(() => {
-  //     expect(getLanguage(response.body.translation)).toBe("python");
-  //   }, MILLIS_PER_SEC * 20);
-  // }, MILLIS_PER_SEC * 100);
+//   // test('java', async () => {
+//   //   const response = await getTranslation({ code: java, inLang: "java", outLang: "python" });
+//   //   setTimeout(() => {
+//   //     expect(getLanguage(response.body.translation)).toBe("python");
+//   //   }, MILLIS_PER_SEC * 20);
+//   // }, MILLIS_PER_SEC * 100);
 
-  test('kotlin', async () => {
-    const response = await getTranslation({ code: kotlin, inLang: "kotlin", outLang: "python" });
-    setTimeout(() => {
-      expect(getLanguage(response.body.translation)).toBe("python");
-    }, MILLIS_PER_SEC * 20);
-  }, MILLIS_PER_SEC * 100);
+//   // test('javascript', async () => {
+//   //   const response = await getTranslation({ code: javascript, inLang: "javascript", outLang: "python" });
+//   //   setTimeout(() => {
+//   //     expect(getLanguage(response.body.translation)).toBe("python");
+//   //   }, MILLIS_PER_SEC * 20);
+//   // }, MILLIS_PER_SEC * 100);
 
-  test('php', async () => {
-    const response = await getTranslation({ code: php, inLang: "php", outLang: "python" });
-    setTimeout(() => {
-      expect(getLanguage(response.body.translation)).toBe("python");
-    }, MILLIS_PER_SEC * 20);
-  }, MILLIS_PER_SEC * 100);
+//   test('kotlin', async () => {
+//     const response = await getTranslation({ code: kotlin, inLang: "kotlin", outLang: "python" });
+//     setTimeout(() => {
+//       expect(getLanguage(response.body.translation)).toBe("python");
+//     }, MILLIS_PER_SEC * 20);
+//   }, MILLIS_PER_SEC * 100);
 
-  // test('python', async () => {
-  //   const response = await getTranslation({ code: python, inLang: "python", outLang: "javascript" });
-  //   setTimeout(() => {
-  //     expect(getLanguage(response.body.translation)).toBe("javascript");
-  //   }, MILLIS_PER_SEC * 20);
-  // }, MILLIS_PER_SEC * 100);
+//   test('php', async () => {
+//     const response = await getTranslation({ code: php, inLang: "php", outLang: "python" });
+//     setTimeout(() => {
+//       expect(getLanguage(response.body.translation)).toBe("python");
+//     }, MILLIS_PER_SEC * 20);
+//   }, MILLIS_PER_SEC * 100);
 
-  test('ruby', async () => {
-    const response = await getTranslation({ code: ruby, inLang: "ruby", outLang: "python" });
-    setTimeout(() => {
-      expect(getLanguage(response.body.translation)).toBe("python");
-    }, MILLIS_PER_SEC * 20);
-  }, MILLIS_PER_SEC * 100);
+//   // test('python', async () => {
+//   //   const response = await getTranslation({ code: python, inLang: "python", outLang: "javascript" });
+//   //   setTimeout(() => {
+//   //     expect(getLanguage(response.body.translation)).toBe("javascript");
+//   //   }, MILLIS_PER_SEC * 20);
+//   // }, MILLIS_PER_SEC * 100);
 
-  test('rust', async () => {
-    const response = await getTranslation({ code: rust, inLang: "rust", outLang: "python" });
-    setTimeout(() => {
-      expect(getLanguage(response.body.translation)).toBe("python");
-    }, MILLIS_PER_SEC * 20);
-  }, MILLIS_PER_SEC * 100);
+//   test('ruby', async () => {
+//     const response = await getTranslation({ code: ruby, inLang: "ruby", outLang: "python" });
+//     setTimeout(() => {
+//       expect(getLanguage(response.body.translation)).toBe("python");
+//     }, MILLIS_PER_SEC * 20);
+//   }, MILLIS_PER_SEC * 100);
 
-  // test('typescript', async () => {
-  //   const response = await getTranslation({ code: typescript, inLang: "typescript", outLang: "python" });
-  //   setTimeout(() => {
-  //     expect(getLanguage(response.body.translation)).toBe("python");
-  //   }, MILLIS_PER_SEC * 20);
-  // }, MILLIS_PER_SEC * 100);
-});
+//   test('rust', async () => {
+//     const response = await getTranslation({ code: rust, inLang: "rust", outLang: "python" });
+//     setTimeout(() => {
+//       expect(getLanguage(response.body.translation)).toBe("python");
+//     }, MILLIS_PER_SEC * 20);
+//   }, MILLIS_PER_SEC * 100);
 
-describe("testing GPT for variety of structures", () => {
-  const { getTranslation } = require('./translation');
+//   // test('typescript', async () => {
+//   //   const response = await getTranslation({ code: typescript, inLang: "typescript", outLang: "python" });
+//   //   setTimeout(() => {
+//   //     expect(getLanguage(response.body.translation)).toBe("python");
+//   //   }, MILLIS_PER_SEC * 20);
+//   // }, MILLIS_PER_SEC * 100);
+// });
 
-  test('for loop', async () => {
-    const response = await getTranslation({ code: forLoop, inLang: "java", outLang: "python" });
-    setTimeout(() => {}, MILLIS_PER_SEC * 20);
-    expect(response.body.translation.indexOf("for") > -1).toBe(true);
-  }, MILLIS_PER_SEC * 100);
+// describe("testing GPT for variety of structures", () => {
+//   const { getTranslation } = require('./translation');
 
-  test('function', async () => {
-    const response = await getTranslation({ code: _function, inLang: "python", outLang: "go" });
-    setTimeout(() => {}, MILLIS_PER_SEC * 20);
-    expect(response.body.translation.indexOf("func") > -1).toBe(true);
-  }, MILLIS_PER_SEC * 100);
+//   test('for loop', async () => {
+//     const response = await getTranslation({ code: forLoop, inLang: "java", outLang: "python" });
+//     setTimeout(() => {}, MILLIS_PER_SEC * 20);
+//     expect(response.body.translation.indexOf("for") > -1).toBe(true);
+//   }, MILLIS_PER_SEC * 100);
 
-  test('object', async () => {
-    const response = await getTranslation({ code: object, inLang: "java", outLang: "python" });
-    setTimeout(() => {}, MILLIS_PER_SEC * 20);
-    expect(response.body.translation.indexOf("class") > -1).toBe(true);
-  }, MILLIS_PER_SEC * 100);
+//   test('function', async () => {
+//     const response = await getTranslation({ code: _function, inLang: "python", outLang: "go" });
+//     setTimeout(() => {}, MILLIS_PER_SEC * 20);
+//     expect(response.body.translation.indexOf("func") > -1).toBe(true);
+//   }, MILLIS_PER_SEC * 100);
 
-  test('if statement', async () => {
-    const response = await getTranslation({ code: ifStatement, inLang: "javascript", outLang: "python" });
-    setTimeout(() => {}, MILLIS_PER_SEC * 20);
-    expect(response.body.translation.indexOf("if") > -1).toBe(true);
-  }, MILLIS_PER_SEC * 100);
+//   test('object', async () => {
+//     const response = await getTranslation({ code: object, inLang: "java", outLang: "python" });
+//     setTimeout(() => {}, MILLIS_PER_SEC * 20);
+//     expect(response.body.translation.indexOf("class") > -1).toBe(true);
+//   }, MILLIS_PER_SEC * 100);
 
-  test('recursion', async () => {
-    const response = await getTranslation({ code: recursion, inLang: "javascript", outLang: "python" });
-    setTimeout(() => {}, MILLIS_PER_SEC * 20);
-    expect(countSubstr(response.body.translation, "factorial")).toBe(3);
-  }, MILLIS_PER_SEC * 100);
+//   test('if statement', async () => {
+//     const response = await getTranslation({ code: ifStatement, inLang: "javascript", outLang: "python" });
+//     setTimeout(() => {}, MILLIS_PER_SEC * 20);
+//     expect(response.body.translation.indexOf("if") > -1).toBe(true);
+//   }, MILLIS_PER_SEC * 100);
 
-  test('import', async () => {
-    const response = await getTranslation({ code: _import, inLang: "python", outLang: "javascript" });
-    setTimeout(() => {}, MILLIS_PER_SEC * 20);
-    expect(response.body.translation.indexOf("import") > -1).toBe(true);
-  }, MILLIS_PER_SEC * 100);
-});
+//   test('recursion', async () => {
+//     const response = await getTranslation({ code: recursion, inLang: "javascript", outLang: "python" });
+//     setTimeout(() => {}, MILLIS_PER_SEC * 20);
+//     expect(countSubstr(response.body.translation, "factorial")).toBe(3);
+//   }, MILLIS_PER_SEC * 100);
+
+//   test('import', async () => {
+//     const response = await getTranslation({ code: _import, inLang: "python", outLang: "javascript" });
+//     setTimeout(() => {}, MILLIS_PER_SEC * 20);
+//     expect(response.body.translation.indexOf("import") > -1).toBe(true);
+//   }, MILLIS_PER_SEC * 100);
+// });
 
 describe("testing valid openai api key", () => {
   beforeEach(() => {
