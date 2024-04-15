@@ -294,36 +294,17 @@ const UserButtons = () => {
     }
   `
 
+  const USER_EXISTS_MUTATION = gql`
+    mutation UserExists($user_id: String!) {
+      userExists(user_id: $user_id)
+    }
+  `
+
   const [addUser] = useMutation(ADD_USER_MUTATION)
   const [generateOTP] = useMutation(GENERATE_OTP_MUTATION)
   const [verifyOTP] = useMutation(VERIFY_OTP_MUTATION)
   const [verificationInProgress] = useMutation(VERIFICATION_IN_PROGRESS_MUTATION)
-
-  // const initialChecks = () => {
-  //   if(isAuthenticated) {
-  //     if (localStorage.getItem('user') === null) {
-  //       auth0.getUser().then(user => {
-  //         delete user.updated_at
-  //         delete user.email_verified
-  //         localStorage.setItem('user', JSON.stringify(user))
-  //       })
-  //     }
-  //     setUser(JSON.parse(localStorage.getItem('user')))
-  //     verificationInProgress({
-  //       variables: { user_id: user.sub }
-  //     }).then(({data}) => {
-  //       const response = JSON.parse(data.verificationInProgress)
-
-  //       if (response) {
-  //         logOut().then(() => {
-  //           localStorage.removeItem('user')
-  //         })
-  //       } else {
-  //         setIsAuth(true)
-  //       }
-  //     })
-  //   }
-  // }
+  const [userExists] = useMutation(USER_EXISTS_MUTATION)
 
   React.useEffect(() => {
     if(isAuthenticated) {
@@ -335,25 +316,63 @@ const UserButtons = () => {
         })
       }
       let userID = JSON.parse(localStorage.getItem('user')).sub || null
+      let userEmail = JSON.parse(localStorage.getItem('user')).email || null
       setUser(JSON.parse(localStorage.getItem('user')))
 
       if(userID === null) {
         return
       }
-      verificationInProgress({
-        variables: { user_id: userID }
-      }).then(({data}) => {
-        const response = JSON.parse(data.verificationInProgress)
-        console.log(response)
-        if (response) {
-          logOut().then(() => {
-            localStorage.removeItem('user')
+
+      userExists({variables: { user_id: userID }}).then(({data}) => {
+        const response = JSON.parse(data.userExists)
+        if (!response) {
+          addUser({
+            variables: { user_id: userID, email: userEmail }
+          }).then(({data}) => {
+            const response = JSON.parse(data.addUser)
+            if (response.statusCode === 500) {
+              logOut().then(() => {
+                localStorage.removeItem('user')
+              })
+              setIsAuth(false)
+            } else {
+              generateOTP({
+                variables: { user_id: userID }
+              }).then(({data}) => {
+                const otp_response = JSON.parse(data.generateCode)
+                if (otp_response.statusCode === 500) {
+                  toast.error(otp_response.message, {position: "bottom-right", duration: 2500})
+                  logOut().then(() => {
+                    localStorage.removeItem('user')
+                    setIsAuth(false)
+                  })
+                } else {
+                  setOtpResponse("")
+                  setOtpError({error: false, helperText: ''})
+                  setIs2faModal(true)
+                }
+              })
+            }
           })
-          setIsAuth(false)
         } else {
-          setIsAuth(true)
+          verificationInProgress({
+            variables: { user_id: userID }
+          }).then(({data}) => {
+            const response = JSON.parse(data.verificationInProgress)
+            if (response) {
+              toast.error(otp_response.message, {position: "bottom-right", duration: 2500})
+              logOut().then(() => {
+                localStorage.removeItem('user')
+              })
+              setIsAuth(false)
+            } else {
+              setIsAuth(true)
+            }
+          })
         }
       })
+
+
     }
   }, [loading])
 
@@ -401,6 +420,7 @@ const UserButtons = () => {
           toast.error(otp_response.message, {position: "bottom-right", duration: 2500})
           await logOut().then(() => {
             localStorage.removeItem('user')
+            setIsAuth(false)
           })
         } else {
           setOtpResponse("")
@@ -454,8 +474,6 @@ const UserButtons = () => {
     })
 
     const response = JSON.parse(data.verifyCode)
-
-    console.log(response)
 
     if (response.statusCode === 401) {
       setOtpResponse(response.message)

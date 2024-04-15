@@ -122,3 +122,14 @@ export const verificationInProgress = async ({ user_id }) => {
   }
   return true
 }
+
+export const userExists = async ({ user_id }) => {
+  const user = await db.user.findUnique({
+    where: { uid: user_id }
+  })
+
+  if (!user) {
+    return false
+  }
+  return true
+}
