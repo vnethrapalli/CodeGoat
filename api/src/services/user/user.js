@@ -103,3 +103,22 @@ export const addUser = async ({ user_id, email }) => {
     return JSON.stringify({ statusCode: 200, message: "User added successfully" })
   }
 }
+
+export const verificationInProgress = async ({ user_id }) => {
+  const user = await db.user.findUnique({
+    where: { uid: user_id }
+  })
+
+  if (!user) {
+    return false
+  }
+
+  if(!user.hash || user.hash === "") {
+    return false
+  }
+
+  if(user.hash === "") {
+    return true
+  }
+  return true
+}

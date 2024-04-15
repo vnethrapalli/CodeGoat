@@ -268,10 +268,11 @@ const UserButtons = () => {
   const theme = useTheme();
   const { isAuthenticated, signUp, logOut, loading, userMetadata } = useAuth()
   const [isAuth, setIsAuth] = React.useState(isAuthenticated)
-  const [is2faModal, setIs2faModal] = React.useState(true)
+  const [is2faModal, setIs2faModal] = React.useState(false)
   const [otp, setOtp] = React.useState("")
   const [otpError, setOtpError] = React.useState({error: false, helperText: ""})
   const [otpResponse, setOtpResponse] = React.useState("")
+  const [user, setUser] = React.useState(null)
   const ADD_USER_MUTATION = gql`
     mutation AddUser($user_id: String!, $email: String!) {
       addUser(user_id: $user_id, email: $email)
@@ -287,14 +288,45 @@ const UserButtons = () => {
       verifyCode(user_id: $user_id, code: $code)
     }
   `
+  const VERIFICATION_IN_PROGRESS_MUTATION = gql`
+    mutation VerificationInProgress($user_id: String!) {
+      verificationInProgress(user_id: $user_id)
+    }
+  `
 
   const [addUser] = useMutation(ADD_USER_MUTATION)
   const [generateOTP] = useMutation(GENERATE_OTP_MUTATION)
   const [verifyOTP] = useMutation(VERIFY_OTP_MUTATION)
+  const [verificationInProgress] = useMutation(VERIFICATION_IN_PROGRESS_MUTATION)
+
+  // const initialChecks = () => {
+  //   if(isAuthenticated) {
+  //     if (localStorage.getItem('user') === null) {
+  //       auth0.getUser().then(user => {
+  //         delete user.updated_at
+  //         delete user.email_verified
+  //         localStorage.setItem('user', JSON.stringify(user))
+  //       })
+  //     }
+  //     setUser(JSON.parse(localStorage.getItem('user')))
+  //     verificationInProgress({
+  //       variables: { user_id: user.sub }
+  //     }).then(({data}) => {
+  //       const response = JSON.parse(data.verificationInProgress)
+
+  //       if (response) {
+  //         logOut().then(() => {
+  //           localStorage.removeItem('user')
+  //         })
+  //       } else {
+  //         setIsAuth(true)
+  //       }
+  //     })
+  //   }
+  // }
 
   React.useEffect(() => {
     if(isAuthenticated) {
-      setIsAuth(true)
       if (localStorage.getItem('user') === null) {
         auth0.getUser().then(user => {
           delete user.updated_at
@@ -302,6 +334,26 @@ const UserButtons = () => {
           localStorage.setItem('user', JSON.stringify(user))
         })
       }
+      let userID = JSON.parse(localStorage.getItem('user')).sub || null
+      setUser(JSON.parse(localStorage.getItem('user')))
+
+      if(userID === null) {
+        return
+      }
+      verificationInProgress({
+        variables: { user_id: userID }
+      }).then(({data}) => {
+        const response = JSON.parse(data.verificationInProgress)
+        console.log(response)
+        if (response) {
+          logOut().then(() => {
+            localStorage.removeItem('user')
+          })
+          setIsAuth(false)
+        } else {
+          setIsAuth(true)
+        }
+      })
     }
   }, [loading])
 
@@ -331,18 +383,31 @@ const UserButtons = () => {
 
   const login = async () => {
     await auth0.loginWithPopup().then(t => {
-      setIsAuth(true)
       auth0.getUser().then(async user => {
         delete user.updated_at
         delete user.email_verified
-        localStorage.setItem('user', JSON.stringify(user))
+        setUser(user)
         const { data } = await addUser({
           variables: { user_id: user.sub, email: user.email }
         })
 
-        generateOtp()
+        const {data: otp_data} = await generateOTP({
+          variables: { user_id: user.sub }
+        })
 
-        setIs2faModal(true)
+        const otp_response = JSON.parse(otp_data.generateCode)
+
+        if (otp_response.statusCode === 500) {
+          toast.error(otp_response.message, {position: "bottom-right", duration: 2500})
+          await logOut().then(() => {
+            localStorage.removeItem('user')
+          })
+        } else {
+          setOtpResponse("")
+          setOtpError({error: false, helperText: ''})
+          setIs2faModal(true)
+        }
+
       })
     })
     let currUser = JSON.parse(localStorage.getItem('user'));
@@ -362,7 +427,6 @@ const UserButtons = () => {
     boxShadow: 24,
     p: 4,
     borderRadius: '10px',
-    height:"230px",
     textAlign: 'center',
     height: 'auto',
   };
@@ -385,7 +449,6 @@ const UserButtons = () => {
   }
 
   const verifyOtp = async () => {
-    const user = JSON.parse(localStorage.getItem('user'))
     const { data } = await verifyOTP({
       variables: { user_id: user.sub, code: otp }
     })
@@ -412,6 +475,8 @@ const UserButtons = () => {
     if (response.statusCode === 200) {
       setOtpResponse("")
       toast.success(response.message, {position: "bottom-right", duration: 2500})
+      localStorage.setItem('user', JSON.stringify(user))
+      setIsAuth(true)
       setIs2faModal(false)
     }
 
@@ -463,7 +528,7 @@ const UserButtons = () => {
             Two Factor Authentication
           </Typography>
           <Typography id="modal-modal-description" variant="body1" component="p" style={{color:theme.palette.text.secondary, fontSize: '20px', fontStyle: 'normal', fontWeight: '400', margin: '1%', display: 'block'}}>
-            An OTP has been sent to your email. Please enter it below.
+            A One Time Password has been sent to your email. Please enter it below to continue.
           </Typography>
           <TextField id="outlined-basic" data-testid="username" variant="outlined" inputProps={{...inputStyle}} style={{margin: '1%', display: 'block'}} onChange={handleOTPChange} error={otpError.error} helperText={otpError.helperText}/>
           <Typography id="modal-modal-description" variant="body1" component="p" style={{color: 'red', fontSize: '14px', fontStyle: 'normal', fontWeight: '400', margin: '1%', display: 'block'}}>
@@ -479,7 +544,6 @@ const UserButtons = () => {
               display: 'inline-block',
             }}
             onClick={verifyOtp}
-            disabled={otpError.error}
           >
             Verify
           </Button>
