@@ -1,6 +1,6 @@
 import { navigate, routes, useParams, useLocation } from '@redwoodjs/router'
 import { Toaster, toast } from '@redwoodjs/web/toast'
-import { IconButton, Divider, AppBar, Link, Box, Button, Container, Tooltip, Typography, Grid, Menu, MenuItem, useScrollTrigger, CssBaseline } from '@mui/material';
+import { IconButton, Divider, AppBar, Link, Box, Button, Container, Tooltip, Typography, Grid, Menu, MenuItem, useScrollTrigger, CssBaseline, Modal, TextField } from '@mui/material';
 import { Experimental_CssVarsProvider as CssVarsProvider, experimental_extendTheme as extendTheme, useColorScheme, useTheme } from '@mui/material/styles';
 import { makeStyles } from "@mui/styles";
 import { Logout, Settings, AccessTime, Person, DarkMode, LightMode } from '@mui/icons-material'
@@ -8,6 +8,7 @@ import { useAuth, auth0 } from 'src/auth'
 import PropTypes from 'prop-types';
 import { useEffect } from 'react';
 import { useMutation } from '@redwoodjs/web';
+import { set } from '@redwoodjs/forms';
 
 const theme = extendTheme({
   colorSchemes: {
@@ -267,6 +268,10 @@ const UserButtons = () => {
   const theme = useTheme();
   const { isAuthenticated, signUp, logOut, loading, userMetadata } = useAuth()
   const [isAuth, setIsAuth] = React.useState(isAuthenticated)
+  const [is2faModal, setIs2faModal] = React.useState(true)
+  const [otp, setOtp] = React.useState("")
+  const [otpError, setOtpError] = React.useState({error: false, helperText: ""})
+  const [otpResponse, setOtpResponse] = React.useState("")
   const ADD_USER_MUTATION = gql`
     mutation AddUser($user_id: String!, $email: String!) {
       addUser(user_id: $user_id, email: $email)
@@ -277,9 +282,15 @@ const UserButtons = () => {
       generateCode(user_id: $user_id)
     }
   `
+  const VERIFY_OTP_MUTATION = gql`
+    mutation VerifyCode($user_id: String!, $code: String!) {
+      verifyCode(user_id: $user_id, code: $code)
+    }
+  `
 
   const [addUser] = useMutation(ADD_USER_MUTATION)
   const [generateOTP] = useMutation(GENERATE_OTP_MUTATION)
+  const [verifyOTP] = useMutation(VERIFY_OTP_MUTATION)
 
   React.useEffect(() => {
     if(isAuthenticated) {
@@ -298,6 +309,26 @@ const UserButtons = () => {
     return null
   }
 
+  const resendOtp = async () => {
+    const user = JSON.parse(localStorage.getItem('user'))
+    const {data: otp_data} = await generateOTP({
+      variables: { user_id: user.sub }
+    })
+
+    const otp_response = JSON.parse(otp_data.generateCode)
+
+    if (otp_response.statusCode === 500) {
+      toast.error(otp_response.message, {position: "bottom-right", duration: 2500})
+      await logOut().then(() => {
+        localStorage.removeItem('user')
+      })
+    } else {
+      toast.success('One Time Password Resent', {position: "bottom-right", duration: 2500})
+      setOtpResponse("")
+      setOtpError({error: false, helperText: ''})
+    }
+  }
+
   const login = async () => {
     await auth0.loginWithPopup().then(t => {
       setIsAuth(true)
@@ -309,23 +340,84 @@ const UserButtons = () => {
           variables: { user_id: user.sub, email: user.email }
         })
 
-        const {data: otp_data} = await generateOTP({
-          variables: { user_id: user.sub }
-        })
+        generateOtp()
 
-        const otp_response = JSON.parse(otp_data.generateCode)
-
-        if (otp_response.statusCode === 500) {
-          toast.error(otp_response.message, {position: "bottom-right", duration: 2500})
-          await logOut().then(() => {
-            localStorage.removeItem('user')
-          })
-        }
+        setIs2faModal(true)
       })
     })
     let currUser = JSON.parse(localStorage.getItem('user'));
     toast.success("Welcome " + currUser.nickname + "!", {position: "bottom-right"})
   }
+
+  const inputStyle = {style:{color: theme.palette.text.secondary, fontSize: '18px', fontStyle: 'normal', fontWeight: '600', margin: '1%', textAlign: 'center'}}
+
+  const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: '40%',
+    bgcolor: theme.palette.secondary.main,
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+    borderRadius: '10px',
+    height:"230px",
+    textAlign: 'center',
+    height: 'auto',
+  };
+
+  const handleOTPChange = (e) => {
+    let value = e.target.value
+    if(value.length !== 6) {
+      setOtpError({error: true, helperText: 'OTP must be 6 characters'})
+      return
+    }
+
+    if (!value.match(/^[A-Z0-9]+$/)) {
+      setOtpError({error: true, helperText: 'OTP must contain only uppercase letters and numbers'})
+      return
+    }
+
+    setOtp(value)
+    setOtpError({error: false, helperText: ''})
+
+  }
+
+  const verifyOtp = async () => {
+    const user = JSON.parse(localStorage.getItem('user'))
+    const { data } = await verifyOTP({
+      variables: { user_id: user.sub, code: otp }
+    })
+
+    const response = JSON.parse(data.verifyCode)
+
+    console.log(response)
+
+    if (response.statusCode === 401) {
+      setOtpResponse(response.message)
+      return
+    }
+
+    if (response.statusCode === 402) {
+      setOtpResponse(response.message)
+      return
+    }
+
+    if (response.statusCode === 500) {
+      setOtpResponse(response.message)
+      return
+    }
+
+    if (response.statusCode === 200) {
+      setOtpResponse("")
+      toast.success(response.message, {position: "bottom-right", duration: 2500})
+      setIs2faModal(false)
+    }
+
+  }
+
+
 
   return (
     <Grid item alignContent='center' alignItems='stretch' sx={{display: 'flex', justifyContent: 'flex-end', paddingRight: '10px' }} xs={3}>
@@ -360,6 +452,53 @@ const UserButtons = () => {
       >
         Sign Up
       </Button>}
+
+      <Modal
+        open={is2faModal}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <Typography id="modal-modal-title" variant="h6" component="h2" style={{color:theme.palette.primary.main, fontSize: '30px', fontStyle: 'normal', fontWeight: '600', margin: '1%', display: 'block'}}>
+            Two Factor Authentication
+          </Typography>
+          <Typography id="modal-modal-description" variant="body1" component="p" style={{color:theme.palette.text.secondary, fontSize: '20px', fontStyle: 'normal', fontWeight: '400', margin: '1%', display: 'block'}}>
+            An OTP has been sent to your email. Please enter it below.
+          </Typography>
+          <TextField id="outlined-basic" data-testid="username" variant="outlined" inputProps={{...inputStyle}} style={{margin: '1%', display: 'block'}} onChange={handleOTPChange} error={otpError.error} helperText={otpError.helperText}/>
+          <Typography id="modal-modal-description" variant="body1" component="p" style={{color: 'red', fontSize: '14px', fontStyle: 'normal', fontWeight: '400', margin: '1%', display: 'block'}}>
+            {otpResponse}
+          </Typography>
+
+          <Button
+            variant="contained"
+            style={{
+              backgroundColor: theme.palette.text.success,
+              color: theme.palette.text.primary,
+              margin: '1%',
+              display: 'inline-block',
+            }}
+            onClick={verifyOtp}
+            disabled={otpError.error}
+          >
+            Verify
+          </Button>
+          <Button
+            variant="contained"
+            style={{
+              backgroundColor: theme.palette.text.primary,
+              color: theme.palette.secondary.main,
+              margin: '1%',
+              display: 'inline-block',
+            }}
+            onClick={resendOtp}
+          >
+            Resend Code
+          </Button>
+
+
+        </Box>
+      </Modal>
 
       {isAuth && <UserMenu />}
     </Grid>

@@ -50,7 +50,7 @@ export const generateCode = async ({ user_id }) => {
 
 export const verifyCode = async ({ user_id, code }) => {
   const user = await db.user.findUnique({
-    where: { user_id }
+    where: { uid: user_id }
   })
 
   if (!user) {
@@ -58,26 +58,26 @@ export const verifyCode = async ({ user_id, code }) => {
   }
 
   if(!user.hash || user.hash === "") {
-    return JSON.stringify({ statusCode: 400, message: "No code was generated" })
+    return JSON.stringify({ statusCode: 401, message: "No one time password was generated" })
   }
 
   if(user.createdAt < new Date(Date.now() - 300000)) {
-    return JSON.stringify({ statusCode: 400, message: "Code expired" })
+    return JSON.stringify({ statusCode: 402, message: "One time password has expired" })
   }
 
   const isValid = await bcrypt.compare(code, user.hash)
 
   if (!isValid) {
-    return JSON.stringify({ statusCode: 400, message: "Invalid code" })
+    return JSON.stringify({ statusCode: 500, message: "Invalid one time password" })
   }
 
   await db.user.update({
-    where: { user_id },
+    where: { uid: user_id },
     data: {
-      hash: null
+      hash: ""
     }
   })
-  return JSON.stringify({ statusCode: 200, message: "Code verified successfully" })
+  return JSON.stringify({ statusCode: 200, message: "Two Factor code verified successfully" })
 }
 
 export const addUser = async ({ user_id, email }) => {
