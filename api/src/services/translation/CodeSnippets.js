@@ -90,22 +90,36 @@ public class Program
 export const go = `
 package main
 
-import (
-	"fmt"
-	"strings"
-)
+import "testing"
 
-func Example() {
-	// Create a slice of the strings that you want to join together
-	strs := []string{"aa", "bb", "cc"}
-	//Use the strings.Join function to join them, by passing the desired separator
-	fmt.Println(strings.Join(strs, "-"))
-	fmt.Println(strings.Join(strs, ", "))
-	fmt.Println(strings.Join(strs, ""))
-	// Output:
-	// aa-bb-cc
-	// aa, bb, cc
-	// aabbcc
+func f(shouldPanic bool) string {
+	if shouldPanic {
+		panic("function panicked")
+	}
+	return "function didn't panic"
+}
+
+func Test_f(t *testing.T) {
+	t.Run("panics", func(t *testing.T) {
+		// If the function panics, recover() will
+		// return a non nil value.
+		defer func() {
+			if r := recover(); r == nil {
+				t.Errorf("function should panic")
+			}
+		}()
+
+		f(true)
+	})
+
+	t.Run("does not panic", func(t *testing.T) {
+		shouldPanic := false
+		want := "function didn't panic"
+		if got := f(shouldPanic); got != want {
+			t.Errorf("f(%v) = %v, want %v", shouldPanic, got, want)
+		}
+	})
+
 }
 `;
 
@@ -189,12 +203,20 @@ with(myTurtle) { //draw a 100 pix square
 `;
 
 export const php = `
-$zip = new ZipArchive;
-$file = $zip->open('file.zip');
-if ($file) {
-	$zip->extractTo('/extract_path/');
-	$zip->close();
-	echo 'Archive extracted successfully!';
+function recurseCopy($src, $dst)
+{
+    $dir = opendir($src);
+    mkdir($dst);
+    while(false !== ( $file = readdir($dir)) ) {
+        if (( $file != '.' ) && ( $file != '..' )) {
+            if ( is_dir($src . '/' . $file) ) {
+                $this->recurseCopy($src . '/' . $file, $dst . '/' . $file);
+            } else {
+                copy($src . '/' . $file,$dst . '/' . $file);
+            }
+        }
+    }
+    closedir($dir);
 }
 `;
 
@@ -290,3 +312,137 @@ interface MyInterface {
   getValue('id'); // 1
   getValue('count')
 `;
+
+export const forLoop = `
+for (int i = 0; i < 10; i++)
+{
+  System.out.println(i);
+}
+`;
+
+export const _function = `
+a = [1, 2, 3, 4];
+
+def sumArr(arr):
+  sum = 0
+  for i in range(0, len(arr)):
+    sum += arr[i]
+  return sum
+
+print(sumArr(a))
+`;
+
+export const object = `
+public class Player {
+  final static int MAX_CARDS = 52;                    // max number of cards in a hand
+
+  private Card[] cards = new Card[MAX_CARDS];         // the cards
+  private int N = 0;                                  // number of cards
+  private String name;                                // player's name
+  private int x, y;                                   // location to draw
+
+  public Player(String name, int x, int y) {
+      this.name = name;
+      this.x = x;
+      this.y = y;
+  }
+
+  public Card peak()         { return cards[0];   }    // return first card
+  public void dealTo(Card c) { cards[N++] = c;    }    // insert card
+  public void reset()        { N = 0;             }    // discard all cards
+
+  // compute value of blackjack hand
+  public int value() {
+      int val = 0;
+      boolean hasAce = false;
+      for (int i = 0; i < N; i++) {
+          val = val + cards[i].rank();
+          if (cards[i].isAce()) hasAce = true;
+      }
+      if (hasAce && (val <= 11)) val = val + 10;          // handle ace = 1 or 11
+      return val;
+  }
+
+  // draw the pile of cards, with the first one centered at (x, y)
+  public void draw(Draw d) {
+      for (int i = 0; i < N; i++)
+          cards[i].draw(d, x + i*25, y);
+  }
+
+  // print out cards in player's hand (for debugging)
+  public String toString() {
+      String s = name + "  (" + value() + ")  ";
+      for (int i = 0; i < N; i++)
+          s += cards[i] + " ";
+      return s;
+  }
+
+}
+`;
+
+export const ifStatement = `
+const age = 14;
+
+if (age < 13)
+{
+    console.log("PG");
+}
+else if (age < 18)
+{
+    console.log("PG13");
+}
+else
+{
+    console.log("R");
+}
+`;
+
+export const recursion = `
+function factorial(n)
+{
+    if (n == 1)
+        return 1;
+    else
+        return n * factorial(n-1);
+}
+
+console.log(factorial(5));
+`;
+
+export const _import = `
+import numpy as np
+
+# Creating 5x4 array
+array = np.arange(20).reshape(5, 4)
+print(array)
+print()
+
+# If no axis mentioned, then it works on the entire array
+print(np.argmax(array))
+
+# If axis=1, then it works on each row
+print(np.argmax(array, axis=1))
+
+# If axis=0, then it works on each column
+print(np.argmax(array, axis=0))
+`;
+
+export const countSubstr = (str, target) => {
+  let count = 0
+  let i = 0;
+
+  while (true)
+  {
+    const r = str.indexOf(target, i);
+
+    if (r !== -1)
+    {
+      count++;
+      i = r+1;
+    }
+    else
+    {
+      return count;
+    }
+  }
+};
