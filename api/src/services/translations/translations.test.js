@@ -1,5 +1,5 @@
 import {
-  translations,
+  translationStats,
   translation,
   createTranslation,
   updateTranslation,
@@ -14,11 +14,11 @@ import {
 // https://redwoodjs.com/docs/testing#jest-expect-type-considerations
 
 describe('translations', () => {
-  scenario('returns all translations', async (scenario) => {
-    const result = await translations({ uid: scenario.uid })
+  // scenario('returns all translations', async (scenario) => {
+  //   const result = await translations({ uid: scenario.uid })
 
-    expect(result.length).not.toEqual(Object.keys(scenario.translation).length)
-  })
+  //   expect(result.length).not.toEqual(Object.keys(scenario.translation).length)
+  // })
 
   scenario('returns a single translation', async (scenario) => {
     const result = await translation({ id: scenario.translation.one.id })

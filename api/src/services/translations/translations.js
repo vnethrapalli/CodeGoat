@@ -2,12 +2,51 @@ import { db } from 'src/lib/db'
 
 const langCodes = [ "c", "cpp", "csharp", "java", "javascript", "python", "typescript", "go", "rust", "ruby", "kotlin", "php"];
 
-export const translations = ({ uid }) => {
+export const translationStats = async ({ uid }) => {
+  const results = await db.translation.findMany({
+    where: { uid: uid },
+    orderBy: [
+      { inputLanguage: 'asc' },
+      { outputLanguage: 'asc'}
+    ],
+    select: {
+      inputLanguage: true,
+      outputLanguage: true
+    }
+  });
+
+
+  /* stores information regarding language translation pairs (ie. frequency, average rating, etc) */
+  let data = {}
+  for (const pair of results) {
+    let key = [pair['inputLanguage'], pair['outputLanguage']].join(',');
+    if (data.hasOwnProperty(key)) {
+      data[key]['freq'] += 1;
+    }
+    else {
+      data[key] = {};
+      data[key]['freq'] = 1;
+    }
+  }
+
+   // console.log(JSON.stringify(data));
+  var mostFreqPair = ['', ''];
+  var maxfreq = 0;
+  for (const pair in data) {
+    if (data[pair]['freq'] > maxfreq) {
+      maxfreq = data[pair]['freq'];
+      let langs = pair.split(',');
+      mostFreqPair[0] = langs[0];
+      mostFreqPair[1] = langs[1];
+    }
+  }
+
+  console.log(maxfreq)
+
   return {
-    translations: db.translation.findMany({
-      where: { uid },
-      orderBy: { createdAt: 'desc' },
-    })
+    count: db.translation.count({ where: { uid } }),
+    favPair: mostFreqPair,
+    favPairFreq: maxfreq
   }
 }
 

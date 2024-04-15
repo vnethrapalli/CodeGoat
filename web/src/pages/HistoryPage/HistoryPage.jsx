@@ -10,6 +10,7 @@ import { auth0 } from 'src/auth'
 import React, { useEffect } from 'react'
 import { QUERY as TranslationQuery } from 'src/components/TranslationsCell'
 import TranslationsCell from 'src/components/TranslationsCell'
+import StatsCell from 'src/components/StatsCell'
 
 import { languages } from "web/src/pages/SubmissionPage/SubmissionPage"
 
@@ -265,6 +266,8 @@ const HistoryPage = ({ page = 1 }) => {
         <Typography data-testid='title' variant='h2' component='span' align='center' style={{ padding: '15px', width: '65%', borderRadius: '20px' , color: theme.palette.text.secondary, fontSize: '52px', fontStyle: 'normal', fontWeight: '600'}}>
           Translation History
         </Typography>
+
+        <StatsCell uid={userId}/>
 
         <Filters />
 
