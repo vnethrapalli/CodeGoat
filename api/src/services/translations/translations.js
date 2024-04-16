@@ -11,7 +11,8 @@ export const translationStats = async ({ uid }) => {
     ],
     select: {
       inputLanguage: true,
-      outputLanguage: true
+      outputLanguage: true,
+      rating: true
     }
   });
 
@@ -39,22 +40,36 @@ export const translationStats = async ({ uid }) => {
     let key = [pair['inputLanguage'], pair['outputLanguage']].join(',');
     if (data.hasOwnProperty(key)) {
       data[key]['freq'] += 1;
+      data[key]['avg_rating'] += pair['rating'];
     }
     else {
       data[key] = {};
       data[key]['freq'] = 1;
+      data[key]['avg_rating'] = pair['rating'];
     }
+  }
+  for (const entry in data) {
+    entry['rating'] /= entry['freq'];
   }
 
   /* finds most frequent pair of input and output languages for translations */
   var mostFreqPair = ['', ''];
   var maxfreq = 0;
+  var highestRatedPair = ['', ''];
+  var highestAvgRating = 0;
   for (const pair in data) {
     if (data[pair]['freq'] > maxfreq) {
       maxfreq = data[pair]['freq'];
       let langs = pair.split(',');
       mostFreqPair[0] = langs[0];
       mostFreqPair[1] = langs[1];
+    }
+
+    if (data[pair]['avg_rating'] > highestAvgRating) {
+      highestAvgRating= data[pair]['avg_rating'];
+      let langs = pair.split(',');
+      highestRatedPair[0] = langs[0];
+      highestRatedPair[1] = langs[1];
     }
   }
 
@@ -69,15 +84,15 @@ export const translationStats = async ({ uid }) => {
     dateFreqs[key] += 1;
   }
 
-  console.log('beepbeep')
-  console.log(typeof Object.keys(dateFreqs)[0])
 
   return {
     count: db.translation.count({ where: { uid } }),
     favPair: mostFreqPair,
     favPairFreq: maxfreq,
     weekDates: Object.keys(dateFreqs),
-    weekRequests: Object.values(dateFreqs)
+    weekRequests: Object.values(dateFreqs),
+    highestRatedPair: highestRatedPair,
+    highestAvgRating: highestAvgRating
   }
 }
 
@@ -85,6 +100,15 @@ export const translation = ({ id }) => {
   return db.translation.findUnique({
     where: { id },
   })
+}
+
+export const translations = ({ uid }) => {
+  return {
+    translations: db.translation.findMany({
+      where: { uid },
+      orderBy: { createdAt: 'desc' },
+    })
+  }
 }
 
 export const createTranslation = ({ input }) => {

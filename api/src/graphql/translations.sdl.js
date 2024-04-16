@@ -15,6 +15,7 @@ export const schema = gql`
     translationHistoryPage(page: Int, uid: String!, inLang: [String!], outLang: [String!], startDate: DateTime, endDate: DateTime, sort: Int, inSort: Int, outSort: Int): TranslationHistoryPage @requireAuth
     translationStats(uid: String!): Stats @requireAuth
     translation(id: Int!): Translation @requireAuth
+    translations(uid: String!): TranslationsList @requireAuth
     translationCount: TranslationCount @skipAuth
   }
 
@@ -56,6 +57,12 @@ export const schema = gql`
     favPairFreq: Int
     weekDates: [String!]!
     weekRequests: [Int!]!
+    highestRatedPair: [String]
+    highestAvgRating: Float
+  }
+
+  type TranslationsList {
+    translations: [Translation!]!
   }
 
   type DeleteCount {

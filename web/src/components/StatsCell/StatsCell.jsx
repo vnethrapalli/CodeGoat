@@ -1,6 +1,7 @@
-import { Box, Typography, Divider, Grid } from '@mui/material'
+import { Box, Typography, Divider, Grid, Rating } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 import { LineChart } from '@mui/x-charts/LineChart';
+
 
 // export const beforeQuery = (props) => {
 //   return {
@@ -17,6 +18,8 @@ export const QUERY = gql`
       favPairFreq
       weekDates
       weekRequests
+      highestRatedPair
+      highestAvgRating
     }
   }
 `
@@ -34,9 +37,10 @@ export const Success = ({ stats }) => {
 
   /* convert date string to date object */
   const weekDates = stats.weekDates.map((val) => {
-    console.log(val)
     return new Date(val);
   });
+
+  console.log(stats);
 
 
   const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -45,26 +49,26 @@ export const Success = ({ stats }) => {
       <Box sx={{ width: "70%", marginBottom: '10px', marginTop: '20px' }}>
         <Grid container spacing={2}>
           <Grid item xs={6}>
-            <Typography data-testid='your-stats-header' align='left' sx={{ color: theme.palette.text.secondary, fontSize: '24px', fontStyle: 'normal', fontWeight: '500', marginBottom: '10px'}}>
+            <Typography data-testid='your-stats-header' align='center' sx={{ color: theme.palette.text.secondary, fontSize: '24px', fontStyle: 'normal', fontWeight: '500', marginBottom: '10px'}}>
               Your Stats
             </Typography>
 
-            <Divider aria-hidden="true" textAlign="left">
+            <Divider aria-hidden="true" textAlign="left" sx={{ marginBottom: '10px' }}>
               <Typography data-testid='translation-count-header' sx={{ color: theme.palette.text.secondary, fontSize: '14px', fontStyle: 'normal', fontWeight: '500'}}>
                 Number of Translations
               </Typography>
             </Divider>
-            <Typography data-testid='user-num-translations' align='center' sx={{ color: theme.palette.text.secondary, fontSize: '12px', fontStyle: 'normal', fontWeight: '500', marginTop: '5px', marginBottom: '5px'}}>
+            <Typography data-testid='user-num-translations' align='right' sx={{ color: theme.palette.text.secondary, fontSize: '12px', fontStyle: 'normal', fontWeight: '500', marginTop: '15px', marginBottom: '15px'}}>
               {stats.count} total translations
             </Typography>
 
-            <Divider aria-hidden="true" textAlign="left">
+            <Divider aria-hidden="true" textAlign="left" sx={{ marginBottom: '10px' }}>
               <Typography data-testid='user-mostfreq-pair-header' sx={{ color: theme.palette.text.secondary, fontSize: '14px', fontStyle: 'normal', fontWeight: '500'}}>
                 Most Frequent Language Pair
               </Typography>
             </Divider>
-            <Typography data-testid='user-mostfreq-pair' align='center' sx={{ color: theme.palette.text.secondary, fontSize: '12px', fontStyle: 'normal', fontWeight: '500', marginTop: '5px', marginBottom: '5px'}}>
-              translated from {stats.favPair[0]} to {stats.favPair[1]} a whopping {stats.favPairFreq} time{stats.favPair > 1 ? 's' : ''}!
+            <Typography data-testid='user-mostfreq-pair' align='right' sx={{ color: theme.palette.text.secondary, fontSize: '12px', fontStyle: 'normal', fontWeight: '500', marginTop: '15px', marginBottom: '15px'}}>
+              {stats.favPair[0]} -&gt; {stats.favPair[1]} (a whopping {stats.favPairFreq} time{stats.favPairFreq > 1 ? 's' : ''}!)
             </Typography>
 
             <Divider aria-hidden="true" textAlign="left">
@@ -72,6 +76,17 @@ export const Success = ({ stats }) => {
                 Highest Rated Language Pair
               </Typography>
             </Divider>
+
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: '15px' }}>
+              <Rating readOnly alight='right' precision={0.1} defaultValue={stats.highestAvgRating} />
+              <Typography ml={2} align='right' data-testid='user-highest-rated-pair' sx={{ color: theme.palette.text.secondary, fontSize: '12px', fontStyle: 'normal', fontWeight: '500', marginTop: '5px'}}>
+                {
+                  stats.highestRatedPair[0] === '' || stats.highestRatedPair[1] === '' ?
+                  '-' :
+                  `${stats.highestRatedPair[0]} -> ${stats.highestRatedPair[1]} (${stats.highestAvgRating})`
+                }
+              </Typography>
+            </Box>
           </Grid>
 
           <Grid item xs={6}>
