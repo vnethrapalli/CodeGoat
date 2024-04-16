@@ -657,6 +657,9 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
           {output &&
           <>
             <Rating
+              sx={{
+                fontSize: "2rem"
+              }}
               defaultValue={5}
               onChange={(event, val) => {
                 if (val == null) val = 0;

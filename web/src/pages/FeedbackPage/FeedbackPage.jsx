@@ -155,7 +155,7 @@ const FeedbackPage = ({ defaultOnSubmit, defaultOnHandle, defaultRatings }) => {
               alignItems: 'center',
               fontSize: "1.5rem",
               justifyContent:"center",
-              marginBottom: '10px',
+              marginBottom: '20px',
             }}
           >
             <StyledRating
@@ -185,7 +185,7 @@ const FeedbackPage = ({ defaultOnSubmit, defaultOnHandle, defaultRatings }) => {
               alignItems: 'center',
               fontSize: "1.5rem",
               justifyContent:"center",
-              marginBottom: '10px',
+              marginBottom: '20px',
             }}
           >
             <StyledRating
@@ -214,7 +214,7 @@ const FeedbackPage = ({ defaultOnSubmit, defaultOnHandle, defaultRatings }) => {
               alignItems: 'center',
               fontSize: "1.5rem",
               justifyContent:"center",
-              marginBottom: '10px',
+              marginBottom: '20px',
             }}
           >
             <StyledRating
@@ -243,7 +243,7 @@ const FeedbackPage = ({ defaultOnSubmit, defaultOnHandle, defaultRatings }) => {
               alignItems: 'center',
               fontSize: "1.5rem",
               justifyContent:"center",
-              marginBottom: '10px',
+              marginBottom: '20px',
             }}
           >
             <StyledRating
@@ -272,7 +272,7 @@ const FeedbackPage = ({ defaultOnSubmit, defaultOnHandle, defaultRatings }) => {
               alignItems: 'center',
               fontSize: "1.5rem",
               justifyContent:"center",
-              marginBottom: '10px',
+              marginBottom: '20px',
             }}
           >
             <StyledRating
