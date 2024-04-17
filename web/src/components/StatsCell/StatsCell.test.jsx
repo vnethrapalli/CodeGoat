@@ -57,21 +57,50 @@ describe('render tests for stats section', () => {
         observe: jest.fn(),
         disconnect: jest.fn(),
         unobserve: jest.fn()
-      }
-    })
-  })
+      };
+    });
+  });
 
   it('renders all text components when all data is provided', () => {
-    let data = standard().stats;
-    render(<Success stats={data} />);
+    let stats = standard().stats;
+    render(<Success stats={stats} />);
 
     expect(screen.getByTestId("your-stats-header")).toHaveTextContent('Your Stats');
 
     expect(screen.getByTestId("translation-count-header")).toHaveTextContent('Number of Translations');
-    expect(screen.getByTestId("user-num-translations")).toHaveTextContent(`${data.count} total translations`);
+    expect(screen.getByTestId("user-num-translations")).toHaveTextContent(`${stats.count} total translations`);
 
     expect(screen.getByTestId("mostfreq-pair-header")).toHaveTextContent('Most Frequent Language Pair');
-    expect(screen.getByTestId("user-mostfreq-pair")).toHaveTextContent(`${data.count} total translations`);
+    expect(screen.getByTestId("user-mostfreq-pair")).toHaveTextContent(`${stats.favPair[0]} -> ${stats.favPair[1]} (a whopping ${stats.favPairFreq} times!)`);
 
-  })
+    expect(screen.getByTestId("highest-rated-pair-header")).toHaveTextContent('Highest Rated Language Pair');
+    expect(screen.getByTestId("user-highest-rated-pair")).toHaveTextContent(`${stats.highestRatedPair[0]} -> ${stats.highestRatedPair[1]} (${stats.highestAvgRating})`);
+    expect(screen.getByTestId("highest-avg-rating-stars")).toBeInTheDocument();
+
+  });
+
+  it('renders all edge case text components correctly when no translations exist', () => {
+    let stats = standard().noTranslations;
+    render(<Success stats={stats} />);
+
+    expect(screen.getByTestId("user-num-translations")).toHaveTextContent(`${stats.count} total translations`);
+
+    expect(screen.getByTestId("user-mostfreq-pair")).toHaveTextContent('-');
+
+    expect(screen.getByTestId("user-highest-rated-pair")).toHaveTextContent('-');
+    expect(screen.queryByTestId("highest-avg-rating-stars")).not.toBeInTheDocument();
+  });
+
+  it('renders all edge case text components correctly when a single translations exist', () => {
+    let stats = standard().oneTranslations;
+    render(<Success stats={stats} />);
+
+    expect(screen.getByTestId("user-num-translations")).toHaveTextContent(`${stats.count} total translation`);
+
+    expect(screen.getByTestId("user-mostfreq-pair")).toHaveTextContent(`${stats.favPair[0]} -> ${stats.favPair[1]} (a whopping ${stats.favPairFreq} time!)`);
+
+    expect(screen.getByTestId("user-highest-rated-pair")).toHaveTextContent(`${stats.highestRatedPair[0]} -> ${stats.highestRatedPair[1]} (${stats.highestAvgRating})`);
+    expect(screen.getByTestId("highest-avg-rating-stars")).toBeInTheDocument();
+  });
+
 });

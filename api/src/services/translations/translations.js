@@ -16,7 +16,6 @@ export const translationStats = async ({ uid }) => {
     }
   });
 
-
   var now = new Date();
   const recents = await db.translation.findMany({
     where: {
@@ -35,22 +34,25 @@ export const translationStats = async ({ uid }) => {
 
 
   /* stores information regarding all language translation pairs (ie. frequency, average rating, etc) */
-  let data = {}
+  let data = {};
+  let nullRating = 0;
   for (const pair of results) {
     let key = [pair['inputLanguage'], pair['outputLanguage']].join(',');
+    let rating = pair['rating'] >= 0 ? pair['rating'] : nullRating;
     if (data.hasOwnProperty(key)) {
       data[key]['freq'] += 1;
-      data[key]['avg_rating'] += pair['rating'];
+      data[key]['rating_freq'] += pair['rating'] >= 0 ? 1 : 0;
+      data[key]['avg_rating'] += rating;
     }
     else {
       data[key] = {};
       data[key]['freq'] = 1;
-      data[key]['avg_rating'] = pair['rating'];
+      data[key]['rating_freq'] = pair['rating'] >= 0 ? 1 : 0;
+      data[key]['avg_rating'] = rating;
     }
   }
   for (var key of Object.keys(data)) {
-    //console.log(JSON.stringify(data[key]));
-    data[key]['avg_rating'] /= data[key]['freq'];
+    data[key]['avg_rating'] /= data[key]['rating_freq'];
   }
 
   /* finds most frequent pair of input and output languages for translations */

@@ -79,17 +79,21 @@ export const Success = ({ stats }) => {
               </Typography>
             </Divider>
             <Typography data-testid='user-mostfreq-pair' align='right' sx={{ color: theme.palette.text.secondary, fontSize: '12px', fontStyle: 'normal', fontWeight: '500', marginTop: '15px', marginBottom: '15px'}}>
-              {stats.favPair[0]} -&gt; {stats.favPair[1]} (a whopping {stats.favPairFreq} time{stats.favPairFreq > 1 ? 's' : ''}!)
-            </Typography>
+              {
+                stats.favPair[0] === '' || stats.favPair[1] === '' ?
+                '-' :
+                `${stats.favPair[0]} -> ${stats.favPair[1]} (a whopping ${stats.favPairFreq} time${stats.favPairFreq > 1 ? 's' : ''}!)`
+              }
+              </Typography>
 
             <Divider aria-hidden="true" textAlign="left">
-              <Typography data-testid='user-highest-rated-pair-header' sx={{ color: theme.palette.text.secondary, fontSize: '14px', fontStyle: 'normal', fontWeight: '500'}}>
+              <Typography data-testid='highest-rated-pair-header' sx={{ color: theme.palette.text.secondary, fontSize: '14px', fontStyle: 'normal', fontWeight: '500'}}>
                 Highest Rated Language Pair
               </Typography>
             </Divider>
 
             <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: '15px', marginBottom: '15px' }}>
-              <Rating readOnly alight='right' precision={0.1} defaultValue={stats.highestAvgRating} />
+              {!(stats.highestRatedPair[0] === '' || stats.highestRatedPair[1] === '') && <Rating readOnly data-testid='highest-avg-rating-stars' alight='right' precision={0.1} defaultValue={stats.highestAvgRating} />}
               <Typography ml={2} align='right' data-testid='user-highest-rated-pair' sx={{ color: theme.palette.text.secondary, fontSize: '12px', fontStyle: 'normal', fontWeight: '500', marginTop: '5px', marginBottom: '15px'}}>
                 {
                   stats.highestRatedPair[0] === '' || stats.highestRatedPair[1] === '' ?
@@ -100,7 +104,7 @@ export const Success = ({ stats }) => {
             </Box>
           </Grid>
 
-          <Grid item display='flex' flexDirection='column' justifyContent='center' xs={6} sx={{ border: 0 }}>
+          <Grid item data-test-id='activity-plot' display='flex' flexDirection='column' justifyContent='center' xs={6} sx={{ border: 0 }}>
             <Typography data-testid='7day-graph-title' align='center' sx={{ color: theme.palette.text.secondary, fontSize: '24px', fontStyle: 'normal', fontWeight: '500', marginBottom: '10px'}}>
               7-day activity
             </Typography>
