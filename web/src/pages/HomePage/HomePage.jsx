@@ -6,6 +6,7 @@ import { languages } from '../SubmissionPage/SubmissionPage.jsx';
 import { KeyboardArrowDown } from '@mui/icons-material';
 import { useRef } from 'react';
 import CounterCell from 'src/components/CounterCell';
+import FeedbackSummaryCell from 'src/components/FeedbackSummaryCell';
 
 const instructions = ['Click on the Translate button in the navigation bar above',
                       'Select the language of the source code and the language of the translated code using the two dropdowns',
@@ -81,6 +82,7 @@ const HomePage = () => {
         </Typography>
 
         <CounterCell />
+        <FeedbackSummaryCell />
 
         <Typography data-testid='tutorial' style={{ padding: '25px', marginTop: '20px', marginBottom: '10px', width: '90%', color: theme.palette.text.secondary, fontSize: '24px', fontStyle: 'normal', fontWeight: '300'}}>
           <Typography variant='h4' component='span' style={{ padding: '0px', margin: '0px', color: theme.palette.text.secondary, fontSize: '32px', fontStyle: 'normal', fontWeight: '550'}}>

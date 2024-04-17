@@ -31,7 +31,7 @@ export const Success = ({ counter }) => {
           background: `url('Images/speechbubble.png')`,
           backgroundRepeat: "no-repeat",
           backgroundSize: "100% 100%",
-          width: '45vw',
+          width: '42vw',
           height: '20vh'
         }}
       >
@@ -57,8 +57,8 @@ export const Success = ({ counter }) => {
         src="Images/goat_no_bubble.png"
         alt="CodeGoat Icon"
         style={{
-          width: '360px',
-          height: '300px',
+          width: '300px',
+          height: '250px',
           objectFit: 'contain',
           objectPosition: 'center'
         }}
