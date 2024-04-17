@@ -1,5 +1,6 @@
 import {
   translationStats,
+  translations,
   translation,
   createTranslation,
   updateTranslation,
@@ -14,11 +15,11 @@ import {
 // https://redwoodjs.com/docs/testing#jest-expect-type-considerations
 
 describe('translations', () => {
-  // scenario('returns all translations', async (scenario) => {
-  //   const result = await translations({ uid: scenario.uid })
+  scenario('returns all translations', async (scenario) => {
+    const result = await translations({ uid: scenario.uid })
 
-  //   expect(result.length).not.toEqual(Object.keys(scenario.translation).length)
-  // })
+    expect(result.length).not.toEqual(Object.keys(scenario.translation).length)
+  })
 
   scenario('returns a single translation', async (scenario) => {
     const result = await translation({ id: scenario.translation.one.id })
@@ -221,4 +222,113 @@ describe('filtering and sorting', () => {
       expect(value[0].createdAt).toEqual(new Date('2021-07-03T00:00:00Z'));
     });
   })
+})
+
+
+describe('basic stats section testing', () => {
+  beforeAll(async () => {
+    await createTranslation({
+      input: {
+        uid: 'notmyid',
+        inputLanguage: 'cpp',
+        outputLanguage: 'python',
+        inputCode: 'String',
+        outputCode: 'String',
+        createdAt: '2021-07-02T00:00:00Z',
+        rating: 5,
+        status: '200 OK'
+      }
+    })
+    await createTranslation({
+      input: {
+        uid: 'myid',
+        inputLanguage: 'cpp',
+        outputLanguage: 'python',
+        inputCode: 'String',
+        outputCode: 'String',
+        createdAt: '2021-07-03T00:00:00Z',
+        rating: 5,
+        status: '200 OK'
+      }
+    })
+
+    await createTranslation({
+      input: {
+        uid: 'myid',
+        inputLanguage: 'python',
+        outputLanguage: 'cpp',
+        inputCode: 'String',
+        outputCode: 'String',
+        createdAt: '2022-09-01T00:00:00Z',
+        rating: 5,
+        status: '200 OK'
+      }
+    })
+
+    await createTranslation({
+      input: {
+        uid: 'myid',
+        inputLanguage: 'python',
+        outputLanguage: 'cpp',
+        inputCode: 'String',
+        outputCode: 'String',
+        createdAt: '2022-07-05T00:00:00Z',
+        rating: 5,
+        status: '200 OK'
+      }
+    })
+
+    await createTranslation({
+      input: {
+        uid: 'myid',
+        inputLanguage: 'javascript',
+        outputLanguage: 'python',
+        inputCode: 'String',
+        outputCode: 'String',
+        createdAt: '2023-07-01T00:00:00Z',
+        rating: 5,
+        status: '200 OK'
+      }
+    })
+
+    await createTranslation({
+      input: {
+        uid: 'myid',
+        inputLanguage: 'cpp',
+        outputLanguage: 'javascript',
+        inputCode: 'String',
+        outputCode: 'String',
+        createdAt: '2024-01-01T00:00:00Z',
+        rating: 5,
+        status: '200 OK'
+      }
+    })
+
+    /* add entry for yesterday's date */
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    await createTranslation({
+      input: {
+        uid: 'myid',
+        inputLanguage: 'cpp',
+        outputLanguage: 'javascript',
+        inputCode: 'String',
+        outputCode: 'String',
+        createdAt: yesterday.toISOString(),
+        rating: 5,
+        status: '200 OK'
+      }
+    })
+  })
+
+  test('returns the correct number of translations', async () => {
+    const record = await translationStats({ uid: 'myid' });
+    console.log(record);
+
+    record.count.then(function(value) {
+      expect(value).toEqual(6);
+    });
+  });
+
+
 })

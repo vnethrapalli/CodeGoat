@@ -48,8 +48,9 @@ export const translationStats = async ({ uid }) => {
       data[key]['avg_rating'] = pair['rating'];
     }
   }
-  for (const entry in data) {
-    entry['rating'] /= entry['freq'];
+  for (var key of Object.keys(data)) {
+    //console.log(JSON.stringify(data[key]));
+    data[key]['avg_rating'] /= data[key]['freq'];
   }
 
   /* finds most frequent pair of input and output languages for translations */
@@ -74,7 +75,7 @@ export const translationStats = async ({ uid }) => {
   }
 
   /* counting the number of translation made each day in the past 7 days (including today) */
-  dateFreqs = {};
+  let dateFreqs = {};
   for (let i = 6; i >= 0; i--) {
     const dt = new Date(now.getFullYear(), now.getMonth(), now.getDate() - i)
     dateFreqs[dt] = 0;
@@ -86,7 +87,7 @@ export const translationStats = async ({ uid }) => {
 
 
   return {
-    count: db.translation.count({ where: { uid } }),
+    count: Object.keys(results).length,
     favPair: mostFreqPair,
     favPairFreq: maxfreq,
     weekDates: Object.keys(dateFreqs),

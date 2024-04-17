@@ -37,6 +37,7 @@
     "css-mediaquery": "^0.1.2",
     "cwait": "^1.1.2",
     "dayjs": "^1.11.10",
-    "openai": "^4.29.0"
+    "openai": "^4.29.0",
+    "recharts": "^2.12.5"
   }
 }

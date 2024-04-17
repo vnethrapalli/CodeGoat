@@ -1,4 +1,4 @@
-import { render } from '@redwoodjs/testing/web'
+import { render, screen } from '@redwoodjs/testing/web'
 import { Loading, Empty, Failure, Success } from './StatsCell'
 import { standard } from './StatsCell.mock'
 
@@ -9,6 +9,16 @@ import { standard } from './StatsCell.mock'
 // https://redwoodjs.com/docs/testing#jest-expect-type-considerations
 
 describe('StatsCell', () => {
+  beforeEach(() => {
+    global.ResizeObserver = jest.fn().mockImplementation(() => {
+      return {
+        observe: jest.fn(),
+        disconnect: jest.fn(),
+        unobserve: jest.fn()
+      }
+    })
+  })
+
   it('renders Loading successfully', () => {
     expect(() => {
       render(<Loading />)
@@ -39,3 +49,29 @@ describe('StatsCell', () => {
     }).not.toThrow()
   })
 })
+
+describe('render tests for stats section', () => {
+  beforeEach(() => {
+    global.ResizeObserver = jest.fn().mockImplementation(() => {
+      return {
+        observe: jest.fn(),
+        disconnect: jest.fn(),
+        unobserve: jest.fn()
+      }
+    })
+  })
+
+  it('renders all text components when all data is provided', () => {
+    let data = standard().stats;
+    render(<Success stats={data} />);
+
+    expect(screen.getByTestId("your-stats-header")).toHaveTextContent('Your Stats');
+
+    expect(screen.getByTestId("translation-count-header")).toHaveTextContent('Number of Translations');
+    expect(screen.getByTestId("user-num-translations")).toHaveTextContent(`${data.count} total translations`);
+
+    expect(screen.getByTestId("mostfreq-pair-header")).toHaveTextContent('Most Frequent Language Pair');
+    expect(screen.getByTestId("user-mostfreq-pair")).toHaveTextContent(`${data.count} total translations`);
+
+  })
+});
