@@ -1,6 +1,6 @@
 import { Box, Typography, Divider, Grid, Rating } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import { LineChart, Line, CartesianGrid, XAxis, YAxis, ResponsiveContainer } from 'recharts';
+import { LineChart, Line, CartesianGrid, XAxis, YAxis, ResponsiveContainer, Tooltip } from 'recharts';
 // import { LineChart } from '@mui/x-charts/LineChart';
 
 
@@ -151,6 +151,7 @@ export const Success = ({ stats }) => {
               <LineChart data={weekActivity} margin={{ right: 30 }}>
                 <Line type="monotone" dataKey="translations" stroke="#8884d8" strokeWidth={2} />
                 <CartesianGrid horizontal={true} vertical={false}/>
+                <Tooltip contentStyle={{ color: '#8884d8' }}/>
                 <XAxis dataKey="name" tick={{ fill: theme.palette.text.secondary }} tickLine={{ stroke: theme.palette.text.secondary }}/>
                 <YAxis allowDecimals={false} tick={{ fill: theme.palette.text.secondary }} tickLine={{ stroke: theme.palette.text.secondary }}/>
               </LineChart>
