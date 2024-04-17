@@ -61,6 +61,21 @@ describe('render tests for stats section', () => {
     });
   });
 
+  const languages = {
+    "c": "C",
+    "cpp": "C++",
+    "csharp": "C#",
+    "go": "Go",
+    "java": "Java",
+    "javascript": "JavaScript",
+    "kotlin": "Kotlin",
+    "php": "PHP",
+    "python": "Python",
+    "ruby": "Ruby",
+    "rust": "Rust",
+    "typescript": "TypeScript"
+  };
+
   it('renders all text components when all data is provided', () => {
     let stats = standard().stats;
     render(<Success stats={stats} />);
@@ -68,13 +83,13 @@ describe('render tests for stats section', () => {
     expect(screen.getByTestId("your-stats-header")).toHaveTextContent('Your Stats');
 
     expect(screen.getByTestId("translation-count-header")).toHaveTextContent('Number of Translations');
-    expect(screen.getByTestId("user-num-translations")).toHaveTextContent(`${stats.count} total translations`);
+    expect(screen.getByTestId("user-num-translations")).toHaveTextContent(`${stats.count} Total Translations`);
 
     expect(screen.getByTestId("mostfreq-pair-header")).toHaveTextContent('Most Frequent Language Pair');
-    expect(screen.getByTestId("user-mostfreq-pair")).toHaveTextContent(`${stats.favPair[0]} -> ${stats.favPair[1]} (a whopping ${stats.favPairFreq} times!)`);
+    expect(screen.getByTestId("user-mostfreq-pair")).toHaveTextContent(`${languages[stats.favPair[0]]} -> ${languages[stats.favPair[1]]} (a whopping ${stats.favPairFreq} times!)`);
 
     expect(screen.getByTestId("highest-rated-pair-header")).toHaveTextContent('Highest Rated Language Pair');
-    expect(screen.getByTestId("user-highest-rated-pair")).toHaveTextContent(`${stats.highestRatedPair[0]} -> ${stats.highestRatedPair[1]} (${stats.highestAvgRating})`);
+    expect(screen.getByTestId("user-highest-rated-pair")).toHaveTextContent(`${languages[stats.highestRatedPair[0]]} -> ${languages[stats.highestRatedPair[1]]} (${stats.highestAvgRating})`);
     expect(screen.getByTestId("highest-avg-rating-stars")).toBeInTheDocument();
 
   });
@@ -83,7 +98,7 @@ describe('render tests for stats section', () => {
     let stats = standard().noTranslations;
     render(<Success stats={stats} />);
 
-    expect(screen.getByTestId("user-num-translations")).toHaveTextContent(`${stats.count} total translations`);
+    expect(screen.getByTestId("user-num-translations")).toHaveTextContent(`${stats.count} Total Translations`);
 
     expect(screen.getByTestId("user-mostfreq-pair")).toHaveTextContent('-');
 
@@ -95,11 +110,11 @@ describe('render tests for stats section', () => {
     let stats = standard().oneTranslations;
     render(<Success stats={stats} />);
 
-    expect(screen.getByTestId("user-num-translations")).toHaveTextContent(`${stats.count} total translation`);
+    expect(screen.getByTestId("user-num-translations")).toHaveTextContent(`${stats.count} Total Translation`);
 
-    expect(screen.getByTestId("user-mostfreq-pair")).toHaveTextContent(`${stats.favPair[0]} -> ${stats.favPair[1]} (a whopping ${stats.favPairFreq} time!)`);
+    expect(screen.getByTestId("user-mostfreq-pair")).toHaveTextContent(`${languages[stats.favPair[0]]} -> ${languages[stats.favPair[1]]} (a whopping ${stats.favPairFreq} time!)`);
 
-    expect(screen.getByTestId("user-highest-rated-pair")).toHaveTextContent(`${stats.highestRatedPair[0]} -> ${stats.highestRatedPair[1]} (${stats.highestAvgRating})`);
+    expect(screen.getByTestId("user-highest-rated-pair")).toHaveTextContent(`${languages[stats.highestRatedPair[0]]} -> ${languages[stats.highestRatedPair[1]]} (${stats.highestAvgRating})`);
     expect(screen.getByTestId("highest-avg-rating-stars")).toBeInTheDocument();
   });
 

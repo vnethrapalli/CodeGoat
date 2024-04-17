@@ -37,7 +37,20 @@ export const Failure = ({ error }) => (
 export const Success = ({ stats }) => {
   const theme = useTheme();
 
-  console.log(stats);
+  const languages = {
+    "c": "C",
+    "cpp": "C++",
+    "csharp": "C#",
+    "go": "Go",
+    "java": "Java",
+    "javascript": "JavaScript",
+    "kotlin": "Kotlin",
+    "php": "PHP",
+    "python": "Python",
+    "ruby": "Ruby",
+    "rust": "Rust",
+    "typescript": "TypeScript"
+  };
 
   /* convert date string to date object */
   const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -53,7 +66,6 @@ export const Success = ({ stats }) => {
   for (var i = 0; i < 7; i++) {
     weekActivity.push({ name: weekDates[i], translations: stats.weekRequests[i] });
   }
-  console.log(weekActivity);
 
   return (
     <>
@@ -70,7 +82,7 @@ export const Success = ({ stats }) => {
               </Typography>
             </Divider>
             <Typography data-testid='user-num-translations' align='right' sx={{ color: theme.palette.text.secondary, fontSize: '12px', fontStyle: 'normal', fontWeight: '500', marginTop: '15px', marginBottom: '15px'}}>
-              {stats.count} total translation{stats.count == 1 ? '' : 's'}
+              {stats.count} Total Translation{stats.count == 1 ? '' : 's'}
             </Typography>
 
             <Divider aria-hidden="true" textAlign="left" sx={{ marginBottom: '10px' }}>
@@ -82,7 +94,7 @@ export const Success = ({ stats }) => {
               {
                 stats.favPair[0] === '' || stats.favPair[1] === '' ?
                 '-' :
-                `${stats.favPair[0]} -> ${stats.favPair[1]} (a whopping ${stats.favPairFreq} time${stats.favPairFreq > 1 ? 's' : ''}!)`
+                `${languages[stats.favPair[0]]} -> ${languages[stats.favPair[1]]} (a whopping ${stats.favPairFreq} time${stats.favPairFreq > 1 ? 's' : ''}!)`
               }
               </Typography>
 
@@ -98,7 +110,7 @@ export const Success = ({ stats }) => {
                 {
                   stats.highestRatedPair[0] === '' || stats.highestRatedPair[1] === '' ?
                   '-' :
-                  `${stats.highestRatedPair[0]} -> ${stats.highestRatedPair[1]} (${stats.highestAvgRating})`
+                  `${languages[stats.highestRatedPair[0]]} -> ${languages[stats.highestRatedPair[1]]} (${stats.highestAvgRating})`
                 }
               </Typography>
             </Box>
