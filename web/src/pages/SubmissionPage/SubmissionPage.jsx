@@ -83,7 +83,6 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
   const [rating, setRating] = React.useState(5);
   const [refreshQuery, setRefreshQuery] = React.useState(true);
   const [ignoreLanguageMismatch, setIgnoreLanguageMismatch] = React.useState(false);
-  const firstLanguageMismatch = useRef(true);
   const [output, setOutput] = React.useState(false);
   const [userId, setUserId] = React.useState();
   const [inputMonaco, setInputMonaco] = React.useState();
@@ -109,6 +108,7 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
     if(outLang){
       setOutputLanguage(outLang);
     }
+
   },[])
 
   const CodeBox = ({ codeValue, updateCodeValue, defaultLanguage, language, defaultValue, isInput }) => {
@@ -163,7 +163,10 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
 
   const codeboxInput = CodeBox({
     codeValue: inputCodeValue,
-    updateCodeValue: (newCodeVal) => setInputCodeValue(newCodeVal),
+    updateCodeValue: ((newCodeVal) => {
+      setInputCodeValue(newCodeVal)
+      setIgnoreLanguageMismatch(false);
+    }),
     defaultLanguage: inputLanguage,
     language: inputLanguage,
     defaultValue: inputCodeValue,
@@ -172,7 +175,9 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
 
   const codeboxOutput = CodeBox({
     codeValue: outputCodeValue,
-    updateCodeValue: (newCodeVal) => setOutputCodeValue(newCodeVal),
+    updateCodeValue: ((newCodeVal) => {
+      setOutputCodeValue(newCodeVal);
+    }),
     defaultLanguage: outputLanguage,
     language: outputLanguage,
     defaultValue: outputCodeValue,
@@ -246,20 +251,6 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
       onCompleted: () => {},
       onError: () => {},
     })
-
-    useEffect(() => {
-      const re = /^(.+ was detected but you selected .+. Please select the right language.)$/
-      if (re.test(outputCodeValue) && firstLanguageMismatch.current)
-      {
-        firstLanguageMismatch.current = false;
-        setIgnoreLanguageMismatch(true);
-      }
-      else if (!re.test(outputCodeValue))
-      {
-        firstLanguageMismatch.current = true;
-        setIgnoreLanguageMismatch(false);
-      }
-    }, [outputCodeValue]);
 
     const removeComments = (inCode, inLang) => {
       if (inputMonaco == undefined)
@@ -362,7 +353,9 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
       let statusCode = response.status;
       response = await response.json();
 
-      setOutputCodeValue(response.data);
+      setOutputCodeValue((outputCodeValue) => {
+        return response.data;
+      });
       setOutput(true);
       setRefreshQuery(val => !val);
       queueCount--;
@@ -370,6 +363,7 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
       if(statusCode === 200) {
         toast.success("Code translated successfully! \nQueued Requests: " + queueCount.toString(), { duration: 1500, position: 'bottom-right' });
         setOutputCodeValue(response.data);
+        setIgnoreLanguageMismatch(false);
       } else {
         switch(statusCode) {
           case 429:
@@ -377,6 +371,13 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
             break;
           case 400:
             toast.error("There was an error in the communication between the backend and API. Please try again.", { duration: 2500, position: 'bottom-right' });
+            const re = /^(.+ was detected but you selected .+. Please select the right language.)$/
+            if (re.test(response.data))
+            {
+              setIgnoreLanguageMismatch(true);
+              return;
+            }
+
             break;
           case 403:
             toast.error("The length of the code is too long. Please shorten the code and try again.", { duration: 2500, position: 'bottom-right' });
@@ -515,7 +516,7 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
   const DropdownAndButtons = ({ input }) => {
     return (
       <Grid container direction="row" justifyContent="center" alignItems="center" width='100%' height="100%">
-        <Grid item direction="row" display='flex' justifyContent="flex-start" alignItems="center" xs={9}>
+        <Grid item display='flex' justifyContent="flex-start" alignItems="center" xs={9}>
           <Box>
             <LangDropdown text="Source Language" language={inputLanguage} setLanguage={(newLang) => setInputLanguage(newLang)} />
           </Box>
@@ -523,7 +524,7 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
             <LangDropdown text="Target Language" language={outputLanguage} setLanguage={(newLang) => setOutputLanguage(newLang)} />
           </Box>
         </Grid>
-        <Grid label="hello" item direction="row" spacing={0} sx={{ display: 'flex', justifyContent: 'flex-end', alignContent: 'flex-end', alignItems: "flex-end", minHeight: '100%' }} xs={3}>
+        <Grid item sx={{ display: 'flex', justifyContent: 'flex-end', alignContent: 'flex-end', alignItems: "flex-end", minHeight: '100%' }} xs={3}>
           <CopyButton editor={codeboxInput} isInput={input}/>
           <Divider orientation="vertical"  style={{ backgroundColor: theme.palette.background.default, width: '0.5%', height: '40px' }}/>
           <UploadButtonInput/>
@@ -536,7 +537,7 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
     return (
       <Grid container direction="row" justifyContent="center" alignItems="center" width='100%' height="100%">
         <Grid item xs={9} />
-        <Grid label="hello" item direction="row" spacing={0} sx={{ display: 'flex', justifyContent: 'flex-end', alignContent: 'flex-end', alignItems: "flex-end", minHeight: '100%' }} xs={3}>
+        <Grid item sx={{ display: 'flex', justifyContent: 'flex-end', alignContent: 'flex-end', alignItems: "flex-end", minHeight: '100%' }} xs={3}>
           <CopyButton editor={input ? codeboxInput : codeboxOutput} isInput={input} />
           <Divider orientation="vertical" style={{ backgroundColor: theme.palette.background.default, width: '0.5%', height: '40px' }}/>
           <DownloadButton/>
@@ -620,13 +621,13 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
           width='100%'
         >
           <Grid item xs />
-          <Grid item direction="column" justifyContent="space-between" alignItems="center" width='100%' height='100%' xs={output ? 10 : 5}>
+          <Grid item justifyContent="space-between" alignItems="center" width='100%' height='100%' xs={output ? 10 : 5}>
             <Grid container direction="row" width='100%' height='100%' marginBottom='10px' spacing={2}>
               <Grid item xs={output ? 6 : 12}>
                 <DropdownAndButtons input={true} />
               </Grid>
               {output &&
-              <Grid item xs={6} spacing={0} sx={{ display: 'flex', justifyContent: 'flex-end', alignContent: 'flex-end', alignItems: "flex-end", minHeight: '100%' }}>
+              <Grid item xs={6} sx={{ display: 'flex', justifyContent: 'flex-end', alignContent: 'flex-end', alignItems: "flex-end", minHeight: '100%' }}>
                 <NoDropdownAndButtons input={false} />
               </Grid>
               }

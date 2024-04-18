@@ -6,7 +6,7 @@ import {
   updateTranslation,
   deleteTranslation,
   translationHistoryPage,
-  deleteTranslations
+  deleteAllTranslations,
 } from './translations'
 
 // Generated boilerplate tests do not account for all circumstances
@@ -67,6 +67,14 @@ describe('translations', () => {
     const result = await translation({ id: original.id })
 
     expect(result).toEqual(null)
+  })
+
+  scenario('deletes all translations', async (scenario) => {
+    const original = await deleteAllTranslations({
+      id: scenario.translation.one.uid,
+    })
+
+    expect(original.count).toEqual(3)
   })
 })
 

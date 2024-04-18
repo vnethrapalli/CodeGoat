@@ -133,7 +133,7 @@ export const deleteTranslation = ({ id }) => {
   })
 }
 
-export const deleteTranslations = ({ uid }) => {
+export const deleteAllTranslations = ({ uid }) => {
   return db.translation.deleteMany({
     where: { uid },
   })
@@ -141,7 +141,7 @@ export const deleteTranslations = ({ uid }) => {
 
 const POSTS_PER_PAGE = 10
 
-export const translationHistoryPage = ({ page = 1, uid, inLang = [], outLang = [], startDate = "1970-01-01T00:00:01Z", endDate = new Date(Date.now()).toISOString(), sort, inSort, outSort}) => {
+export const translationHistoryPage = ({ page = 1, uid, inLang = [], outLang = [], startDate = "1970-01-01T00:00:01Z", endDate = new Date().getFullYear() + 1 + "-01-01T00:00:01Z", sort, inSort, outSort}) => {
   const offset = (page - 1) * POSTS_PER_PAGE
 
   return {
