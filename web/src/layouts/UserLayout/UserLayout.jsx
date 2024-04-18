@@ -377,9 +377,9 @@ const UserButtons = () => {
   }
 
   const resendOtp = async () => {
-    const user_id = userMetadata.sub
+    const userID = userMetadata.sub
     const {data: otp_data} = await generateOTP({
-      variables: { user_id:  }
+      variables: { user_id: userID }
     })
 
     const otp_response = JSON.parse(otp_data.generateCode)
