@@ -95,7 +95,7 @@ export const translationStats = async ({ uid }) => {
     weekDates: Object.keys(dateFreqs),
     weekRequests: Object.values(dateFreqs),
     highestRatedPair: highestRatedPair,
-    highestAvgRating: highestAvgRating
+    highestAvgRating: Math.round(highestAvgRating * 100) / 100
   }
 }
 
