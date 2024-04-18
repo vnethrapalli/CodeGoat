@@ -1,12 +1,14 @@
 import { navigate, routes, useParams, useLocation } from '@redwoodjs/router'
 import { Toaster, toast } from '@redwoodjs/web/toast'
-import { IconButton, Divider, AppBar, Link, Box, Button, Container, Tooltip, Typography, Grid, Menu, MenuItem, useScrollTrigger, CssBaseline } from '@mui/material';
+import { IconButton, Divider, AppBar, Link, Box, Button, Container, Tooltip, Typography, Grid, Menu, MenuItem, useScrollTrigger, CssBaseline, Modal, TextField } from '@mui/material';
 import { Experimental_CssVarsProvider as CssVarsProvider, experimental_extendTheme as extendTheme, useColorScheme, useTheme } from '@mui/material/styles';
 import { makeStyles } from "@mui/styles";
 import { Logout, Settings, AccessTime, Person, DarkMode, LightMode } from '@mui/icons-material'
 import { useAuth, auth0 } from 'src/auth'
 import PropTypes from 'prop-types';
 import { useEffect } from 'react';
+import { useMutation } from '@redwoodjs/web';
+import { set } from '@redwoodjs/forms';
 
 const theme = extendTheme({
   colorSchemes: {
@@ -266,10 +268,46 @@ const UserButtons = () => {
   const theme = useTheme();
   const { isAuthenticated, signUp, logOut, loading, userMetadata } = useAuth()
   const [isAuth, setIsAuth] = React.useState(isAuthenticated)
+  const [is2faModal, setIs2faModal] = React.useState(false)
+  const [otp, setOtp] = React.useState("")
+  const [otpError, setOtpError] = React.useState({error: false, helperText: ""})
+  const [otpResponse, setOtpResponse] = React.useState("")
+  const [user, setUser] = React.useState(null)
+  const ADD_USER_MUTATION = gql`
+    mutation AddUser($user_id: String!, $email: String!) {
+      addUser(user_id: $user_id, email: $email)
+    }
+  `
+  const GENERATE_OTP_MUTATION = gql`
+    mutation GenerateOTP($user_id: String!) {
+      generateCode(user_id: $user_id)
+    }
+  `
+  const VERIFY_OTP_MUTATION = gql`
+    mutation VerifyCode($user_id: String!, $code: String!) {
+      verifyCode(user_id: $user_id, code: $code)
+    }
+  `
+  const VERIFICATION_IN_PROGRESS_MUTATION = gql`
+    mutation VerificationInProgress($user_id: String!) {
+      verificationInProgress(user_id: $user_id)
+    }
+  `
+
+  const USER_EXISTS_MUTATION = gql`
+    mutation UserExists($user_id: String!) {
+      userExists(user_id: $user_id)
+    }
+  `
+
+  const [addUser] = useMutation(ADD_USER_MUTATION)
+  const [generateOTP] = useMutation(GENERATE_OTP_MUTATION)
+  const [verifyOTP] = useMutation(VERIFY_OTP_MUTATION)
+  const [verificationInProgress] = useMutation(VERIFICATION_IN_PROGRESS_MUTATION)
+  const [userExists] = useMutation(USER_EXISTS_MUTATION)
 
   React.useEffect(() => {
     if(isAuthenticated) {
-      setIsAuth(true)
       if (localStorage.getItem('user') === null) {
         auth0.getUser().then(user => {
           delete user.updated_at
@@ -277,6 +315,64 @@ const UserButtons = () => {
           localStorage.setItem('user', JSON.stringify(user))
         })
       }
+      let userID = JSON.parse(localStorage.getItem('user')).sub || null
+      let userEmail = JSON.parse(localStorage.getItem('user')).email || null
+      setUser(JSON.parse(localStorage.getItem('user')))
+
+      if(userID === null) {
+        return
+      }
+
+      userExists({variables: { user_id: userID }}).then(({data}) => {
+        const response = JSON.parse(data.userExists)
+        if (!response) {
+          addUser({
+            variables: { user_id: userID, email: userEmail }
+          }).then(({data}) => {
+            const response = JSON.parse(data.addUser)
+            if (response.statusCode === 500) {
+              logOut().then(() => {
+                localStorage.removeItem('user')
+              })
+              setIsAuth(false)
+            } else {
+              generateOTP({
+                variables: { user_id: userID }
+              }).then(({data}) => {
+                const otp_response = JSON.parse(data.generateCode)
+                if (otp_response.statusCode === 500) {
+                  toast.error(otp_response.message, {position: "bottom-right", duration: 2500})
+                  logOut().then(() => {
+                    localStorage.removeItem('user')
+                    setIsAuth(false)
+                  })
+                } else {
+                  setOtpResponse("")
+                  setOtpError({error: false, helperText: ''})
+                  setIs2faModal(true)
+                }
+              })
+            }
+          })
+        } else {
+          verificationInProgress({
+            variables: { user_id: userID }
+          }).then(({data}) => {
+            const response = JSON.parse(data.verificationInProgress)
+            if (response) {
+              toast.error(otp_response.message, {position: "bottom-right", duration: 2500})
+              logOut().then(() => {
+                localStorage.removeItem('user')
+              })
+              setIsAuth(false)
+            } else {
+              setIsAuth(true)
+            }
+          })
+        }
+      })
+
+
     }
   }, [loading])
 
@@ -284,18 +380,127 @@ const UserButtons = () => {
     return null
   }
 
+  const resendOtp = async () => {
+    const user = JSON.parse(localStorage.getItem('user'))
+    const {data: otp_data} = await generateOTP({
+      variables: { user_id: user.sub }
+    })
+
+    const otp_response = JSON.parse(otp_data.generateCode)
+
+    if (otp_response.statusCode === 500) {
+      toast.error(otp_response.message, {position: "bottom-right", duration: 2500})
+      await logOut().then(() => {
+        localStorage.removeItem('user')
+      })
+    } else {
+      toast.success('One Time Password Resent', {position: "bottom-right", duration: 2500})
+      setOtpResponse("")
+      setOtpError({error: false, helperText: ''})
+    }
+  }
+
   const login = async () => {
     await auth0.loginWithPopup().then(t => {
-      setIsAuth(true)
-      auth0.getUser().then(user => {
+      auth0.getUser().then(async user => {
         delete user.updated_at
         delete user.email_verified
-        localStorage.setItem('user', JSON.stringify(user))
+        setUser(user)
+        const { data } = await addUser({
+          variables: { user_id: user.sub, email: user.email }
+        })
+
+        const {data: otp_data} = await generateOTP({
+          variables: { user_id: user.sub }
+        })
+
+        const otp_response = JSON.parse(otp_data.generateCode)
+
+        if (otp_response.statusCode === 500) {
+          toast.error(otp_response.message, {position: "bottom-right", duration: 2500})
+          await logOut().then(() => {
+            localStorage.removeItem('user')
+            setIsAuth(false)
+          })
+        } else {
+          setOtpResponse("")
+          setOtpError({error: false, helperText: ''})
+          setIs2faModal(true)
+        }
+
       })
     })
     let currUser = JSON.parse(localStorage.getItem('user'));
     toast.success("Welcome " + currUser.nickname + "!", {position: "bottom-right"})
   }
+
+  const inputStyle = {style:{color: theme.palette.text.secondary, fontSize: '18px', fontStyle: 'normal', fontWeight: '600', margin: '1%', textAlign: 'center'}}
+
+  const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: '40%',
+    bgcolor: theme.palette.background.default,
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+    borderRadius: '10px',
+    textAlign: 'center',
+    height: 'auto',
+  };
+
+  const handleOTPChange = (e) => {
+    let value = e.target.value
+    if(value.length !== 6) {
+      setOtpError({error: true, helperText: 'OTP must be 6 characters'})
+      return
+    }
+
+    if (!value.match(/^[A-Z0-9]+$/)) {
+      setOtpError({error: true, helperText: 'OTP must contain only uppercase letters and numbers'})
+      return
+    }
+
+    setOtp(value)
+    setOtpError({error: false, helperText: ''})
+
+  }
+
+  const verifyOtp = async () => {
+    const { data } = await verifyOTP({
+      variables: { user_id: user.sub, code: otp }
+    })
+
+    const response = JSON.parse(data.verifyCode)
+
+    if (response.statusCode === 401) {
+      setOtpResponse(response.message)
+      return
+    }
+
+    if (response.statusCode === 402) {
+      setOtpResponse(response.message)
+      return
+    }
+
+    if (response.statusCode === 500) {
+      setOtpResponse(response.message)
+      return
+    }
+
+    if (response.statusCode === 200) {
+      setOtpResponse("")
+      toast.success(response.message, {position: "bottom-right", duration: 2500})
+      localStorage.setItem('user', JSON.stringify(user))
+      setIsAuth(true)
+      setIs2faModal(false)
+    }
+
+  }
+
+
 
   return (
     <Grid item alignContent='center' alignItems='stretch' sx={{display: 'flex', justifyContent: 'flex-end', paddingRight: '10px' }} xs={3}>
@@ -330,6 +535,54 @@ const UserButtons = () => {
       >
         Sign Up
       </Button>}
+
+      <Modal
+        open={is2faModal}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <Typography id="modal-modal-title" variant="h6" component="h2" style={{color:theme.palette.primary.main, fontSize: '30px', fontStyle: 'normal', fontWeight: '600', margin: '1%', display: 'block'}}>
+            Two Factor Authentication
+          </Typography>
+          <Typography id="modal-modal-description" variant="body1" component="p" style={{color:theme.palette.text.secondary, fontSize: '20px', fontStyle: 'normal', fontWeight: '400', margin: '1%', display: 'block'}}>
+            A One Time Password has been sent to your email. Please enter it below to continue.
+          </Typography>
+          <TextField id="outlined-basic" data-testid="username" variant="outlined" inputProps={{...inputStyle}} style={{margin: '1%', display: 'block'}} onChange={handleOTPChange} error={otpError.error} helperText={otpError.helperText}/>
+          <Typography id="modal-modal-description" variant="body1" component="p" style={{color: 'red', fontSize: '14px', fontStyle: 'normal', fontWeight: '400', margin: '1%', display: 'block'}}>
+            {otpResponse}
+          </Typography>
+
+          <Button
+            variant="contained"
+            style={{
+              backgroundColor: theme.palette.text.secondary,
+              color: theme.palette.background.default,
+              margin: '1%',
+              display: 'inline-block',
+            }}
+            onClick={verifyOtp}
+          >
+            Verify
+          </Button>
+          <Button
+            variant="contained"
+            style={{
+              backgroundColor: theme.palette.background.default,
+              color: theme.palette.text.secondary,
+              border: '1px solid ' + theme.palette.text.secondary,
+              boxShadow: 'none',
+              margin: '1%',
+              display: 'inline-block',
+            }}
+            onClick={resendOtp}
+          >
+            Resend Code
+          </Button>
+
+
+        </Box>
+      </Modal>
 
       {isAuth && <UserMenu />}
     </Grid>
