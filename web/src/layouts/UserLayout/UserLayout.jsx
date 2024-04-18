@@ -315,13 +315,9 @@ const UserButtons = () => {
           localStorage.setItem('user', JSON.stringify(user))
         })
       }
-      let userID = JSON.parse(localStorage.getItem('user')).sub || null
-      let userEmail = JSON.parse(localStorage.getItem('user')).email || null
+      let userID = userMetadata.sub || null
+      let userEmail = userMetadata.email || null
       setUser(JSON.parse(localStorage.getItem('user')))
-
-      if(userID === null) {
-        return
-      }
 
       userExists({variables: { user_id: userID }}).then(({data}) => {
         const response = JSON.parse(data.userExists)
@@ -381,9 +377,9 @@ const UserButtons = () => {
   }
 
   const resendOtp = async () => {
-    const user = JSON.parse(localStorage.getItem('user'))
+    const userID = userMetadata.sub
     const {data: otp_data} = await generateOTP({
-      variables: { user_id: user.sub }
+      variables: { user_id: userID }
     })
 
     const otp_response = JSON.parse(otp_data.generateCode)
