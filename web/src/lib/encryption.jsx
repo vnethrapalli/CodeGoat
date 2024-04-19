@@ -1,4 +1,3 @@
-require('dotenv').config();
 import CryptoJS from "crypto-js";
 
 export const encrypt = (data) => {

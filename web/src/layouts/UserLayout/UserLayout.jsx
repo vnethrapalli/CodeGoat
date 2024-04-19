@@ -9,6 +9,7 @@ import PropTypes from 'prop-types';
 import { useEffect } from 'react';
 import { useMutation } from '@redwoodjs/web';
 import { set } from '@redwoodjs/forms';
+import { encrypt, decrypt } from 'src/lib/encryption';
 
 const theme = extendTheme({
   colorSchemes: {
@@ -194,7 +195,7 @@ const UserMenu = () => {
     setAnchorElUser(null);
   };
 
-  let currUser = JSON.parse(localStorage.getItem('user'));
+  let currUser = JSON.parse(decrypt(localStorage.getItem('user')));
 
   return (
     <Box sx={{ display: 'flex', alignContent: 'center', paddingLeft: '10px', flexGrow: 0 }}>
@@ -312,12 +313,12 @@ const UserButtons = () => {
         auth0.getUser().then(user => {
           delete user.updated_at
           delete user.email_verified
-          localStorage.setItem('user', JSON.stringify(user))
+          localStorage.setItem('user', encrypt(JSON.stringify(user)))
         })
       }
       let userID = userMetadata.sub || null
       let userEmail = userMetadata.email || null
-      setUser(JSON.parse(localStorage.getItem('user')))
+      setUser(JSON.parse(decrypt(localStorage.getItem('user'))))
 
       userExists({variables: { user_id: userID }}).then(({data}) => {
         const response = JSON.parse(data.userExists)
@@ -426,7 +427,7 @@ const UserButtons = () => {
 
       })
     })
-    let currUser = JSON.parse(localStorage.getItem('user'));
+    let currUser = JSON.parse(decrypt(localStorage.getItem('user')));
     toast.success("Welcome " + currUser.nickname + "!", {position: "bottom-right"})
   }
 
@@ -489,7 +490,7 @@ const UserButtons = () => {
     if (response.statusCode === 200) {
       setOtpResponse("")
       toast.success(response.message, {position: "bottom-right", duration: 2500})
-      localStorage.setItem('user', JSON.stringify(user))
+      localStorage.setItem('user', encrypt(JSON.stringify(user)))
       setIsAuth(true)
       setIs2faModal(false)
     }
