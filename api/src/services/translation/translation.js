@@ -115,9 +115,7 @@ export const getTranslation = async ({ code, inLang, outLang }) => {
 
       /* construct main message request */
       let msg = `
-      Please give me a translation of the following ${langcodeToLang[inLang]} code into the ${langcodeToLang[outLang]} programming language. Provide no backticks at the beginning and end:\n\n
-      ${code}
-      `;
+      Translate the following code from ${langcodeToLang[inLang]} to ${langcodeToLang[outLang]}. Provide no backticks at the beginning or end:\n\n${code}`;
 
       messages.push({ role : "user", content: msg });
       // console.log(messages);
