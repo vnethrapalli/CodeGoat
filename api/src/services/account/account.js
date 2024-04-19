@@ -1,7 +1,10 @@
 import { db } from 'src/lib/db';
 import axios from 'axios'
+import { encrypt, decrypt } from 'src/lib/encrypt';
 
 export const updateUsername = async ({ user_id, nickname }) => {
+
+  user_id = decrypt(user_id)
 
   const token_options = {
     method: 'POST',
@@ -61,6 +64,8 @@ export const updateUsername = async ({ user_id, nickname }) => {
 
 
 export const deleteAccount = async ({ user_id }) => {
+
+  user_id = decrypt(user_id)
 
   const token_options = {
     method: 'POST',

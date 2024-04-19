@@ -1,6 +1,7 @@
 import { addUser, generateCode, verifyCode, verificationInProgress, userExists } from "./user";
 import bcrypt from "bcrypt"
 import { db } from "src/lib/db";
+import { encrypt, decrypt } from "src/lib/encrypt";
 
 jest.mock("nodemailer")
 const nodemailer = require("nodemailer")
@@ -24,7 +25,7 @@ describe("Create User", () => {
 describe("Generate Two Factor Code", () => {
 
   beforeEach(async () => {
-    await addUser({ user_id: "1234", email: "johndoe@gmail.com"})
+    await addUser({ user_id: encrypt("1234"), email: encrypt("johndoe@gmail.com")})
     nodemailer.createTransport().sendMail.mockClear()
     nodemailer.createTransport.mockClear()
   })
@@ -36,7 +37,7 @@ describe("Generate Two Factor Code", () => {
   })
 
   it("should generate a two factor code", async () => {
-    const code = await generateCode({ user_id: "1234" })
+    const code = await generateCode({ user_id: encrypt("1234") })
     expect(nodemailer.createTransport).toHaveBeenCalled()
     expect(nodemailer.createTransport().sendMail).toHaveBeenCalled()
     expect(code).toEqual(JSON.stringify({ statusCode: 200, message: "One Time Password mailed successfully" }))
@@ -64,13 +65,13 @@ describe("Verify Two Factor Code", () => {
     })
 
     it("should verify a two factor code", async () => {
-      const code = await verifyCode({ user_id: "1234", code: "123456" })
+      const code = await verifyCode({ user_id: encrypt("1234"), code: encrypt("123456") })
       expect(code).toEqual(JSON.stringify({ statusCode: 200, message: "Two Factor code verified successfully" }))
       expect(await db.user.findUnique({ where: { uid: "1234" }})).toEqual(expect.objectContaining({ hash: "" }))
     })
 
     it("should not verify a two factor code if user not found", async () => {
-      const code = await verifyCode({ user_id: "12345", code: "123456" })
+      const code = await verifyCode({ user_id: encrypt("12345"), code: encrypt("123456") })
       expect(code).toEqual(JSON.stringify({ statusCode: 404, message: "User not found" }))
     })
 
@@ -81,7 +82,7 @@ describe("Verify Two Factor Code", () => {
           hash: ""
         }
       })
-      const code = await verifyCode({ user_id: "1234", code: "123456" })
+      const code = await verifyCode({ user_id: encrypt("1234"), code: encrypt("123456") })
       expect(code).toEqual(JSON.stringify({ statusCode: 401, message: "No one time password was generated" }))
     })
 
@@ -92,16 +93,16 @@ describe("Verify Two Factor Code", () => {
           createdAt: new Date(Date.now() - 600000)
         }
       })
-      const code = await verifyCode({ user_id: "1234", code: "123456" })
+      const code = await verifyCode({ user_id: encrypt("1234"), code: encrypt("123456") })
       expect(code).toEqual(JSON.stringify({ statusCode: 402, message: "One time password has expired" }))
     })
 })
 
 describe("User Exists", () => {
   it("should check if user exists", async () => {
-    await addUser({ user_id: "1234", email: "johndoe@gmail.com"})
+    await addUser({ user_id: encrypt("1234"), email: encrypt("johndoe@gmail.com")})
 
-    const user = await userExists({ user_id: "1234" })
+    const user = await userExists({ user_id: encrypt("1234") })
 
     expect(user).toEqual(true)
 
@@ -111,7 +112,7 @@ describe("User Exists", () => {
   })
 
   it("should check if user does not exist", async () => {
-    const user = await userExists({ user_id: "1234" })
+    const user = await userExists({ user_id: encrypt("1234") })
 
     expect(user).toEqual(false)
   })
@@ -119,9 +120,9 @@ describe("User Exists", () => {
 
 describe("Verification In Progress", () => {
   it("should check if verification is in progress", async () => {
-    await addUser({ user_id: "1234", email: "johndoe@gmail.com"})
+    await addUser({ user_id: encrypt("1234"), email: encrypt("johndoe@gmail.com")})
 
-    const user = await verificationInProgress({ user_id: "1234" })
+    const user = await verificationInProgress({ user_id: encrypt("1234") })
 
     expect(user).toEqual(false)
 
@@ -141,7 +142,7 @@ describe("Verification In Progress", () => {
       }
     })
 
-    const user = await verificationInProgress({ user_id: "1234" })
+    const user = await verificationInProgress({ user_id: encrypt("1234") })
 
     expect(user).toEqual(true)
 
