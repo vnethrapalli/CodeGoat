@@ -23,7 +23,7 @@ services:
     # ```
     # destination: https://my-redwood-project-api.onrender.com/*
     # ```
-    destination: replace_with_api_url/*
+    destination: https://codegoat.onrender.com/*
   - type: rewrite
     source: /*
     destination: /200.html
