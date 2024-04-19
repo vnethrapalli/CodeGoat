@@ -4,6 +4,7 @@ import {
   createFeedback,
   updateFeedback,
   deleteFeedback,
+  feedbackStats
 } from './feedbacks'
 
 // Generated boilerplate tests do not account for all circumstances
@@ -65,4 +66,50 @@ describe('feedbacks', () => {
 
     expect(result).toEqual(null)
   })
-})
+});
+
+describe('testing feedback summary aggregation', () => {
+  beforeEach(async () => {
+    await createFeedback({
+      input: {
+        submissionPage: 7,
+        outputPage: 2,
+        translationAccuracy: 5,
+        gptAvailability: 3,
+        experience: 9,
+        comments: 'String',
+      },
+    });
+
+    await createFeedback({
+      input: {
+        submissionPage: 8,
+        outputPage: 2,
+        translationAccuracy: 4,
+        gptAvailability: 5,
+        experience: 9,
+        comments: 'String',
+      },
+    });
+
+    await createFeedback({
+      input: {
+        submissionPage: 1,
+        outputPage: 2,
+        translationAccuracy: 2,
+        gptAvailability: 4,
+        experience: 6,
+        comments: 'String',
+      },
+    });
+  });
+
+  it('correctly computes the average ratings for each category', async () => {
+    const results = await feedbackStats({});
+    expect(results.submissionPageAvg).toEqual(2.67);
+    expect(results.outputPageAvg).toEqual(1);
+    expect(results.translationAccuracyAvg).toEqual(1.83);
+    expect(results.gptAvailabilityAvg).toEqual(2);
+    expect(results.experienceAvg).toEqual(4);
+  });
+});
