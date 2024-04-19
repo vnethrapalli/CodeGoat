@@ -12,8 +12,6 @@ services:
   envVars:
   - key: SKIP_INSTALL_DEPS
     value: true
-  - key: NODE_VERSION
-    value: 20
 
   routes:
   - type: rewrite
@@ -41,8 +39,6 @@ services:
     fromDatabase:
       name: CodeGoat-db
       property: connectionString
-  - key: NODE_VERSION
-    value: 20
 
 databases:
   - name: CodeGoat-db
