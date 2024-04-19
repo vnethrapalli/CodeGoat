@@ -10,6 +10,7 @@ import UserLayout from './UserLayout'
 import HomePage from 'src/pages/HomePage/HomePage';
 import { LightMode, DarkMode } from '@mui/icons-material'
 import { testClick } from './UserLayout';
+import { encrypt, decrypt } from 'src/lib/encryption';
 
 jest.mock('@redwoodjs/router', () => ({
   ...jest.requireActual('@redwoodjs/router'),
@@ -72,7 +73,7 @@ const localStorageMock = (function () {
 Object.defineProperty(window, "localStorage", { value: localStorageMock });
 
 const setLocalStorage = (id, data) => {
-  window.localStorage.setItem(id, JSON.stringify(data));
+  window.localStorage.setItem(id, encrypt(JSON.stringify(data)));
 };
 
 beforeEach(() => {

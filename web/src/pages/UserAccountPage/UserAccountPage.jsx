@@ -17,13 +17,13 @@ const UserAccountPage = () => {
   const { userMetadata } = useAuth()
 
   const UPDATE_USERNAME_MUTATION = gql`
-    mutation UpdateUsername($user_id: String!, $nickname: String!, $token: String!) {
-      updateUsername(user_id: $user_id, nickname: $nickname, token: $token)
+    mutation UpdateUsername($user_id: String!, $nickname: String!) {
+      updateUsername(user_id: $user_id, nickname: $nickname)
     }
   `
   const DELETE_ACCOUNT_MUTATION = gql`
-    mutation DeleteAccount($user_id: String!, $token: String!) {
-      deleteAccount(user_id: $user_id, token: $token)
+    mutation DeleteAccount($user_id: String!) {
+      deleteAccount(user_id: $user_id)
     }
   `
 
@@ -78,7 +78,7 @@ const UserAccountPage = () => {
     let token = await auth0.getTokenSilently()
     try {
       const {data} = await updateUsername({
-        variables: { user_id: userMetadata.sub, nickname: username, token: token }
+        variables: { user_id: userMetadata.sub, nickname: username }
       })
       const response = JSON.parse(data.updateUsername)
 
@@ -108,7 +108,7 @@ const UserAccountPage = () => {
     let token = await auth0.getTokenSilently()
     try {
       const {data} = await deleteAccount({
-        variables: { user_id: userMetadata.sub, token: token }
+        variables: { user_id: userMetadata.sub }
       })
 
       const response = JSON.parse(data.deleteAccount)

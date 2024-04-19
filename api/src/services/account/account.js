@@ -1,7 +1,7 @@
 import { db } from 'src/lib/db';
 import axios from 'axios'
 
-export const updateUsername = async ({ user_id, nickname, token }) => {
+export const updateUsername = async ({ user_id, nickname }) => {
 
   const token_options = {
     method: 'POST',
@@ -60,7 +60,7 @@ export const updateUsername = async ({ user_id, nickname, token }) => {
 }
 
 
-export const deleteAccount = async ({ user_id, token }) => {
+export const deleteAccount = async ({ user_id }) => {
 
   const token_options = {
     method: 'POST',
