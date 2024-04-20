@@ -8,6 +8,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import { auth0 } from 'src/auth'
 import { useParams } from '@redwoodjs/router'
 import { ConfirmationNumberOutlined, ConnectingAirportsOutlined, ConstructionOutlined, ContentPasteSearchOutlined, Download, UploadFile, ContentCopy } from '@mui/icons-material';
+import { useMediaQuery } from 'react-responsive'
+
 
 const CREATE_TRANSLATION = gql`
   mutation CreateTranslationMutation($input: CreateTranslationInput!) {
@@ -90,6 +92,8 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
   const theme = useTheme();
 
   const { code, inLang, outLang } = useParams();
+
+  const isDesktopOrLaptop = useMediaQuery({query: '(min-width: 1000px)'})
 
   useEffect(()=>{
     auth0.getUser().then(user => {
@@ -620,7 +624,7 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
           width='100%'
         >
           <Grid item xs />
-          <Grid item justifyContent="space-between" alignItems="center" width='100%' height='100%' xs={output ? 10 : 5}>
+          <Grid item justifyContent="space-between" alignItems="center" width='100%' height='100%' xs={output ? isDesktopOrLaptop ? 10 : 12 : isDesktopOrLaptop ? 5 : 12}>
             <Grid container direction="row" width='100%' height='100%' marginBottom='10px' spacing={2}>
               <Grid item xs={output ? 6 : 12}>
                 <DropdownAndButtons input={true} />
