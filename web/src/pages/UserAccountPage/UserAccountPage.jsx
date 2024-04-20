@@ -78,7 +78,7 @@ const UserAccountPage = () => {
     let token = await auth0.getTokenSilently()
     try {
       const {data} = await updateUsername({
-        variables: { user_id: userMetadata.sub, nickname: username }
+        variables: { user_id: encrypt(userMetadata.sub), nickname: username }
       })
       const response = JSON.parse(data.updateUsername)
 
@@ -105,10 +105,9 @@ const UserAccountPage = () => {
   const onDeleteAccount = async () => {
 
 
-    let token = await auth0.getTokenSilently()
     try {
       const {data} = await deleteAccount({
-        variables: { user_id: userMetadata.sub }
+        variables: { user_id: encrypt(userMetadata.sub) }
       })
 
       const response = JSON.parse(data.deleteAccount)

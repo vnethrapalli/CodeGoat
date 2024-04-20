@@ -320,11 +320,11 @@ const UserButtons = () => {
       let userEmail = userMetadata.email || null
       setUser(JSON.parse(decrypt(localStorage.getItem('user'))))
 
-      userExists({variables: { user_id: userID }}).then(({data}) => {
+      userExists({variables: { user_id: encrypt(userID) }}).then(({data}) => {
         const response = JSON.parse(data.userExists)
         if (!response) {
           addUser({
-            variables: { user_id: userID, email: userEmail }
+            variables: { user_id: encrypt(userID), email: encrypt(userEmail) }
           }).then(({data}) => {
             const response = JSON.parse(data.addUser)
             if (response.statusCode === 500) {
@@ -334,7 +334,7 @@ const UserButtons = () => {
               setIsAuth(false)
             } else {
               generateOTP({
-                variables: { user_id: userID }
+                variables: { user_id: encrypt(userID) }
               }).then(({data}) => {
                 const otp_response = JSON.parse(data.generateCode)
                 if (otp_response.statusCode === 500) {
@@ -353,7 +353,7 @@ const UserButtons = () => {
           })
         } else {
           verificationInProgress({
-            variables: { user_id: userID }
+            variables: { user_id: encrypt(userID) }
           }).then(({data}) => {
             const response = JSON.parse(data.verificationInProgress)
             if (response) {
@@ -380,7 +380,7 @@ const UserButtons = () => {
   const resendOtp = async () => {
     const userID = userMetadata.sub
     const {data: otp_data} = await generateOTP({
-      variables: { user_id: userID }
+      variables: { user_id: encrypt(userID) }
     })
 
     const otp_response = JSON.parse(otp_data.generateCode)
@@ -404,11 +404,11 @@ const UserButtons = () => {
         delete user.email_verified
         setUser(user)
         const { data } = await addUser({
-          variables: { user_id: user.sub, email: user.email }
+          variables: { user_id: encrypt(user.sub), email: encrypt(user.email) }
         })
 
         const {data: otp_data} = await generateOTP({
-          variables: { user_id: user.sub }
+          variables: { user_id: encrypt(user.sub) }
         })
 
         const otp_response = JSON.parse(otp_data.generateCode)
@@ -467,7 +467,7 @@ const UserButtons = () => {
 
   const verifyOtp = async () => {
     const { data } = await verifyOTP({
-      variables: { user_id: user.sub, code: otp }
+      variables: { user_id: encrypt(user.sub), code: encrypt(otp) }
     })
 
     const response = JSON.parse(data.verifyCode)
