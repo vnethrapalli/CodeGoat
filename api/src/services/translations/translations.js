@@ -2,12 +2,100 @@ import { db } from 'src/lib/db'
 
 const langCodes = [ "c", "cpp", "csharp", "java", "javascript", "python", "typescript", "go", "rust", "ruby", "kotlin", "php"];
 
-export const translations = ({ uid }) => {
+export const translationStats = async ({ uid }) => {
+  const results = await db.translation.findMany({
+    where: { uid: uid },
+    orderBy: [
+      { inputLanguage: 'asc' },
+      { outputLanguage: 'asc'}
+    ],
+    select: {
+      inputLanguage: true,
+      outputLanguage: true,
+      rating: true
+    }
+  });
+
+  var now = new Date();
+  const recents = await db.translation.findMany({
+    where: {
+      uid: uid,
+      createdAt: {
+        gte: new Date(now.getFullYear(), now.getMonth(), now.getDate() - (7-1))
+      }
+    },
+    orderBy: [
+      { createdAt: 'asc' }
+    ],
+    select: {
+      createdAt: true
+    }
+  });
+
+
+  /* stores information regarding all language translation pairs (ie. frequency, average rating, etc) */
+  let data = {};
+  let nullRating = 0;
+  for (const pair of results) {
+    let key = [pair['inputLanguage'], pair['outputLanguage']].join(',');
+    let rating = pair['rating'] >= 0 ? pair['rating'] : nullRating;
+    if (data.hasOwnProperty(key)) {
+      data[key]['freq'] += 1;
+      data[key]['rating_freq'] += pair['rating'] >= 0 ? 1 : 0;
+      data[key]['avg_rating'] += rating;
+    }
+    else {
+      data[key] = {};
+      data[key]['freq'] = 1;
+      data[key]['rating_freq'] = pair['rating'] >= 0 ? 1 : 0;
+      data[key]['avg_rating'] = rating;
+    }
+  }
+  for (var key of Object.keys(data)) {
+    data[key]['avg_rating'] /= data[key]['rating_freq'];
+  }
+
+  /* finds most frequent pair of input and output languages for translations */
+  var mostFreqPair = ['', ''];
+  var maxfreq = 0;
+  var highestRatedPair = ['', ''];
+  var highestAvgRating = 0;
+  for (const pair in data) {
+    if (data[pair]['freq'] > maxfreq) {
+      maxfreq = data[pair]['freq'];
+      let langs = pair.split(',');
+      mostFreqPair[0] = langs[0];
+      mostFreqPair[1] = langs[1];
+    }
+
+    if (data[pair]['avg_rating'] > highestAvgRating) {
+      highestAvgRating= data[pair]['avg_rating'];
+      let langs = pair.split(',');
+      highestRatedPair[0] = langs[0];
+      highestRatedPair[1] = langs[1];
+    }
+  }
+
+  /* counting the number of translation made each day in the past 7 days (including today) */
+  let dateFreqs = {};
+  for (let i = 6; i >= 0; i--) {
+    const dt = new Date(now.getFullYear(), now.getMonth(), now.getDate() - i)
+    dateFreqs[dt] = 0;
+  }
+  for (const pair of recents) {
+    let key = new Date(pair['createdAt'].getFullYear(), pair['createdAt'].getMonth(), pair['createdAt'].getDate());
+    dateFreqs[key] += 1;
+  }
+
+
   return {
-    translations: db.translation.findMany({
-      where: { uid },
-      orderBy: { createdAt: 'desc' },
-    })
+    count: Object.keys(results).length,
+    favPair: mostFreqPair,
+    favPairFreq: maxfreq,
+    weekDates: Object.keys(dateFreqs),
+    weekRequests: Object.values(dateFreqs),
+    highestRatedPair: highestRatedPair,
+    highestAvgRating: Math.round(highestAvgRating * 100) / 100
   }
 }
 
@@ -15,6 +103,15 @@ export const translation = ({ id }) => {
   return db.translation.findUnique({
     where: { id },
   })
+}
+
+export const translations = ({ uid }) => {
+  return {
+    translations: db.translation.findMany({
+      where: { uid },
+      orderBy: { createdAt: 'desc' },
+    })
+  }
 }
 
 export const createTranslation = ({ input }) => {
@@ -85,5 +182,11 @@ export const translationHistoryPage = ({ page = 1, uid, inLang = [], outLang = [
         },
       },
     }),
+  }
+}
+
+export const translationCount = ({ }) => {
+  return {
+    count: db.translation.count()
   }
 }
