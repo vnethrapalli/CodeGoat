@@ -24,7 +24,7 @@ services:
     destination: https://codegoat.onrender.com/*
   - type: rewrite
     source: /*
-    destination: /200.html
+    destination: /index.html
 
 - name: CodeGoat-api
   type: web
