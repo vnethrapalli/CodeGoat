@@ -12,9 +12,11 @@ export const schema = gql`
   }
 
   type Query {
+    translationStats(uid: String!): Stats @requireAuth
     translationHistoryPage(page: Int, uid: String!, inLang: [String!]!, outLang: [String!]!, startDate: DateTime, endDate: DateTime, sort: Int!, inSort: Int!, outSort: Int!): TranslationHistoryPage @requireAuth
     translations(uid: String!): TranslationsList @requireAuth
     translation(id: Int!): Translation @requireAuth
+    translationCount: TranslationCount @skipAuth
   }
 
   input CreateTranslationInput {
@@ -49,11 +51,25 @@ export const schema = gql`
     count: Int!
   }
 
+  type Stats {
+    count: Int!
+    favPair: [String]
+    favPairFreq: Int
+    weekDates: [String!]!
+    weekRequests: [Int!]!
+    highestRatedPair: [String]
+    highestAvgRating: Float
+  }
+
   type TranslationsList {
     translations: [Translation!]!
   }
 
   type DeleteCount {
+    count: Int!
+  }
+
+  type TranslationCount {
     count: Int!
   }
 `
