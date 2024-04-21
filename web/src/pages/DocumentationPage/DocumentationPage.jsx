@@ -16,6 +16,7 @@ import { Divider } from '@mui/material';
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
+import { useRef } from 'react';
 
 export function testClick() {
   return "hello"
@@ -23,6 +24,15 @@ export function testClick() {
 
 const DocumentationPage = () => {
   const theme = useTheme()
+  const myRefRel = useRef(null)
+  const executeScrollRel = () => myRefRel.current.scrollIntoView({behavior: 'smooth'})
+  const myRefTec = useRef(null)
+  const executeScrollTec = () => myRefTec.current.scrollIntoView({behavior: 'smooth'})
+  const myRefDow = useRef(null)
+  const executeScrollDow = () => myRefDow.current.scrollIntoView({behavior: 'smooth'})
+  const myRefFAQ = useRef(null)
+  const executeScrollFAQ = () => myRefFAQ.current.scrollIntoView({behavior: 'smooth'})
+
   const [searchQuery, setSearchQuery] = useState("");
 
   return (
@@ -45,8 +55,7 @@ const DocumentationPage = () => {
             key="Release Notes"
             variant="text"
             data-testid="notesButton"
-            onClick={testClick}
-            href={'#releasenotes'}
+            onClick={executeScrollRel}
             sx={{ fontSize: '18px', marginTop: '2px', marginBottom: '2px', marginRight: '5px', marginLeft: '0px', color: theme.palette.text.secondary, display: 'block' }}
           >
             Release Notes
@@ -55,18 +64,16 @@ const DocumentationPage = () => {
             key="Technologies"
             variant="text"
             data-testid="techButton"
-            href={'#technologies'}
-            onClick={testClick}
+            onClick={executeScrollTec}
             sx={{ fontSize: '18px', marginTop: '2px', marginBottom: '2px', marginRight: '5px', marginLeft: '0px', color: theme.palette.text.secondary, display: 'block'}}
           >
             Technologies
           </Button>
           <Button
-            key="Feedback"
+            key="Download"
             variant="text"
             data-testid="feedbackButton"
-            onClick={testClick}
-            href={'#downloads'}
+            onClick={executeScrollDow}
             sx={{ fontSize: '18px', marginTop: '2px', marginBottom: '2px', marginRight: '5px', marginLeft: '0px', color: theme.palette.text.secondary, display: 'block' }}
           >
             Downloadable Guides
@@ -75,15 +82,14 @@ const DocumentationPage = () => {
             key="FAQ"
             variant="text"
             data-testid="faqButton"
-            onClick={testClick}
-            href={'#faq'}
+            onClick={executeScrollFAQ}
             sx={{ fontSize: '18px', marginTop: '2px', marginBottom: '2px', marginRight: '5px', marginLeft: '0px', color: theme.palette.text.secondary, display: 'block' }}
           >
             FAQs
           </Button>
       </Box>
     </Grid>
-
+    <Box ref={myRefRel} style={{paddingBottom: '50px'}}></Box>
       <Box display="flex" flexDirection='column' justifyContent="center" alignItems="center">
         <Divider id='releasenotes' variant='h1' component='h1' align='center' style={{color: theme.palette.text.secondary, fontSize: '40px', fontStyle: 'normal', fontWeight: '500', width: '90%'}}>Release Notes</Divider>
           <Box style={{ padding: '25px', paddingBottom: '0px', marginTop: '20px', marginBottom: '0px', width: '85%'}}>
@@ -264,6 +270,8 @@ const DocumentationPage = () => {
             </Accordion>
 
           </Box>
+        <Box ref={myRefTec} style={{paddingBottom: '50px'}}></Box>
+
         <Divider id='technologies' variant='h1' component='h1' align='center' style={{color: theme.palette.text.secondary, fontSize: '40px', fontStyle: 'normal', fontWeight: '500', width: '90%'}}>Technologies</Divider>
 
         <Box style={{ padding: '25px', paddingBottom: '0px', marginTop: '20px', marginBottom: '0px', width: '85%'}}>
@@ -348,7 +356,7 @@ const DocumentationPage = () => {
             sent and translated, a new code box will return with the translation provided by GPT-3.
           </Typography>
         </Typography>
-
+        <Box ref={myRefDow} style={{paddingBottom: '50px'}}></Box>
         <Divider id="downloads" variant='h1' component='h1' align='center' style={{color: theme.palette.text.secondary, fontSize: '40px', fontStyle: 'normal', fontWeight: '500', width: '90%'}}>Downloadable Guides</Divider>
 
         <Box display="flex" flexDirection="row" justifyContent="center" alignItems="center">
@@ -376,35 +384,35 @@ const DocumentationPage = () => {
           </Link>
         </Box>
 
-        <br></br>
+        <Box ref={myRefFAQ} style={{paddingBottom: '50px'}}></Box>
         <Divider id="faq" variant='h1' component='h1' align='center' style={{color: theme.palette.text.secondary, fontSize: '40px', fontStyle: 'normal', fontWeight: '500', width: '90%'}}>FAQ</Divider>
       </Box>
       <br></br>
-        <Form data-testid='search'>
-          <TextField
-            sx={{ input: { color: theme.palette.text.secondary }, '&:active fieldset': {borderColor: theme.palette.text.secondary} }}
-            id="search-bar"
-            className="text"
-            style={{width:'97%'}}
-            onInput={(e) => {
-              setSearchQuery(e.target.value);
-            }}
-            label="What are you looking for?"
-            variant="outlined"
-            placeholder="Search..."
-            size="small"
-          />
-          <IconButton data-testid='search icon' type="submit" aria-label="search">
-            <SearchIcon style={{ fill: theme.palette.text.secondary, size:"xl" }} />
-          </IconButton>
-        </Form>
-        <br></br>
-        <QuestionsCell searchQuery={searchQuery}/>
-
+      <Box display="flex" flexDirection='column' justifyContent="center" alignItems="center">
+        <Box style={{ padding: '25px', paddingBottom: '0px', marginTop: '20px', marginBottom: '0px', width: '85%'}}>
+          <Form data-testid='search'>
+            <TextField
+              sx={{ input: { color: theme.palette.text.secondary }, '&:active fieldset': {borderColor: theme.palette.text.secondary} }}
+              id="search-bar"
+              className="text"
+              style={{width:'95%'}}
+              onInput={(e) => {
+                setSearchQuery(e.target.value);
+              }}
+              label="What are you looking for?"
+              variant="outlined"
+              placeholder="Search..."
+              size="small"
+            />
+            <IconButton data-testid='search icon' type="submit" aria-label="search">
+              <SearchIcon style={{ fill: theme.palette.text.secondary, size:"xl" }} />
+            </IconButton>
+          </Form>
+          <br></br>
+          <QuestionsCell searchQuery={searchQuery}/>
+        </Box>
+      </Box>
       </div>
-
-
-
     </>
   )
 }
