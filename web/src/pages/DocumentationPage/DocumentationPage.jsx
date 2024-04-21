@@ -8,13 +8,15 @@ import SearchIcon from "@mui/icons-material/Search";
 import TextField from "@mui/material/TextField";
 
 import { useTheme } from '@mui/material/styles'
-import { Grid, Box, Typography, Link, IconButton, List, ListItemIcon, ListItemText, ListItem } from '@mui/material';
+import { Button, Grid, Box, Typography, Link, IconButton, List, ListItemIcon, ListItemText, ListItem } from '@mui/material';
 
 import QuestionsCell from 'src/components/QuestionsCell'
 import DownloadIcon from '@mui/icons-material/Download';
 import { Divider } from '@mui/material';
 
-
+export function testClick() {
+  return "hello"
+}
 
 const DocumentationPage = () => {
   const theme = useTheme()
@@ -34,8 +36,55 @@ const DocumentationPage = () => {
             padding: 20
           }}
         >
+          <Grid item display='flex' alignContent='center' alignItems='center' justifyContent='center' xs={6}>
+      <Box data-testid="docButtons" display="flex" sx={{ justifyContent: "center", alignItems: "center" }}>
+          <Button
+            key="Release Notes"
+            variant="text"
+            data-testid="notesButton"
+            onClick={testClick}
+            href={'#releasenotes'}
+            sx={{ fontSize: '18px', marginTop: '2px', marginBottom: '2px', marginRight: '5px', marginLeft: '0px', color: theme.palette.text.secondary, display: 'block' }}
+          >
+            Release Notes
+          </Button>
+          <Button
+            key="Technologies"
+            variant="text"
+            data-testid="techButton"
+            href={'#technologies'}
+            onClick={testClick}
+            sx={{ fontSize: '18px', marginTop: '2px', marginBottom: '2px', marginRight: '5px', marginLeft: '0px', color: theme.palette.text.secondary, display: 'block'}}
+          >
+            Technologies
+          </Button>
+          <Button
+            key="Feedback"
+            variant="text"
+            data-testid="feedbackButton"
+            onClick={testClick}
+            href={'#downloads'}
+            sx={{ fontSize: '18px', marginTop: '2px', marginBottom: '2px', marginRight: '5px', marginLeft: '0px', color: theme.palette.text.secondary, display: 'block' }}
+          >
+            Downloadable Guides
+          </Button>
+          <Button
+            key="FAQ"
+            variant="text"
+            data-testid="faqButton"
+            onClick={testClick}
+            href={'#faq'}
+            sx={{ fontSize: '18px', marginTop: '2px', marginBottom: '2px', marginRight: '0px', marginLeft: '0px', color: theme.palette.text.secondary, display: 'block' }}
+          >
+            FAQ
+          </Button>
+      </Box>
+    </Grid>
+
       <Box display="flex" flexDirection='column' justifyContent="center" alignItems="center">
-        <Divider variant='h1' component='h1' align='center' style={{color: theme.palette.text.secondary, fontSize: '40px', fontStyle: 'normal', fontWeight: '500', width: '90%'}}>Technologies</Divider>
+        <Divider id='releasenotes' variant='h1' component='h1' align='center' style={{color: theme.palette.text.secondary, fontSize: '40px', fontStyle: 'normal', fontWeight: '500', width: '90%'}}>Release Notes</Divider>
+
+        <Divider id='technologies' variant='h1' component='h1' align='center' style={{color: theme.palette.text.secondary, fontSize: '40px', fontStyle: 'normal', fontWeight: '500', width: '90%'}}>Technologies</Divider>
 
         <Box style={{ padding: '25px', paddingBottom: '0px', marginTop: '20px', marginBottom: '0px', width: '85%'}}>
           <Typography data-testid='description' component="span" sx={{color: theme.palette.text.secondary, fontSize: '24px', fontStyle: 'normal', fontWeight: '300'}}>
@@ -93,7 +142,7 @@ const DocumentationPage = () => {
         </Box>
 
         <Typography data-testid='whatgpt' component="span" style={{ padding: '25px', marginTop: '20px', marginBottom: '20px', width: '85%', borderRadius: '20px', color: theme.palette.text.primary, fontSize: '24px', fontStyle: 'normal', fontWeight: '300'}}>
-          <Typography variant='h4' style={{ padding: '0px', margin: '0px', color: theme.palette.text.secondary, fontSize: '32px', fontStyle: 'normal', fontWeight: '550'}}>
+          <Typography variant='h4' style={{ padding: '0px', margin: '0px', color: theme.palette.text.secondary, fontSize: '26px', fontStyle: 'normal', fontWeight: '550'}}>
             What is GPT-3.5?
           </Typography>
 
@@ -104,7 +153,7 @@ const DocumentationPage = () => {
         </Typography>
 
         <Typography data-testid='howgpt' component="span"  style={{ padding: '25px', marginTop: '20px', marginBottom: '20px', width: '85%', borderRadius: '20px', color: theme.palette.text.secondary, fontSize: '24px', fontStyle: 'normal', fontWeight: '300'}}>
-          <Typography variant='h4' style={{ padding: '0px', margin: '0px', color: theme.palette.text.secondary, fontSize: '32px', fontStyle: 'normal', fontWeight: '550'}}>
+          <Typography variant='h4' style={{ padding: '0px', margin: '0px', color: theme.palette.text.secondary, fontSize: '26px', fontStyle: 'normal', fontWeight: '550'}}>
             How do we use GPT-3?
           </Typography>
 
@@ -115,7 +164,7 @@ const DocumentationPage = () => {
           </Typography>
         </Typography>
 
-        <Divider variant='h1' component='h1' align='center' style={{color: theme.palette.text.secondary, fontSize: '40px', fontStyle: 'normal', fontWeight: '500', width: '90%'}}>Downloadable Guides</Divider>
+        <Divider id="downloads" variant='h1' component='h1' align='center' style={{color: theme.palette.text.secondary, fontSize: '40px', fontStyle: 'normal', fontWeight: '500', width: '90%'}}>Downloadable Guides</Divider>
 
         <Box display="flex" flexDirection="row" justifyContent="center" alignItems="center">
           <Typography variant='h1' component='h1' align='center' style={{color: theme.palette.text.secondary, fontSize: '24px', fontStyle: 'normal', fontWeight: '300'}}>CodeGoat Walkthrough</Typography>
@@ -143,7 +192,7 @@ const DocumentationPage = () => {
         </Box>
 
         <br></br>
-        <Divider variant='h1' component='h1' align='center' style={{color: theme.palette.text.secondary, fontSize: '40px', fontStyle: 'normal', fontWeight: '500', width: '90%'}}>FAQ</Divider>
+        <Divider id="faq" variant='h1' component='h1' align='center' style={{color: theme.palette.text.secondary, fontSize: '40px', fontStyle: 'normal', fontWeight: '500', width: '90%'}}>FAQ</Divider>
       </Box>
       <br></br>
         <Form data-testid='search'>
