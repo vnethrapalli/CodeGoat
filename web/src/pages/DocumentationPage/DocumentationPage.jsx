@@ -18,6 +18,16 @@ export function testClick() {
   return "hello"
 }
 
+export const releaseData = {
+  'version': 'v1.0',
+  'date': '23 April 2024',
+  'content': {
+      'General: ':['First release!', 'Detailed instructions on usage can be found on the downloadable guides section of the documentation page.'],
+      'New Features: ':['Feature 1', 'Feature 2', 'Feature 3'],
+      'Planned Improvements: ':['Automatic bagel maker'],
+    }
+}
+
 const DocumentationPage = () => {
   const theme = useTheme()
   const [searchQuery, setSearchQuery] = useState("");
@@ -36,7 +46,7 @@ const DocumentationPage = () => {
             padding: 20
           }}
         >
-          <Grid item display='flex' alignContent='center' alignItems='center' justifyContent='center' xs={6}>
+      <Grid item display='flex' alignContent='center' alignItems='center' justifyContent='center' xs={6}>
       <Box data-testid="docButtons" display="flex" sx={{ justifyContent: "center", alignItems: "center" }}>
           <Button
             key="Release Notes"
@@ -83,7 +93,89 @@ const DocumentationPage = () => {
 
       <Box display="flex" flexDirection='column' justifyContent="center" alignItems="center">
         <Divider id='releasenotes' variant='h1' component='h1' align='center' style={{color: theme.palette.text.secondary, fontSize: '40px', fontStyle: 'normal', fontWeight: '500', width: '90%'}}>Release Notes</Divider>
+          <Box style={{ padding: '25px', paddingBottom: '0px', marginTop: '20px', marginBottom: '0px', width: '85%'}}>
+            <Typography variant='h4' style={{ padding: '0px', margin: '0px', color: theme.palette.text.secondary, fontSize: '30px', fontStyle: 'normal', fontWeight: '550'}}>
+              CodeGoat v1.0
+            </Typography>
+            <Typography data-testid='description' component="span" sx={{color: theme.palette.text.secondary, fontSize: '24px', fontStyle: 'normal', fontWeight: '300'}}>
+              23 April 2024
+            </Typography>
+            <div></div>
+            <Typography data-testid='general' component="span"  style={{ padding: '25px', marginTop: '20px', marginBottom: '20px', width: '85%', borderRadius: '20px', color: theme.palette.text.secondary, fontSize: '24px', fontStyle: 'normal', fontWeight: '300'}}>
+              <Typography variant='h4' style={{ padding: '0px', margin: '0px', color: theme.palette.text.secondary, fontSize: '26px', fontStyle: 'normal', fontWeight: '550'}}>
+                General:
+              </Typography>
+              <List style={{ padding: '0px', marginBottom: '0px', color: theme.palette.text.secondary, fontSize: '28px', fontStyle: 'normal', fontWeight: '300'}}>
+                <ListItem>
+                  <ListItemText
+                    primaryTypographyProps={{fontSize: '24px'}}
+                    primary="- Officially released!"
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemText
+                    primaryTypographyProps={{fontSize: '24px'}}
+                    primary="- Detailed instructions on usage can be found in the downloadable guides section below."
+                  />
+                </ListItem>
+              </List>
 
+              <Typography variant='h4' style={{ padding: '0px', margin: '0px', color: theme.palette.text.secondary, fontSize: '26px', fontStyle: 'normal', fontWeight: '550'}}>
+                New Features:
+              </Typography>
+              <List style={{ padding: '0px', marginBottom: '0px', color: theme.palette.text.secondary, fontSize: '28px', fontStyle: 'normal', fontWeight: '300'}}>
+                <ListItem>
+                  <ListItemText
+                    primaryTypographyProps={{fontSize: '24px'}}
+                    primary="- Account creation and login have been implemented, allowing users to make their accounts and track their translation histories."
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemText
+                    primaryTypographyProps={{fontSize: '24px'}}
+                    primary="- ChatGPT integration allows for code translation requests to be sent from our website. Users can select their desired language and will receive their code translated into that language."
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemText
+                    primaryTypographyProps={{fontSize: '24px'}}
+                    primary="- Users can take advantage of copy text, upload file, and download file buttons from the translation page."
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemText
+                    primaryTypographyProps={{fontSize: '24px'}}
+                    primary="- Translation reviews appear after each translation completes, allowing users to give rated feedback for that specific translation."
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemText
+                    primaryTypographyProps={{fontSize: '24px'}}
+                    primary="- The feedback page allows users to rate their overall experiences on a scale of 1 - 10, with 1 being the worst and 10 being the best. An additional comments box is provided for any type of feedback desired."
+                  />
+                </ListItem>
+              </List>
+
+              <Typography variant='h4' style={{ padding: '0px', margin: '0px', color: theme.palette.text.secondary, fontSize: '26px', fontStyle: 'normal', fontWeight: '550'}}>
+                Planned Improvements:
+              </Typography>
+              <List style={{ padding: '0px', marginBottom: '0px', color: theme.palette.text.secondary, fontSize: '28px', fontStyle: 'normal', fontWeight: '300'}}>
+                <ListItem>
+                  <ListItemText
+                    primaryTypographyProps={{fontSize: '24px'}}
+                    primary="- Additional user customization through profile pictures!"
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemText
+                    primaryTypographyProps={{fontSize: '24px'}}
+                    primary="- Paid subscription plan for premium users!"
+                  />
+                </ListItem>
+              </List>
+
+            </Typography>
+          </Box>
         <Divider id='technologies' variant='h1' component='h1' align='center' style={{color: theme.palette.text.secondary, fontSize: '40px', fontStyle: 'normal', fontWeight: '500', width: '90%'}}>Technologies</Divider>
 
         <Box style={{ padding: '25px', paddingBottom: '0px', marginTop: '20px', marginBottom: '0px', width: '85%'}}>
@@ -99,6 +191,7 @@ const DocumentationPage = () => {
             >
               <img src="Images/react.png" alt="React Icon" style={{ width: '25px', height: '25px', objectFit: 'contain', objectPosition: 'center', marginRight: '5px'}} />
               <ListItemText
+                primaryTypographyProps={{fontSize: '24px'}}
                 primary="React"
               />
             </ListItem>
@@ -108,6 +201,7 @@ const DocumentationPage = () => {
             >
               <img src="Images/prismaHD.png" alt="Prisma Icon" style={{ width: '25px', height: '25px', objectFit: 'contain', objectPosition: 'center',  marginRight: '5px' }} />
               <ListItemText
+                primaryTypographyProps={{fontSize: '24px'}}
                 primary="Prisma"
               />
             </ListItem>
@@ -117,6 +211,7 @@ const DocumentationPage = () => {
             >
               <img src="Images/graphql.png" alt="GrahphQL Icon" style={{ width: '25px', height: '25px', objectFit: 'contain', objectPosition: 'center', marginRight: '5px' }} />
               <ListItemText
+                primaryTypographyProps={{fontSize: '24px'}}
                 primary="GrahphQL"
               />
             </ListItem>
@@ -126,6 +221,7 @@ const DocumentationPage = () => {
             >
               <img src="Images/storybook.png" alt="Storybook Icon" style={{ width: '25px', height: '25px', objectFit: 'contain', objectPosition: 'center', marginRight: '10px'}} />
               <ListItemText
+                primaryTypographyProps={{fontSize: '24px'}}
                 primary="Storybook"
               />
             </ListItem>
@@ -135,6 +231,7 @@ const DocumentationPage = () => {
             >
               <img src="Images/jest.png" alt="Jest Icon" style={{ width: '25px', height: '25px', objectFit: 'contain', objectPosition: 'center', marginRight: '5px' }} />
               <ListItemText
+                primaryTypographyProps={{fontSize: '24px'}}
                 primary="Jest"
               />
             </ListItem>
