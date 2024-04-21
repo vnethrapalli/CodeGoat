@@ -11,6 +11,7 @@ import { useTheme } from '@mui/material/styles';
 import { alpha } from "@mui/material";
 import { TextareaAutosize as BaseTextareaAutosize } from '@mui/base/TextareaAutosize';
 // import { styled } from '@mui/system';
+import { Divider } from '@mui/material';
 
 const blue = {
   100: '#DAECFF',
@@ -154,7 +155,7 @@ const FeedbackPage = ({ defaultOnSubmit, defaultOnHandle, defaultRatings }) => {
               alignItems: 'center',
               fontSize: "1.5rem",
               justifyContent:"center",
-              marginBottom: '10px',
+              marginBottom: '20px',
             }}
           >
             <StyledRating
@@ -184,7 +185,7 @@ const FeedbackPage = ({ defaultOnSubmit, defaultOnHandle, defaultRatings }) => {
               alignItems: 'center',
               fontSize: "1.5rem",
               justifyContent:"center",
-              marginBottom: '10px',
+              marginBottom: '20px',
             }}
           >
             <StyledRating
@@ -213,7 +214,7 @@ const FeedbackPage = ({ defaultOnSubmit, defaultOnHandle, defaultRatings }) => {
               alignItems: 'center',
               fontSize: "1.5rem",
               justifyContent:"center",
-              marginBottom: '10px',
+              marginBottom: '20px',
             }}
           >
             <StyledRating
@@ -242,7 +243,7 @@ const FeedbackPage = ({ defaultOnSubmit, defaultOnHandle, defaultRatings }) => {
               alignItems: 'center',
               fontSize: "1.5rem",
               justifyContent:"center",
-              marginBottom: '10px',
+              marginBottom: '20px',
             }}
           >
             <StyledRating
@@ -271,7 +272,7 @@ const FeedbackPage = ({ defaultOnSubmit, defaultOnHandle, defaultRatings }) => {
               alignItems: 'center',
               fontSize: "1.5rem",
               justifyContent:"center",
-              marginBottom: '10px',
+              marginBottom: '20px',
             }}
           >
             <StyledRating
