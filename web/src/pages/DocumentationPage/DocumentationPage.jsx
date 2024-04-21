@@ -126,31 +126,31 @@ const DocumentationPage = () => {
               <List style={{ padding: '0px', marginBottom: '0px', color: theme.palette.text.secondary, fontSize: '28px', fontStyle: 'normal', fontWeight: '300'}}>
                 <ListItem>
                   <ListItemText
-                    primaryTypographyProps={{fontSize: '24px'}}
+                    primaryTypographyProps={{fontSize: '24px', fontWeight:'300'}}
                     primary="- Account creation and login have been implemented, allowing users to make their accounts and track their translation histories."
                   />
                 </ListItem>
                 <ListItem>
                   <ListItemText
-                    primaryTypographyProps={{fontSize: '24px'}}
+                    primaryTypographyProps={{fontSize: '24px', fontWeight:'300'}}
                     primary="- ChatGPT integration allows for code translation requests to be sent from our website. Users can select their desired language and will receive their code translated into that language."
                   />
                 </ListItem>
                 <ListItem>
                   <ListItemText
-                    primaryTypographyProps={{fontSize: '24px'}}
+                    primaryTypographyProps={{fontSize: '24px', fontWeight:'300'}}
                     primary="- Users can take advantage of copy text, upload file, and download file buttons from the translation page."
                   />
                 </ListItem>
                 <ListItem>
                   <ListItemText
-                    primaryTypographyProps={{fontSize: '24px'}}
+                    primaryTypographyProps={{fontSize: '24px', fontWeight:'300'}}
                     primary="- Translation reviews appear after each translation completes, allowing users to give rated feedback for that specific translation."
                   />
                 </ListItem>
                 <ListItem>
                   <ListItemText
-                    primaryTypographyProps={{fontSize: '24px'}}
+                    primaryTypographyProps={{fontSize: '24px', fontWeight:'300'}}
                     primary="- The feedback page allows users to rate their overall experiences on a scale of 1 - 10, with 1 being the worst and 10 being the best. An additional comments box is provided for any type of feedback desired."
                   />
                 </ListItem>
@@ -162,13 +162,13 @@ const DocumentationPage = () => {
               <List style={{ padding: '0px', marginBottom: '0px', color: theme.palette.text.secondary, fontSize: '28px', fontStyle: 'normal', fontWeight: '300'}}>
                 <ListItem>
                   <ListItemText
-                    primaryTypographyProps={{fontSize: '24px'}}
+                    primaryTypographyProps={{fontSize: '24px', fontWeight:'300'}}
                     primary="- Additional user customization through profile pictures!"
                   />
                 </ListItem>
                 <ListItem>
                   <ListItemText
-                    primaryTypographyProps={{fontSize: '24px'}}
+                    primaryTypographyProps={{fontSize: '24px', fontWeight:'300'}}
                     primary="- Paid subscription plan for premium users!"
                   />
                 </ListItem>
