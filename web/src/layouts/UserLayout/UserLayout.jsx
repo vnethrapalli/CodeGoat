@@ -615,7 +615,7 @@ const UserButtons = () => {
         data-testid="signupButton"
         key="Sign Up"
         variant="text"
-        sx={{ backgroundColor: "#2D9596", color: "#F1FADA", height: "30px", marginLeft: '14px', marginRight: '0px', borderRadius: '6px', alignSelf: 'center',
+        sx={{ backgroundColor: "#2D9596", color: "#F1FADA", height: "30px", textWrap: 'nowrap', marginLeft: '14px', marginRight: '0px', borderRadius: '6px', alignSelf: 'center',
           '&:hover': {
             backgroundColor: '#2D9596',
             color: "#F1FADA",
