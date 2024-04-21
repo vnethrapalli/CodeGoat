@@ -69,7 +69,7 @@ const HomePage = () => {
         <Typography data-testid='description' style={{ padding: '25px', marginTop: '25px', marginBottom: '0px', width: '90%', color: theme.palette.text.secondary, fontSize: '24px', fontStyle: 'normal', fontWeight: '300'}}>
           This tool uses an AI model to convert your code from one programming language to another. We provide support for a variety of languages such as:
 
-          <List dense disablePadding sx={{ listStyleType: 'disc', pl: 4, marginTop: '5px', marginBottom: '0px'}}>
+          <List dense disablePadding sx={{ columns: '2 auto', listStyleType: 'disc', pl: 4, marginTop: '5px', marginBottom: '0px'}}>
             {languages.map((language) => (
               <ListItem dense key={language.dropdownItem} disablePadding sx={{ display: 'list-item' }}>
                 {language.dropdownItem}

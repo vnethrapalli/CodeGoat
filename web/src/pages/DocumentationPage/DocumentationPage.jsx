@@ -13,19 +13,12 @@ import { Button, Grid, Box, Typography, Link, IconButton, List, ListItemIcon, Li
 import QuestionsCell from 'src/components/QuestionsCell'
 import DownloadIcon from '@mui/icons-material/Download';
 import { Divider } from '@mui/material';
+import Accordion from '@mui/material/Accordion';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import AccordionSummary from '@mui/material/AccordionSummary';
 
 export function testClick() {
   return "hello"
-}
-
-export const releaseData = {
-  'version': 'v1.0',
-  'date': '23 April 2024',
-  'content': {
-      'General: ':['First release!', 'Detailed instructions on usage can be found on the downloadable guides section of the documentation page.'],
-      'New Features: ':['Feature 1', 'Feature 2', 'Feature 3'],
-      'Planned Improvements: ':['Automatic bagel maker'],
-    }
 }
 
 const DocumentationPage = () => {
@@ -84,9 +77,9 @@ const DocumentationPage = () => {
             data-testid="faqButton"
             onClick={testClick}
             href={'#faq'}
-            sx={{ fontSize: '18px', marginTop: '2px', marginBottom: '2px', marginRight: '0px', marginLeft: '0px', color: theme.palette.text.secondary, display: 'block' }}
+            sx={{ fontSize: '18px', marginTop: '2px', marginBottom: '2px', marginRight: '5px', marginLeft: '0px', color: theme.palette.text.secondary, display: 'block' }}
           >
-            FAQ
+            FAQs
           </Button>
       </Box>
     </Grid>
@@ -94,87 +87,182 @@ const DocumentationPage = () => {
       <Box display="flex" flexDirection='column' justifyContent="center" alignItems="center">
         <Divider id='releasenotes' variant='h1' component='h1' align='center' style={{color: theme.palette.text.secondary, fontSize: '40px', fontStyle: 'normal', fontWeight: '500', width: '90%'}}>Release Notes</Divider>
           <Box style={{ padding: '25px', paddingBottom: '0px', marginTop: '20px', marginBottom: '0px', width: '85%'}}>
+              <Typography variant='h4' style={{ padding: '0px', margin: '0px', color: theme.palette.text.secondary, fontSize: '30px', fontStyle: 'normal', fontWeight: '550'}}>
+                Current Release
+              </Typography>
+            <Accordion sx={{bgcolor: theme.palette.text.success, width: '100%', border: '1px solid'}}>
+              <AccordionSummary sx={{bgcolor: theme.palette.text.success, fontSize: '24px'}} aria-controls="panel1d-content" id="panel1d-header">
+              <Typography variant='h4' style={{ padding: '0px', margin: '0px', color: theme.palette.text.primary, fontSize: '30px', fontStyle: 'normal', fontWeight: '550'}}>
+                CodeGoat v1.0
+              </Typography>
+              </AccordionSummary>
+              <AccordionDetails sx={{bgcolor: theme.palette.text.success, fontSize: '18px'}}>
+                <Typography data-testid='description' component="span" sx={{color: theme.palette.text.primary, fontSize: '24px', fontStyle: 'normal', fontWeight: '300'}}>
+                  23 April 2024
+                </Typography>
+                <div></div>
+                <Typography data-testid='general' component="span"  style={{ padding: '25px', marginTop: '20px', marginBottom: '20px', width: '85%', borderRadius: '20px', color: theme.palette.text.primary, fontSize: '24px', fontStyle: 'normal', fontWeight: '300'}}>
+                  <Typography variant='h4' style={{ padding: '0px', margin: '0px', color: theme.palette.text.primary, fontSize: '26px', fontStyle: 'normal', fontWeight: '550'}}>
+                    General:
+                  </Typography>
+                  <List style={{ padding: '0px', marginBottom: '0px', color: theme.palette.text.primary, fontSize: '28px', fontStyle: 'normal', fontWeight: '300'}}>
+                    <ListItem>
+                      <ListItemText
+                        primaryTypographyProps={{fontSize: '24px', fontWeight:'300'}}
+                        primary="- Officially released!"
+                      />
+                    </ListItem>
+                    <ListItem>
+                      <ListItemText
+                        primaryTypographyProps={{fontSize: '24px', fontWeight:'300'}}
+                        primary="- Detailed instructions on usage can be found in the downloadable guides section below."
+                      />
+                    </ListItem>
+                  </List>
+
+                  <Typography variant='h4' style={{ padding: '0px', margin: '0px', color: theme.palette.text.primary, fontSize: '26px', fontStyle: 'normal', fontWeight: '550'}}>
+                    Available Features:
+                  </Typography>
+                  <List style={{ padding: '0px', marginBottom: '0px', color: theme.palette.text.primary, fontSize: '28px', fontStyle: 'normal', fontWeight: '300'}}>
+                    <ListItem>
+                      <ListItemText
+                        primaryTypographyProps={{fontSize: '24px', fontWeight:'300'}}
+                        primary="- Account creation and login have been implemented, allowing users to make their accounts and track their translation histories."
+                      />
+                    </ListItem>
+                    <ListItem>
+                      <ListItemText
+                        primaryTypographyProps={{fontSize: '24px', fontWeight:'300'}}
+                        primary="- ChatGPT integration allows for code translation requests to be sent from our website. Users can select their desired language and will receive their code translated into that language."
+                      />
+                    </ListItem>
+                    <ListItem>
+                      <ListItemText
+                        primaryTypographyProps={{fontSize: '24px', fontWeight:'300'}}
+                        primary="- Users can take advantage of copy text, upload file, and download file buttons from the translation page."
+                      />
+                    </ListItem>
+                    <ListItem>
+                      <ListItemText
+                        primaryTypographyProps={{fontSize: '24px', fontWeight:'300'}}
+                        primary="- Translation reviews appear after each translation completes, allowing users to give rated feedback for that specific translation."
+                      />
+                    </ListItem>
+                    <ListItem>
+                      <ListItemText
+                        primaryTypographyProps={{fontSize: '24px', fontWeight:'300'}}
+                        primary="- The feedback page allows users to rate their overall experiences on a scale of 1 - 10, with 1 being the worst and 10 being the best. An additional comments box is provided for any type of feedback desired."
+                      />
+                    </ListItem>
+                  </List>
+
+                  <Typography variant='h4' style={{ padding: '0px', margin: '0px', color: theme.palette.text.primary, fontSize: '26px', fontStyle: 'normal', fontWeight: '550'}}>
+                    Planned Improvements:
+                  </Typography>
+                  <List style={{ padding: '0px', marginBottom: '0px', color: theme.palette.text.primary, fontSize: '28px', fontStyle: 'normal', fontWeight: '300'}}>
+                    <ListItem>
+                      <ListItemText
+                        primaryTypographyProps={{fontSize: '24px', fontWeight:'300'}}
+                        primary="- Additional user customization through profile pictures!"
+                      />
+                    </ListItem>
+                    <ListItem>
+                      <ListItemText
+                        primaryTypographyProps={{fontSize: '24px', fontWeight:'300'}}
+                        primary="- Paid subscription plan for premium users!"
+                      />
+                    </ListItem>
+                  </List>
+
+                </Typography>
+              </AccordionDetails>
+            </Accordion>
+            <br></br>
             <Typography variant='h4' style={{ padding: '0px', margin: '0px', color: theme.palette.text.secondary, fontSize: '30px', fontStyle: 'normal', fontWeight: '550'}}>
-              CodeGoat v1.0
+              Old Releases
             </Typography>
-            <Typography data-testid='description' component="span" sx={{color: theme.palette.text.secondary, fontSize: '24px', fontStyle: 'normal', fontWeight: '300'}}>
-              23 April 2024
-            </Typography>
-            <div></div>
-            <Typography data-testid='general' component="span"  style={{ padding: '25px', marginTop: '20px', marginBottom: '20px', width: '85%', borderRadius: '20px', color: theme.palette.text.secondary, fontSize: '24px', fontStyle: 'normal', fontWeight: '300'}}>
-              <Typography variant='h4' style={{ padding: '0px', margin: '0px', color: theme.palette.text.secondary, fontSize: '26px', fontStyle: 'normal', fontWeight: '550'}}>
-                General:
+            <Accordion sx={{bgcolor: theme.palette.text.success, width: '100%', border: '1px solid'}}>
+              <AccordionSummary sx={{bgcolor: theme.palette.text.success, fontSize: '24px'}} aria-controls="panel1d-content" id="panel1d-header">
+              <Typography variant='h4' style={{ padding: '0px', margin: '0px', color: theme.palette.text.primary, fontSize: '30px', fontStyle: 'normal', fontWeight: '550'}}>
+                CodeGoat v0.8
               </Typography>
-              <List style={{ padding: '0px', marginBottom: '0px', color: theme.palette.text.secondary, fontSize: '28px', fontStyle: 'normal', fontWeight: '300'}}>
-                <ListItem>
-                  <ListItemText
-                    primaryTypographyProps={{fontSize: '24px'}}
-                    primary="- Officially released!"
-                  />
-                </ListItem>
-                <ListItem>
-                  <ListItemText
-                    primaryTypographyProps={{fontSize: '24px'}}
-                    primary="- Detailed instructions on usage can be found in the downloadable guides section below."
-                  />
-                </ListItem>
-              </List>
+              </AccordionSummary>
+              <AccordionDetails sx={{bgcolor: theme.palette.text.success, fontSize: '18px'}}>
+                <Typography data-testid='description' component="span" sx={{color: theme.palette.text.primary, fontSize: '24px', fontStyle: 'normal', fontWeight: '300'}}>
+                  9 April 2024
+                </Typography>
+                <div></div>
+                <Typography data-testid='general' component="span"  style={{ padding: '25px', marginTop: '20px', marginBottom: '20px', width: '85%', borderRadius: '20px', color: theme.palette.text.primary, fontSize: '24px', fontStyle: 'normal', fontWeight: '300'}}>
+                  <Typography variant='h4' style={{ padding: '0px', margin: '0px', color: theme.palette.text.primary, fontSize: '26px', fontStyle: 'normal', fontWeight: '550'}}>
+                    General:
+                  </Typography>
+                  <List style={{ padding: '0px', marginBottom: '0px', color: theme.palette.text.primary, fontSize: '28px', fontStyle: 'normal', fontWeight: '300'}}>
+                    <ListItem>
+                      <ListItemText
+                        primaryTypographyProps={{fontSize: '24px', fontWeight:'300'}}
+                        primary="- Mainly focused on refinement and debugging."
+                      />
+                    </ListItem>
+                  </List>
 
-              <Typography variant='h4' style={{ padding: '0px', margin: '0px', color: theme.palette.text.secondary, fontSize: '26px', fontStyle: 'normal', fontWeight: '550'}}>
-                New Features:
-              </Typography>
-              <List style={{ padding: '0px', marginBottom: '0px', color: theme.palette.text.secondary, fontSize: '28px', fontStyle: 'normal', fontWeight: '300'}}>
-                <ListItem>
-                  <ListItemText
-                    primaryTypographyProps={{fontSize: '24px', fontWeight:'300'}}
-                    primary="- Account creation and login have been implemented, allowing users to make their accounts and track their translation histories."
-                  />
-                </ListItem>
-                <ListItem>
-                  <ListItemText
-                    primaryTypographyProps={{fontSize: '24px', fontWeight:'300'}}
-                    primary="- ChatGPT integration allows for code translation requests to be sent from our website. Users can select their desired language and will receive their code translated into that language."
-                  />
-                </ListItem>
-                <ListItem>
-                  <ListItemText
-                    primaryTypographyProps={{fontSize: '24px', fontWeight:'300'}}
-                    primary="- Users can take advantage of copy text, upload file, and download file buttons from the translation page."
-                  />
-                </ListItem>
-                <ListItem>
-                  <ListItemText
-                    primaryTypographyProps={{fontSize: '24px', fontWeight:'300'}}
-                    primary="- Translation reviews appear after each translation completes, allowing users to give rated feedback for that specific translation."
-                  />
-                </ListItem>
-                <ListItem>
-                  <ListItemText
-                    primaryTypographyProps={{fontSize: '24px', fontWeight:'300'}}
-                    primary="- The feedback page allows users to rate their overall experiences on a scale of 1 - 10, with 1 being the worst and 10 being the best. An additional comments box is provided for any type of feedback desired."
-                  />
-                </ListItem>
-              </List>
+                  <Typography variant='h4' style={{ padding: '0px', margin: '0px', color: theme.palette.text.primary, fontSize: '26px', fontStyle: 'normal', fontWeight: '550'}}>
+                    New Features:
+                  </Typography>
+                  <List style={{ padding: '0px', marginBottom: '0px', color: theme.palette.text.primary, fontSize: '28px', fontStyle: 'normal', fontWeight: '300'}}>
+                    <ListItem>
+                      <ListItemText
+                        primaryTypographyProps={{fontSize: '24px', fontWeight:'300'}}
+                        primary="- Added comment removal prior to API calls."
+                      />
+                    </ListItem>
+                    <ListItem>
+                      <ListItemText
+                        primaryTypographyProps={{fontSize: '24px', fontWeight:'300'}}
+                        primary="- Added user profile editing."
+                      />
+                    </ListItem>
+                    <ListItem>
+                      <ListItemText
+                        primaryTypographyProps={{fontSize: '24px', fontWeight:'300'}}
+                        primary="- Added translation history sorting and filtering."
+                      />
+                    </ListItem>
+                  </List>
 
-              <Typography variant='h4' style={{ padding: '0px', margin: '0px', color: theme.palette.text.secondary, fontSize: '26px', fontStyle: 'normal', fontWeight: '550'}}>
-                Planned Improvements:
-              </Typography>
-              <List style={{ padding: '0px', marginBottom: '0px', color: theme.palette.text.secondary, fontSize: '28px', fontStyle: 'normal', fontWeight: '300'}}>
-                <ListItem>
-                  <ListItemText
-                    primaryTypographyProps={{fontSize: '24px', fontWeight:'300'}}
-                    primary="- Additional user customization through profile pictures!"
-                  />
-                </ListItem>
-                <ListItem>
-                  <ListItemText
-                    primaryTypographyProps={{fontSize: '24px', fontWeight:'300'}}
-                    primary="- Paid subscription plan for premium users!"
-                  />
-                </ListItem>
-              </List>
+                  <Typography variant='h4' style={{ padding: '0px', margin: '0px', color: theme.palette.text.primary, fontSize: '26px', fontStyle: 'normal', fontWeight: '550'}}>
+                    Bug Fixes:
+                  </Typography>
+                  <List style={{ padding: '0px', marginBottom: '0px', color: theme.palette.text.primary, fontSize: '28px', fontStyle: 'normal', fontWeight: '300'}}>
+                    <ListItem>
+                      <ListItemText
+                        primaryTypographyProps={{fontSize: '24px', fontWeight:'300'}}
+                        primary="- Added better validation and user feedback to the translation and feedback pages."
+                      />
+                    </ListItem>
+                  </List>
 
-            </Typography>
+                  <Typography variant='h4' style={{ padding: '0px', margin: '0px', color: theme.palette.text.primary, fontSize: '26px', fontStyle: 'normal', fontWeight: '550'}}>
+                    Planned Improvements:
+                  </Typography>
+                  <List style={{ padding: '0px', marginBottom: '0px', color: theme.palette.text.primary, fontSize: '28px', fontStyle: 'normal', fontWeight: '300'}}>
+                    <ListItem>
+                      <ListItemText
+                        primaryTypographyProps={{fontSize: '24px', fontWeight:'300'}}
+                        primary="- Deploy website."
+                      />
+                    </ListItem>
+                    <ListItem>
+                      <ListItemText
+                        primaryTypographyProps={{fontSize: '24px', fontWeight:'300'}}
+                        primary="- Add 2FA."
+                      />
+                    </ListItem>
+                  </List>
+
+                </Typography>
+              </AccordionDetails>
+            </Accordion>
+
           </Box>
         <Divider id='technologies' variant='h1' component='h1' align='center' style={{color: theme.palette.text.secondary, fontSize: '40px', fontStyle: 'normal', fontWeight: '500', width: '90%'}}>Technologies</Divider>
 
