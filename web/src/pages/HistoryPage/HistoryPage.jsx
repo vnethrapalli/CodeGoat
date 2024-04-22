@@ -12,6 +12,7 @@ import { QUERY as TranslationQuery } from 'src/components/TranslationsCell'
 import TranslationsCell from 'src/components/TranslationsCell'
 import StatsCell from 'src/components/StatsCell'
 import { languages } from "web/src/pages/SubmissionPage/SubmissionPage"
+import { useMediaQuery } from 'react-responsive'
 
 const DELETE_ALL_TRANSLATIONS = gql`
   mutation DeleteAllTranslationsMutation($uid: String!) {
@@ -36,6 +37,8 @@ const HistoryPage = ({ page = 1 }) => {
   const [inSort, setInSort] = React.useState(0);
   const [outSort, setOutSort] = React.useState(0);
   const [reload, setReload] = React.useState(false);
+
+  const isDesktopOrLaptop = useMediaQuery({query: '(min-width: 1000px)'})
 
   useEffect(()=>{
     auth0.getUser().then(user => {
@@ -155,6 +158,8 @@ const HistoryPage = ({ page = 1 }) => {
             </Select>
           </FormControl>
 
+          <br></br>
+
           <Box data-testid='start' sx={{ width: 150, marginRight: '10px',
             "& .MuiInputBase-input": { color: theme.palette.text.secondary },
           }}>
@@ -196,12 +201,13 @@ const HistoryPage = ({ page = 1 }) => {
         </Box>
 
         <br></br>
+
         <Typography data-testid='sort' sx={{ color: theme.palette.text.secondary, fontSize: '24px', fontStyle: 'normal', fontWeight: '500'}}>
           Sort
         </Typography>
 
         <Grid container width="100%" sx={{ display: 'flex', alignItems: 'center', color: theme.palette.text.secondary, fontSize: '16px', fontStyle: 'normal', fontWeight: '300'}} spacing={0}>
-          <Grid item sx={{display: 'flex', flexDirection: 'row' }} xs={6}>
+          <Grid item sx={{display: 'flex', flexDirection: 'row' }} xs={isDesktopOrLaptop ? 6 : 12}>
             <Button
               onClick={() => {inSort != 0 ? setInSort(inSort + 1) : setInSort(1)}}
               data-testid='inputSort'
@@ -224,7 +230,7 @@ const HistoryPage = ({ page = 1 }) => {
                 {sort%3 != 0 ? (sort%3 == 1 ? <ArrowUpward sx={{ fontSize: 'medium', marginLeft: '5px', marginBottom: '1px' }}/> : <ArrowDownward sx={{ fontSize: 'medium', marginLeft: '5px', marginBottom: '1px'}} />) : null}
             </Button>
           </Grid>
-          <Grid item sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', alignContent: 'center' }} xs={6}>
+          <Grid item sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', alignContent: 'center' }} xs={isDesktopOrLaptop ? 6 : 12}>
             <Button
               onClick={() => {setSort(1); setSelectedInLanguage([]); setSelectedOutLanguage([]); setSelectedStartDate(undefined); setSelectedEndDate(undefined); setInSort(0); setOutSort(0);}}
               sx={{ marginRight: '15px' }}

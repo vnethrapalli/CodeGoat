@@ -20,16 +20,57 @@ describe('Rendering Tests', () => {
       screen.getByRole('heading', {
         name: /Documentation/i
       })
-      screen.getByRole('heading', {
-        name: /Technologies/i
-      })
-      screen.getByRole('heading', {
-        name: /Downloadable Guides/i
-      })
-      screen.getByRole('heading', {
-        name: /FAQ/i
-      })
+      expect(screen.getByTestId(/releasenotes/i)).toBeInTheDocument()
+      expect(screen.getByTestId(/technologies/i)).toBeInTheDocument()
+      expect(screen.getByTestId(/downloads/i)).toBeInTheDocument()
+      expect(screen.getByTestId(/faqtitle/i)).toBeInTheDocument()
     }).not.toThrow()
+  })
+
+  it('renders release notes button successfully', () => {
+    render(<DocumentationPage />)
+
+    expect(screen.getByTestId("notesButton")).toBeInTheDocument()
+  })
+
+  it('renders technologies button successfully', () => {
+    render(<DocumentationPage />)
+
+    expect(screen.getByTestId("techButton")).toBeInTheDocument()
+  })
+
+  it('renders downloadable guides button successfully', () => {
+    render(<DocumentationPage />)
+
+    expect(screen.getByTestId("downButton")).toBeInTheDocument()
+  })
+
+  it('renders FAQ button successfully', () => {
+    render(<DocumentationPage />)
+
+    expect(screen.getByTestId("faqButton")).toBeInTheDocument()
+  })
+
+  it('renders new release notes successfully', () => {
+    render(<DocumentationPage />)
+
+    expect(screen.getByTestId("new")).toBeInTheDocument()
+  })
+
+  it('renders old release notes successfully', () => {
+    render(<DocumentationPage />)
+
+    expect(screen.getByTestId("old")).toBeInTheDocument()
+  })
+
+  it('renders technology icons successfully', () => {
+    render(<DocumentationPage />)
+
+    expect(screen.getByAltText("React Icon")).toBeInTheDocument()
+    expect(screen.getByAltText("Prisma Icon")).toBeInTheDocument()
+    expect(screen.getByAltText("GraphQL Icon")).toBeInTheDocument()
+    expect(screen.getByAltText("Storybook Icon")).toBeInTheDocument()
+    expect(screen.getByAltText("Jest Icon")).toBeInTheDocument()
   })
 
   it('renders "What is GPT" box successfully', () => {
@@ -77,6 +118,46 @@ describe('Link and Download Tests', () => {
     const rwlink = screen.getByTestId('redwood link');
     expect(rwlink).toBeInTheDocument()
     expect(rwlink).toHaveAttribute('href', 'https://redwoodjs.com/docs/introduction');
+  })
+
+  it('redirects to React docs', () => {
+    render(<DocumentationPage />)
+
+    const link = screen.getByTestId('react');
+    expect(link).toBeInTheDocument()
+    expect(link).toHaveAttribute('href', 'https://reactjs.org');
+  })
+
+  it('redirects to Prisma docs', () => {
+    render(<DocumentationPage />)
+
+    const link = screen.getByTestId('prisma');
+    expect(link).toBeInTheDocument()
+    expect(link).toHaveAttribute('href', 'https://www.prisma.io/');
+  })
+
+  it('redirects to GraphQL docs', () => {
+    render(<DocumentationPage />)
+
+    const link = screen.getByTestId('graphql');
+    expect(link).toBeInTheDocument()
+    expect(link).toHaveAttribute('href', 'https://www.graphql.com/');
+  })
+
+  it('redirects to Storybook docs', () => {
+    render(<DocumentationPage />)
+
+    const link = screen.getByTestId('storybook');
+    expect(link).toBeInTheDocument()
+    expect(link).toHaveAttribute('href', 'https://storybook.js.org/');
+  })
+
+  it('redirects to Jest docs', () => {
+    render(<DocumentationPage />)
+
+    const link = screen.getByTestId('jest');
+    expect(link).toBeInTheDocument()
+    expect(link).toHaveAttribute('href', 'https://jestjs.io/');
   })
 
   it('redirects to GPT docs', () => {
