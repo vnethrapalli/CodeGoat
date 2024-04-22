@@ -393,13 +393,13 @@ const DocumentationPage = (defaultScroll) => {
       </Box>
       <br></br>
       <Box display="flex" flexDirection='column' justifyContent="center" alignItems="center">
-        <Box style={{ padding: '25px', paddingBottom: '0px', marginTop: '20px', marginBottom: '0px', width: '90%'}}>
+        <Box align="center" style={{ padding: '25px', paddingBottom: '0px', marginTop: '20px', marginBottom: '0px', width: '90%'}}>
           <Form data-testid='search'>
             <TextField
               sx={{ input: { color: theme.palette.text.secondary }, '&:active fieldset': {borderColor: theme.palette.text.secondary} }}
               id="search-bar"
               className="text"
-              style={{width:'97%'}}
+              style={{width:'85%'}}
               onInput={(e) => {
                 setSearchQuery(e.target.value);
               }}
