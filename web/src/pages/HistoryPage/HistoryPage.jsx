@@ -274,7 +274,9 @@ const HistoryPage = ({ page = 1 }) => {
           Translation History
         </Typography>
 
-        <StatsCell uid={userId}/>
+        <Box sx={{ width: "70%", height: "30vh", marginBottom: '10px', marginTop: '20px' }}>
+          <StatsCell uid={userId}/>
+        </Box>
 
         <Filters />
 

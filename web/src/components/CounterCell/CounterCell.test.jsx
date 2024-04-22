@@ -44,7 +44,7 @@ describe('Counter functionality and image loading', () => {
   it('correctly pulls the number of translations and displays the image', () => {
     render(<Success counter={standard().counter} />);
 
-    expect(screen.getByTestId("counter-box")).toHaveStyle(`background: url('Images/speechbubble.png')`);
+    expect(screen.getByTestId("counter-box")).toHaveStyle(`background: url('Images/speechbubble.svg')`);
     expect(screen.getByTestId("counter")).toHaveTextContent(`${standard().counter.count} translations and counting!`);
     expect(screen.getByTestId("goat-image")).toBeInTheDocument();
   })
