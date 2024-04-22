@@ -4,23 +4,26 @@ import { Metadata, useMutation } from '@redwoodjs/web'
 import { Button, TextField, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 import { Box } from '@mui/system'
-import { useAuth, auth0 } from 'src/auth'
+import { useAuth, auth0, } from 'src/auth'
 import { Toaster, toast } from '@redwoodjs/web/toast'
 import {Modal} from '@mui/material'
 import {IconButton} from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
+import { encrypt, decrypt } from 'src/lib/encryption'
 
 
 const UserAccountPage = () => {
 
+  const { userMetadata } = useAuth()
+
   const UPDATE_USERNAME_MUTATION = gql`
-    mutation UpdateUsername($user_id: String!, $nickname: String!, $token: String!) {
-      updateUsername(user_id: $user_id, nickname: $nickname, token: $token)
+    mutation UpdateUsername($user_id: String!, $nickname: String!) {
+      updateUsername(user_id: $user_id, nickname: $nickname)
     }
   `
   const DELETE_ACCOUNT_MUTATION = gql`
-    mutation DeleteAccount($user_id: String!, $token: String!) {
-      deleteAccount(user_id: $user_id, token: $token)
+    mutation DeleteAccount($user_id: String!) {
+      deleteAccount(user_id: $user_id)
     }
   `
 
@@ -33,10 +36,10 @@ const UserAccountPage = () => {
   const theme = useTheme()
   const [isDeleteAccount, setIsDeleteAccount] = React.useState(false)
 
-  const [username, setUsername] = React.useState(localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')).nickname : '')
+  const [username, setUsername] = React.useState(localStorage.getItem('user') ? JSON.parse(decrypt(localStorage.getItem('user'))).nickname : '')
   const [usernameError, setUsernameError] = React.useState({error: false, helperText: ''})
 
-  let email = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')).email : ''
+  let email = userMetadata.email
 
   const inputStyle = {style:{color: theme.palette.text.secondary, fontSize: '18px', fontStyle: 'normal', fontWeight: '600', margin: '1%'}}
   const style = {
@@ -75,7 +78,7 @@ const UserAccountPage = () => {
     let token = await auth0.getTokenSilently()
     try {
       const {data} = await updateUsername({
-        variables: { user_id: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')).sub : '', nickname: username, token: token }
+        variables: { user_id: encrypt(userMetadata.sub), nickname: username }
       })
       const response = JSON.parse(data.updateUsername)
 
@@ -88,7 +91,7 @@ const UserAccountPage = () => {
         delete user.updated_at
         delete user.email_verified
         user.nickname = username
-        localStorage.setItem('user', JSON.stringify(user))
+        localStorage.setItem('user', encrypt(JSON.stringify(user)))
       })
 
       toast.success(response.message, {duration: 2500, position: 'bottom-right'})
@@ -102,10 +105,9 @@ const UserAccountPage = () => {
   const onDeleteAccount = async () => {
 
 
-    let token = await auth0.getTokenSilently()
     try {
       const {data} = await deleteAccount({
-        variables: { user_id: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')).sub : '', token: token }
+        variables: { user_id: encrypt(userMetadata.sub) }
       })
 
       const response = JSON.parse(data.deleteAccount)

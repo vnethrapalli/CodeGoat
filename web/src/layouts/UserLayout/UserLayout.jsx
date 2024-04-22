@@ -11,6 +11,7 @@ import { useEffect } from 'react';
 import { useMediaQuery } from 'react-responsive'
 import { useMutation } from '@redwoodjs/web';
 import { set } from '@redwoodjs/forms';
+import { encrypt, decrypt } from 'src/lib/encryption';
 
 const theme = extendTheme({
   colorSchemes: {
@@ -285,7 +286,7 @@ const UserMenu = () => {
     setAnchorElUser(null);
   };
 
-  let currUser = JSON.parse(localStorage.getItem('user'));
+  let currUser = JSON.parse(decrypt(localStorage.getItem('user')));
 
   return (
     <Box sx={{ display: 'flex', alignContent: 'center', paddingLeft: '10px', flexGrow: 0 }}>
@@ -405,18 +406,18 @@ const UserButtons = () => {
         auth0.getUser().then(user => {
           delete user.updated_at
           delete user.email_verified
-          localStorage.setItem('user', JSON.stringify(user))
+          localStorage.setItem('user', encrypt(JSON.stringify(user)))
         })
       }
       let userID = userMetadata.sub || null
       let userEmail = userMetadata.email || null
-      setUser(JSON.parse(localStorage.getItem('user')))
+      setUser(JSON.parse(decrypt(localStorage.getItem('user'))))
 
-      userExists({variables: { user_id: userID }}).then(({data}) => {
+      userExists({variables: { user_id: encrypt(userID) }}).then(({data}) => {
         const response = JSON.parse(data.userExists)
         if (!response) {
           addUser({
-            variables: { user_id: userID, email: userEmail }
+            variables: { user_id: encrypt(userID), email: encrypt(userEmail) }
           }).then(({data}) => {
             const response = JSON.parse(data.addUser)
             if (response.statusCode === 500) {
@@ -426,7 +427,7 @@ const UserButtons = () => {
               setIsAuth(false)
             } else {
               generateOTP({
-                variables: { user_id: userID }
+                variables: { user_id: encrypt(userID) }
               }).then(({data}) => {
                 const otp_response = JSON.parse(data.generateCode)
                 if (otp_response.statusCode === 500) {
@@ -445,7 +446,7 @@ const UserButtons = () => {
           })
         } else {
           verificationInProgress({
-            variables: { user_id: userID }
+            variables: { user_id: encrypt(userID) }
           }).then(({data}) => {
             const response = JSON.parse(data.verificationInProgress)
             if (response) {
@@ -472,7 +473,7 @@ const UserButtons = () => {
   const resendOtp = async () => {
     const userID = userMetadata.sub
     const {data: otp_data} = await generateOTP({
-      variables: { user_id: userID }
+      variables: { user_id: encrypt(userID) }
     })
 
     const otp_response = JSON.parse(otp_data.generateCode)
@@ -496,11 +497,11 @@ const UserButtons = () => {
         delete user.email_verified
         setUser(user)
         const { data } = await addUser({
-          variables: { user_id: user.sub, email: user.email }
+          variables: { user_id: encrypt(user.sub), email: encrypt(user.email) }
         })
 
         const {data: otp_data} = await generateOTP({
-          variables: { user_id: user.sub }
+          variables: { user_id: encrypt(user.sub) }
         })
 
         const otp_response = JSON.parse(otp_data.generateCode)
@@ -519,7 +520,7 @@ const UserButtons = () => {
 
       })
     })
-    let currUser = JSON.parse(localStorage.getItem('user'));
+    let currUser = JSON.parse(decrypt(localStorage.getItem('user')));
     toast.success("Welcome " + currUser.nickname + "!", {position: "bottom-right"})
   }
 
@@ -559,7 +560,7 @@ const UserButtons = () => {
 
   const verifyOtp = async () => {
     const { data } = await verifyOTP({
-      variables: { user_id: user.sub, code: otp }
+      variables: { user_id: encrypt(user.sub), code: encrypt(otp) }
     })
 
     const response = JSON.parse(data.verifyCode)
@@ -582,7 +583,7 @@ const UserButtons = () => {
     if (response.statusCode === 200) {
       setOtpResponse("")
       toast.success(response.message, {position: "bottom-right", duration: 2500})
-      localStorage.setItem('user', JSON.stringify(user))
+      localStorage.setItem('user', encrypt(JSON.stringify(user)))
       setIsAuth(true)
       setIs2faModal(false)
     }

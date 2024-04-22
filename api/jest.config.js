@@ -5,4 +5,8 @@ const config = {
   preset: '@redwoodjs/testing/config/jest/api',
 }
 
+process.env = Object.assign(process.env, {
+  AES_KEY: "JESTTESTAESKEY"
+})
+
 module.exports = config

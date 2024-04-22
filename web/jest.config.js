@@ -6,3 +6,7 @@ const config = {
 }
 
 module.exports = config
+
+process.env = Object.assign(process.env, {
+  AES_KEY: "JESTTESTAESKEY"
+})
