@@ -46,5 +46,5 @@
     "react-responsive": "^10.0.0",
     "recharts": "^2.12.5"
   },
-  "proxy":"https://codegoat.onrender.com"
+  "proxy": "https://codegoat.onrender.com"
 }
