@@ -9,10 +9,8 @@ import { useTheme } from '@mui/material/styles'
 
 // This is for the regex highlighting stuff
 import _ from "lodash";
-let startTime;
 
 export const beforeQuery = (props) => {
-  startTime = new Date().getTime();
   return {
     variables: props,
     fetchPolicy: 'network-only',
@@ -41,9 +39,6 @@ function escapeRegex(string) {
 }
 
 export const Success = ({ questions, searchQuery }) => {
-  React.useEffect(() => {
-    console.log(`time taken for query: ${new Date().getTime() - startTime}`);
-  }, []);
   const theme = useTheme();
 
   const [expanded, setExpanded] = React.useState('panel1');
