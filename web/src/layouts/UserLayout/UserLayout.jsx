@@ -1,12 +1,14 @@
 import { navigate, routes, useParams, useLocation } from '@redwoodjs/router'
 import { Toaster, toast } from '@redwoodjs/web/toast'
-import { IconButton, Divider, AppBar, Link, Box, Button, Container, Tooltip, Typography, Grid, Menu, MenuItem, useScrollTrigger, CssBaseline, Modal, TextField } from '@mui/material';
+import { IconButton, Divider, AppBar, Link, Box, Button, Container, Tooltip, Typography, Grid, Menu, MenuItem, useScrollTrigger, Modal, TextField, CssBaseline, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText} from '@mui/material';
 import { Experimental_CssVarsProvider as CssVarsProvider, experimental_extendTheme as extendTheme, useColorScheme, useTheme } from '@mui/material/styles';
 import { makeStyles } from "@mui/styles";
 import { Logout, Settings, AccessTime, Person, DarkMode, LightMode } from '@mui/icons-material'
+import MenuIcon from '@mui/icons-material/Menu';
 import { useAuth, auth0 } from 'src/auth'
 import PropTypes from 'prop-types';
 import { useEffect } from 'react';
+import { useMediaQuery } from 'react-responsive'
 import { useMutation } from '@redwoodjs/web';
 import { set } from '@redwoodjs/forms';
 
@@ -55,8 +57,10 @@ const theme = extendTheme({
 const TitleLink = () => {
   const theme = useTheme();
 
+  const isDesktopOrLaptop = useMediaQuery({query: '(min-width: 1000px)'})
+
   return (
-    <Grid item display="flex" alignContent='center' alignItems='stretch' xs={3}>
+    <Grid item display="flex" alignContent='center' alignItems='stretch' xs={isDesktopOrLaptop ? 3 : 8}>
       <Typography data-testid="titleLink" noWrap
         sx={{
           mr: 2,
@@ -131,7 +135,7 @@ const NavButtons = () => {
 
         <Tooltip title='Documentation'>
           <Button
-            key="Feedback"
+            key="Documentation"
             variant="text"
             data-testid="documentationButton"
             onClick={() => (navigate(routes.documentation()))}
@@ -159,6 +163,93 @@ const ThemeButton = () => {
       </IconButton>
     </Tooltip>
   )
+}
+
+const NavDrawer = () => {
+  const theme = useTheme();
+  const page = useLocation().pathname.split('/')[1]
+  const [open, setOpen] = React.useState(false);
+
+  const toggleDrawer = (newOpen) => () => {
+    setOpen(newOpen);
+  };
+
+  const DrawerList = (
+    <Box sx={{ height: '100%', width: 180, backgroundColor: theme.palette.text.success, color: theme.palette.text.primary }} role="presentation" onClick={toggleDrawer(false)}>
+      <List>
+        <ListItem key={'Translate'} >
+          <Tooltip title='Translate Code'>
+            <Button
+              key="Translate"
+              variant="text"
+              data-testid="translateButton"
+              href={routes.translate()}
+              onClick={testClick}
+              sx={{ marginTop: '2px', marginBottom: '2px', marginRight: '5px', marginLeft: '0px', color: theme.palette.text.primary + '!important', display: 'block'}}
+              style={page==="translate" ? {textDecoration: 'underline', textUnderlineOffset: '5px'} : {}}
+            >
+              Translate
+            </Button>
+          </Tooltip>
+        </ListItem>
+
+        <ListItem key={'Feedback'} >
+          <Tooltip title='Give Feedback'>
+            <Button
+              key="Feedback"
+              variant="text"
+              data-testid="feedbackButton"
+              onClick={testClick}
+              href={routes.feedback()}
+              sx={{ marginTop: '2px', marginBottom: '2px', marginRight: '5px', marginLeft: '0px', color: theme.palette.text.primary + '!important', display: 'block' }}
+              style={page==="feedback" ? {textDecoration: 'underline', textUnderlineOffset: '5px'} : {}}
+            >
+              Feedback
+            </Button>
+          </Tooltip>
+        </ListItem>
+
+        <ListItem key={'Documentation'} >
+          <Tooltip title='Documentation'>
+            <Button
+              key="Documentation"
+              variant="text"
+              data-testid="documentationButton"
+              onClick={() => (navigate(routes.documentation()))}
+              sx={{ marginTop: '2px', marginBottom: '2px', marginRight: '0px', marginLeft: '0px', color: theme.palette.text.primary, display: 'block' }}
+              style={page==="documentation" ? {textDecoration: 'underline', textUnderlineOffset: '5px'} : {}}
+            >
+              Documentation
+            </Button>
+          </Tooltip>
+        </ListItem>
+      </List>
+    </Box>
+  );
+
+  return (
+    <Box>
+      <IconButton onClick={toggleDrawer(true)}>
+        <MenuIcon sx={{ fill: theme.palette.text.secondary }} />
+      </IconButton>
+      <Drawer open={open} variant="temporary" anchor={'right'} disableScrollLock={true} onClose={toggleDrawer(false)}
+        ModalProps={{
+          anchorOrigin: {
+            vertical: 'top',
+            horizontal: 'right',
+          },
+          keepMounted: true,
+          transformOrigin: {
+            vertical: 'top',
+            horizontal: 'right',
+          }
+        }}
+      >
+        {DrawerList}
+      </Drawer>
+    </Box>
+  )
+
 }
 
 export const useStyles = makeStyles((theme) => ({
@@ -305,6 +396,8 @@ const UserButtons = () => {
   const [verifyOTP] = useMutation(VERIFY_OTP_MUTATION)
   const [verificationInProgress] = useMutation(VERIFICATION_IN_PROGRESS_MUTATION)
   const [userExists] = useMutation(USER_EXISTS_MUTATION)
+
+  const isDesktopOrLaptop = useMediaQuery({query: '(min-width: 1000px)'})
 
   React.useEffect(() => {
     if(isAuthenticated) {
@@ -499,7 +592,7 @@ const UserButtons = () => {
 
 
   return (
-    <Grid item alignContent='center' alignItems='stretch' sx={{display: 'flex', justifyContent: 'flex-end', paddingRight: '10px' }} xs={3}>
+    <Grid item alignContent='center' alignItems='stretch' sx={{display: 'flex', justifyContent: 'flex-end', paddingRight: '10px' }} xs={isDesktopOrLaptop ? 3 : 4}>
       <ThemeButton />
 
       {!isAuth && <Button
@@ -522,7 +615,7 @@ const UserButtons = () => {
         data-testid="signupButton"
         key="Sign Up"
         variant="text"
-        sx={{ backgroundColor: "#2D9596", color: "#F1FADA", height: "30px", marginLeft: '14px', marginRight: '0px', borderRadius: '6px', alignSelf: 'center',
+        sx={{ backgroundColor: "#2D9596", color: "#F1FADA", height: "30px", textWrap: 'nowrap', marginLeft: '14px', marginRight: '0px', borderRadius: '6px', alignSelf: 'center',
           '&:hover': {
             backgroundColor: '#2D9596',
             color: "#F1FADA",
@@ -581,6 +674,8 @@ const UserButtons = () => {
       </Modal>
 
       {isAuth && <UserMenu />}
+
+      {!isDesktopOrLaptop && <NavDrawer />}
     </Grid>
   )
 }
@@ -633,7 +728,7 @@ function ElevationScroll(props) {
   });
 
   return React.cloneElement(children, {
-    elevation: trigger ? 4 : 0,
+    elevation: trigger ? 3 : 0,
   });
 }
 
@@ -649,6 +744,11 @@ ElevationScroll.propTypes = {
 const NavBar = (props) => {
   const theme = useTheme();
 
+  const isDesktopOrLaptop = useMediaQuery({query: '(min-width: 1000px)'})
+  const isBigScreen = useMediaQuery({ query: '(min-width: 1824px)' })
+  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 1100px)' })
+  const isPortrait = useMediaQuery({ query: '(orientation: portrait)' })
+
   return (
     <ElevationScroll {...props}>
       <AppBar position="sticky" sx={{ background: theme.palette.background.default, marginBottom: '5px', paddingTop: '5px', paddingBottom: '5px', height: '10%' }}>
@@ -657,7 +757,7 @@ const NavBar = (props) => {
             <TitleLink />
 
             {/* Navigation Buttons */}
-            <NavButtons />
+            {isDesktopOrLaptop && <NavButtons />}
 
             {/* Theme Change and Authentication Button */}
             <UserButtons />

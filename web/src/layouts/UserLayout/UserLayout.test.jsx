@@ -148,7 +148,9 @@ describe('UserLayout', () => {
 
   test('renders all Nav Buttons successfully', () => {
     render(<UserLayout />)
-    expect(screen.getByTestId("navButtons")).toBeInTheDocument()
+    expect(screen.getByText("Translate")).toBeInTheDocument()
+    expect(screen.getByText("Feedback")).toBeInTheDocument()
+    expect(screen.getByText("Documentation")).toBeInTheDocument()
   })
 
   test('renders Translate Button successfully', () => {

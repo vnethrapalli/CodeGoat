@@ -14,11 +14,13 @@ import QuestionsCell from 'src/components/QuestionsCell'
 import DownloadIcon from '@mui/icons-material/Download';
 import { Divider } from '@mui/material';
 
-
+import { useMediaQuery } from 'react-responsive'
 
 const DocumentationPage = () => {
   const theme = useTheme()
   const [searchQuery, setSearchQuery] = useState("");
+
+  const isDesktopOrLaptop = useMediaQuery({query: '(min-width: 1000px)'})
 
   return (
     <>
@@ -37,7 +39,7 @@ const DocumentationPage = () => {
       <Box display="flex" flexDirection='column' justifyContent="center" alignItems="center">
         <Divider variant='h1' component='h1' align='center' style={{color: theme.palette.text.secondary, fontSize: '40px', fontStyle: 'normal', fontWeight: '500', width: '90%'}}>Technologies</Divider>
 
-        <Box style={{ padding: '25px', paddingBottom: '0px', marginTop: '20px', marginBottom: '0px', width: '85%'}}>
+        <Box style={{ padding: '25px', paddingBottom: '0px', marginTop: '20px', marginBottom: '0px', width: '85%'}} sx={ isDesktopOrLaptop ? { width: '85%' } : { width: '95%' }}>
           <Typography data-testid='description' component="span" sx={{color: theme.palette.text.secondary, fontSize: '24px', fontStyle: 'normal', fontWeight: '300'}}>
             This tool was created using <Link data-testid='redwood link' href="https://redwoodjs.com/docs/introduction" sx={{textDecoration: 'underline' + '!important', textUnderlineOffset: '5px' + " !important" }}>Redwood</Link>, a full-stack web framework. As such, most of the technologies we employ are provided and are
             seamlessly integrated into our workflow and development of our tool. This includes:
@@ -92,7 +94,7 @@ const DocumentationPage = () => {
           </List>
         </Box>
 
-        <Typography data-testid='whatgpt' component="span" style={{ padding: '25px', marginTop: '20px', marginBottom: '20px', width: '85%', borderRadius: '20px', color: theme.palette.text.primary, fontSize: '24px', fontStyle: 'normal', fontWeight: '300'}}>
+        <Typography data-testid='whatgpt' component="span" style={{ padding: '25px', marginTop: '20px', marginBottom: '20px', width: '85%', borderRadius: '20px', color: theme.palette.text.primary, fontSize: '24px', fontStyle: 'normal', fontWeight: '300'}} sx={ isDesktopOrLaptop ? { width: '85%' } : { width: '95%' }}>
           <Typography variant='h4' style={{ padding: '0px', margin: '0px', color: theme.palette.text.secondary, fontSize: '32px', fontStyle: 'normal', fontWeight: '550'}}>
             What is GPT-3.5?
           </Typography>
@@ -103,7 +105,7 @@ const DocumentationPage = () => {
           </Typography>
         </Typography>
 
-        <Typography data-testid='howgpt' component="span"  style={{ padding: '25px', marginTop: '20px', marginBottom: '20px', width: '85%', borderRadius: '20px', color: theme.palette.text.secondary, fontSize: '24px', fontStyle: 'normal', fontWeight: '300'}}>
+        <Typography data-testid='howgpt' component="span"  style={{ padding: '25px', marginTop: '20px', marginBottom: '20px', width: '85%', borderRadius: '20px', color: theme.palette.text.secondary, fontSize: '24px', fontStyle: 'normal', fontWeight: '300'}} sx={ isDesktopOrLaptop ? { width: '85%' } : { width: '95%' }}>
           <Typography variant='h4' style={{ padding: '0px', margin: '0px', color: theme.palette.text.secondary, fontSize: '32px', fontStyle: 'normal', fontWeight: '550'}}>
             How do we use GPT-3?
           </Typography>
@@ -168,9 +170,6 @@ const DocumentationPage = () => {
         <QuestionsCell searchQuery={searchQuery}/>
 
       </div>
-
-
-
     </>
   )
 }

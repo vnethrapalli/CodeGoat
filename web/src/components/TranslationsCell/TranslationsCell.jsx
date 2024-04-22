@@ -4,6 +4,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useTheme } from '@mui/material/styles'
 
 import Pagination from 'src/components/Pagination'
+import { navigate, useParams } from '@redwoodjs/router';
 
 const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 
@@ -56,8 +57,11 @@ export const Failure = ({ error }) => (
 )
 
 export const Success = ({ translationHistoryPage, page, uid, inLang, outLang, startDate, endDate, sort, inSort, outSort }) => {
-
   const theme = useTheme();
+
+  if(translationHistoryPage.translations.length == 0 && page > 1) {
+    navigate(`/history?page=${page - 1}`)
+  }
 
   const prettyDate = (translation) => {
     const translationDate = new Date(translation.createdAt);
