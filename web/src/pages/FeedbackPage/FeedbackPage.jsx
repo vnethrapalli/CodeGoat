@@ -77,6 +77,8 @@ const CREATE_FEEDBACK = gql`
 `
 const FeedbackPage = ({ defaultOnSubmit, defaultOnHandle, defaultRatings }) => {
   const theme = useTheme();
+  const isDesktopOrLaptop = useMediaQuery({query: '(min-width: 1000px)'})
+
   // This is for getting the correct color to display when hovered / unhovered
   // Alpha controls the transparency; prevents needing another color added to the UserLayout palette
   const StyledRating = styled(Rating)({
@@ -171,9 +173,7 @@ const FeedbackPage = ({ defaultOnSubmit, defaultOnHandle, defaultRatings }) => {
               onChangeActive={(event, newHover) => {
                 setHover(newHover);
               }}
-              sx={{
-                fontSize: "5rem"
-              }}
+              sx={isDesktopOrLaptop ? {fontSize: "5rem"} : {fontSize: "2.5rem"}}
               icon={<LensIcon fontSize="inherit" />}
               emptyIcon={<RadioButtonUncheckedIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
             />
@@ -200,9 +200,7 @@ const FeedbackPage = ({ defaultOnSubmit, defaultOnHandle, defaultRatings }) => {
               onChangeActive={(event, newHover) => {
                 setHover(newHover);
               }}
-              sx={{
-                fontSize: "5rem"
-              }}
+              sx={isDesktopOrLaptop ? {fontSize: "5rem"} : {fontSize: "2.5rem"}}
               icon={<LensIcon fontSize="inherit" />}
               emptyIcon={<RadioButtonUncheckedIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
             />
@@ -229,9 +227,7 @@ const FeedbackPage = ({ defaultOnSubmit, defaultOnHandle, defaultRatings }) => {
               onChangeActive={(event, newHover) => {
                 setHover(newHover);
               }}
-              sx={{
-                fontSize: "5rem"
-              }}
+              sx={isDesktopOrLaptop ? {fontSize: "5rem"} : {fontSize: "2.5rem"}}
               icon={<LensIcon fontSize="inherit" />}
               emptyIcon={<RadioButtonUncheckedIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
             />
@@ -258,9 +254,7 @@ const FeedbackPage = ({ defaultOnSubmit, defaultOnHandle, defaultRatings }) => {
               onChangeActive={(event, newHover) => {
                 setHover(newHover);
               }}
-              sx={{
-                fontSize: "5rem"
-              }}
+              sx={isDesktopOrLaptop ? {fontSize: "5rem"} : {fontSize: "2.5rem"}}
               icon={<LensIcon fontSize="inherit" />}
               emptyIcon={<RadioButtonUncheckedIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
             />
@@ -287,9 +281,7 @@ const FeedbackPage = ({ defaultOnSubmit, defaultOnHandle, defaultRatings }) => {
               onChangeActive={(event, newHover) => {
                 setHover(newHover);
               }}
-              sx={{
-                fontSize: "5rem"
-              }}
+              sx={isDesktopOrLaptop ? {fontSize: "5rem"} : {fontSize: "2.5rem"}}
               icon={<LensIcon fontSize="inherit" />}
               emptyIcon={<RadioButtonUncheckedIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
             />

@@ -273,7 +273,6 @@ const DocumentationPage = (defaultScroll) => {
         <Box ref={myRefTec} style={{paddingBottom: '50px'}}></Box>
 
         <Divider data-testid='technologies' variant='h1' component='h1' align='center' style={{color: theme.palette.text.secondary, fontSize: '40px', fontStyle: 'normal', fontWeight: '500', width: '90%'}}>Technologies</Divider>
-
         <Box style={{ padding: '25px', paddingBottom: '0px', marginTop: '20px', marginBottom: '0px', width: '85%'}} sx={ isDesktopOrLaptop ? { width: '85%' } : { width: '95%' }}>
           <Typography data-testid='description' component="span" sx={{color: theme.palette.text.secondary, fontSize: '24px', fontStyle: 'normal', fontWeight: '300'}}>
             This tool was created using <Link data-testid='redwood link' href="https://redwoodjs.com/docs/introduction" sx={{textDecoration: 'underline' + '!important', textUnderlineOffset: '5px' + " !important" }}>Redwood</Link>, a full-stack web framework. As such, most of the technologies we employ are provided and are
@@ -417,6 +416,7 @@ const DocumentationPage = (defaultScroll) => {
           <QuestionsCell searchQuery={searchQuery}/>
           </Box>
         </Box>
+
       </div>
     </>
   )

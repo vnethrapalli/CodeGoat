@@ -21,3 +21,4 @@ api/src/lib/generateGraphiQLHeader.*
 !.yarn/sdks
 !.yarn/versions
 api/db/migrations_sqlite/
+coverage/
