@@ -83,7 +83,6 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
   const [rating, setRating] = React.useState(5);
   const [refreshQuery, setRefreshQuery] = React.useState(true);
   const [ignoreLanguageMismatch, setIgnoreLanguageMismatch] = React.useState(false);
-  const firstLanguageMismatch = useRef(true);
   const [output, setOutput] = React.useState(false);
   const [userId, setUserId] = React.useState();
   const [inputMonaco, setInputMonaco] = React.useState();
@@ -109,6 +108,7 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
     if(outLang){
       setOutputLanguage(outLang);
     }
+
   },[])
 
   const CodeBox = ({ codeValue, updateCodeValue, defaultLanguage, language, defaultValue, isInput }) => {
@@ -163,7 +163,10 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
 
   const codeboxInput = CodeBox({
     codeValue: inputCodeValue,
-    updateCodeValue: (newCodeVal) => setInputCodeValue(newCodeVal),
+    updateCodeValue: ((newCodeVal) => {
+      setInputCodeValue(newCodeVal)
+      setIgnoreLanguageMismatch(false);
+    }),
     defaultLanguage: inputLanguage,
     language: inputLanguage,
     defaultValue: inputCodeValue,
@@ -172,7 +175,9 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
 
   const codeboxOutput = CodeBox({
     codeValue: outputCodeValue,
-    updateCodeValue: (newCodeVal) => setOutputCodeValue(newCodeVal),
+    updateCodeValue: ((newCodeVal) => {
+      setOutputCodeValue(newCodeVal);
+    }),
     defaultLanguage: outputLanguage,
     language: outputLanguage,
     defaultValue: outputCodeValue,
@@ -246,20 +251,6 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
       onCompleted: () => {},
       onError: () => {},
     })
-
-    useEffect(() => {
-      const re = /^(.+ was detected but you selected .+. Please select the right language.)$/
-      if (re.test(outputCodeValue) && firstLanguageMismatch.current)
-      {
-        firstLanguageMismatch.current = false;
-        setIgnoreLanguageMismatch(true);
-      }
-      else if (!re.test(outputCodeValue))
-      {
-        firstLanguageMismatch.current = true;
-        setIgnoreLanguageMismatch(false);
-      }
-    }, [outputCodeValue]);
 
     const removeComments = (inCode, inLang) => {
       if (inputMonaco == undefined)
@@ -362,7 +353,9 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
       let statusCode = response.status;
       response = await response.json();
 
-      setOutputCodeValue(response.data);
+      setOutputCodeValue((outputCodeValue) => {
+        return response.data;
+      });
       setOutput(true);
       setRefreshQuery(val => !val);
       queueCount--;
@@ -370,6 +363,7 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
       if(statusCode === 200) {
         toast.success("Code translated successfully! \nQueued Requests: " + queueCount.toString(), { duration: 1500, position: 'bottom-right' });
         setOutputCodeValue(response.data);
+        setIgnoreLanguageMismatch(false);
       } else {
         switch(statusCode) {
           case 429:
@@ -377,6 +371,13 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
             break;
           case 400:
             toast.error("There was an error in the communication between the backend and API. Please try again.", { duration: 2500, position: 'bottom-right' });
+            const re = /^(.+ was detected but you selected .+. Please select the right language.)$/
+            if (re.test(response.data))
+            {
+              setIgnoreLanguageMismatch(true);
+              return;
+            }
+
             break;
           case 403:
             toast.error("The length of the code is too long. Please shorten the code and try again.", { duration: 2500, position: 'bottom-right' });

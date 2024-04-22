@@ -1,3 +1,4 @@
+import { db } from 'src/lib/db';
 import axios from 'axios'
 
 export const updateUsername = async ({ user_id, nickname, token }) => {
@@ -107,6 +108,10 @@ export const deleteAccount = async ({ user_id, token }) => {
   }
 
   if (userDeleteResponse) {
+    const user = db.user.delete({ where: { uid: user_id } })
+    if(user) {
+      console.log('User deleted from database:', user_id)
+    }
     console.log('User deleted:', userDeleteResponse)
     return JSON.stringify({ statusCode: 204, message: "User successfully deleted" })
   }

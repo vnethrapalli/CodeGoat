@@ -12,6 +12,7 @@ export const schema = gql`
   type Query {
     feedbacks: [Feedback!]! @requireAuth
     feedback(id: Int!): Feedback @requireAuth
+    feedbackStats: Stats @skipAuth
   }
 
   input CreateFeedbackInput {
@@ -21,6 +22,15 @@ export const schema = gql`
     gptAvailability: Int!
     experience: Int!
     comments: String!
+  }
+
+  type Stats {
+    count: Int!
+    submissionPageAvg: Float!
+    outputPageAvg: Float!
+    translationAccuracyAvg: Float!
+    gptAvailabilityAvg: Float!
+    experienceAvg: Float!
   }
 
   type Mutation {
