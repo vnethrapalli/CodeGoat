@@ -342,7 +342,7 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
         toast.error("Slow down there! I can't afford all those API calls lmao", {duration: 2500, position: 'bottom-right'});
         return;
       }
-      const reqUrl = `http://localhost:8910/.redwood/functions/translate`;
+      const reqUrl = `/.redwood/functions/translate`;
       const translation = await fetch(reqUrl, {
         method: "POST",
         body: JSON.stringify({
