@@ -18,10 +18,6 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import { useRef } from 'react';
 
-export function testClick() {
-  return "hello"
-}
-
 const DocumentationPage = () => {
   const theme = useTheme()
   const myRefRel = useRef(null)
@@ -72,7 +68,7 @@ const DocumentationPage = () => {
           <Button
             key="Download"
             variant="text"
-            data-testid="feedbackButton"
+            data-testid="downButton"
             onClick={executeScrollDow}
             sx={{ fontSize: '18px', marginTop: '2px', marginBottom: '2px', marginRight: '5px', marginLeft: '0px', color: theme.palette.text.secondary, display: 'block' }}
           >
@@ -91,19 +87,19 @@ const DocumentationPage = () => {
     </Grid>
     <Box ref={myRefRel} style={{paddingBottom: '50px'}}></Box>
       <Box display="flex" flexDirection='column' justifyContent="center" alignItems="center">
-        <Divider id='releasenotes' variant='h1' component='h1' align='center' style={{color: theme.palette.text.secondary, fontSize: '40px', fontStyle: 'normal', fontWeight: '500', width: '90%'}}>Release Notes</Divider>
-          <Box style={{ padding: '25px', paddingBottom: '0px', marginTop: '20px', marginBottom: '0px', width: '85%'}}>
+        <Divider data-testid='releasenotes' variant='h1' component='h1' align='center' style={{color: theme.palette.text.secondary, fontSize: '40px', fontStyle: 'normal', fontWeight: '500', width: '90%'}}>Release Notes</Divider>
+          <Box style={{ padding: '25px', paddingBottom: '0px', marginTop: '20px', marginBottom: '0px', width: '90%'}}>
               <Typography variant='h4' style={{ padding: '0px', margin: '0px', color: theme.palette.text.secondary, fontSize: '30px', fontStyle: 'normal', fontWeight: '450'}}>
                 Current Release
               </Typography>
-            <Accordion sx={{bgcolor: theme.palette.text.success, width: '100%', border: '1px solid'}}>
+            <Accordion data-testid="new" sx={{bgcolor: theme.palette.text.success, width: '100%', border: '1px solid'}}>
               <AccordionSummary sx={{bgcolor: theme.palette.text.success, fontSize: '24px'}} aria-controls="panel1d-content" id="panel1d-header">
               <Typography variant='h4' style={{ padding: '0px', margin: '0px', color: theme.palette.text.primary, fontSize: '30px', fontStyle: 'normal', fontWeight: '550'}}>
                 v1.0
               </Typography>
               </AccordionSummary>
               <AccordionDetails sx={{bgcolor: theme.palette.text.success, fontSize: '18px'}}>
-                <Typography data-testid='description' component="span" sx={{color: theme.palette.text.primary, fontSize: '24px', fontStyle: 'normal', fontWeight: '300'}}>
+                <Typography data-testid='date' component="span" sx={{color: theme.palette.text.primary, fontSize: '24px', fontStyle: 'normal', fontWeight: '300'}}>
                   23 April 2024
                 </Typography>
                 <div></div>
@@ -187,7 +183,7 @@ const DocumentationPage = () => {
             <Typography variant='h4' style={{ padding: '0px', margin: '0px', color: theme.palette.text.secondary, fontSize: '30px', fontStyle: 'normal', fontWeight: '450'}}>
               Old Releases
             </Typography>
-            <Accordion sx={{bgcolor: theme.palette.text.success, width: '100%', border: '1px solid'}}>
+            <Accordion data-testid="old"sx={{bgcolor: theme.palette.text.success, width: '100%', border: '1px solid'}}>
               <AccordionSummary sx={{bgcolor: theme.palette.text.success, fontSize: '24px'}} aria-controls="panel1d-content" id="panel1d-header">
               <Typography variant='h4' style={{ padding: '0px', margin: '0px', color: theme.palette.text.primary, fontSize: '30px', fontStyle: 'normal', fontWeight: '550'}}>
                 v0.8
@@ -272,7 +268,7 @@ const DocumentationPage = () => {
           </Box>
         <Box ref={myRefTec} style={{paddingBottom: '50px'}}></Box>
 
-        <Divider id='technologies' variant='h1' component='h1' align='center' style={{color: theme.palette.text.secondary, fontSize: '40px', fontStyle: 'normal', fontWeight: '500', width: '90%'}}>Technologies</Divider>
+        <Divider data-testid='technologies' variant='h1' component='h1' align='center' style={{color: theme.palette.text.secondary, fontSize: '40px', fontStyle: 'normal', fontWeight: '500', width: '90%'}}>Technologies</Divider>
 
         <Box style={{ padding: '25px', paddingBottom: '0px', marginTop: '20px', marginBottom: '0px', width: '85%'}}>
           <Typography data-testid='description' component="span" sx={{color: theme.palette.text.secondary, fontSize: '24px', fontStyle: 'normal', fontWeight: '300'}}>
@@ -282,6 +278,7 @@ const DocumentationPage = () => {
 
           <List style={{ width: "6%", padding: '0px', marginBottom: '0px', color: theme.palette.text.secondary, fontSize: '28px', fontStyle: 'normal', fontWeight: '300'}}>
             <ListItem
+              data-testid="react"
               component="a"
               href="https://reactjs.org"
             >
@@ -292,6 +289,7 @@ const DocumentationPage = () => {
               />
             </ListItem>
             <ListItem
+              data-testid="prisma"
               component="a"
               href="https://www.prisma.io/"
             >
@@ -302,16 +300,18 @@ const DocumentationPage = () => {
               />
             </ListItem>
             <ListItem
+              data-testid="graphql"
               component="a"
               href="https://www.graphql.com/"
             >
-              <img src="Images/graphql.png" alt="GrahphQL Icon" style={{ width: '25px', height: '25px', objectFit: 'contain', objectPosition: 'center', marginRight: '5px' }} />
+              <img src="Images/graphql.png" alt="GraphQL Icon" style={{ width: '25px', height: '25px', objectFit: 'contain', objectPosition: 'center', marginRight: '5px' }} />
               <ListItemText
                 primaryTypographyProps={{fontSize: '24px'}}
                 primary="GrahphQL"
               />
             </ListItem>
             <ListItem
+              data-testid="storybook"
               component="a"
               href="https://storybook.js.org/"
             >
@@ -322,6 +322,7 @@ const DocumentationPage = () => {
               />
             </ListItem>
             <ListItem
+              data-testid="jest"
               component="a"
               href="https://jestjs.io/"
             >
@@ -357,7 +358,7 @@ const DocumentationPage = () => {
           </Typography>
         </Typography>
         <Box ref={myRefDow} style={{paddingBottom: '50px'}}></Box>
-        <Divider id="downloads" variant='h1' component='h1' align='center' style={{color: theme.palette.text.secondary, fontSize: '40px', fontStyle: 'normal', fontWeight: '500', width: '90%'}}>Downloadable Guides</Divider>
+        <Divider data-testid="downloads" variant='h1' component='h1' align='center' style={{color: theme.palette.text.secondary, fontSize: '40px', fontStyle: 'normal', fontWeight: '500', width: '90%'}}>Downloadable Guides</Divider>
 
         <Box display="flex" flexDirection="row" justifyContent="center" alignItems="center">
           <Typography variant='h1' component='h1' align='center' style={{color: theme.palette.text.secondary, fontSize: '24px', fontStyle: 'normal', fontWeight: '300'}}>CodeGoat Walkthrough</Typography>
@@ -385,9 +386,11 @@ const DocumentationPage = () => {
         </Box>
 
         <Box ref={myRefFAQ} style={{paddingBottom: '50px'}}></Box>
-        <Divider id="faq" variant='h1' component='h1' align='center' style={{color: theme.palette.text.secondary, fontSize: '40px', fontStyle: 'normal', fontWeight: '500', width: '90%'}}>FAQ</Divider>
+        <Divider data-testid="faqtitle" variant='h1' component='h1' align='center' style={{color: theme.palette.text.secondary, fontSize: '40px', fontStyle: 'normal', fontWeight: '500', width: '90%'}}>FAQ</Divider>
       </Box>
       <br></br>
+      <Box display="flex" flexDirection='column' justifyContent="center" alignItems="center">
+        <Box style={{ padding: '25px', paddingBottom: '0px', marginTop: '20px', marginBottom: '0px', width: '90%'}}>
           <Form data-testid='search'>
             <TextField
               sx={{ input: { color: theme.palette.text.secondary }, '&:active fieldset': {borderColor: theme.palette.text.secondary} }}
@@ -408,6 +411,8 @@ const DocumentationPage = () => {
           </Form>
           <br></br>
           <QuestionsCell searchQuery={searchQuery}/>
+          </Box>
+        </Box>
       </div>
     </>
   )
