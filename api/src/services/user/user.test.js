@@ -12,13 +12,26 @@ nodemailer.createTransport.mockReturnValue({
 
 describe("Create User", () => {
   it("should create a user", async () => {
-    const user = await addUser({ user_id: "1234", email: "johndoe@gmail.com" })
+    const user = await addUser({ user_id: encrypt("1234"), email: encrypt("johndoe@gmail.com") })
     expect(user).toEqual(JSON.stringify({ statusCode: 200, message: "User added successfully" }))
+    await db.user.delete({
+      where: { uid: "1234" }
+    })
   })
 
   it("should not create a user if user already exists", async () => {
-    const user = await addUser({ user_id: "1234", email: "johndoe@gmail.com" })
+    await db.user.create({
+      data: {
+        uid: "1234",
+        email: "johndoe@gmail.com",
+        createdAt: new Date()
+      }
+    })
+    const user = await addUser({ user_id: encrypt("1234"), email: encrypt("johndoe@gmail.com") })
     expect(user).toEqual(JSON.stringify({ statusCode: 400, message: "User already exists" }))
+    await db.user.delete({
+      where: { uid: "1234" }
+    })
   })
 })
 
