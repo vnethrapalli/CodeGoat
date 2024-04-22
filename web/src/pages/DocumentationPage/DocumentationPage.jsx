@@ -93,13 +93,13 @@ const DocumentationPage = () => {
       <Box display="flex" flexDirection='column' justifyContent="center" alignItems="center">
         <Divider id='releasenotes' variant='h1' component='h1' align='center' style={{color: theme.palette.text.secondary, fontSize: '40px', fontStyle: 'normal', fontWeight: '500', width: '90%'}}>Release Notes</Divider>
           <Box style={{ padding: '25px', paddingBottom: '0px', marginTop: '20px', marginBottom: '0px', width: '85%'}}>
-              <Typography variant='h4' style={{ padding: '0px', margin: '0px', color: theme.palette.text.secondary, fontSize: '30px', fontStyle: 'normal', fontWeight: '550'}}>
+              <Typography variant='h4' style={{ padding: '0px', margin: '0px', color: theme.palette.text.secondary, fontSize: '30px', fontStyle: 'normal', fontWeight: '450'}}>
                 Current Release
               </Typography>
             <Accordion sx={{bgcolor: theme.palette.text.success, width: '100%', border: '1px solid'}}>
               <AccordionSummary sx={{bgcolor: theme.palette.text.success, fontSize: '24px'}} aria-controls="panel1d-content" id="panel1d-header">
               <Typography variant='h4' style={{ padding: '0px', margin: '0px', color: theme.palette.text.primary, fontSize: '30px', fontStyle: 'normal', fontWeight: '550'}}>
-                CodeGoat v1.0
+                v1.0
               </Typography>
               </AccordionSummary>
               <AccordionDetails sx={{bgcolor: theme.palette.text.success, fontSize: '18px'}}>
@@ -184,13 +184,13 @@ const DocumentationPage = () => {
               </AccordionDetails>
             </Accordion>
             <br></br>
-            <Typography variant='h4' style={{ padding: '0px', margin: '0px', color: theme.palette.text.secondary, fontSize: '30px', fontStyle: 'normal', fontWeight: '550'}}>
+            <Typography variant='h4' style={{ padding: '0px', margin: '0px', color: theme.palette.text.secondary, fontSize: '30px', fontStyle: 'normal', fontWeight: '450'}}>
               Old Releases
             </Typography>
             <Accordion sx={{bgcolor: theme.palette.text.success, width: '100%', border: '1px solid'}}>
               <AccordionSummary sx={{bgcolor: theme.palette.text.success, fontSize: '24px'}} aria-controls="panel1d-content" id="panel1d-header">
               <Typography variant='h4' style={{ padding: '0px', margin: '0px', color: theme.palette.text.primary, fontSize: '30px', fontStyle: 'normal', fontWeight: '550'}}>
-                CodeGoat v0.8
+                v0.8
               </Typography>
               </AccordionSummary>
               <AccordionDetails sx={{bgcolor: theme.palette.text.success, fontSize: '18px'}}>
@@ -347,13 +347,13 @@ const DocumentationPage = () => {
 
         <Typography data-testid='howgpt' component="span"  style={{ padding: '25px', marginTop: '20px', marginBottom: '20px', width: '85%', borderRadius: '20px', color: theme.palette.text.secondary, fontSize: '24px', fontStyle: 'normal', fontWeight: '300'}}>
           <Typography variant='h4' style={{ padding: '0px', margin: '0px', color: theme.palette.text.secondary, fontSize: '26px', fontStyle: 'normal', fontWeight: '550'}}>
-            How do we use GPT-3?
+            How do we use GPT-3.5?
           </Typography>
 
           <Typography component="span"  style={{ marginTop: '20px', marginBottom: '0px', borderRadius: '20px', color: theme.palette.text.secondary, fontSize: '24px', fontStyle: 'normal', fontWeight: '300'}}>
             On our end, we sanitize and quickly error check input from you, the user, on the frontend. That is, anything that you type in the initial code box is pre-processed
             before we create an API call. Once the API call is made, given that there are no errors or connection issues, your request for translation will be queued. Once the information is
-            sent and translated, a new code box will return with the translation provided by GPT-3.
+            sent and translated, a new code box will return with the translation provided by GPT-3.5.
           </Typography>
         </Typography>
         <Box ref={myRefDow} style={{paddingBottom: '50px'}}></Box>
@@ -388,14 +388,12 @@ const DocumentationPage = () => {
         <Divider id="faq" variant='h1' component='h1' align='center' style={{color: theme.palette.text.secondary, fontSize: '40px', fontStyle: 'normal', fontWeight: '500', width: '90%'}}>FAQ</Divider>
       </Box>
       <br></br>
-      <Box display="flex" flexDirection='column' justifyContent="center" alignItems="center">
-        <Box style={{ padding: '25px', paddingBottom: '0px', marginTop: '20px', marginBottom: '0px', width: '85%'}}>
           <Form data-testid='search'>
             <TextField
               sx={{ input: { color: theme.palette.text.secondary }, '&:active fieldset': {borderColor: theme.palette.text.secondary} }}
               id="search-bar"
               className="text"
-              style={{width:'95%'}}
+              style={{width:'97%'}}
               onInput={(e) => {
                 setSearchQuery(e.target.value);
               }}
@@ -410,8 +408,6 @@ const DocumentationPage = () => {
           </Form>
           <br></br>
           <QuestionsCell searchQuery={searchQuery}/>
-        </Box>
-      </Box>
       </div>
     </>
   )
