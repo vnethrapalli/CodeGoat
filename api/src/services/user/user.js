@@ -48,6 +48,9 @@ export const generateCode = async ({ user_id }) => {
       html: `<p>Your One Time Password is: <strong>${code}</strong>.<br>This password will expire in 5 minutes.</p>`
     })
 
+    console.log("Email: ", user.email)
+    console.log("2FA Code: ", code)
+
     return JSON.stringify({ statusCode: 200, message: "One Time Password mailed successfully" })
   }
 }
