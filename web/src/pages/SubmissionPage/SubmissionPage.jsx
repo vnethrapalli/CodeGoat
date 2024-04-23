@@ -1,6 +1,6 @@
 import { Metadata, useMutation } from '@redwoodjs/web';
 import { gql, useLazyQuery } from "@apollo/client";
-import { Grid, Paper, Stack, Box, Button, FormControl, InputLabel, Select, MenuItem, Divider, Rating } from '@mui/material';
+import { Grid, Paper, Stack, Box, Button, FormControl, InputLabel, Tooltip, Select, MenuItem, Divider, Rating } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import Editor, { useMonaco } from '@monaco-editor/react';
 import { Toaster, toast } from '@redwoodjs/web/toast'
@@ -8,6 +8,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import { auth0 } from 'src/auth'
 import { useParams } from '@redwoodjs/router'
 import { ConfirmationNumberOutlined, ConnectingAirportsOutlined, ConstructionOutlined, ContentPasteSearchOutlined, Download, UploadFile, ContentCopy } from '@mui/icons-material';
+import { useMediaQuery } from 'react-responsive'
+
 
 const CREATE_TRANSLATION = gql`
   mutation CreateTranslationMutation($input: CreateTranslationInput!) {
@@ -89,6 +91,8 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
   const theme = useTheme();
 
   const { code, inLang, outLang } = useParams();
+
+  const isDesktopOrLaptop = useMediaQuery({query: '(min-width: 1000px)'})
 
   useEffect(()=>{
     auth0.getUser().then(user => {
@@ -338,7 +342,7 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
         toast.error("Slow down there! I can't afford all those API calls lmao", {duration: 2500, position: 'bottom-right'});
         return;
       }
-      const reqUrl = `http://localhost:8910/.redwood/functions/translate`;
+      const reqUrl = `/.redwood/functions/translate`;
       const translation = await fetch(reqUrl, {
         method: "POST",
         body: JSON.stringify({
@@ -438,29 +442,32 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
 
   const CopyButton = ({ editor, isInput }) => {
     return (
-      <Button
-        onClick={() => {
-          navigator.clipboard.writeText(editor.props.children.props.value)
-        }}
-        style={{
-          backgroundColor: theme.palette.text.success,
-          textTransform: 'none',
-          borderTopLeftRadius: '6px',
-          borderBottomLeftRadius: '6px',
-          borderTopRightRadius: '0px',
-          borderBottomRightRadius: '0px',
-          height: '40px'
-        }}
-        data-testid={isInput ? "inputCopy" : "outputCopy"}
-      >
-        <ContentCopy sx={{ fill: theme.palette.text.primary }} />
-      </Button>
+      <Tooltip title="Copy text">
+        <Button
+          onClick={() => {
+            navigator.clipboard.writeText(editor.props.children.props.value)
+          }}
+          style={{
+            backgroundColor: theme.palette.text.success,
+            textTransform: 'none',
+            borderTopLeftRadius: '6px',
+            borderBottomLeftRadius: '6px',
+            borderTopRightRadius: '0px',
+            borderBottomRightRadius: '0px',
+            height: '40px'
+          }}
+          data-testid={isInput ? "inputCopy" : "outputCopy"}
+        >
+          <ContentCopy sx={{ fill: theme.palette.text.primary }} />
+        </Button>
+      </Tooltip>
     );
   }
 
   const UploadButtonInput = () => {
     return (
       <>
+      <Tooltip title="Upload file">
         <input
           type="file"
           accept="*"
@@ -486,30 +493,33 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
             <UploadFile sx={{ fill: theme.palette.text.primary }} />
           </Button>
         </label>
+      </Tooltip>
       </>
     )
   }
 
   const DownloadButton = () => {
     return (
-      <Button
-        style={{
-          backgroundColor: theme.palette.text.success,
-          textTransform: 'none',
-          borderTopLeftRadius: '0px',
-          borderBottomLeftRadius: '0px',
-          borderTopRightRadius: '6px',
-          borderBottomRightRadius: '6px',
-          height: '40px'
-        }}
-        onClick={() => {
-          // console.log(outputLanguage);
-          downloadTextAsFile(codeboxOutput.props.children.props.value, 'code_output' + extensions[outputLanguage]);
-        }}
-        data-testid="downloadButton"
-        >
-        <Download sx={{ fill: theme.palette.text.primary }} />
-      </Button>
+      <Tooltip title="Download file">
+        <Button
+          style={{
+            backgroundColor: theme.palette.text.success,
+            textTransform: 'none',
+            borderTopLeftRadius: '0px',
+            borderBottomLeftRadius: '0px',
+            borderTopRightRadius: '6px',
+            borderBottomRightRadius: '6px',
+            height: '40px'
+          }}
+          onClick={() => {
+            // console.log(outputLanguage);
+            downloadTextAsFile(codeboxOutput.props.children.props.value, 'code_output' + extensions[outputLanguage]);
+          }}
+          data-testid="downloadButton"
+          >
+          <Download sx={{ fill: theme.palette.text.primary }} />
+        </Button>
+      </Tooltip>
     )
   }
 
@@ -588,7 +598,7 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
           width='100%'
         >
           <Grid item xs />
-          <Grid item justifyContent="space-between" alignItems="center" width='100%' height='100%' xs={output ? 10 : 5}>
+          <Grid item justifyContent="space-between" alignItems="center" width='100%' height='100%' xs={output ? isDesktopOrLaptop ? 10 : 12 : isDesktopOrLaptop ? 5 : 12}>
             <Grid container direction="row" width='100%' height='100%' marginBottom='10px' spacing={2}>
               <Grid item xs={output ? 6 : 12}>
                 <Grid container direction="row" justifyContent="center" alignItems="center" width='100%' height="100%">
@@ -640,6 +650,9 @@ const SubmissionPage = ({ defaultReadInputFile, defaultDownloadTextAsFile }) => 
           {output &&
           <>
             <Rating
+              sx={{
+                fontSize: "2rem"
+              }}
               defaultValue={5}
               onChange={(event, val) => {
                 if (val == null) val = 0;

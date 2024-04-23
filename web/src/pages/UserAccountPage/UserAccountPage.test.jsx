@@ -6,6 +6,7 @@ jest.mock("src/auth.js");
 import { useAuth, auth0 } from 'src/auth'
 import { mocked } from "jest-mock";
 import { GraphQLHooksProvider } from '@redwoodjs/web';
+import { encrypt, decrypt } from 'src/lib/encryption';
 
 const createMatchMedia = (width) => (query) => ({
   matches: mediaQuery.match(query, { width }),
@@ -74,7 +75,7 @@ beforeEach(() => {
   const mockedAuth0 = mocked(auth0);
   mockedAuth0.getUser = jest.fn().mockResolvedValue(user);
   localStorage.clear();
-  localStorage.setItem('user', JSON.stringify(user));
+  localStorage.setItem('user', encrypt(JSON.stringify(user)));
 });
 
 

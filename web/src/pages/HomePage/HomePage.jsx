@@ -5,6 +5,8 @@ import { useTheme } from '@mui/material/styles';
 import { languages } from '../SubmissionPage/SubmissionPage.jsx';
 import { KeyboardArrowDown } from '@mui/icons-material';
 import { useRef } from 'react';
+import CounterCell from 'src/components/CounterCell';
+import FeedbackSummaryCell from 'src/components/FeedbackSummaryCell';
 
 const instructions = ['Click on the Translate button in the navigation bar above',
                       'Select the language of the source code and the language of the translated code using the two dropdowns',
@@ -32,6 +34,7 @@ const HomePage = () => {
           <Typography data-testid='phrase' variant='h2' component='span' align='right' style={{ width: '100%', color: theme.palette.text.primary, fontSize: '45px', fontStyle: 'normal', fontWeight: '600'}}>
             Effortless Code Translation, Elevated Results.
           </Typography>
+
 
           <Tooltip title='Scroll Down For More Information'>
             <Button
@@ -69,7 +72,7 @@ const HomePage = () => {
         <Typography data-testid='description' style={{ padding: '25px', marginTop: '25px', marginBottom: '0px', width: '90%', color: theme.palette.text.secondary, fontSize: '24px', fontStyle: 'normal', fontWeight: '300'}}>
           This tool uses an AI model to convert your code from one programming language to another. We provide support for a variety of languages such as:
 
-          <List dense disablePadding sx={{ listStyleType: 'disc', pl: 4, marginTop: '5px', marginBottom: '0px'}}>
+          <List dense disablePadding sx={{ columns: '2 auto', listStyleType: 'disc', pl: 4, marginTop: '5px', marginBottom: '0px'}}>
             {languages.map((language) => (
               <ListItem dense key={language.dropdownItem} disablePadding sx={{ display: 'list-item' }}>
                 {language.dropdownItem}
@@ -77,6 +80,9 @@ const HomePage = () => {
             ))}
           </List>
         </Typography>
+
+        <CounterCell />
+        <FeedbackSummaryCell />
 
         <Typography data-testid='tutorial' style={{ padding: '25px', marginTop: '20px', marginBottom: '10px', width: '90%', color: theme.palette.text.secondary, fontSize: '24px', fontStyle: 'normal', fontWeight: '300'}}>
           <Typography variant='h4' component='span' style={{ padding: '0px', margin: '0px', color: theme.palette.text.secondary, fontSize: '32px', fontStyle: 'normal', fontWeight: '550'}}>
@@ -92,7 +98,6 @@ const HomePage = () => {
           </List>
         </Typography>
       </Box>
-
     </>
   )
 }

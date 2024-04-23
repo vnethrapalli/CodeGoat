@@ -2,8 +2,12 @@ import { db } from 'src/lib/db'
 import randomstring from 'randomstring'
 import bcrypt from 'bcrypt'
 import nodemailer from 'nodemailer'
+import { encrypt, decrypt } from 'src/lib/encrypt'
 
 export const generateCode = async ({ user_id }) => {
+
+  user_id = decrypt(user_id)
+
   const code = randomstring.generate({
     length: 6,
     charset: 'alphanumeric',
@@ -49,6 +53,10 @@ export const generateCode = async ({ user_id }) => {
 }
 
 export const verifyCode = async ({ user_id, code }) => {
+
+  user_id = decrypt(user_id)
+  code = decrypt(code)
+
   const user = await db.user.findUnique({
     where: { uid: user_id }
   })
@@ -82,6 +90,9 @@ export const verifyCode = async ({ user_id, code }) => {
 
 export const addUser = async ({ user_id, email }) => {
 
+  user_id = decrypt(user_id)
+  email = decrypt(email)
+
   const isUser = await db.user.findUnique({
     where: { uid: user_id}
   })
@@ -105,6 +116,9 @@ export const addUser = async ({ user_id, email }) => {
 }
 
 export const verificationInProgress = async ({ user_id }) => {
+
+  user_id = decrypt(user_id)
+
   const user = await db.user.findUnique({
     where: { uid: user_id }
   })
@@ -124,6 +138,9 @@ export const verificationInProgress = async ({ user_id }) => {
 }
 
 export const userExists = async ({ user_id }) => {
+
+  user_id = decrypt(user_id)
+
   const user = await db.user.findUnique({
     where: { uid: user_id }
   })

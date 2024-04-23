@@ -61,12 +61,12 @@ Before the code translation service can be used, you must create an account and 
 
 Once logged in, you can access our code translation service! To get started, click the Translate button at the top to access the _Translate_ page. Choose the desired input and target language using the language dropdown menu. You will see a codebox to input your code to be translated. Type your code there, or upload your code file if you already have some code handy.
 
-Once you are ready, hit the Translate button at the bottom of the page and watch your translated code appear in the output code box on the right! How did we do? Let us know using the feedback feature now available below the translate button. Choose the desired number of starts, and click on the button.
+Once you are ready, hit the Translate button at the bottom of the page and watch your translated code appear in the output code box on the right! How did we do? Let us know using the feedback feature now available below the translate button. Choose the desired number of stars, and click on the button.
 
-All of your translation history will be available for you to see if you click on your user icon in the top right of the screen, and then clicking "Translation History". This will take you to the _History_ page. This will include the input and out code that was submitted, the rating you provided (if one was provided), the input and output languagues, the date and time of the translation, and the API response (ie. 200 OK, etc).
+All of your translation history will be available for you to see if you click on your user icon in the top right of the screen, and then clicking "Translation History". This will take you to the _History_ page. This will include the input and output languagues, the input code and its corresponding output code, the rating you provided (if one was provided), the date and time of the translation, and the API response (ie. 200 OK, etc). This page will also contain statistics regarding your usage such as the number of translations and the most frequently used language pair.
 
 ### More Feedback
 
-By clicking the "Feedback" text in the navbar, you will be taken to our _Feedback_ page. Here you will see various criteria by which you can provide a 1-10 rating of our system. We appreciate your feedback, so please do take a look at this! There is space to provide comments as well.
+By clicking the "Feedback" text in the navbar, you will be taken to our _Feedback_ page. Here you will see various criteria by which you can provide a 1-10 rating of our system. We appreciate your feedback, so please do take a look at this! There is a text box if you want to leave us a comment.
 
 ## Thank you! - CodeGoat Dev Team
