@@ -10,6 +10,14 @@ import { useTheme } from '@mui/material/styles'
 // This is for the regex highlighting stuff
 import _ from "lodash";
 
+export const beforeQuery = (props) => {
+  return {
+    variables: props,
+    fetchPolicy: 'network-only',
+    nextFetchPolicy: 'cache-first'
+  };
+}
+
 export const QUERY = gql`
   query QuestionsQuery {
     questions: faqs {
@@ -24,16 +32,14 @@ export const Loading = () => <div>Loading...</div>
 
 export const Empty = () => <div>Empty</div>
 
-export const Failure = ({ error }) => (
-  <div style={{ color: 'red' }}>Error: {error?.message}</div>
-)
+export const Failure = ({ error }) => <div style={{ color: 'red' }}>Error: {error?.message}</div>
 
 function escapeRegex(string) {
   return string.replace(/[/\-\\^$*+?.()|[\]{}]/g, '\\$&');
 }
 
 export const Success = ({ questions, searchQuery }) => {
-  const theme = useTheme()
+  const theme = useTheme();
 
   const [expanded, setExpanded] = React.useState('panel1');
   const Highlighted = ({text = '', highlight = ''}) => {
