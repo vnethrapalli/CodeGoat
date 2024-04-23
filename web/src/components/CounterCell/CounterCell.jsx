@@ -28,7 +28,7 @@ export const Success = ({ counter }) => {
         justifyContent='center'
         alignItems='center'
         sx={{
-          background: `url('Images/speechbubble.png')`,
+          background: `url('Images/speechbubble.svg')`,
           backgroundRepeat: "no-repeat",
           backgroundSize: "100% 100%",
           width: '42vw',
@@ -54,7 +54,7 @@ export const Success = ({ counter }) => {
       </Box>
       <img
         data-testid='goat-image'
-        src="Images/goat_no_bubble.png"
+        src="Images/goat_no_bubble.svg"
         alt="CodeGoat Icon"
         style={{
           width: '300px',
