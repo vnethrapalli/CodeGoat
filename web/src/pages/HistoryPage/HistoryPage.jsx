@@ -39,6 +39,7 @@ const HistoryPage = ({ page = 1 }) => {
   const [reload, setReload] = React.useState(false);
 
   const isDesktopOrLaptop = useMediaQuery({query: '(min-width: 1000px)'})
+  const largeHeight = useMediaQuery({query: '(min-height: 1000px)'})
 
   useEffect(()=>{
     auth0.getUser().then(user => {
@@ -274,7 +275,7 @@ const HistoryPage = ({ page = 1 }) => {
           Translation History
         </Typography>
 
-        <Box sx={{ width: "70%", height: "30vh", marginBottom: '10px', marginTop: '20px' }}>
+        <Box sx={{ width: "70%", height: largeHeight ? "30vh" : "30%", marginBottom: '10px', marginTop: '20px' }}>
           <StatsCell uid={userId}/>
         </Box>
 
