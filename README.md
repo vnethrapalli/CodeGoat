@@ -57,6 +57,11 @@ Once opening the website, you will find yourself on our landing page, which prov
 
 Before the code translation service can be used, you must create an account and ensure that you are logged in. For new users, click on the signup button on the top right of the navbar at the top and follow the indicated steps. Returning users can log in via the login button also at the right side of the navbar.
 
+<img src="../CodeGoat/web/public/Images/signup1.JPG" alt="first image of signup authentication" height=400 />
+<img src="../CodeGoat/web/public/Images/signup2.JPG" alt="second image of signup authentication" height=400 />
+<br>
+Demonstration of authentication during signup.
+
 ### Using our Service
 
 Once logged in, you can access our code translation service! To get started, click the Translate button at the top to access the _Translate_ page. Choose the desired input and target language using the language dropdown menu. You will see a codebox to input your code to be translated. Type your code there, or upload your code file if you already have some code handy.
@@ -65,8 +70,19 @@ Once you are ready, hit the Translate button at the bottom of the page and watch
 
 All of your translation history will be available for you to see if you click on your user icon in the top right of the screen, and then clicking "Translation History". This will take you to the _History_ page. This will include the input and output languagues, the input code and its corresponding output code, the rating you provided (if one was provided), the date and time of the translation, and the API response (ie. 200 OK, etc). This page will also contain statistics regarding your usage such as the number of translations and the most frequently used language pair.
 
+<img src="../CodeGoat/web/public/Images/translation.JPG" alt="image of a successful translation" height=400 />
+<br>
+Demonstration of a successful translation.
+
+<br>
+<img src="../CodeGoat/web/public/Images/translation_history.JPG" alt="image of the translation history" height=400 />
+<br>
+Demonstration of the translation history.
+
 ### More Feedback
 
 By clicking the "Feedback" text in the navbar, you will be taken to our _Feedback_ page. Here you will see various criteria by which you can provide a 1-10 rating of our system. We appreciate your feedback, so please do take a look at this! There is a text box if you want to leave us a comment.
+
+<img src="../CodeGoat/web/public/Images/feedback.JPG" alt="image of the feedback page" height=400 />
 
 ## Thank you! - CodeGoat Dev Team
